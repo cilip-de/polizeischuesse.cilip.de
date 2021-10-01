@@ -1,13 +1,24 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
-import { GetServerSideProps } from "next";
+import { Container, Text, Title } from "@mantine/core";
 import { csv } from "d3-fetch";
+import dayjs from "dayjs";
+import Fuse from "fuse.js";
+import _ from "lodash";
+import type { NextPage } from "next";
+import { GetServerSideProps } from "next";
+import Head from "next/head";
 import React from "react";
-import { Container, Title, Text } from "@mantine/core";
 import CaseList from "../components/CaseList";
 
-const Home: NextPage = ({ data }) => {
+const Home: NextPage = ({
+  data,
+  year,
+  place,
+  state,
+  q,
+  p,
+  options,
+  maxCases,
+}) => {
   return (
     <div>
       <Head>
@@ -28,7 +39,16 @@ const Home: NextPage = ({ data }) => {
               inventore incidunt temporibus?
             </Text>
           </div>
-          <CaseList data={data} />
+          <CaseList
+            data={data}
+            year={year}
+            place={place}
+            state={state}
+            q={q || ""}
+            p={p === null ? null : parseInt(p)}
+            options={options}
+            maxCases={maxCases}
+          />
         </Container>
       </main>
 
@@ -37,14 +57,91 @@ const Home: NextPage = ({ data }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+const countItems = (arr, sort = false) => {
+  const counts = {};
+  for (const y of arr) {
+    counts[y] = counts[y] ? counts[y] + 1 : 1;
+  }
+
+  let countsEntries = Object.entries(counts);
+
+  if (sort) countsEntries = _.orderBy(countsEntries, (x) => x[1], "desc");
+
+  return countsEntries.map((x) => ({
+    value: x[0],
+    label: x[0] + " (" + x[1] + ")",
+  }));
+};
+
+let fuse = null;
+let setupProps = null;
+
+const setupData = async () => {
+  console.log("x");
+  if (setupProps !== null) return setupProps;
+  console.log("y");
+
   let url = "http://localhost:3000/data.csv";
   if (process.env.NODE_ENV === "production")
     url = "http://cilip.app.vis.one/data.csv";
 
-  const data = await csv(url);
+  let data = await csv(url);
+  data = _.orderBy(data, "Datum", "desc");
 
-  return { props: { data } };
+  data.forEach((x, i) => {
+    const date = dayjs(x["Datum"]);
+    x.year = date.get("year");
+    x.datePrint = date.format("DD.MM.YYYY");
+    x.key = i;
+  });
+
+  const years = _.orderBy(countItems(data.map((x) => x.year)), "value", "desc");
+  const states = countItems(
+    data.map((x) => x.Bundesland),
+    true
+  );
+  const places = countItems(
+    data.map((x) => x.Ort),
+    true
+  );
+
+  fuse = new Fuse(data, {
+    minMatchCharLength: 3,
+    includeMatches: true,
+    findAllMatches: false,
+    threshold: 0,
+    ignoreLocation: true,
+    keys: ["Name", "Szenarium"],
+  });
+
+  setupProps = { data, options: { years, states, places } };
+  return setupProps;
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { year, place, state, q, p } = context.query;
+
+  const { data, options } = await setupData();
+
+  let searchedData = null;
+  if (q && q.length > 2) {
+    searchedData = fuse
+      .search(q)
+      .map(({ item, matches }) => ({ ...item, matches: matches }));
+  }
+
+  return {
+    props: {
+      data: searchedData || data,
+      options,
+      year: year || null,
+      place: place || null,
+      state: state || null,
+      q: q || null,
+      p: p || null,
+      maxCases: data.length,
+    },
+  };
 };
 
 export default Home;
