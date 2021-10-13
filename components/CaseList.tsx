@@ -152,7 +152,7 @@ const CaseList = ({ data, year, place, state, q, p, options, maxCases }) => {
             style={{ marginRight: "1rem" }}
             onClick={() =>
               router.push(
-                constructUrl(year, place, state, q, Math.min(1, p - 1))
+                constructUrl(year, place, state, q, Math.max(1, p - 1))
               )
             }
           >
