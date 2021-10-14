@@ -63,11 +63,11 @@ const CaseList = ({ data, year, place, state, q, p, options, maxCases }) => {
           <Select
             value={year || ""}
             onChange={(x) => router.push(constructUrl(x, place, state, q))}
-            label="Jahr auswählen"
-            placeholder="Pick one"
+            label="Jahr"
+            placeholder="auswählen"
             searchable
             clearable
-            nothingFound="No options"
+            nothingFound="keine Ergebnis"
             data={years}
           />
         </Col>
@@ -75,11 +75,11 @@ const CaseList = ({ data, year, place, state, q, p, options, maxCases }) => {
           <Select
             value={state || ""}
             onChange={(x) => router.push(constructUrl(year, place, x, q))}
-            label="Land auswählen"
-            placeholder="Pick one"
+            label="Land"
+            placeholder="auswählen"
             searchable
             clearable
-            nothingFound="No options"
+            nothingFound="keine Ergebnis"
             data={states}
           />
         </Col>
@@ -87,11 +87,11 @@ const CaseList = ({ data, year, place, state, q, p, options, maxCases }) => {
           <Select
             value={place || ""}
             onChange={(x) => router.push(constructUrl(year, x, state, q))}
-            label="Ort auswählen"
-            placeholder="Pick one"
+            label="Ort"
+            placeholder="auswählen"
             searchable
             clearable
-            nothingFound="No options"
+            nothingFound="keine Ergebnis"
             data={places}
           />
         </Col>
@@ -101,6 +101,7 @@ const CaseList = ({ data, year, place, state, q, p, options, maxCases }) => {
         id="search-input"
         style={{ marginBottom: "2rem" }}
         label="Suche"
+        placeholder="z. B. Wohnung oder Kopf"
         onChange={(event) => {
           if (event.currentTarget.value === "") {
             router.push(constructUrl(year, place, state, null));
@@ -115,11 +116,11 @@ const CaseList = ({ data, year, place, state, q, p, options, maxCases }) => {
       <Center style={{ marginBottom: "1rem" }}>
         {enoughChars && numHits > 1 && numHits !== maxCases && (
           <Text>
-            {numHits} von {maxCases} Fälle{" "}
+            {numHits} von {maxCases} Fälle
           </Text>
         )}
         {enoughChars && numHits > 1 && numHits === maxCases && (
-          <Text>{numHits} Fälle </Text>
+          <Text>{numHits} Fälle</Text>
         )}
         {enoughChars && numHits === 1 && <Text>ein Fall</Text>}
         {enoughChars && numHits === 0 && <Text>keine Fälle</Text>}

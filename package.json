@@ -12,6 +12,7 @@
     "@mantine/core": "^3.0.4",
     "@mantine/hooks": "^3.0.4",
     "@mantine/next": "^3.0.4",
+    "@nivo/bar": "^0.74.0",
     "d3-dsv": "^3.0.1",
     "d3-fetch": "^3.0.1",
     "dayjs": "^1.10.7",
