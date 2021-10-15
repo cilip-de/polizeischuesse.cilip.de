@@ -186,7 +186,6 @@ const CaseList = ({
         {enoughChars && resultList.map((x) => <Case item={x} key={x.key} />)}
         <Center>
           <Pagination
-            withEdges
             total={totalPages}
             page={p}
             onChange={(newPage) =>
