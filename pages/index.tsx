@@ -100,12 +100,12 @@ const Home: NextPage = ({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { year, place, state, q, p } = context.query;
 
-  const { data, options } = await setupData();
+  const { data, options, fuse } = await setupData();
 
   let searchedData = null;
   if (q && q.length > 2) {
     searchedData = fuse
-      .search(q)
+      .search("'" + q)
       .map(({ item, matches }) => ({ ...item, matches: matches }));
   }
 

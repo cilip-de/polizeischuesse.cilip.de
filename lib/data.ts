@@ -38,8 +38,6 @@ const setupData = async () => {
   let data = await csv(url);
   data = _.orderBy(data, "Datum", "desc");
 
-  console.log(dayjs.weekdays());
-
   data.forEach((x, i) => {
     const date = dayjs(x["Datum"]);
     x.year = date.get("year");
@@ -68,10 +66,11 @@ const setupData = async () => {
     findAllMatches: false,
     threshold: 0,
     ignoreLocation: true,
+    useExtendedSearch: true,
     keys: ["Name", "Szenarium"],
   });
 
-  setupProps = { data, options: { years, states, places } };
+  setupProps = { data, options: { years, states, places }, fuse };
   return setupProps;
 };
 

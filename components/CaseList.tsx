@@ -8,7 +8,7 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useRouter } from "next/router";
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import Case from "./Case";
 
 const PAGE_SIZE = 20;
@@ -33,12 +33,25 @@ function paginate(array, page_size, page_number) {
   return array.slice((page_number - 1) * page_size, page_number * page_size);
 }
 
+// +        onChange={async (event) => {
+//   if (event.currentTarget.value === "") {
+// -            router.push(constructUrl(year, place, state, null));
+// +            setSearchedData(null);
+//   } else {
+// -            router.replace(
+// -              constructUrl(year, place, state, event.currentTarget.value)
+// -            );
+
 const CaseList = ({ data, year, place, state, q, p, options, maxCases }) => {
   const { years, states, places } = options;
-  const router = useRouter();
-  let resultList = data;
 
-  const searchRef = useRef(null);
+  const [searchedData, setSearchedData] = useState(null);
+  const [searchedQ, setSearchedQ] = useState(null);
+
+  q = searchedQ || q;
+
+  const router = useRouter();
+  let resultList = searchedData || data;
 
   if (year) resultList = resultList.filter((x) => year == x.year); // do not use ===
   if (state) resultList = resultList.filter((x) => state === x.Bundesland);
@@ -97,79 +110,93 @@ const CaseList = ({ data, year, place, state, q, p, options, maxCases }) => {
         </Col>
       </Grid>
       <TextInput
-        elementRef={searchRef}
+        value={q}
         id="search-input"
         style={{ marginBottom: "2rem" }}
         label="Suche"
         placeholder="z. B. Wohnung oder Kopf"
-        onChange={(event) => {
+        onChange={async (event) => {
+          router.replace(
+            constructUrl(year, place, state, event.currentTarget.value),
+            undefined,
+            { shallow: true }
+          );
+          setSearchedQ(event.currentTarget.value);
           if (event.currentTarget.value === "") {
-            router.push(constructUrl(year, place, state, null));
+            setSearchedData(null);
           } else {
-            router.replace(
-              constructUrl(year, place, state, event.currentTarget.value)
-            );
+            if (event.currentTarget.value.length > 2)
+              setSearchedData(
+                await (
+                  await fetch("/api/suche?q=" + event.currentTarget.value)
+                ).json()
+              );
           }
         }}
       />
 
-      <Center style={{ marginBottom: "1rem" }}>
-        {enoughChars && numHits > 1 && numHits !== maxCases && (
-          <Text>
-            {numHits} von {maxCases} Fälle
-          </Text>
-        )}
-        {enoughChars && numHits > 1 && numHits === maxCases && (
-          <Text>{numHits} Fälle</Text>
-        )}
-        {enoughChars && numHits === 1 && <Text>ein Fall</Text>}
-        {enoughChars && numHits === 0 && <Text>keine Fälle</Text>}
-        {!enoughChars && <Text>Bitte mehr Zeichen für die Suche eingeben</Text>}
-      </Center>
-      {maxCases !== numHits && (
+      <div style={{ minHeight: "100rem" }}>
         <Center style={{ marginBottom: "1rem" }}>
-          <Text
-            onClick={() => {
-              router.push("/");
-              searchRef.current.value = "";
-            }}
-            size="sm"
-            style={{
-              paddingLeft: "1rem",
-              cursor: "pointer",
-              textDecoration: "underline",
-            }}
-          >
-            Auswahl zurücksetzen
-          </Text>
+          {enoughChars && numHits > 1 && numHits !== maxCases && (
+            <Text>
+              {numHits} von {maxCases} Fälle
+            </Text>
+          )}
+          {enoughChars && numHits > 1 && numHits === maxCases && (
+            <Text>{numHits} Fälle</Text>
+          )}
+          {enoughChars && numHits === 1 && <Text>ein Fall</Text>}
+          {enoughChars && numHits === 0 && <Text>keine Fälle</Text>}
+          {!enoughChars && (
+            <Text>Bitte mehr Zeichen für die Suche eingeben</Text>
+          )}
         </Center>
-      )}
-
-      {enoughChars && resultList.map((x) => <Case item={x} key={x.key} />)}
-
-      <Center>
-        {hasPrevPage && (
-          <Button
-            style={{ marginRight: "1rem" }}
-            onClick={() =>
-              router.push(
-                constructUrl(year, place, state, q, Math.max(1, p - 1))
-              )
-            }
-          >
-            zurück
-          </Button>
+        {maxCases !== numHits && (
+          <Center style={{ marginBottom: "1rem" }}>
+            <Text
+              onClick={() => {
+                router.push("/");
+                setSearchedData(null);
+                setSearchedQ(null);
+              }}
+              size="sm"
+              style={{
+                paddingLeft: "1rem",
+                cursor: "pointer",
+                textDecoration: "underline",
+              }}
+            >
+              Auswahl zurücksetzen
+            </Text>
+          </Center>
         )}
-        {hasNextPage && (
-          <Button
-            onClick={() =>
-              router.push(constructUrl(year, place, state, q, p + 1))
-            }
-          >
-            weiter
-          </Button>
-        )}
-      </Center>
+
+        {enoughChars && resultList.map((x) => <Case item={x} key={x.key} />)}
+
+        <Center>
+          {hasPrevPage && (
+            <Button
+              style={{ marginRight: "1rem" }}
+              onClick={() =>
+                router.push(
+                  constructUrl(year, place, state, q, Math.max(1, p - 1))
+                )
+              }
+            >
+              zurück
+            </Button>
+          )}
+          {hasNextPage && (
+            <Button
+              onClick={() =>
+                router.push(constructUrl(year, place, state, q, p + 1))
+              }
+            >
+              weiter
+            </Button>
+          )}
+        </Center>
+      </div>
     </div>
   );
 };
