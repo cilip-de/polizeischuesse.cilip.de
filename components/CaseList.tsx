@@ -58,16 +58,10 @@ const CaseList = ({
 
   q = searchedQ ?? q;
 
-  // console.log(p, q);
-
   let resultList =
     firstRender && initialSearchedData != null
       ? initialSearchedData
       : searchedData || data;
-
-  console.log(Math.ceil(resultList.length / PAGE_SIZE));
-  console.log(resultList.length);
-  // console.log(data, searchedData, initialSearchedData);
 
   if (year) resultList = resultList.filter((x) => year == x.year); // do not use ===
   if (state) resultList = resultList.filter((x) => state === x.Bundesland);
@@ -75,14 +69,12 @@ const CaseList = ({
 
   if (!p) p = 1;
 
-  console.log(p, typeof p);
-
   const enoughChars = !q || q.length > 2;
   const numHits = resultList.length;
   const hasNextPage = enoughChars && resultList.length > p * PAGE_SIZE;
   const hasPrevPage = enoughChars && p > 1;
 
-  const totalPages = Math.ceil(resultList / PAGE_SIZE);
+  const totalPages = Math.ceil(resultList.length / PAGE_SIZE);
 
   resultList = paginate(resultList, PAGE_SIZE, p);
 
@@ -192,11 +184,9 @@ const CaseList = ({
         )}
 
         {enoughChars && resultList.map((x) => <Case item={x} key={x.key} />)}
-
         <Center>
           <Pagination
-            id={"matine-page"}
-            siblings={3}
+            withEdges
             total={totalPages}
             page={p}
             onChange={(newPage) =>
