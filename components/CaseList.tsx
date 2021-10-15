@@ -1,14 +1,14 @@
 import {
-  Button,
   Center,
   Col,
   Grid,
+  Pagination,
   Select,
   Text,
   TextInput,
 } from "@mantine/core";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Case from "./Case";
 
 const PAGE_SIZE = 20;
@@ -33,25 +33,41 @@ function paginate(array, page_size, page_number) {
   return array.slice((page_number - 1) * page_size, page_number * page_size);
 }
 
-// +        onChange={async (event) => {
-//   if (event.currentTarget.value === "") {
-// -            router.push(constructUrl(year, place, state, null));
-// +            setSearchedData(null);
-//   } else {
-// -            router.replace(
-// -              constructUrl(year, place, state, event.currentTarget.value)
-// -            );
-
-const CaseList = ({ data, year, place, state, q, p, options, maxCases }) => {
+const CaseList = ({
+  data,
+  initialSearchedData,
+  year,
+  place,
+  state,
+  q,
+  p,
+  options,
+  maxCases,
+}) => {
   const { years, states, places } = options;
+  const router = useRouter();
 
   const [searchedData, setSearchedData] = useState(null);
   const [searchedQ, setSearchedQ] = useState(null);
+  const [firstRender, setFirstRender] = useState(true);
 
-  q = searchedQ || q;
+  useEffect(() => {
+    setSearchedData(initialSearchedData);
+    setFirstRender(false);
+  }, []);
 
-  const router = useRouter();
-  let resultList = searchedData || data;
+  q = searchedQ ?? q;
+
+  // console.log(p, q);
+
+  let resultList =
+    firstRender && initialSearchedData != null
+      ? initialSearchedData
+      : searchedData || data;
+
+  console.log(Math.ceil(resultList.length / PAGE_SIZE));
+  console.log(resultList.length);
+  // console.log(data, searchedData, initialSearchedData);
 
   if (year) resultList = resultList.filter((x) => year == x.year); // do not use ===
   if (state) resultList = resultList.filter((x) => state === x.Bundesland);
@@ -59,10 +75,14 @@ const CaseList = ({ data, year, place, state, q, p, options, maxCases }) => {
 
   if (!p) p = 1;
 
+  console.log(p, typeof p);
+
   const enoughChars = !q || q.length > 2;
   const numHits = resultList.length;
   const hasNextPage = enoughChars && resultList.length > p * PAGE_SIZE;
   const hasPrevPage = enoughChars && p > 1;
+
+  const totalPages = Math.ceil(resultList / PAGE_SIZE);
 
   resultList = paginate(resultList, PAGE_SIZE, p);
 
@@ -157,7 +177,7 @@ const CaseList = ({ data, year, place, state, q, p, options, maxCases }) => {
               onClick={() => {
                 router.push("/");
                 setSearchedData(null);
-                setSearchedQ(null);
+                setSearchedQ("");
               }}
               size="sm"
               style={{
@@ -174,27 +194,15 @@ const CaseList = ({ data, year, place, state, q, p, options, maxCases }) => {
         {enoughChars && resultList.map((x) => <Case item={x} key={x.key} />)}
 
         <Center>
-          {hasPrevPage && (
-            <Button
-              style={{ marginRight: "1rem" }}
-              onClick={() =>
-                router.push(
-                  constructUrl(year, place, state, q, Math.max(1, p - 1))
-                )
-              }
-            >
-              zurück
-            </Button>
-          )}
-          {hasNextPage && (
-            <Button
-              onClick={() =>
-                router.push(constructUrl(year, place, state, q, p + 1))
-              }
-            >
-              weiter
-            </Button>
-          )}
+          <Pagination
+            id={"matine-page"}
+            siblings={3}
+            total={totalPages}
+            page={p}
+            onChange={(newPage) =>
+              router.push(constructUrl(year, place, state, q, newPage))
+            }
+          />
         </Center>
       </div>
     </div>

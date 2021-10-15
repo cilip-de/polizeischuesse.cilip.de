@@ -9,6 +9,7 @@ import { setupData } from "../lib/data";
 
 const Home: NextPage = ({
   data,
+  initialSearchedData,
   year,
   place,
   state,
@@ -82,6 +83,7 @@ const Home: NextPage = ({
           <Space h="xl" />
 
           <CaseList
+            initialSearchedData={initialSearchedData}
             data={data}
             year={year}
             place={place}
@@ -102,16 +104,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const { data, options, fuse } = await setupData();
 
-  let searchedData = null;
+  let initialSearchedData = null;
   if (q && q.length > 2) {
-    searchedData = fuse
+    initialSearchedData = fuse
       .search("'" + q)
       .map(({ item, matches }) => ({ ...item, matches: matches }));
   }
 
   return {
     props: {
-      data: searchedData || data,
+      data,
+      initialSearchedData,
       options,
       year: year || null,
       place: place || null,
