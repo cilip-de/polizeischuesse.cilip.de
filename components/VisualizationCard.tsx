@@ -1,6 +1,7 @@
 import { Button, Card, Group, Text, useMantineTheme } from "@mantine/core";
+import Link from "next/link";
 import React from "react";
-import TimeChart from "./TimeChart";
+import { VerticalBarChart } from "./charts";
 
 function VisualizationCard({ data }) {
   const theme = useMantineTheme();
@@ -8,7 +9,7 @@ function VisualizationCard({ data }) {
   return (
     <Card shadow="sm" padding="lg">
       <Card.Section>
-        <TimeChart
+        <VerticalBarChart
           data={data
             .slice(0, 11)
             .reverse()
@@ -23,14 +24,16 @@ function VisualizationCard({ data }) {
         <Text size="sm">Anzahl der Todesschüsse 2010–2020</Text>
       </Group>
 
-      <Button
-        variant="light"
-        color="indigo"
-        fullWidth
-        style={{ marginTop: 14 }}
-      >
-        Weitere Visualisierungen
-      </Button>
+      <Link href="/auswertung">
+        <Button
+          variant="light"
+          color="indigo"
+          fullWidth
+          style={{ marginTop: 14 }}
+        >
+          Weitere Visualisierungen
+        </Button>
+      </Link>
     </Card>
   );
 }

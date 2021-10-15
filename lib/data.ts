@@ -1,7 +1,12 @@
 import { csv } from "d3-fetch";
 import dayjs from "dayjs";
+import "dayjs/locale/de";
+import localeData from "dayjs/plugin/localeData";
 import Fuse from "fuse.js";
 import _ from "lodash";
+
+dayjs.locale("de");
+dayjs.extend(localeData);
 
 const countItems = (arr, sort = false) => {
   const counts = {};
@@ -33,12 +38,16 @@ const setupData = async () => {
   let data = await csv(url);
   data = _.orderBy(data, "Datum", "desc");
 
+  console.log(dayjs.weekdays());
+
   data.forEach((x, i) => {
     const date = dayjs(x["Datum"]);
     x.year = date.get("year");
     x.dow = date.day();
+    x.dowPrint = dayjs.weekdays()[x.dow];
     x.dom = date.date();
     x.month = date.get("month");
+    x.monthPrint = dayjs.months()[x.month];
     x.datePrint = date.format("DD.MM.YYYY");
     x.key = i;
   });

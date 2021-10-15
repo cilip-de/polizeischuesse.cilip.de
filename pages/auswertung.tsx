@@ -1,10 +1,10 @@
-import { Container, Title } from "@mantine/core";
+import { Container, Text, Title } from "@mantine/core";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import React from "react";
-import TimeChart from "../components/TimeChart";
+import { HorizontalBarChart, VerticalBarChart } from "../components/charts";
 import { countItems, setupData } from "../lib/data";
 
 const Auswertung: NextPage = ({ data, options }) => {
@@ -21,26 +21,37 @@ const Auswertung: NextPage = ({ data, options }) => {
     value: x,
   }));
 
-  const noWeapon = countItems(
-    data.filter((x) => !x[boolAtr[4]].includes("Ja")).map(({ dow }) => dow)
+  const makeDowData = (data) => {
+    const dataDow = countItems(
+      _.orderBy(data, "dow", "desc").map(({ dowPrint }) => dowPrint)
+    );
+    // make Sunday last day of week
+    dataDow.unshift(dataDow.pop());
+    return dataDow;
+  };
+
+  const noWeaponSekYes = data.filter(
+    (x) => !x[boolAtr[4]].includes("Ja") && x[boolAtr[1]].includes("Ja")
   );
-  const noWeapon2 = countItems(
-    data
-      .filter(
-        (x) => !x[boolAtr[4]].includes("Ja") && !x[boolAtr[1]].includes("Ja")
-      )
-      .map(({ dow }) => dow)
+
+  const noWeaponSekNo = data.filter(
+    (x) => !x[boolAtr[4]].includes("Ja") && !x[boolAtr[1]].includes("Ja")
   );
-  const noWeapon3 = countItems(
-    data
-      .filter(
-        (x) =>
-          !x[boolAtr[4]].includes("Ja") &&
-          !x[boolAtr[1]].includes("Ja") &&
-          !x[boolAtr[3]].includes("Ja")
-      )
-      .map(({ dow }) => dow)
-  );
+
+  const dataDow = makeDowData(data);
+
+  const dataSekYes = makeDowData(noWeaponSekYes);
+  const dataSekNo = makeDowData(noWeaponSekNo);
+
+  console.log(dataSekYes);
+  console.log(dataSekNo);
+
+  for (const x of dataSekNo) {
+    const bla = dataSekYes.filter(({ value }) => value === x.value);
+    if (bla.length) x.count2 = bla[0].count;
+    x.tooltipLabel = { count: "ohne SEK", count2: "mit SEK" };
+  }
+  console.log(dataSekNo);
 
   return (
     <div>
@@ -53,41 +64,63 @@ const Auswertung: NextPage = ({ data, options }) => {
       <main>
         <Container>
           <Title order={1}>Auswertung der Daten</Title>
-
+          <Text>
+            Eine statische Auswertung der Daten aus der Chronik. Es fehlt noch
+            mehr Text für die Beschreibung.
+          </Text>
           <div>
-            <TimeChart data={_.orderBy(options.years, "value")} />
-          </div>
-          <div>
-            <TimeChart data={_.orderBy(options.states, "count", "desc")} />
-          </div>
-          <div>
-            <TimeChart
-              data={_.orderBy(options.places, "count", "desc").slice(0, 20)}
+            <Title order={3}>Fälle pro Jahr</Title>
+            <VerticalBarChart
+              data={_.orderBy(options.years, "value")}
+              numTicks={5}
             />
           </div>
           <div>
-            <TimeChart data={countItems(data.map(({ month }) => month))} />
+            <Title order={3}>Fälle pro Bundesland</Title>
+            <HorizontalBarChart data={_.orderBy(options.states, "count")} />
           </div>
           <div>
-            <TimeChart data={countItems(data.map(({ dow }) => dow))} />
+            <Title order={3}>Fälle pro Stadt (nur top20)</Title>
+            <HorizontalBarChart
+              data={_.orderBy(options.places, "count", "desc")
+                .slice(0, 20)
+                .reverse()}
+            />
           </div>
           <div>
-            <TimeChart data={countItems(data.map(({ dom }) => dom))} />
+            <Title order={3}>Fälle pro Monat</Title>
+            <HorizontalBarChart
+              data={countItems(
+                _.orderBy(data, "month", "desc").map(
+                  ({ monthPrint }) => monthPrint
+                )
+              )}
+            />
           </div>
           <div>
-            <TimeChart data={countItems(data.map(({ Alter }) => Alter))} />
+            <Title order={3}>Fälle pro Wochentag</Title>
+            <HorizontalBarChart data={dataDow} />
           </div>
           <div>
-            <TimeChart data={boolData} />
+            <Title order={3}>
+              Fälle pro Wochentag, Opfer ohne Schusswaffe, unterteilt nach
+              SEK-Beteiligung
+            </Title>
+            <HorizontalBarChart data={dataSekNo} />
           </div>
           <div>
-            <TimeChart data={noWeapon} />
+            <Title order={3}>Tag im Monat</Title>
+            <VerticalBarChart data={countItems(data.map(({ dom }) => dom))} />
           </div>
           <div>
-            <TimeChart data={noWeapon2} />
+            <Title order={3}>Alter</Title>
+            <VerticalBarChart
+              data={countItems(data.map(({ Alter }) => Alter))}
+            />
           </div>
           <div>
-            <TimeChart data={noWeapon3} />
+            <Title order={3}>Klassifikation</Title>
+            <HorizontalBarChart data={boolData} />
           </div>
         </Container>
       </main>
