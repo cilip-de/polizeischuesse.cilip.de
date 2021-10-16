@@ -60,6 +60,7 @@ const CaseList = ({
   let { q, p } = selection;
 
   q = searchedQ ?? q;
+  const enoughChars = !q || q.length > 2;
 
   let resultList =
     firstRender && initialSearchedData != null
@@ -71,13 +72,10 @@ const CaseList = ({
     resultList = resultList.filter((x) => x[k] == v);
   }
 
-  console.log(selection.tags);
-
   for (const tag of selection.tags || []) {
     resultList = resultList.filter((x) => x[tag]);
   }
 
-  const enoughChars = !q || q.length > 2;
   const numHits = resultList.length;
   const totalPages = Math.ceil(resultList.length / PAGE_SIZE);
 
@@ -96,7 +94,7 @@ const CaseList = ({
               value={selection[key] || ""}
               onChange={(x) =>
                 router.push(
-                  constructUrl({ ...selection, [key]: x }),
+                  constructUrl({ ...selection, [key]: x, p: 1 }),
                   undefined,
                   {
                     scroll: false,
@@ -128,7 +126,9 @@ const CaseList = ({
                     p: 1,
                     q: event.currentTarget.value,
                   })
-                );
+                ),
+                  undefined,
+                  { scroll: false };
                 return;
               }
 
@@ -164,7 +164,7 @@ const CaseList = ({
             data={TAGS.map((x) => ({ label: x[1], value: x[0] }))}
             onChange={(x) =>
               router.replace(
-                constructUrl({ ...selection, tags: x }),
+                constructUrl({ ...selection, tags: x, p: 1 }),
                 undefined,
                 { scroll: false }
               )
@@ -189,7 +189,7 @@ const CaseList = ({
             <Text>Bitte mehr Zeichen für die Suche eingeben</Text>
           )}
         </Center>
-        {maxCases !== numHits && (
+        {enoughChars && maxCases !== numHits && (
           <Center style={{ marginBottom: "1rem" }}>
             <Text
               onClick={() => {
@@ -210,22 +210,24 @@ const CaseList = ({
         )}
 
         {enoughChars && resultList.map((x) => <Case item={x} key={x.key} />)}
-        <Center>
-          <Pagination
-            total={totalPages}
-            page={p}
-            onChange={(newPage) =>
-              router.push(
-                constructUrl({
-                  ...selection,
-                  p: newPage,
-                }),
-                undefined,
-                { scroll: false }
-              )
-            }
-          />
-        </Center>
+        {enoughChars && (
+          <Center>
+            <Pagination
+              total={totalPages}
+              page={p}
+              onChange={(newPage) =>
+                router.push(
+                  constructUrl({
+                    ...selection,
+                    p: newPage,
+                  }),
+                  undefined,
+                  { scroll: false }
+                )
+              }
+            />
+          </Center>
+        )}
       </div>
     </div>
   );
