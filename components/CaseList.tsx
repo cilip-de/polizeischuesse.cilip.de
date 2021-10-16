@@ -25,7 +25,7 @@ type Selection = {
 
 const constructUrl = (params: Partial<Selection>) => {
   const paramsString = Object.entries(params)
-    .filter((x) => !!x[1])
+    .filter((x) => !!x[1] && (!Array.isArray(x[1]) || x[1].length))
     .map((x) => `${x[0]}=${x[1]}`);
 
   if (paramsString.length === 0) return "/#chronik";
@@ -121,12 +121,27 @@ const CaseList = ({
             label="Suche"
             placeholder="z. B. Wohnung oder Kopf"
             onChange={async (event) => {
+              if (selection.p > 1) {
+                router.replace(
+                  constructUrl({
+                    ...selection,
+                    p: 1,
+                    q: event.currentTarget.value,
+                  })
+                );
+                return;
+              }
+
               router.replace(
-                constructUrl({ ...selection, q: event.currentTarget.value }),
+                constructUrl({
+                  ...selection,
+                  q: event.currentTarget.value,
+                }),
                 undefined,
                 { shallow: true }
               );
               setSearchedQ(event.currentTarget.value);
+
               if (event.currentTarget.value === "") {
                 setSearchedData(null);
               } else {
@@ -144,6 +159,7 @@ const CaseList = ({
           <MultiSelect
             clearable
             label="Kategorie"
+            placeholder="auswählen (mehrfach)"
             value={selection.tags}
             data={TAGS.map((x) => ({ label: x[1], value: x[0] }))}
             onChange={(x) =>

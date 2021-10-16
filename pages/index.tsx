@@ -97,8 +97,6 @@ const Home: NextPage = ({
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const selection = { q: "", p: "1", ...context.query };
 
-  console.log(selection);
-
   const { q } = selection;
   const { data, options, fuse } = await setupData();
 
