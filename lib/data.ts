@@ -18,6 +18,8 @@ const TAGS = [
   ["vbaktion", "Vorbereitete Polizeiaktion"],
 ];
 
+const SEARCH_KEYES = ["Name", "Szenarium", "weapon", "place", "state"];
+
 const countItems = (arr, sort = false) => {
   const counts = {};
   for (const y of arr) {
@@ -84,11 +86,11 @@ const setupData = async () => {
     threshold: 0,
     ignoreLocation: true,
     useExtendedSearch: true,
-    keys: ["Name", "Szenarium"],
+    keys: SEARCH_KEYES,
   });
 
   setupProps = { data, options: { year, state, place }, fuse };
   return setupProps;
 };
 
-export { setupData, countItems, SELECTABLE, PAGE_SIZE, TAGS };
+export { setupData, countItems, SELECTABLE, PAGE_SIZE, TAGS, SEARCH_KEYES };

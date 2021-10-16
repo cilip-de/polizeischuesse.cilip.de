@@ -1,5 +1,6 @@
 import { Badge, Card, Col, Grid, Group, Text } from "@mantine/core";
 import React from "react";
+import { SEARCH_KEYES } from "../lib/data";
 
 // https://dev.to/noclat/using-fuse-js-with-react-to-build-an-advanced-search-with-highlighting-4b93
 const highlight = (value, indices = [], i = 1) => {
@@ -26,8 +27,9 @@ const constructHighlights = (item, attr) => {
 };
 
 const Case = ({ item }) => {
-  const description = constructHighlights(item, "Szenarium");
-  const name = constructHighlights(item, "Name");
+  for (const term of SEARCH_KEYES) {
+    item[term] = constructHighlights(item, term);
+  }
 
   return (
     <Card shadow="sm" padding="lg" style={{ marginBottom: "2rem" }}>
@@ -55,7 +57,7 @@ const Case = ({ item }) => {
       </Group>
       <Grid>
         <Col span={12} md={4} lg={4}>
-          <Text weight={500}>{name}</Text>
+          <Text weight={500}>{item["Name"]}</Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             {item.datePrint}
           </Text>
@@ -63,7 +65,7 @@ const Case = ({ item }) => {
             {item.Alter} Jahre
           </Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
-            {item.Ort}, {item.Bundesland}
+            {item.place}, {item.state}
           </Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             Bewaffnet mit Schusswaffe: {item.weapon}
@@ -71,7 +73,7 @@ const Case = ({ item }) => {
         </Col>
         <Col span={12} md={8} lg={8}>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
-            {description}
+            {item["Szenarium"]}
           </Text>
         </Col>
       </Grid>
