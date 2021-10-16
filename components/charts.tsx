@@ -3,11 +3,14 @@ import { ResponsiveBar } from "@nivo/bar";
 import { ticks } from "d3-array";
 import React from "react";
 
-const selectNiceTicks = (data, numTicks) =>
-  ticks(0, data.length, numTicks)
-    .concat([0, data.length - 1])
-    .filter((x) => x < data.length)
-    .map((x) => data[x].value);
+const selectNiceTicks = (data, numTicks) => [
+  ...new Set(
+    ticks(0, data.length, numTicks)
+      .concat([0, data.length - 1])
+      .filter((x) => x < data.length)
+      .map((x) => data[x].value)
+  ),
+];
 
 const tooltip = ({ value, data, id }) => (
   <div>

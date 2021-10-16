@@ -71,18 +71,18 @@ const Auswertung: NextPage = ({ data, options }) => {
           <div>
             <Title order={3}>Fälle pro Jahr</Title>
             <VerticalBarChart
-              data={_.orderBy(options.years, "value")}
+              data={_.orderBy(options.year, "value")}
               numTicks={5}
             />
           </div>
           <div>
             <Title order={3}>Fälle pro Bundesland</Title>
-            <HorizontalBarChart data={_.orderBy(options.states, "count")} />
+            <HorizontalBarChart data={_.orderBy(options.state, "count")} />
           </div>
           <div>
             <Title order={3}>Fälle pro Stadt (nur top20)</Title>
             <HorizontalBarChart
-              data={_.orderBy(options.places, "count", "desc")
+              data={_.orderBy(options.place, "count", "desc")
                 .slice(0, 20)
                 .reverse()}
             />

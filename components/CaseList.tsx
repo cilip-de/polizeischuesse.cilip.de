@@ -2,6 +2,7 @@ import {
   Center,
   Col,
   Grid,
+  MultiSelect,
   Pagination,
   Select,
   Text,
@@ -9,42 +10,42 @@ import {
 } from "@mantine/core";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import { PAGE_SIZE, SELECTABLE, TAGS } from "../lib/data";
+import { paginate } from "../lib/util";
 import Case from "./Case";
 
-const PAGE_SIZE = 20;
-
-const constructUrl = (year, place, state, q, p = null) => {
-  const params = {};
-  if (year) params["year"] = year;
-  if (place) params["place"] = place;
-  if (state) params["state"] = state;
-  if (q) params["q"] = q;
-  if (p) params["p"] = p;
-
-  const paramsString = Object.entries(params).map((x) => `${x[0]}=${x[1]}`);
-
-  if (paramsString.length === 0) return "/";
-
-  return `/?${paramsString.join("&")}`;
+type Selection = {
+  year: string;
+  place: string;
+  state: string;
+  q: string;
+  p: number;
+  tags: string[];
 };
 
-function paginate(array, page_size, page_number) {
-  // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
-  return array.slice((page_number - 1) * page_size, page_number * page_size);
-}
+const constructUrl = (params: Partial<Selection>) => {
+  const paramsString = Object.entries(params)
+    .filter((x) => !!x[1])
+    .map((x) => `${x[0]}=${x[1]}`);
+
+  if (paramsString.length === 0) return "/#chronik";
+
+  return `/?${paramsString.join("&")}#chronik`;
+};
 
 const CaseList = ({
   data,
   initialSearchedData,
-  year,
-  place,
-  state,
-  q,
-  p,
+  selection,
   options,
   maxCases,
+}: {
+  data: any[];
+  initialSearchedData: any[];
+  selection: Selection;
+  options: any;
+  maxCases: number;
 }) => {
-  const { years, states, places } = options;
   const router = useRouter();
 
   const [searchedData, setSearchedData] = useState(null);
@@ -56,6 +57,8 @@ const CaseList = ({
     setFirstRender(false);
   }, []);
 
+  let { q, p } = selection;
+
   q = searchedQ ?? q;
 
   let resultList =
@@ -63,89 +66,96 @@ const CaseList = ({
       ? initialSearchedData
       : searchedData || data;
 
-  if (year) resultList = resultList.filter((x) => year == x.year); // do not use ===
-  if (state) resultList = resultList.filter((x) => state === x.Bundesland);
-  if (place) resultList = resultList.filter((x) => place === x.Ort);
+  for (const [k, v] of Object.entries(selection)) {
+    if (!v || !SELECTABLE.includes(k)) continue;
+    resultList = resultList.filter((x) => x[k] == v);
+  }
 
-  if (!p) p = 1;
+  console.log(selection.tags);
+
+  for (const tag of selection.tags || []) {
+    resultList = resultList.filter((x) => x[tag]);
+  }
 
   const enoughChars = !q || q.length > 2;
   const numHits = resultList.length;
-  const hasNextPage = enoughChars && resultList.length > p * PAGE_SIZE;
-  const hasPrevPage = enoughChars && p > 1;
-
   const totalPages = Math.ceil(resultList.length / PAGE_SIZE);
 
   resultList = paginate(resultList, PAGE_SIZE, p);
 
   return (
     <div style={{ paddingBottom: "2rem" }}>
-      <Grid
-        id="select-grid"
-        style={{ marginBottom: "2rem", marginTop: "1rem" }}
-      >
-        <Col span={4}>
-          <Select
-            value={year || ""}
-            onChange={(x) => router.push(constructUrl(x, place, state, q))}
-            label="Jahr"
-            placeholder="auswählen"
-            searchable
-            clearable
-            nothingFound="keine Ergebnis"
-            data={years}
+      <Grid style={{ marginBottom: "2rem", marginTop: "1rem" }}>
+        {[
+          ["year", "Jahr"],
+          ["state", "Bundesland"],
+          ["place", "Ort"],
+        ].map(([key, label]) => (
+          <Col span={4} key={key}>
+            <Select
+              value={selection[key] || ""}
+              onChange={(x) =>
+                router.push(
+                  constructUrl({ ...selection, [key]: x }),
+                  undefined,
+                  {
+                    scroll: false,
+                  }
+                )
+              }
+              label={label}
+              placeholder="auswählen"
+              searchable
+              clearable
+              nothingFound="keine Ergebnis"
+              data={options[key]}
+            />
+          </Col>
+        ))}
+      </Grid>
+      <Grid>
+        <Col span={6}>
+          <TextInput
+            value={q}
+            style={{ marginBottom: "2rem" }}
+            label="Suche"
+            placeholder="z. B. Wohnung oder Kopf"
+            onChange={async (event) => {
+              router.replace(
+                constructUrl({ ...selection, q: event.currentTarget.value }),
+                undefined,
+                { shallow: true }
+              );
+              setSearchedQ(event.currentTarget.value);
+              if (event.currentTarget.value === "") {
+                setSearchedData(null);
+              } else {
+                if (event.currentTarget.value.length > 2)
+                  setSearchedData(
+                    await (
+                      await fetch("/api/suche?q=" + event.currentTarget.value)
+                    ).json()
+                  );
+              }
+            }}
           />
         </Col>
-        <Col span={4}>
-          <Select
-            value={state || ""}
-            onChange={(x) => router.push(constructUrl(year, place, x, q))}
-            label="Land"
-            placeholder="auswählen"
-            searchable
+        <Col span={6}>
+          <MultiSelect
             clearable
-            nothingFound="keine Ergebnis"
-            data={states}
-          />
-        </Col>
-        <Col span={4}>
-          <Select
-            value={place || ""}
-            onChange={(x) => router.push(constructUrl(year, x, state, q))}
-            label="Ort"
-            placeholder="auswählen"
-            searchable
-            clearable
-            nothingFound="keine Ergebnis"
-            data={places}
-          />
+            label="Kategorie"
+            value={selection.tags}
+            data={TAGS.map((x) => ({ label: x[1], value: x[0] }))}
+            onChange={(x) =>
+              router.replace(
+                constructUrl({ ...selection, tags: x }),
+                undefined,
+                { scroll: false }
+              )
+            }
+          ></MultiSelect>
         </Col>
       </Grid>
-      <TextInput
-        value={q}
-        id="search-input"
-        style={{ marginBottom: "2rem" }}
-        label="Suche"
-        placeholder="z. B. Wohnung oder Kopf"
-        onChange={async (event) => {
-          router.replace(
-            constructUrl(year, place, state, event.currentTarget.value),
-            undefined,
-            { shallow: true }
-          );
-          setSearchedQ(event.currentTarget.value);
-          if (event.currentTarget.value === "") {
-            setSearchedData(null);
-          } else {
-            if (event.currentTarget.value.length > 2)
-              setSearchedData(
-                await (
-                  await fetch("/api/suche?q=" + event.currentTarget.value)
-                ).json()
-              );
-          }
-        }}
-      />
 
       <div style={{ minHeight: "100rem" }}>
         <Center style={{ marginBottom: "1rem" }}>
@@ -167,7 +177,7 @@ const CaseList = ({
           <Center style={{ marginBottom: "1rem" }}>
             <Text
               onClick={() => {
-                router.push("/");
+                router.push("/#chronik", undefined, { scroll: false });
                 setSearchedData(null);
                 setSearchedQ("");
               }}
@@ -189,7 +199,14 @@ const CaseList = ({
             total={totalPages}
             page={p}
             onChange={(newPage) =>
-              router.push(constructUrl(year, place, state, q, newPage))
+              router.push(
+                constructUrl({
+                  ...selection,
+                  p: newPage,
+                }),
+                undefined,
+                { scroll: false }
+              )
             }
           />
         </Center>

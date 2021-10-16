@@ -8,6 +8,16 @@ import _ from "lodash";
 dayjs.locale("de");
 dayjs.extend(localeData);
 
+const PAGE_SIZE = 20;
+const SELECTABLE = ["year", "state", "place"];
+
+const TAGS = [
+  ["schusswechsel", "Schusswechsel"],
+  ["sek", "Sondereinsatzbeamte"],
+  ["vgbeamte", "Verletzte/getötete Beamte"],
+  ["vbaktion", "Vorbereitete Polizeiaktion"],
+];
+
 const countItems = (arr, sort = false) => {
   const counts = {};
   for (const y of arr) {
@@ -48,14 +58,21 @@ const setupData = async () => {
     x.monthPrint = dayjs.months()[x.month];
     x.datePrint = date.format("DD.MM.YYYY");
     x.key = i;
+    x.state = x["Bundesland"];
+    x.place = x["Ort"];
+    x.weapon = x["Opfer mit Schusswaffe"];
+
+    for (const [t, label] of TAGS) {
+      x[t] = x[label].includes("Ja");
+    }
   });
 
-  const years = _.orderBy(countItems(data.map((x) => x.year)), "value", "desc");
-  const states = countItems(
+  const year = _.orderBy(countItems(data.map((x) => x.year)), "value", "desc");
+  const state = countItems(
     data.map((x) => x.Bundesland),
     true
   );
-  const places = countItems(
+  const place = countItems(
     data.map((x) => x.Ort),
     true
   );
@@ -70,8 +87,8 @@ const setupData = async () => {
     keys: ["Name", "Szenarium"],
   });
 
-  setupProps = { data, options: { years, states, places }, fuse };
+  setupProps = { data, options: { year, state, place }, fuse };
   return setupProps;
 };
 
-export { setupData, countItems };
+export { setupData, countItems, SELECTABLE, PAGE_SIZE, TAGS };

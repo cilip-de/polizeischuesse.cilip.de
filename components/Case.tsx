@@ -31,31 +31,31 @@ const Case = ({ item }) => {
 
   return (
     <Card shadow="sm" padding="lg" style={{ marginBottom: "2rem" }}>
-      <Grid id="my-grid">
-        <Col span={12} md={6} lg={6}>
-          <Group position="apart">
-            <Text weight={500}>{name}</Text>
-            {item["Schusswechsel"].includes("Ja") && (
-              <Badge size="xs" color="pink" variant="light">
-                Schusswechsel
-              </Badge>
-            )}
-            {item["Sondereinsatzbeamte"].includes("Ja") && (
-              <Badge size="xs" color="grape" variant="light">
-                Sondereinsatzbeamte
-              </Badge>
-            )}
-            {item["Verletzte/getötete Beamte"].includes("Ja") && (
-              <Badge size="xs" color="violet" variant="light">
-                Verletzte/getötete Beamte
-              </Badge>
-            )}
-            {item["Vorbereitete Polizeiaktion"].includes("Ja") && (
-              <Badge size="xs" color="indigo" variant="light">
-                Vorbereitete Polizeiaktion
-              </Badge>
-            )}
-          </Group>
+      <Group>
+        {item.schusswechsel && (
+          <Badge size="xs" color="pink" variant="light">
+            Schusswechsel
+          </Badge>
+        )}
+        {item.sek && (
+          <Badge size="xs" color="grape" variant="light">
+            Sondereinsatzbeamte
+          </Badge>
+        )}
+        {item.vgbeamte && (
+          <Badge size="xs" color="violet" variant="light">
+            Verletzte/getötete Beamte
+          </Badge>
+        )}
+        {item.vorbaktion && (
+          <Badge size="xs" color="indigo" variant="light">
+            Vorbereitete Polizeiaktion
+          </Badge>
+        )}
+      </Group>
+      <Grid>
+        <Col span={12} md={4} lg={4}>
+          <Text weight={500}>{name}</Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             {item.datePrint}
           </Text>
@@ -66,11 +66,10 @@ const Case = ({ item }) => {
             {item.Ort}, {item.Bundesland}
           </Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
-            Opfer mit Schusswaffe: {item["Opfer mit Schusswaffe"]}
+            Bewaffnet mit Schusswaffe: {item.weapon}
           </Text>
         </Col>
-        <Col span={12} md={6} lg={6}>
-          {" "}
+        <Col span={12} md={8} lg={8}>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             {description}
           </Text>

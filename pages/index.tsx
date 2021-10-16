@@ -10,11 +10,7 @@ import { setupData } from "../lib/data";
 const Home: NextPage = ({
   data,
   initialSearchedData,
-  year,
-  place,
-  state,
-  q,
-  p,
+  selection,
   options,
   maxCases,
 }) => {
@@ -37,15 +33,14 @@ const Home: NextPage = ({
                 <Space h="xl" />
                 <Title order={1}>Polizeiliche Todesschüsse</Title>
                 <Space h="xl" />
-                <Title order={2}>
+                <Title order={3}>
                   Seit 1985 wurden mindestens {maxCases} Personen durch die
                   deutsche Polizei erschossen.
                 </Title>
                 <Space h="xl" />
                 <Text size="md">
-                  Wir dokumentieren die einzelnen Taten. Die Daten werden von
-                  der Innenministerkoferenz erhoben. Die Zeitschrift CILIP
-                  dokumentiert diese seit{" "}
+                  Es gibt offizielle Statistiken, aber eine einzelne Taten. Die
+                  Bürgerrechtszeitschfrift CILIP dokumentiert die Taten.
                 </Text>
               </div>
             </Col>
@@ -76,20 +71,20 @@ const Home: NextPage = ({
               </Text>
             </Col>
             <Col span={12} sm={4}>
-              <VisualizationCard data={options.years} />
+              <VisualizationCard data={options.year} />
             </Col>
           </Grid>
 
           <Space h="xl" />
 
+          <Title order={2} id="chronik">
+            Chronik
+          </Title>
+
           <CaseList
             initialSearchedData={initialSearchedData}
             data={data}
-            year={year}
-            place={place}
-            state={state}
-            q={q || ""}
-            p={p === null ? null : parseInt(p)}
+            selection={selection}
             options={options}
             maxCases={maxCases}
           />
@@ -100,12 +95,21 @@ const Home: NextPage = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { year, place, state, q, p } = context.query;
+  const selection = { q: "", p: "1", ...context.query };
 
+  console.log(selection);
+
+  const { q } = selection;
   const { data, options, fuse } = await setupData();
+
+  if (selection.p !== null) selection.p = parseInt(selection.p);
+  if (selection.tags && selection.tags !== null)
+    selection.tags = selection.tags.split(",");
+  else selection.tags = [];
 
   let initialSearchedData = null;
   if (q && q.length > 2) {
+    // use only excact matches with Fuse advanced search options
     initialSearchedData = fuse
       .search("'" + q)
       .map(({ item, matches }) => ({ ...item, matches: matches }));
@@ -116,11 +120,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       data,
       initialSearchedData,
       options,
-      year: year || null,
-      place: place || null,
-      state: state || null,
-      q: q || null,
-      p: p || null,
+      selection,
       maxCases: data.length,
     },
   };
