@@ -49,7 +49,7 @@ const CaseList = ({
   const router = useRouter();
 
   const [searchedData, setSearchedData] = useState(null);
-  const [searchedQ, setSearchedQ] = useState(null);
+  const [searchedQ, setSearchedQ] = useState<null | string>(null);
   const [firstRender, setFirstRender] = useState(true);
 
   useEffect(() => {
@@ -62,6 +62,11 @@ const CaseList = ({
   q = searchedQ ?? q;
   const enoughChars = !q || q.length > 2;
 
+  const constructUrlWithQ = (params) => {
+    if (q !== null) params["q"] = q;
+    return constructUrl(params);
+  };
+
   let resultList =
     firstRender && initialSearchedData != null
       ? initialSearchedData
@@ -73,7 +78,9 @@ const CaseList = ({
   }
 
   for (const tag of selection.tags || []) {
-    resultList = resultList.filter((x) => x[tag]);
+    resultList = resultList.filter((x) =>
+      tag.startsWith("no__") ? !x[tag.replace("no__", "")] : x[tag]
+    );
   }
 
   const numHits = resultList.length;
@@ -121,7 +128,7 @@ const CaseList = ({
             onChange={async (event) => {
               if (selection.p > 1) {
                 router.replace(
-                  constructUrl({
+                  constructUrlWithQ({
                     ...selection,
                     p: 1,
                     q: event.currentTarget.value,
@@ -133,7 +140,7 @@ const CaseList = ({
               }
 
               router.replace(
-                constructUrl({
+                constructUrlWithQ({
                   ...selection,
                   q: event.currentTarget.value,
                 }),
@@ -141,7 +148,6 @@ const CaseList = ({
                 { shallow: true }
               );
               setSearchedQ(event.currentTarget.value);
-
               if (event.currentTarget.value === "") {
                 setSearchedData(null);
               } else {
@@ -161,10 +167,29 @@ const CaseList = ({
             label="Kategorie"
             placeholder="auswählen (mehrfach)"
             value={selection.tags}
-            data={TAGS.map((x) => ({ label: x[1], value: x[0] }))}
+            data={TAGS.map((x) => ({
+              label: x[2],
+              value: x[0],
+              group: "trifft zu",
+            }))
+              .concat(
+                TAGS.map((x) => ({
+                  label: x[3],
+                  value: "no__" + x[0],
+                  group: "trifft nicht zu",
+                }))
+              )
+              .filter(
+                (x) =>
+                  !selection.tags.includes(
+                    x.value.startsWith("no__")
+                      ? x.value.replace("no__", "")
+                      : "no__" + x.value
+                  )
+              )}
             onChange={(x) =>
               router.replace(
-                constructUrl({ ...selection, tags: x, p: 1 }),
+                constructUrlWithQ({ ...selection, tags: x, p: 1 }),
                 undefined,
                 { scroll: false }
               )
@@ -217,7 +242,7 @@ const CaseList = ({
               page={p}
               onChange={(newPage) =>
                 router.push(
-                  constructUrl({
+                  constructUrlWithQ({
                     ...selection,
                     p: newPage,
                   }),

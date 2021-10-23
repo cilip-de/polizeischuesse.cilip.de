@@ -11,11 +11,22 @@ dayjs.extend(localeData);
 const PAGE_SIZE = 20;
 const SELECTABLE = ["year", "state", "place"];
 
+// value, column, positive label, negative label
 const TAGS = [
-  ["schusswechsel", "Schusswechsel"],
-  ["sek", "Sondereinsatzbeamte"],
-  ["vgbeamte", "Verletzte/getötete Beamte"],
-  ["vbaktion", "Vorbereitete Polizeiaktion"],
+  ["schusswechsel", "Schusswechsel", "Schusswechsel", "kein Schusswechsel"],
+  ["sek", "Sondereinsatzbeamte", "SEK", "kein SEK"],
+  [
+    "vgbeamte",
+    "Verletzte/getötete Beamte",
+    "Verletzte/getötete Beamte",
+    "keine verletzten/getöteten Beamten",
+  ],
+  [
+    "vbaktion",
+    "Vorbereitete Polizeiaktion",
+    "Vorbereitete Polizeiaktion",
+    "Unvorbereitete Polizeiaktion",
+  ],
 ];
 
 const SEARCH_KEYES = ["Name", "Szenarium", "weapon", "place", "state"];
