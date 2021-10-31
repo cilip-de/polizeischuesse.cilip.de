@@ -27,13 +27,17 @@ const constructHighlights = (item, attr) => {
   return text;
 };
 
-const Case = ({ item }) => {
+const Case = ({ item, hideLink = false }) => {
   for (const term of SEARCH_KEYES) {
     item[term] = constructHighlights(item, term);
   }
 
   return (
-    <Card shadow="sm" padding="lg" style={{ marginBottom: "2rem" }}>
+    <Card
+      shadow="sm"
+      padding="sm"
+      style={{ marginBottom: "2rem", position: "relative" }}
+    >
       <Group>
         {item.schusswechsel && (
           <Badge size="xs" color="pink" variant="light">
@@ -104,11 +108,30 @@ const Case = ({ item }) => {
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             {item.weapon && `Bewaffnet mit ${item.weapon}`}
           </Text>
+          <div></div>
         </Col>
         <Col span={12} md={8} lg={8}>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             {item["Szenarium"]}
           </Text>
+          {!hideLink && (
+            <div style={{ position: "absolute", bottom: 0, right: 10 }}>
+              <Text align="right" color="dimmed">
+                <a href={`/fall/${item["Fall"]}`} target="_blank">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    fill="currentColor"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
+                    <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
+                  </svg>
+                </a>
+              </Text>
+            </div>
+          )}
         </Col>
       </Grid>
     </Card>
