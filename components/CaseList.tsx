@@ -202,7 +202,7 @@ const CaseList = ({
         <Center style={{ marginBottom: "1rem" }}>
           {enoughChars && numHits > 1 && numHits !== maxCases && (
             <Text>
-              {numHits} von {maxCases} Fälle
+              {numHits} von {maxCases} Fällen
             </Text>
           )}
           {enoughChars && numHits > 1 && numHits === maxCases && (

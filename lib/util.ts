@@ -3,4 +3,8 @@ const paginate = (array: [], pageSize: number, pageNumber: number) => {
   return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 };
 
-export { paginate };
+const isNumber = (n) => {
+  return !isNaN(parseFloat(n)) && isFinite(n);
+};
+
+export { paginate, isNumber };

@@ -19,7 +19,7 @@ const TAGS = [
     "vgbeamte",
     "Verletzte/getötete Beamte",
     "Verletzte/getötete Beamte",
-    "keine verletzten/getöteten Beamten",
+    "Keine verletzten/getöteten Beamten",
   ],
   [
     "vbaktion",
@@ -27,6 +27,26 @@ const TAGS = [
     "Vorbereitete Polizeiaktion",
     "Unvorbereitete Polizeiaktion",
   ],
+  [
+    "psych",
+    "Hinweise auf psychische Ausnahmesituation und/ oder Drogenkonsum",
+    "Hinweise auf psychische Ausnahmesituation und/ oder Drogenkonsum",
+    "Keine Hinweise auf psychische Ausnahmesituation und/ oder Drogenkonsum",
+  ],
+  [
+    "famgew",
+    "Hinweise auf familiäre oder häusliche Gewalt",
+    "Hinweise auf familiäre oder häusliche Gewalt",
+    "Keine Hinweise auf familiäre oder häusliche Gewalt",
+  ],
+
+  [
+    "unschuss",
+    "Unbeabsichtigte Schussabgabe",
+    "Unbeabsichtigte Schussabgabe",
+    "Beabsichtigte Schussabgabe",
+  ],
+  ["indoor", "Schussort Indoor", "Schussort Indoor", "Schussort nicht Indoor"],
 ];
 
 const SEARCH_KEYES = ["Name", "Szenarium", "weapon", "place", "state"];
@@ -73,7 +93,10 @@ const setupData = async () => {
     x.key = i;
     x.state = x["Bundesland"];
     x.place = x["Ort"];
-    x.weapon = x["Opfer mit Schusswaffe"];
+    x.weapon = x["Waffen"];
+    x.sex = x["Geschlecht"];
+    x.numShots = x["Anzahl im Einsatz abgegebener polizeilicher Schüsse"];
+    x["Schussort Indoor"] = x["Schussort"] === "Drin" ? "Ja" : "";
 
     for (const [t, label] of TAGS) {
       x[t] = x[label].includes("Ja");

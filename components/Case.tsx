@@ -1,6 +1,7 @@
-import { Badge, Card, Col, Grid, Group, Text } from "@mantine/core";
+import { Badge, Card, Col, Grid, Group, Space, Text } from "@mantine/core";
 import React from "react";
 import { SEARCH_KEYES } from "../lib/data";
+import { isNumber } from "../lib/util";
 
 // https://dev.to/noclat/using-fuse-js-with-react-to-build-an-advanced-search-with-highlighting-4b93
 const highlight = (value, indices = [], i = 1) => {
@@ -41,7 +42,7 @@ const Case = ({ item }) => {
         )}
         {item.sek && (
           <Badge size="xs" color="grape" variant="light">
-            Sondereinsatzbeamte
+            SEK
           </Badge>
         )}
         {item.vgbeamte && (
@@ -54,21 +55,54 @@ const Case = ({ item }) => {
             Vorbereitete Polizeiaktion
           </Badge>
         )}
+        {item.famgew && (
+          <Badge size="xs" color="blue" variant="light">
+            Phsych. Ausnahmesituation / Drogen
+          </Badge>
+        )}
+        {item.famgew && (
+          <Badge size="xs" color="teal" variant="light">
+            Famil. oder häusl. Gewalt
+          </Badge>
+        )}
+        {item.unschuss && (
+          <Badge size="xs" color="cyan" variant="light">
+            Unbeabsichtigte Schussabgabe
+          </Badge>
+        )}
+        {item.indoor && (
+          <Badge size="xs" color="lime" variant="light">
+            Indoor
+          </Badge>
+        )}
       </Group>
       <Grid>
         <Col span={12} md={4} lg={4}>
-          <Text weight={500}>{item["Name"]}</Text>
+          <Text weight={500}>{item["Name"].replace(`, ${item.sex}`, "")}</Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
-            {item.datePrint}
+            {isNumber(item.Alter)
+              ? `${item.Alter} Jahre`
+              : `Alter: ${item.Alter}`}
+            {item.sex.length > 0 && `, ${item.sex}`}
+          </Text>
+          <Space />
+          <Text size="sm" style={{ lineHeight: 1.5 }}>
+            Erschossen am {item.datePrint}
           </Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
-            {item.Alter} Jahre
+            In {item.place}
+            {item.state !== item.place && `, ${item.state}`}
           </Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
-            {item.place}, {item.state}
+            {item.numShots.length > 0 &&
+              item.numShots !== "1" &&
+              `Mit ${item.numShots} Schüssen`}
+            {item.numShots.length > 0 &&
+              item.numShots === "1" &&
+              `Mit einem Schuss`}
           </Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
-            Bewaffnet mit Schusswaffe: {item.weapon}
+            {item.weapon && `Bewaffnet mit ${item.weapon}`}
           </Text>
         </Col>
         <Col span={12} md={8} lg={8}>
