@@ -32,16 +32,18 @@ const Home: NextPage = ({
               <div>
                 <Space h="xl" />
                 <Title order={1}>Polizeiliche Todesschüsse</Title>
+                {/* <Space h="sm" /> */}
+                <Title order={2}>In Deutschland</Title>
                 <Space h="xl" />
-                <Title order={3}>
-                  Seit 1985 wurden mindestens {maxCases} Personen durch die
-                  deutsche Polizei erschossen.
+                <Title order={4}>
+                  Nach dem Fall der Mauer wurden {maxCases} Personen durch
+                  Kugeln der deutschen Polizei getötet.
                 </Title>
                 <Space h="xl" />
-                <Text size="md">
-                  Es gibt offizielle Statistiken, aber eine einzelne Taten. Die
-                  Bürgerrechtszeitschfrift CILIP dokumentiert die Taten.
-                </Text>
+                <Title order={4}>
+                  Wir zählen seit 1976 außerdem {maxCases} tödliche Schüsse
+                  allein in Westdeutschland.
+                </Title>
               </div>
             </Col>
           </Grid>
@@ -50,24 +52,47 @@ const Home: NextPage = ({
           <Grid>
             <Col span={12} sm={8}>
               <Text>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque
-                assumenda excepturi atque praesentium est asperiores obcaecati
-                recusandae ratione maiores! Quia nostrum eos, obcaecati facere
-                natus ducimus dolore! Commodi, ducimus modi?
+                Jedes Jahr veröffentlicht die Konferenz der Innenminister*innen
+                der Bundesländer eine neue{" "}
+                <b>Statistik zum polizeilichen Schusswaffengebrauch</b> des
+                Vorjahres. Neben Warnschüssen oder Schüssen auf Tiere und Sachen
+                werden auch Polizeikugeln auf Personen und daraus resultierende
+                Todesfälle gezählt.
               </Text>
               <Space h="xl" />
               <Text>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque
-                assumenda excepturi atque praesentium est asperiores obcaecati
-                recusandae ratione maiores! Quia nostrum eos, obcaecati facere
-                natus ducimus dolore! Commodi, ducimus modi?
+                Die ab 1984 von den <b>Behörden geführte Aufstellung</b> ist
+                jedoch <b>anonym</b>, es wird nicht auf die einzelnen Taten
+                eingegangen. Die Statistik gibt auch keine Auskunft über die
+                Opfer.{" "}
+                <b>
+                  Seit 1976 dokumentiert die Zeitschrift Bürgerrechte &
+                  Polizei/CILIP
+                </b>
+                . deshalb die Hintergründe zu den durch die Polizei verursachten
+                Todesfällen. Dabei sammeln wir Informationen zur Beteiligung von
+                Sondereinheiten, der Zahl jeweils abgegebener Schüsse und der
+                Situation in der sich die Schussabgabe zutrug.
               </Text>
               <Space h="xl" />
               <Text>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque
-                assumenda excepturi atque praesentium est asperiores obcaecati
-                recusandae ratione maiores! Quia nostrum eos, obcaecati facere
-                natus ducimus dolore! Commodi, ducimus modi?
+                So ist etwa von Bedeutung, ob die Getöteten selbst bewaffnet
+                waren, sich womöglich in einer psychischen Ausnahmesituation
+                befanden oder, wie es häufig geschieht, in ihrer eigenen Wohnung
+                erschossen wurden. Unsere Jahresberichte basieren vor allem auf
+                Recherchen in der lokalen und überregionalen Presse. 2017 haben
+                Erik Peter und Svenja Bednarczyk in der taz eigene Recherchen zu
+                unserer Sammlung angestellt und diese{" "}
+                <a href="https://web.archive.org/web/20210129215547/https://taz.atavist.com/polizeitote">
+                  visualisiert
+                </a>
+                . Auch{" "}
+                <a href="http://schusswaffeneinsatz.de/download/toetung-durch-polizeibeamte%20(1).pdf">
+                  Clemens Lorei
+                </a>{" "}
+                dokumentiert den polizeilichen Schusswaffengebrauch in
+                Deutschland auf seiner Webseite und beruft sich dabei oft auf
+                die CILIP.
               </Text>
             </Col>
             <Col span={12} sm={4}>

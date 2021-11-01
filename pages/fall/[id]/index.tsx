@@ -5,10 +5,6 @@ import React from "react";
 import Case from "../../../components/Case";
 import { setupData } from "../../../lib/data";
 
-// const CaseDetail: NextPage = (props) => {
-//   return <div>Hello</div>;
-// };
-
 const CaseDetail: NextPage = (props) => {
   return (
     <Container>
