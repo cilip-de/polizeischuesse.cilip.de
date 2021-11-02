@@ -27,6 +27,15 @@ const constructHighlights = (item, attr) => {
   return text;
 };
 
+const textToLinks = (text) => {
+  const links = text.split(" ");
+  return links.map((x, i) => (
+    <a style={{ color: "inherit" }} href={x}>
+      [{i + 1}]
+    </a>
+  ));
+};
+
 const Case = ({ item, hideLink = false }) => {
   for (const term of SEARCH_KEYES) {
     item[term] = constructHighlights(item, term);
@@ -59,14 +68,14 @@ const Case = ({ item, hideLink = false }) => {
             Vorbereitete Polizeiaktion
           </Badge>
         )}
-        {item.famgew && (
+        {item.psych && (
           <Badge size="xs" color="blue" variant="light">
-            Phsych. Ausnahmesituation / Drogen
+            Mutm. phsych. Ausnahmesituation / Drogen
           </Badge>
         )}
         {item.famgew && (
           <Badge size="xs" color="teal" variant="light">
-            Famil. oder häusl. Gewalt
+            Mutm. famil. oder häusl. Gewalt
           </Badge>
         )}
         {item.unschuss && (
@@ -108,12 +117,12 @@ const Case = ({ item, hideLink = false }) => {
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             {item.weapon && `Bewaffnet mit ${item.weapon}`}
           </Text>
+          <Space />
+          <Text size="sm">Quellen: {textToLinks(item["Quellen"])}</Text>
           <div></div>
         </Col>
         <Col span={12} md={8} lg={8}>
-          <Text size="sm" style={{ lineHeight: 1.5 }}>
-            {item["Szenarium"]}
-          </Text>
+          <Text style={{ lineHeight: 1.5 }}>{item["Szenarium"]}</Text>
           {!hideLink && (
             <div style={{ position: "absolute", bottom: 0, right: 10 }}>
               <Text align="right" color="dimmed">
