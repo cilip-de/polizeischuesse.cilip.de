@@ -1,7 +1,16 @@
-import { Col, Container, Grid, Space, Text, Title } from "@mantine/core";
+import {
+  Button,
+  Col,
+  Container,
+  Grid,
+  Space,
+  Text,
+  Title,
+} from "@mantine/core";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import React from "react";
 import CaseList from "../components/CaseList";
 import VisualizationCard from "../components/VisualizationCard";
@@ -97,6 +106,19 @@ const Home: NextPage = ({
             </Col>
             <Col span={12} sm={4}>
               <VisualizationCard data={options.year} />
+              <div style={{ padding: "1rem" }}>
+                <Link href="/daten">
+                  <Button variant="light" fullWidth>
+                    Datenbeschreibung
+                  </Button>
+                </Link>
+                <Space />
+                <Link href="/statistiken">
+                  <Button variant="light" fullWidth>
+                    Offizielle Statistiken
+                  </Button>
+                </Link>
+              </div>
             </Col>
           </Grid>
 

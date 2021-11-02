@@ -3,6 +3,7 @@ import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import React from "react";
 import { HorizontalBarChart, VerticalBarChart } from "../components/charts";
 import { countItems, setupData } from "../lib/data";
@@ -63,6 +64,9 @@ const Auswertung: NextPage = ({ data, options }) => {
 
       <main>
         <Container>
+          <Link href="/">
+            <a>{"« zurück"}</a>
+          </Link>
           <Title order={1}>Auswertung der Daten</Title>
           <Text>
             Eine statische Auswertung der Daten aus der Chronik. Es fehlt noch

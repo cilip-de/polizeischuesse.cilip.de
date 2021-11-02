@@ -30,7 +30,7 @@ const constructHighlights = (item, attr) => {
 const textToLinks = (text) => {
   const links = text.split(" ");
   return links.map((x, i) => (
-    <a style={{ color: "inherit" }} href={x}>
+    <a key={x} style={{ color: "inherit", textDecoration: "inherit" }} href={x}>
       [{i + 1}]
     </a>
   ));
