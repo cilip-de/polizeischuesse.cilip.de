@@ -7,6 +7,7 @@ import Link from "next/link";
 import React from "react";
 import { HorizontalBarChart, VerticalBarChart } from "../components/charts";
 import { countItems, setupData } from "../lib/data";
+import { isNumber } from "../lib/util";
 
 const Auswertung: NextPage = ({ data, options }) => {
   const boolAtr = [
@@ -15,6 +16,13 @@ const Auswertung: NextPage = ({ data, options }) => {
     "Verletzte/getötete Beamte",
     "Vorbereitete Polizeiaktion",
     "Opfer mit Schusswaffe",
+    "Schussort Innenraum",
+    "Schussort Außen",
+    "Unbeabsichtigte Schussabgabe",
+    "Hinweise auf familiäre oder häusliche Gewalt",
+    "Hinweise auf psychische Ausnahmesituation und/ oder Drogenkonsum",
+    "weiblich",
+    "männlich",
   ];
 
   const boolData = boolAtr.map((x) => ({
@@ -119,7 +127,7 @@ const Auswertung: NextPage = ({ data, options }) => {
           <div>
             <Title order={3}>Alter</Title>
             <VerticalBarChart
-              data={countItems(data.map(({ Alter }) => Alter))}
+              data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
             />
           </div>
           <div>

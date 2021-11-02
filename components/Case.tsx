@@ -28,9 +28,20 @@ const constructHighlights = (item, attr) => {
 };
 
 const textToLinks = (text) => {
-  const links = text.split(" ");
+  const links = text
+    .trim()
+    .split(" ")
+    .filter((x) => x !== "");
+
+  if (links.length === 0) return "TBA";
+
   return links.map((x, i) => (
-    <a key={x} style={{ color: "inherit", textDecoration: "inherit" }} href={x}>
+    <a
+      target="_blank"
+      key={x}
+      style={{ color: "inherit", textDecoration: "inherit" }}
+      href={x}
+    >
       [{i + 1}]
     </a>
   ));
@@ -55,7 +66,7 @@ const Case = ({ item, hideLink = false }) => {
         )}
         {item.sek && (
           <Badge size="xs" color="grape" variant="light">
-            SEK
+            SEK-Beteiligung
           </Badge>
         )}
         {item.vgbeamte && (
@@ -85,7 +96,7 @@ const Case = ({ item, hideLink = false }) => {
         )}
         {item.indoor && (
           <Badge size="xs" color="lime" variant="light">
-            Indoor
+            Innenraum
           </Badge>
         )}
       </Group>

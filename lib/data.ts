@@ -14,7 +14,7 @@ const SELECTABLE = ["year", "state", "place"];
 // value, column, positive label, negative label
 const TAGS = [
   ["schusswechsel", "Schusswechsel", "Schusswechsel", "kein Schusswechsel"],
-  ["sek", "Sondereinsatzbeamte", "SEK", "kein SEK"],
+  ["sek", "Sondereinsatzbeamte", "SEK-Beteiligung", "ohne SEK-Beteiligung"],
   [
     "vgbeamte",
     "Verletzte/getötete Beamte",
@@ -46,7 +46,13 @@ const TAGS = [
     "Unbeabsichtigte Schussabgabe",
     "Beabsichtigte Schussabgabe",
   ],
-  ["indoor", "Schussort Indoor", "Schussort Indoor", "Schussort nicht Indoor"],
+  [
+    "indoor",
+    "Schussort Innenraum",
+    "Schussort Innenraum",
+    "Schussort nicht Innenraum",
+  ],
+  ["men", "männlich", "Männlich", "Nicht männlich"],
 ];
 
 const SEARCH_KEYES = ["Name", "Szenarium", "weapon", "place", "state"];
@@ -81,6 +87,8 @@ const setupData = async () => {
   let data = await csv(url);
   data = _.orderBy(data, "Datum", "desc");
 
+  const dateReunification = dayjs("1990-10-3");
+
   data.forEach((x, i) => {
     const date = dayjs(x["Datum"]);
     x.year = date.get("year");
@@ -90,18 +98,27 @@ const setupData = async () => {
     x.month = date.get("month");
     x.monthPrint = dayjs.months()[x.month];
     x.datePrint = date.format("DD.MM.YYYY");
+    x.beforeReunification = date.isBefore(dateReunification);
     x.key = i;
     x.state = x["Bundesland"];
     x.place = x["Ort"];
     x.weapon = x["Waffen"];
     x.sex = x["Geschlecht"];
     x.numShots = x["Anzahl im Einsatz abgegebener polizeilicher Schüsse"];
-    x["Schussort Indoor"] = x["Schussort"] === "Drin" ? "Ja" : "";
+    x["Schussort Innenraum"] = x["Schussort"] === "Drin" ? "Ja" : "";
+    x["Schussort Außen"] = x["Schussort"] === "Draußen" ? "Ja" : "";
+    x["weiblich"] = x.sex == "weiblich" ? "Ja" : "";
+    x["männlich"] = x.sex == "männlich" ? "Ja" : "";
 
     for (const [t, label] of TAGS) {
       x[t] = x[label].includes("Ja");
     }
   });
+
+  const [beforeReuni, afterReuni] = _.map(
+    _.partition(data, "beforeReunification"),
+    "length"
+  );
 
   const year = _.orderBy(countItems(data.map((x) => x.year)), "value", "desc");
   const state = countItems(
@@ -123,7 +140,13 @@ const setupData = async () => {
     keys: SEARCH_KEYES,
   });
 
-  setupProps = { data, options: { year, state, place }, fuse };
+  setupProps = {
+    data,
+    options: { year, state, place },
+    fuse,
+    beforeReuni,
+    afterReuni,
+  };
   return setupProps;
 };
 

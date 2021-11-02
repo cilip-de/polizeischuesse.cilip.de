@@ -22,6 +22,8 @@ const Home: NextPage = ({
   selection,
   options,
   maxCases,
+  afterReuni,
+  beforeReuni,
 }) => {
   return (
     <div>
@@ -44,14 +46,14 @@ const Home: NextPage = ({
                 {/* <Space h="sm" /> */}
                 <Title order={2}>In Deutschland</Title>
                 <Space h="xl" />
-                <Title order={4}>
-                  Nach dem Fall der Mauer wurden {maxCases} Personen durch
+                <Title order={3}>
+                  Seit der Wiedervereinigung wurden {afterReuni} Personen durch
                   Kugeln der deutschen Polizei getötet.
                 </Title>
                 <Space h="xl" />
                 <Title order={4}>
-                  Wir zählen seit 1976 außerdem {maxCases} tödliche Schüsse
-                  allein in Westdeutschland.
+                  Wir zählen von 1976 bis zur Wiedervereinigung außerdem{" "}
+                  {beforeReuni} tödliche Schüsse allein in Westdeutschland.
                 </Title>
               </div>
             </Col>
@@ -145,7 +147,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const selection = { q: "", p: "1", ...context.query };
 
   const { q } = selection;
-  const { data, options, fuse } = await setupData();
+  const { data, options, fuse, beforeReuni, afterReuni } = await setupData();
 
   if (selection.p !== null) selection.p = parseInt(selection.p);
   if (selection.tags && selection.tags !== null)
@@ -167,6 +169,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       options,
       selection,
       maxCases: data.length,
+      beforeReuni,
+      afterReuni,
     },
   };
 };

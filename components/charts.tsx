@@ -53,7 +53,7 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
 const HorizontalBarChart = ({ data }) => {
   const theme = useMantineTheme();
 
-  const margin = { top: 10, right: 10, bottom: 20, left: 150 };
+  const margin = { top: 10, right: 10, bottom: 20, left: 200 };
 
   return (
     <div style={{ height: 20 * data.length + margin.top + margin.bottom }}>
