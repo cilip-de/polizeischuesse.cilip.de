@@ -3,7 +3,7 @@ import { GetServerSideProps, NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 import Case from "../../../components/Case";
-import { setupData } from "../../../lib/data";
+import { setupData, setupTaserData } from "../../../lib/data";
 
 const CaseDetail: NextPage = (props) => {
   return (
@@ -22,12 +22,13 @@ const CaseDetail: NextPage = (props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const results = await setupData();
-  // // const case = data.filter((x) => x["Fall"] == id)[0];
-  // const case = results.data[0];
-  // return { props: { case } };
-  return { props: { case: results.data[0] } };
+  const taserData = await setupTaserData();
+  const casex = results.data
+    .concat(taserData)
+    .filter((x) => x["Fall"] == query.id)[0];
+  return { props: { case: casex } };
 };
 
 export default CaseDetail;

@@ -120,6 +120,12 @@ const Home: NextPage = ({
                     Offizielle Statistiken
                   </Button>
                 </Link>
+                <Space />
+                <Link href="/taser">
+                  <Button variant="light" fullWidth>
+                    Tod durch Taser
+                  </Button>
+                </Link>
               </div>
             </Col>
           </Grid>

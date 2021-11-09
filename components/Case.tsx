@@ -38,6 +38,7 @@ const textToLinks = (text) => {
   return links.map((x, i) => (
     <a
       target="_blank"
+      rel="noreferrer"
       key={x}
       style={{ color: "inherit", textDecoration: "inherit" }}
       href={x}
@@ -100,6 +101,7 @@ const Case = ({ item, hideLink = false }) => {
           </Badge>
         )}
       </Group>
+      <Space />
       <Grid>
         <Col span={12} md={4} lg={4}>
           <Text weight={500}>{item["Name"].replace(`, ${item.sex}`, "")}</Text>
@@ -133,11 +135,17 @@ const Case = ({ item, hideLink = false }) => {
           <div></div>
         </Col>
         <Col span={12} md={8} lg={8}>
-          <Text style={{ lineHeight: 1.5 }}>{item["Szenarium"]}</Text>
+          <Text style={{ lineHeight: 1.5, marginBottom: "0.5rem" }}>
+            {item["Szenarium"]}
+          </Text>
           {!hideLink && (
             <div style={{ position: "absolute", bottom: 0, right: 10 }}>
               <Text align="right" color="dimmed">
-                <a href={`/fall/${item["Fall"]}`} target="_blank">
+                <a
+                  href={`/fall/${item["Fall"]}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"

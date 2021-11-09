@@ -11,6 +11,9 @@ dayjs.extend(localeData);
 const PAGE_SIZE = 20;
 const SELECTABLE = ["year", "state", "place"];
 
+let HOST = "http://localhost:3000";
+if (process.env.NODE_ENV === "production") HOST = "http://cilip.app.vis.one";
+
 // value, column, positive label, negative label
 const TAGS = [
   ["schusswechsel", "Schusswechsel", "Schusswechsel", "kein Schusswechsel"],
@@ -74,17 +77,7 @@ const countItems = (arr, sort = false) => {
   }));
 };
 
-let fuse = null;
-let setupProps = null;
-
-const setupData = async () => {
-  if (setupProps !== null) return setupProps;
-
-  let url = "http://localhost:3000/data.csv";
-  if (process.env.NODE_ENV === "production")
-    url = "http://cilip.app.vis.one/data.csv";
-
-  let data = await csv(url);
+const preprocessData = (data) => {
   data = _.orderBy(data, "Datum", "desc");
 
   const dateReunification = dayjs("1990-10-3");
@@ -114,6 +107,19 @@ const setupData = async () => {
       x[t] = x[label].includes("Ja");
     }
   });
+
+  return data;
+};
+
+let fuse = null;
+let setupProps = null;
+
+const setupData = async () => {
+  if (setupProps !== null) return setupProps;
+
+  let data = await csv(`${HOST}/data.csv`);
+
+  data = preprocessData(data);
 
   const [beforeReuni, afterReuni] = _.map(
     _.partition(data, "beforeReunification"),
@@ -150,4 +156,17 @@ const setupData = async () => {
   return setupProps;
 };
 
-export { setupData, countItems, SELECTABLE, PAGE_SIZE, TAGS, SEARCH_KEYES };
+const setupTaserData = async () => {
+  let data = await csv(`${HOST}/taser.csv`);
+  return preprocessData(data);
+};
+
+export {
+  setupData,
+  countItems,
+  setupTaserData,
+  SELECTABLE,
+  PAGE_SIZE,
+  TAGS,
+  SEARCH_KEYES,
+};
