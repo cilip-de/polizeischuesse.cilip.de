@@ -1,30 +1,17 @@
-import { Container, Text, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
-import Head from "next/head";
-import Link from "next/link";
 import React from "react";
+import Layout from "../components/Layout";
 import { setupData } from "../lib/data";
 
 const Daten: NextPage = ({ data, options }) => {
   return (
-    <div>
-      <Head>
-        <title>Polizeiliche Todesschüsse</title>
-        <meta name="description" content="Polizeiliche Todesschüsse" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <Container>
-          <Link href="/">
-            <a>{"« zurück"}</a>
-          </Link>
-          <Title order={1}>Ausführliche Darstelleun zu den Daten</Title>
-          <Text>Woher die Daten kommen, etc.</Text>
-        </Container>
-      </main>
-    </div>
+    <Layout
+      title="Ausführliche Darstelleun zu den Daten"
+      description="Woher die Daten kommen, etc."
+    >
+      <div>Peter</div>
+    </Layout>
   );
 };
 

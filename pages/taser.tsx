@@ -1,36 +1,26 @@
-import { Container, Text, Title } from "@mantine/core";
+import { Space } from "@mantine/core";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
-import Head from "next/head";
-import Link from "next/link";
 import React from "react";
 import Case from "../components/Case";
+import Layout from "../components/Layout";
 import { setupTaserData } from "../lib/data";
 
 const Taser: NextPage = ({ data }) => {
   return (
-    <div>
-      <Head>
-        <title>Tod durch Taser</title>
-        <meta name="description" content="Tod durch Taser" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <Container>
-          <Link href="/">
-            <a>{"« zurück"}</a>
-          </Link>
-          <Title order={1}>Tod durch Taser</Title>
-          <Text>Tod durch Taser</Text>
-          <div>
-            {data.map((x) => (
-              <Case item={x} key={x.key} />
-            ))}
-          </div>
-        </Container>
-      </main>
-    </div>
+    <Layout title="Tod durch Taser" description="Tod durch Taser">
+      <div>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iure, laborum,
+        fuga iste veniam dolorum corrupti nobis eum blanditiis soluta eius atque
+        voluptatum ut iusto officia natus dolorem ea temporibus. Odit.
+      </div>
+      <Space />
+      <div>
+        {data.map((x) => (
+          <Case item={x} key={x.key} />
+        ))}
+      </div>
+    </Layout>
   );
 };
 

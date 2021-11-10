@@ -126,6 +126,12 @@ const Home: NextPage = ({
                     Tod durch Taser
                   </Button>
                 </Link>
+                <Space />
+                <Link href="/kontakt">
+                  <Button variant="light" fullWidth>
+                    Kontakt, Impressum, Datenschutz
+                  </Button>
+                </Link>
               </div>
             </Col>
           </Grid>
