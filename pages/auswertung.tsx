@@ -8,6 +8,35 @@ import Layout from "../components/Layout";
 import { countItems, setupData } from "../lib/data";
 import { isNumber } from "../lib/util";
 
+// https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Bevoelkerungsstand/Tabellen/bevoelkerung-nichtdeutsch-laender.html
+// Stand 21. Juni 2021
+const inhab = `
+Baden-Württemberg 11103043
+Bayern 13140183
+Berlin 3664088
+Brandenburg 2531071
+Bremen 680130
+Hamburg 1852478
+Hessen 6293154
+Mecklenburg-Vorpommern 1610774
+Niedersachsen 8003421
+Nordrhein-Westfalen 17925570
+Rheinland-Pfalz 4098391
+Saarland 983991
+Sachsen 4056941
+Sachsen-Anhalt 2180684
+Schleswig-Holstein 2910875
+Thüringen 2120237
+`
+  .trim()
+  .split("\n");
+
+const landInhab = {};
+for (const x of inhab) {
+  landInhab[x.split(" ")[0]] = parseInt(x.split(" ")[1]) / 1000000;
+}
+console.log(landInhab);
+
 const Auswertung: NextPage = ({ data, options }) => {
   const boolAtr = [
     "Schusswechsel",
@@ -61,6 +90,14 @@ const Auswertung: NextPage = ({ data, options }) => {
   }
   console.log(dataSekNo);
 
+  // const stateDate = _.orderBy(options.state, "count");
+  const perInhab = _.cloneDeep(options.state);
+  perInhab.forEach((x) => {
+    x.count = _.round(x.count / landInhab[x.value], 2);
+  });
+
+  const perInhabSorted = _.orderBy(perInhab, "count");
+
   return (
     <Layout
       title="Visuelle Auswertung der Daten"
@@ -75,8 +112,8 @@ const Auswertung: NextPage = ({ data, options }) => {
         />
       </div>
       <div>
-        <Title order={3}>Fälle pro Bundesland</Title>
-        <HorizontalBarChart data={_.orderBy(options.state, "count")} />
+        <Title order={3}>Fälle pro Bundesland, je 1.000.000 Einwohner</Title>
+        <HorizontalBarChart data={perInhabSorted} />
       </div>
       <div>
         <Title order={3}>Fälle pro Stadt (nur top20)</Title>
