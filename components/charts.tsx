@@ -1,6 +1,7 @@
 import { Text, useMantineTheme } from "@mantine/core";
 import { ResponsiveBar } from "@nivo/bar";
 import { ticks } from "d3-array";
+import _ from "lodash";
 import React from "react";
 
 const selectNiceTicks = (data, numTicks) => [
@@ -37,7 +38,7 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
   return (
     <div style={{ height: 150 }}>
       <ResponsiveBar
-        margin={{ top: 10, right: 10, bottom: 20, left: 10 }}
+        margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
         axisLeft={null}
         colors={theme.colors.indigo[2]}
         axisBottom={{
@@ -50,14 +51,15 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
   );
 };
 
-const HorizontalBarChart = ({ data }) => {
+const HorizontalBarChart = ({ data, formatPerc = false }) => {
   const theme = useMantineTheme();
 
-  const margin = { top: 10, right: 10, bottom: 20, left: 200 };
+  const margin = { top: 10, right: 10, bottom: 30, left: 200 };
 
   return (
     <div style={{ height: 20 * data.length + margin.top + margin.bottom }}>
       <ResponsiveBar
+        valueFormat={(x) => (formatPerc ? _.round(x * 100, 0) + " %" : x)}
         margin={margin}
         layout={"horizontal"}
         axisRight={null}

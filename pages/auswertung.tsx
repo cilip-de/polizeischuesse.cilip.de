@@ -117,7 +117,7 @@ const Auswertung: NextPage = ({ data, options }) => {
       </div>
       <div>
         <Title order={3}>Klassifikation</Title>
-        <HorizontalBarChart data={boolData} />
+        <HorizontalBarChart data={boolData} formatPerc />
       </div>
     </Layout>
   );
