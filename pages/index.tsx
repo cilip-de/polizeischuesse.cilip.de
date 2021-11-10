@@ -52,8 +52,8 @@ const Home: NextPage = ({
                 </Title>
                 <Space h="xl" />
                 <Title order={4}>
-                  Wir zählen von 1976 bis zur Wiedervereinigung außerdem{" "}
-                  {beforeReuni} tödliche Schüsse allein in Westdeutschland.
+                  Wir zählen von 1976 bis 1990 außerdem {beforeReuni} tödliche
+                  Schüsse allein in Westdeutschland.
                 </Title>
               </div>
             </Col>
