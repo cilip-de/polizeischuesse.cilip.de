@@ -1,11 +1,10 @@
-import { Container, Text, Title } from "@mantine/core";
+import { Title } from "@mantine/core";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
-import Head from "next/head";
-import Link from "next/link";
 import React from "react";
 import { HorizontalBarChart, VerticalBarChart } from "../components/charts";
+import Layout from "../components/Layout";
 import { countItems, setupData } from "../lib/data";
 import { isNumber } from "../lib/util";
 
@@ -63,80 +62,64 @@ const Auswertung: NextPage = ({ data, options }) => {
   console.log(dataSekNo);
 
   return (
-    <div>
-      <Head>
-        <title>Polizeiliche Todesschüsse</title>
-        <meta name="description" content="Polizeiliche Todesschüsse" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main>
-        <Container>
-          <Link href="/">
-            <a>{"« zurück"}</a>
-          </Link>
-          <Title order={1}>Auswertung der Daten</Title>
-          <Text>
-            Eine statische Auswertung der Daten aus der Chronik. Es fehlt noch
-            mehr Text für die Beschreibung.
-          </Text>
-          <div>
-            <Title order={3}>Fälle pro Jahr</Title>
-            <VerticalBarChart
-              data={_.orderBy(options.year, "value")}
-              numTicks={5}
-            />
-          </div>
-          <div>
-            <Title order={3}>Fälle pro Bundesland</Title>
-            <HorizontalBarChart data={_.orderBy(options.state, "count")} />
-          </div>
-          <div>
-            <Title order={3}>Fälle pro Stadt (nur top20)</Title>
-            <HorizontalBarChart
-              data={_.orderBy(options.place, "count", "desc")
-                .slice(0, 20)
-                .reverse()}
-            />
-          </div>
-          <div>
-            <Title order={3}>Fälle pro Monat</Title>
-            <HorizontalBarChart
-              data={countItems(
-                _.orderBy(data, "month", "desc").map(
-                  ({ monthPrint }) => monthPrint
-                )
-              )}
-            />
-          </div>
-          <div>
-            <Title order={3}>Fälle pro Wochentag</Title>
-            <HorizontalBarChart data={dataDow} />
-          </div>
-          <div>
-            <Title order={3}>
-              Fälle pro Wochentag, Opfer ohne Schusswaffe, unterteilt nach
-              SEK-Beteiligung
-            </Title>
-            <HorizontalBarChart data={dataSekNo} />
-          </div>
-          <div>
-            <Title order={3}>Tag im Monat</Title>
-            <VerticalBarChart data={countItems(data.map(({ dom }) => dom))} />
-          </div>
-          <div>
-            <Title order={3}>Alter</Title>
-            <VerticalBarChart
-              data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
-            />
-          </div>
-          <div>
-            <Title order={3}>Klassifikation</Title>
-            <HorizontalBarChart data={boolData} />
-          </div>
-        </Container>
-      </main>
-    </div>
+    <Layout
+      title="Visuelle Auswertung der Daten"
+      description="Eine statische Auswertung der Daten aus der Chronik. Es fehlt noch mehr
+    Text für die Beschreibung."
+    >
+      <div>
+        <Title order={3}>Fälle pro Jahr</Title>
+        <VerticalBarChart
+          data={_.orderBy(options.year, "value")}
+          numTicks={5}
+        />
+      </div>
+      <div>
+        <Title order={3}>Fälle pro Bundesland</Title>
+        <HorizontalBarChart data={_.orderBy(options.state, "count")} />
+      </div>
+      <div>
+        <Title order={3}>Fälle pro Stadt (nur top20)</Title>
+        <HorizontalBarChart
+          data={_.orderBy(options.place, "count", "desc")
+            .slice(0, 20)
+            .reverse()}
+        />
+      </div>
+      <div>
+        <Title order={3}>Fälle pro Monat</Title>
+        <HorizontalBarChart
+          data={countItems(
+            _.orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
+          )}
+        />
+      </div>
+      <div>
+        <Title order={3}>Fälle pro Wochentag</Title>
+        <HorizontalBarChart data={dataDow} />
+      </div>
+      <div>
+        <Title order={3}>
+          Fälle pro Wochentag, Opfer ohne Schusswaffe, unterteilt nach
+          SEK-Beteiligung
+        </Title>
+        <HorizontalBarChart data={dataSekNo} />
+      </div>
+      <div>
+        <Title order={3}>Tag im Monat</Title>
+        <VerticalBarChart data={countItems(data.map(({ dom }) => dom))} />
+      </div>
+      <div>
+        <Title order={3}>Alter</Title>
+        <VerticalBarChart
+          data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
+        />
+      </div>
+      <div>
+        <Title order={3}>Klassifikation</Title>
+        <HorizontalBarChart data={boolData} />
+      </div>
+    </Layout>
   );
 };
 

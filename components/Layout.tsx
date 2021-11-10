@@ -23,6 +23,7 @@ export default function Layout({ children, title, description }) {
         <Title order={4}>{description}</Title>
         <Space h="lg" />
         <main>{children}</main>
+        <Space h="lg" />
       </Container>
     </>
   );

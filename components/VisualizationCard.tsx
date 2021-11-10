@@ -24,14 +24,14 @@ function VisualizationCard({ data }) {
         <Text size="sm">Anzahl der Todesschüsse 2010–2020</Text>
       </Group>
 
-      <Link href="/auswertung">
+      <Link href="/auswertung" passHref>
         <Button
           variant="light"
           color="indigo"
           fullWidth
           style={{ marginTop: 14 }}
         >
-          Weitere Visualisierungen
+          Visualisierungen
         </Button>
       </Link>
     </Card>

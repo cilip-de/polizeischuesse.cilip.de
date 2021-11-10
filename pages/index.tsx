@@ -90,44 +90,31 @@ const Home: NextPage = ({
                 So ist etwa von Bedeutung, ob die Getöteten selbst bewaffnet
                 waren, sich womöglich in einer psychischen Ausnahmesituation
                 befanden oder, wie es häufig geschieht, in ihrer eigenen Wohnung
-                erschossen wurden. Unsere Jahresberichte basieren vor allem auf
-                Recherchen in der lokalen und überregionalen Presse. 2017 haben
-                Erik Peter und Svenja Bednarczyk in der taz eigene Recherchen zu
-                unserer Sammlung angestellt und diese{" "}
-                <a href="https://web.archive.org/web/20210129215547/https://taz.atavist.com/polizeitote">
-                  visualisiert
-                </a>
-                . Auch{" "}
-                <a href="http://schusswaffeneinsatz.de/download/toetung-durch-polizeibeamte%20(1).pdf">
-                  Clemens Lorei
-                </a>{" "}
-                dokumentiert den polizeilichen Schusswaffengebrauch in
-                Deutschland auf seiner Webseite und beruft sich dabei oft auf
-                die CILIP.
+                erschossen wurden.
               </Text>
             </Col>
             <Col span={12} sm={4}>
               <VisualizationCard data={options.year} />
               <div style={{ padding: "1rem" }}>
-                <Link href="/daten">
+                <Link href="/daten" passHref>
                   <Button variant="light" fullWidth>
-                    Datenbeschreibung
+                    Methodik
                   </Button>
                 </Link>
                 <Space />
-                <Link href="/statistiken">
+                <Link href="/statistiken" passHref>
                   <Button variant="light" fullWidth>
                     Offizielle Statistiken
                   </Button>
                 </Link>
                 <Space />
-                <Link href="/taser">
+                <Link href="/taser" passHref>
                   <Button variant="light" fullWidth>
                     Tod durch Taser
                   </Button>
                 </Link>
                 <Space />
-                <Link href="/kontakt">
+                <Link href="/kontakt" passHref>
                   <Button variant="light" fullWidth>
                     Kontakt, Impressum, Datenschutz
                   </Button>
