@@ -92,6 +92,8 @@ const Home: NextPage = ({
                 befanden oder, wie es häufig geschieht, in ihrer eigenen Wohnung
                 erschossen wurden.
               </Text>
+              <Space h="xl" />
+              <img src="/cilip-logo-outline.svg" height="50" />
             </Col>
             <Col span={12} sm={4}>
               <VisualizationCard data={options.year} />
