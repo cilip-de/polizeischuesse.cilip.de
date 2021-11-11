@@ -27,7 +27,7 @@ const tooltip = ({ value, data, id }) => (
 
 const commonProps = {
   indexBy: "value",
-  keys: ["count"],
+  keys: ["count", "count2"],
   padding: 0.2,
   tooltip,
 };
@@ -36,11 +36,11 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
   const theme = useMantineTheme();
 
   return (
-    <div style={{ height: 150 }}>
+    <div style={{ height: 200 }}>
       <ResponsiveBar
         margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
         axisLeft={null}
-        colors={theme.colors.indigo[2]}
+        colors={[theme.colors.indigo[2], theme.colors.indigo[1]]}
         axisBottom={{
           tickValues: selectNiceTicks(data, numTicks),
         }}
@@ -67,7 +67,7 @@ const HorizontalBarChart = ({ data, formatPerc = false }) => {
         axisBottom={null}
         colors={[theme.colors.indigo[2], theme.colors.indigo[1]]}
         data={data}
-        {...{ ...commonProps, keys: ["count", "count2"] }}
+        {...commonProps}
       />
     </div>
   );

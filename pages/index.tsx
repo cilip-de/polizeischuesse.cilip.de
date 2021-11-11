@@ -96,7 +96,7 @@ const Home: NextPage = ({
             <Col span={12} sm={4}>
               <VisualizationCard data={options.year} />
               <div style={{ padding: "1rem" }}>
-                <Link href="/daten" passHref>
+                <Link href="/methodik" passHref>
                   <Button variant="light" fullWidth>
                     Methodik
                   </Button>

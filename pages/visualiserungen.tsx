@@ -1,4 +1,4 @@
-import { Title } from "@mantine/core";
+import { Space, Text, Title } from "@mantine/core";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
@@ -35,24 +35,56 @@ const landInhab = {};
 for (const x of inhab) {
   landInhab[x.split(" ")[0]] = parseInt(x.split(" ")[1]) / 1000000;
 }
-console.log(landInhab);
+
+const boolAtr = [
+  "Schusswechsel",
+  "Sondereinsatzbeamte",
+  "Verletzte/getötete Beamte",
+  "Vorbereitete Polizeiaktion",
+  "Opfer mit Schusswaffe",
+  "Schussort Innenraum",
+  "Schussort Außen",
+  "Unbeabsichtigte Schussabgabe",
+  "Hinweise auf familiäre oder häusliche Gewalt",
+  "Hinweise auf psychische Ausnahmesituation und/ oder Drogenkonsum",
+  "weiblich",
+  "männlich",
+];
+
+const CasesPerYear = ({ data }) => {
+  const eastData = countItems(
+    data.filter(({ east }) => east).map(({ year }) => year)
+  );
+  const westData = countItems(
+    data.filter(({ east }) => !east).map(({ year }) => year)
+  );
+
+  const procData = westData;
+  for (const x of westData) {
+    const bla = eastData.filter(({ value }) => value === x.value);
+    if (bla.length) x.count2 = bla[0].count;
+    x.tooltipLabel = {
+      count: "Westdeutschland",
+      count2: "Ostdeutschland",
+    };
+  }
+
+  return (
+    <div>
+      <Title order={3}>
+        Polizeiliche Todesschüsse von {data[data.length - 1].year}–
+        {data[0].year}
+      </Title>
+      <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
+      <Text>
+        Berlin zählt zu Westdeutschland und wird nicht weiter aufgeschlüsselt.
+      </Text>
+      <Space h="lg" />
+    </div>
+  );
+};
 
 const Auswertung: NextPage = ({ data, options }) => {
-  const boolAtr = [
-    "Schusswechsel",
-    "Sondereinsatzbeamte",
-    "Verletzte/getötete Beamte",
-    "Vorbereitete Polizeiaktion",
-    "Opfer mit Schusswaffe",
-    "Schussort Innenraum",
-    "Schussort Außen",
-    "Unbeabsichtigte Schussabgabe",
-    "Hinweise auf familiäre oder häusliche Gewalt",
-    "Hinweise auf psychische Ausnahmesituation und/ oder Drogenkonsum",
-    "weiblich",
-    "männlich",
-  ];
-
   const boolData = boolAtr.map((x) => ({
     count: data.filter((d) => d[x].includes("Ja")).length / data.length,
     value: x,
@@ -67,30 +99,20 @@ const Auswertung: NextPage = ({ data, options }) => {
     return dataDow;
   };
 
-  const noWeaponSekYes = data.filter(
-    (x) => !x[boolAtr[4]].includes("Ja") && x[boolAtr[1]].includes("Ja")
-  );
+  const noWeaponSekYes = data.filter((x) => x[boolAtr[1]].includes("Ja"));
 
-  const noWeaponSekNo = data.filter(
-    (x) => !x[boolAtr[4]].includes("Ja") && !x[boolAtr[1]].includes("Ja")
-  );
+  const noWeaponSekNo = data.filter((x) => !x[boolAtr[1]].includes("Ja"));
 
   const dataDow = makeDowData(data);
-
   const dataSekYes = makeDowData(noWeaponSekYes);
   const dataSekNo = makeDowData(noWeaponSekNo);
-
-  console.log(dataSekYes);
-  console.log(dataSekNo);
 
   for (const x of dataSekNo) {
     const bla = dataSekYes.filter(({ value }) => value === x.value);
     if (bla.length) x.count2 = bla[0].count;
     x.tooltipLabel = { count: "ohne SEK", count2: "mit SEK" };
   }
-  console.log(dataSekNo);
 
-  // const stateDate = _.orderBy(options.state, "count");
   const perInhab = _.cloneDeep(options.state);
   perInhab.forEach((x) => {
     x.count = _.round(x.count / landInhab[x.value], 2);
@@ -104,19 +126,17 @@ const Auswertung: NextPage = ({ data, options }) => {
       description="Eine statische Auswertung der Daten aus der Chronik. Es fehlt noch mehr
     Text für die Beschreibung."
     >
+      <Text>Hier noch eine kurze Erklärung</Text>
+      <Space h="lg" />
+      <CasesPerYear data={data} />
       <div>
-        <Title order={3}>Fälle pro Jahr</Title>
-        <VerticalBarChart
-          data={_.orderBy(options.year, "value")}
-          numTicks={5}
-        />
-      </div>
-      <div>
-        <Title order={3}>Fälle pro Bundesland, je 1.000.000 Einwohner</Title>
+        <Title order={3}>
+          Polizeiliche Todesschüsse pro Bundesland, je 1.000.000 Einwohner
+        </Title>
         <HorizontalBarChart data={perInhabSorted} />
       </div>
       <div>
-        <Title order={3}>Fälle pro Stadt (nur top20)</Title>
+        <Title order={3}>Polizeiliche Todesschüsse pro Stadt</Title>
         <HorizontalBarChart
           data={_.orderBy(options.place, "count", "desc")
             .slice(0, 20)
@@ -124,7 +144,7 @@ const Auswertung: NextPage = ({ data, options }) => {
         />
       </div>
       <div>
-        <Title order={3}>Fälle pro Monat</Title>
+        <Title order={3}>Polizeiliche Todesschüsse pro Monat</Title>
         <HorizontalBarChart
           data={countItems(
             _.orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
@@ -132,22 +152,22 @@ const Auswertung: NextPage = ({ data, options }) => {
         />
       </div>
       <div>
-        <Title order={3}>Fälle pro Wochentag</Title>
+        <Title order={3}>Polizeiliche Todesschüsse pro Wochentag [raus?]</Title>
         <HorizontalBarChart data={dataDow} />
       </div>
       <div>
         <Title order={3}>
-          Fälle pro Wochentag, Opfer ohne Schusswaffe, unterteilt nach
+          Polizeiliche Todesschüsse pro Wochentag, unterteilt nach
           SEK-Beteiligung
         </Title>
         <HorizontalBarChart data={dataSekNo} />
       </div>
       <div>
-        <Title order={3}>Tag im Monat</Title>
+        <Title order={3}>Polizeiliche Todesschüsse pro Tag im Monat</Title>
         <VerticalBarChart data={countItems(data.map(({ dom }) => dom))} />
       </div>
       <div>
-        <Title order={3}>Alter</Title>
+        <Title order={3}>Alter der Opfer polizeilicher Todesschüsse</Title>
         <VerticalBarChart
           data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
         />

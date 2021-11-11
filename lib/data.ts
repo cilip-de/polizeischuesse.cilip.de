@@ -77,6 +77,12 @@ const countItems = (arr, sort = false) => {
   }));
 };
 
+// excluding Berlin
+const eastStates =
+  `Brandenburg Mecklenburg-Vorpommern Sachsen Sachsen-Anhalt Thüringen`.split(
+    " "
+  );
+
 const preprocessData = (data) => {
   data = _.orderBy(data, "Datum", "desc");
 
@@ -94,6 +100,7 @@ const preprocessData = (data) => {
     x.beforeReunification = date.isBefore(dateReunification);
     x.key = i;
     x.state = x["Bundesland"];
+    x.east = eastStates.includes(x.state);
     x.place = x["Ort"];
     x.weapon = x["Waffen"];
     x.sex = x["Geschlecht"];
