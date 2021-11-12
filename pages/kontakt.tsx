@@ -108,8 +108,8 @@ vertreten durch den Vorstand: Norbert Pütter
 const Kontakt: NextPage = () => {
   return (
     <Layout
-      title="Kontakt, Impressum, Datenschutz"
-      description="Wie ihr uns erreichen könnt und einige rechtliche Informationen."
+      title="Wie ihr uns erreichen könnt und einige rechtliche Informationen"
+      description=""
     >
       <Title order={2}>Kontakt</Title>
       <Space />

@@ -7,31 +7,35 @@ const Daten: NextPage = () => {
   return (
     <Layout
       title="Methodik: Woher stammen unsere Informationen?"
-      description="Wir zählen alle Fälle, in denen Menschen durch Polizeikugel gestorben sind. Dabei beziehen wir auch die sehr wenigen Situationen, in denen dies außerhalb des Dienstes oder für den eigenen Suizid geschieht, mit ein. "
+      description="Wir zählen alle Fälle, in denen Menschen durch eine Polizeikugel gestorben sind. Dabei beziehen wir auch die sehr wenigen Situationen, in denen dies außerhalb des Dienstes oder bei bekannt gewordenen Fällen von Suizid geschieht, mit ein."
     >
       <div>
         Wir recherchieren unsere Fälle zum tödlichen Gebrauch von Schusswaffen
         und Tasern gewöhnlich in der Presse. Früher erfolgte dies durch die
         Sichtung von gedruckten Tageszeitungen, heute ausschließlich im
         Internet. Weitere Details haben wir anschließend bei den zuständigen
-        Polizeibehörden oder Staatsanwaltschaften erfragt. Die Informationen
-        sind mit Vorsicht zu genießen, denn auch in der Presse überwiegt oft die
-        Darstellung und mithin die Sichtweise der Polizei. Deshalb sind auch die
-        Angaben zur Beteiligung von polizeilichen Spezialkräften mit Vorsicht zu
-        genießen. Möglicherweise wurde dies auch nicht immer berichtet.
+        Polizeibehörden oder Staatsanwaltschaften erfragt. Deren Angaben sind
+        mit Vorsicht zu genießen, denn auch in der Presse überwiegt oft die
+        Darstellung und mithin die Sichtweise der Polizei. Auch die Hinweise zur
+        Beteiligung von polizeilichen Spezialkräften sind womöglich
+        unvollständig, möglicherweise wurde dies auch nicht immer von den
+        Zeitungen gemeldet.
         <br />
         <br />
-        Unsere Sammlung gleichen wir vor der Veröffentlichung in{" "}
+        Unsere Sammlung gleichen wir vor der{" "}
         <a href="https://www.cilip.de/category/polizeiliche-todesschuesse/">
-          unserer Zeitschrift
+          Veröffentlichung in unserer Zeitschrift
         </a>{" "}
         mit der jährlichen Schusswaffengebrauchsstatistik der Deutschen
         Hochschule der Polizei (DhPol) ab. Manchmal müssen wir dann Fälle
         ergänzen, die uns nicht bekannt wurden. Mitunter korrigieren wir unsere
         Zählung auch, etwa wenn die von uns gezählten Todesschüsse lediglich zu
-        schweren Verletzungen geführt haben. Einige Fälle haben wir womöglich
-        auch nicht korrekt dargestellt, etwa wenn sich Jahre später neue
-        Sachverhalte ergeben und dies in der Fallbeschreibung nicht ergänzt ist.
+        einer schweren Verletzung geführt haben. Einige Fälle haben wir
+        womöglich auch nicht korrekt dargestellt, etwa wenn sich von uns
+        unbemerkt neue Sachverhalte ergeben haben und dies in der
+        Fallbeschreibung nicht ergänzt ist.
+        <br />
+        <br />
         Weitere Diskrepanzen ergeben sich, wenn die staatsanwaltlichen
         Ermittlungen zu den Schusswaffengebräuchen noch nicht abgeschlossen
         sind. Dann werden die Fälle als „offen“ bewertet, sie tauchen also in
@@ -45,19 +49,20 @@ const Daten: NextPage = () => {
         belegen und dies erst für die Ereignisse ab der Jahrtausendwende
         nachgeholt. Deshalb sind viele Fälle nur schwer nachprüfbar, teilweise
         bleiben sie auch unvollständig. So bleibt das Geschlecht der Getöteten
-        aus dem Jahr 1976 größtenteils unbekannt.
+        bis zum Jahr 1982 mitunter unbekannt.
         <br />
         <br />
         Nachträglich haben wir die Fälle nach Hinweisen auf eine psychische
         Ausnahmesituation der Opfer durchsucht und markiert. Damit wollen wir
-        unsere These stützen, dass dies eine der häufigsten Todesursachen durch
-        Polizeischüsse darstellt. Davon betroffen sind ebenfalls sehr häufig
-        Menschen in ihrer eigenen Wohnung, etwa wenn sich diese in Reaktion auf
-        den polizeilichen Angriff plötzlich mit einem Messer bewaffnen. Deshalb
-        haben wir die Fälle auch nach Schussabgaben innerhalb und außerhalb von
-        Gebäuden sortiert. Nicht immer ließ sich dies jedoch exakt
-        rekonstruieren. Für einen Überblick hilft auch die Suche in den
-        einzelnen Meldungen mit dem Stichwort{" "}
+        unsere These stützen, dass dies seit einigen Jahren eine der häufigsten
+        Todesursachen durch Polizeischüsse darstellt. Davon betroffen sind
+        ebenfalls sehr häufig Menschen in ihrer eigenen Wohnung, etwa wenn sich
+        diese in Reaktion auf das polizeiliche Eingreifen oder im Gefühl des
+        Bedrohtseins plötzlich mit einem Messer bewaffnen. Deshalb haben wir die
+        Fälle auch nach Schussabgaben innerhalb und außerhalb von Gebäuden
+        sortiert. Nicht immer ließ sich dies jedoch exakt rekonstruieren. Für
+        einen Überblick hilft auch die Suche in den einzelnen Meldungen mit dem
+        Stichwort{" "}
         <Link href="/?q=Wohnun&p=1#chronik">
           <a>„Wohnung“</a>
         </Link>

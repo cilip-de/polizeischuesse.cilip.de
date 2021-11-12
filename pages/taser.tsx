@@ -14,21 +14,24 @@ const Taser: NextPage = ({ data }) => {
     von Tasern."
     >
       <div>
-        Hintergrund ist die zunehmende Einführung dieser „Elektroimpulswaffen“
-        auch für den gewöhnlichen Streifendienst in einzelnen Bundesländern. Bis
-        vor einigen Jahren waren lediglich Spezialeinheiten damit ausgerüstet.
+        Bis vor einigen Jahren waren lediglich Spezialeinheiten damit
+        ausgerüstet. In einigen Bundesländern ist dies bereits auf
+        „geschlossenen Einheiten“ der Landespolizei (Bayern) ausgeweitet, in
+        anderen gehören die Geräte zur „Grundausstattung“ mehrerer
+        Polizeipräsidien (NRW, Hessen, Saarland). In Rheinland-Pfalz ist
+        angeblich „jeder Streifenwagen“ mit einem Taser ausgestattet.
         {/* <br /> */}
         {/* <br /> */}
         Die Taser-Statistik stellen wir gesondert dar, denn die Elektroschocks
         führen zu deutlich anderen Todesursachen als Munition aus Schusswaffen.
-        Die Opfer sterben an Herz- oder Kreislaufstillstand Organversagen oder
-        Ersticken an Erbrochenem.
+        Die Opfer sterben an Herz- oder Kreislaufstillstand, Organversagen oder
+        sie ersticken an Erbrochenem.
         <br />
         <br />
-        Unsere bislang kurze Liste zeigt (mit Stand November 2021), dass
-        Menschen größtenteils innerhalb von Gebäuden getasert wurden. Bei allen
-        Betroffenen lassen die Presseberichte auf eine psychische
-        Ausnahmesituation bzw. Drogenkonsum schließen.
+        Unsere Liste zeigt (mit Stand November 2021), dass Menschen größtenteils
+        innerhalb von Gebäuden getasert werden. Bei allen Betroffenen lassen die
+        Presseberichte auf eine psychische Ausnahmesituation bzw. Drogenkonsum
+        schließen.
       </div>
       <Space />
       <Title order={2} id="chronik">
