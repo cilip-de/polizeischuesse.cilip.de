@@ -68,7 +68,12 @@ const countItems = (arr, sort = false) => {
 
   let countsEntries = Object.entries(counts);
 
-  if (sort) countsEntries = _.orderBy(countsEntries, (x) => x[1], "desc");
+  if (sort)
+    countsEntries = _.orderBy(
+      countsEntries,
+      [(x) => x[1], (x) => x[0]],
+      ["desc", "asc"]
+    );
 
   return countsEntries.map((x) => ({
     value: x[0],

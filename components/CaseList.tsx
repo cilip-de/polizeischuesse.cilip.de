@@ -124,7 +124,7 @@ const CaseList = ({
             value={q}
             style={{ marginBottom: "2rem" }}
             label="Suche"
-            placeholder="z. B. Wohnung oder Kopf"
+            placeholder="z. B. Wohnung, Flucht, Rücken, Kopf"
             onChange={async (event) => {
               if (selection.p > 1) {
                 router.replace(
