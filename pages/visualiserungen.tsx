@@ -51,6 +51,26 @@ const boolAtr = [
   "männlich",
 ];
 
+const addMissingYears = (data, arr) => {
+  const years = arr.map(({ value }) => parseInt(value));
+  for (const i of _.range(data[data.length - 1].year, data[0].year)) {
+    if (!years.includes(i)) arr.push({ value: `${i}`, count: 0 });
+  }
+  return arr;
+};
+
+const combineArray = (arr1, arr2, count1Label, count2Label) => {
+  for (const x of arr1) {
+    const bla = arr2.filter(({ value }) => value === x.value);
+    if (bla.length) x.count2 = bla[0].count;
+    x.tooltipLabel = {
+      count: count1Label,
+      count2: count2Label,
+    };
+  }
+  return arr1;
+};
+
 const CasesPerYear = ({ data }) => {
   const eastData = countItems(
     data.filter(({ east }) => east).map(({ year }) => year)
@@ -59,21 +79,51 @@ const CasesPerYear = ({ data }) => {
     data.filter(({ east }) => !east).map(({ year }) => year)
   );
 
-  const procData = westData;
-  for (const x of westData) {
-    const bla = eastData.filter(({ value }) => value === x.value);
-    if (bla.length) x.count2 = bla[0].count;
-    x.tooltipLabel = {
-      count: "Westdeutschland",
-      count2: "Ostdeutschland",
-    };
-  }
+  const procData = combineArray(
+    westData,
+    eastData,
+    "Westdeutschland",
+    "Ostdeutschland"
+  );
 
   return (
     <div>
       <Title order={3}>
         Polizeiliche Todesschüsse von {data[data.length - 1].year}–
         {data[0].year}
+      </Title>
+      <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
+      <Text>
+        Berlin zählt zu Westdeutschland und wird nicht weiter aufgeschlüsselt.
+      </Text>
+      <Space h="lg" />
+    </div>
+  );
+};
+const CasesPerYearWeapon = ({ data }) => {
+  const eastData = countItems(
+    data
+      .filter(({ weapon }) => weapon.includes("Schusswaffe"))
+      .map(({ year }) => year)
+  );
+  const westData = countItems(
+    data
+      .filter(({ weapon }) => weapon.includes("Stichwaffe"))
+      .map(({ year }) => year)
+  );
+
+  const procData = combineArray(
+    addMissingYears(data, eastData),
+    westData,
+    "Schusswaffe",
+    "Stichwaffe"
+  );
+
+  return (
+    <div>
+      <Title order={3}>
+        Polizeiliche Todesschüsse von {data[data.length - 1].year}–
+        {data[0].year}, Opfer mit Schusswaffe vs Stichwaffe
       </Title>
       <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
       <Text>
@@ -103,15 +153,10 @@ const Auswertung: NextPage = ({ data, options }) => {
 
   const noWeaponSekNo = data.filter((x) => !x[boolAtr[1]].includes("Ja"));
 
-  const dataDow = makeDowData(data);
   const dataSekYes = makeDowData(noWeaponSekYes);
   const dataSekNo = makeDowData(noWeaponSekNo);
 
-  for (const x of dataSekNo) {
-    const bla = dataSekYes.filter(({ value }) => value === x.value);
-    if (bla.length) x.count2 = bla[0].count;
-    x.tooltipLabel = { count: "ohne SEK", count2: "mit SEK" };
-  }
+  const dataSekNo2 = combineArray(dataSekNo, dataSekYes, "ohne SEK", "mit SEK");
 
   const perInhab = _.cloneDeep(options.state);
   perInhab.forEach((x) => {
@@ -129,6 +174,7 @@ const Auswertung: NextPage = ({ data, options }) => {
       <Text>Hier noch eine kurze Erklärung</Text>
       <Space h="lg" />
       <CasesPerYear data={data} />
+      <CasesPerYearWeapon data={data} />
       <div>
         <Title order={3}>
           Polizeiliche Todesschüsse pro Bundesland, je 1.000.000 Einwohner
@@ -152,15 +198,11 @@ const Auswertung: NextPage = ({ data, options }) => {
         />
       </div>
       <div>
-        <Title order={3}>Polizeiliche Todesschüsse pro Wochentag [raus?]</Title>
-        <HorizontalBarChart data={dataDow} />
-      </div>
-      <div>
         <Title order={3}>
           Polizeiliche Todesschüsse pro Wochentag, unterteilt nach
           SEK-Beteiligung
         </Title>
-        <HorizontalBarChart data={dataSekNo} />
+        <HorizontalBarChart data={dataSekNo2} />
       </div>
       <div>
         <Title order={3}>Polizeiliche Todesschüsse pro Tag im Monat</Title>

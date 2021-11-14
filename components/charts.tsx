@@ -38,6 +38,7 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
   return (
     <div style={{ height: 200 }}>
       <ResponsiveBar
+        valueFormat={(x) => (x == 0 ? null : x)}
         margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
         axisLeft={null}
         colors={[theme.colors.indigo[2], theme.colors.indigo[1]]}
