@@ -18,6 +18,7 @@ import { setupData } from "../lib/data";
 
 const Home: NextPage = ({
   data,
+  geoData,
   initialSearchedData,
   selection,
   options,
@@ -134,6 +135,7 @@ const Home: NextPage = ({
           <CaseList
             initialSearchedData={initialSearchedData}
             data={data}
+            geoData={geoData}
             selection={selection}
             options={options}
             maxCases={maxCases}
@@ -148,7 +150,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const selection = { q: "", p: "1", ...context.query };
 
   const { q } = selection;
-  const { data, options, fuse, beforeReuni, afterReuni } = await setupData();
+  const { data, geoData, options, fuse, beforeReuni, afterReuni } =
+    await setupData();
 
   if (selection.p !== null) selection.p = parseInt(selection.p);
   if (selection.tags && selection.tags !== null)
@@ -166,6 +169,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
     props: {
       data,
+      geoData,
       initialSearchedData,
       options,
       selection,

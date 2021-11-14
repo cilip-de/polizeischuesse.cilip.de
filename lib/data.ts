@@ -4,6 +4,7 @@ import "dayjs/locale/de";
 import localeData from "dayjs/plugin/localeData";
 import Fuse from "fuse.js";
 import _ from "lodash";
+import { getGeo } from "./geo";
 
 dayjs.locale("de");
 dayjs.extend(localeData);
@@ -131,6 +132,8 @@ const setupData = async () => {
 
   let data = await csv(`${HOST}/data.csv`);
 
+  const geoData = await getGeo(data);
+
   data = preprocessData(data);
 
   const [beforeReuni, afterReuni] = _.map(
@@ -160,6 +163,7 @@ const setupData = async () => {
 
   setupProps = {
     data,
+    geoData,
     options: { year, state, place },
     fuse,
     beforeReuni,
