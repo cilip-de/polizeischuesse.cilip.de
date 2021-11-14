@@ -46,7 +46,8 @@ const boolAtr = [
   "Schussort Außen",
   "Unbeabsichtigte Schussabgabe",
   "Hinweise auf familiäre oder häusliche Gewalt",
-  "Hinweise auf psychische Ausnahmesituation und/ oder Drogenkonsum",
+  "Hinweise auf psychische Ausnahmesituation",
+  "Hinweise auf Alkohol- und/ oder Drogenkonsum",
   "weiblich",
   "männlich",
 ];

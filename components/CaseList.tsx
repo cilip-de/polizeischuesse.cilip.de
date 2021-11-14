@@ -1,19 +1,13 @@
-import {
-  Center,
-  Col,
-  Grid,
-  MultiSelect,
-  Pagination,
-  Select,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { Center, Col, Grid, Pagination, Text } from "@mantine/core";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { PAGE_SIZE, SELECTABLE, TAGS } from "../lib/data";
-import { paginate } from "../lib/util";
+import { PAGE_SIZE, SELECTABLE } from "../lib/data";
+import { constructUrlWithQ, paginate } from "../lib/util";
 import Case from "./Case";
+import CategoryInput from "./CategoryInput";
 import Map from "./Map";
+import SearchInput from "./SearchInput";
+import SelectInput from "./SelectInput";
 
 type Selection = {
   year: string;
@@ -22,16 +16,6 @@ type Selection = {
   q: string;
   p: number;
   tags: string[];
-};
-
-const constructUrl = (params: Partial<Selection>) => {
-  const paramsString = Object.entries(params)
-    .filter((x) => !!x[1] && (!Array.isArray(x[1]) || x[1].length))
-    .map((x) => `${x[0]}=${x[1]}`);
-
-  if (paramsString.length === 0) return "/#chronik";
-
-  return `/?${paramsString.join("&")}#chronik`;
 };
 
 const CaseList = ({
@@ -64,11 +48,6 @@ const CaseList = ({
 
   q = searchedQ ?? q;
   const enoughChars = !q || q.length > 2;
-
-  const constructUrlWithQ = (params) => {
-    if (q !== null) params["q"] = q;
-    return constructUrl(params);
-  };
 
   let resultList =
     firstRender && initialSearchedData != null
@@ -118,107 +97,30 @@ const CaseList = ({
               ["place", "Ort"],
             ].map(([key, label]) => (
               <Col span={4} key={key}>
-                <Select
-                  value={selection[key] || ""}
-                  onChange={(x) =>
-                    router.push(
-                      constructUrl({ ...selection, [key]: x, p: 1 }),
-                      undefined,
-                      {
-                        scroll: false,
-                      }
-                    )
-                  }
+                <SelectInput
+                  key={key}
                   label={label}
-                  placeholder="auswählen"
-                  searchable
-                  clearable
-                  nothingFound="keine Ergebnis"
+                  selection={selection}
                   data={options[key]}
                 />
               </Col>
             ))}
           </Grid>
           <Grid>
-            <Col span={4}>
-              <TextInput
-                value={q}
-                style={{ marginBottom: "2rem" }}
-                label="Suche"
-                placeholder="z. B. Wohnung, Flucht, Rücken, Kopf"
-                onChange={async (event) => {
-                  if (selection.p > 1) {
-                    router.replace(
-                      constructUrlWithQ({
-                        ...selection,
-                        p: 1,
-                        q: event.currentTarget.value,
-                      })
-                    ),
-                      undefined,
-                      { scroll: false };
-                    return;
-                  }
-
-                  router.replace(
-                    constructUrlWithQ({
-                      ...selection,
-                      q: event.currentTarget.value,
-                    }),
-                    undefined,
-                    { shallow: true }
-                  );
-                  setSearchedQ(event.currentTarget.value);
-                  if (event.currentTarget.value === "") {
-                    setSearchedData(null);
-                  } else {
-                    if (event.currentTarget.value.length > 2)
-                      setSearchedData(
-                        await (
-                          await fetch(
-                            "/api/suche?q=" + event.currentTarget.value
-                          )
-                        ).json()
-                      );
-                  }
-                }}
+            <Col span={8}>
+              <SearchInput
+                q={q}
+                selection={selection}
+                setSearchedData={setSearchedData}
+                setSearchedQ={setSearchedQ}
               />
             </Col>
+          </Grid>
+          <Grid>
             <Col span={8}>
-              <MultiSelect
-                clearable
-                label="Kategorie"
-                placeholder="auswählen (mehrfach)"
-                value={selection.tags}
-                data={TAGS.map((x) => ({
-                  label: x[2],
-                  value: x[0],
-                  group: "trifft zu",
-                }))
-                  .concat(
-                    TAGS.map((x) => ({
-                      label: x[3],
-                      value: "no__" + x[0],
-                      group: "trifft nicht zu",
-                    }))
-                  )
-                  .filter(
-                    (x) =>
-                      !selection.tags.includes(
-                        x.value.startsWith("no__")
-                          ? x.value.replace("no__", "")
-                          : "no__" + x.value
-                      )
-                  )}
-                onChange={(x) =>
-                  router.replace(
-                    constructUrlWithQ({ ...selection, tags: x, p: 1 }),
-                    undefined,
-                    { scroll: false }
-                  )
-                }
-              ></MultiSelect>
+              <CategoryInput q={q} selection={selection} />
             </Col>
+            <Col span={4}>x</Col>
           </Grid>
         </Col>
         <Col span={4}>
@@ -270,7 +172,7 @@ const CaseList = ({
               page={p}
               onChange={(newPage) =>
                 router.push(
-                  constructUrlWithQ({
+                  constructUrlWithQ(q, {
                     ...selection,
                     p: newPage,
                   }),

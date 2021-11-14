@@ -33,9 +33,15 @@ const TAGS = [
   ],
   [
     "psych",
-    "Hinweise auf psychische Ausnahmesituation und/ oder Drogenkonsum",
-    "Hinweise auf psychische Ausnahmesituation und/ oder Drogenkonsum",
-    "Keine Hinweise auf psychische Ausnahmesituation und/ oder Drogenkonsum",
+    "Hinweise auf psychische Ausnahmesituation",
+    "Hinweise auf psychische Ausnahmesituation",
+    "Keine Hinweise auf psychische Ausnahmesituation",
+  ],
+  [
+    "alkdrog",
+    "Hinweise auf Alkohol- und/ oder Drogenkonsum",
+    "Hinweise auf Alkohol- und/ oder Drogenkonsum",
+    "Keine Hinweise auf Alkohol- und/ oder Drogenkonsum",
   ],
   [
     "famgew",
