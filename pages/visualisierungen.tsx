@@ -6,7 +6,7 @@ import React from "react";
 import { HorizontalBarChart, VerticalBarChart } from "../components/charts";
 import Layout from "../components/Layout";
 import { countItems, setupData } from "../lib/data";
-import { isNumber } from "../lib/util";
+import { addMissingYears, combineArray, isNumber } from "../lib/util";
 
 // https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Bevoelkerungsstand/Tabellen/bevoelkerung-nichtdeutsch-laender.html
 // Stand 21. Juni 2021
@@ -52,26 +52,6 @@ const boolAtr = [
   "männlich",
 ];
 
-const addMissingYears = (data, arr) => {
-  const years = arr.map(({ value }) => parseInt(value));
-  for (const i of _.range(data[data.length - 1].year, data[0].year)) {
-    if (!years.includes(i)) arr.push({ value: `${i}`, count: 0 });
-  }
-  return arr;
-};
-
-const combineArray = (arr1, arr2, count1Label, count2Label) => {
-  for (const x of arr1) {
-    const bla = arr2.filter(({ value }) => value === x.value);
-    if (bla.length) x.count2 = bla[0].count;
-    x.tooltipLabel = {
-      count: count1Label,
-      count2: count2Label,
-    };
-  }
-  return arr1;
-};
-
 const CasesPerYear = ({ data }) => {
   const eastData = countItems(
     data.filter(({ east }) => east).map(({ year }) => year)
@@ -101,6 +81,7 @@ const CasesPerYear = ({ data }) => {
     </div>
   );
 };
+
 const CasesPerYearWeapon = ({ data }) => {
   const eastData = countItems(
     data

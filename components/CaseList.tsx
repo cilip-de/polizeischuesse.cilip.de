@@ -2,9 +2,10 @@ import { Center, Col, Grid, Pagination, Text } from "@mantine/core";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { PAGE_SIZE, SELECTABLE } from "../lib/data";
-import { constructUrlWithQ, paginate } from "../lib/util";
+import { constructUrl, constructUrlWithQ, paginate } from "../lib/util";
 import Case from "./Case";
 import CategoryInput from "./CategoryInput";
+import { OverviewChart } from "./charts";
 import Map from "./Map";
 import SearchInput from "./SearchInput";
 import SelectInput from "./SelectInput";
@@ -81,6 +82,22 @@ const CaseList = ({
     displayLocations.has(x.city + x.state)
   );
 
+  const overChart = (
+    <OverviewChart
+      data={data}
+      hits={resultList}
+      onClick={(x) =>
+        router.push(
+          constructUrl({ ...selection, year: x.indexValue, p: 1 }),
+          undefined,
+          {
+            scroll: false,
+          }
+        )
+      }
+    />
+  );
+
   // for (const x of displayMarkers) {
   //   if (x["city"] == "Frankfurt am Main") console.log(x);
   // }
@@ -94,7 +111,7 @@ const CaseList = ({
     <div style={{ paddingBottom: "2rem" }}>
       <Grid>
         <Col span={8}>
-          <Grid style={{ marginBottom: "2rem", marginTop: "1rem" }}>
+          <Grid style={{ marginBottom: "1rem", marginTop: "1rem" }}>
             {[
               ["year", "Jahr"],
               ["state", "Bundesland"],
@@ -110,7 +127,7 @@ const CaseList = ({
               </Col>
             ))}
           </Grid>
-          <Grid>
+          <Grid style={{ marginBottom: "1rem" }}>
             <Col span={8}>
               <SearchInput
                 q={q}
@@ -128,7 +145,7 @@ const CaseList = ({
               />
             </Col>
           </Grid>
-          <Grid>
+          <Grid style={{ marginBottom: "1rem" }}>
             <Col span={8}>
               <CategoryInput q={q} selection={selection} />
             </Col>
@@ -141,6 +158,7 @@ const CaseList = ({
               />
             </Col>
           </Grid>
+          {overChart}
         </Col>
         <Col span={4}>
           <Map makersData={displayMarkers} />
@@ -151,14 +169,18 @@ const CaseList = ({
         <Center style={{ marginBottom: "1rem" }}>
           {enoughChars && numHits > 1 && numHits !== maxCases && (
             <Text>
-              {numHits} von {maxCases} Fällen
+              zeige {numHits} von {maxCases} polizeilichen Todesschüsse
             </Text>
           )}
           {enoughChars && numHits > 1 && numHits === maxCases && (
-            <Text>{numHits} Fälle</Text>
+            <Text>{numHits} polizeiliche Todesschüsse</Text>
           )}
-          {enoughChars && numHits === 1 && <Text>ein Fall</Text>}
-          {enoughChars && numHits === 0 && <Text>keine Fälle</Text>}
+          {enoughChars && numHits === 1 && (
+            <Text>ein polizeilicher Todesschuss</Text>
+          )}
+          {enoughChars && numHits === 0 && (
+            <Text>kein polizeilicher Todesschuss</Text>
+          )}
           {!enoughChars && (
             <Text>Bitte mehr Zeichen für die Suche eingeben</Text>
           )}

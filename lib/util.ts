@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 const paginate = (array: [], pageSize: number, pageNumber: number) => {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
   return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
@@ -22,4 +24,31 @@ const constructUrlWithQ = (q, params) => {
   return constructUrl(params);
 };
 
-export { paginate, isNumber, constructUrl, constructUrlWithQ };
+const addMissingYears = (data, arr) => {
+  const years = arr.map(({ value }) => parseInt(value));
+  for (const i of _.range(data[data.length - 1].year, data[0].year)) {
+    if (!years.includes(i)) arr.push({ value: `${i}`, count: 0 });
+  }
+  return arr;
+};
+
+const combineArray = (arr1, arr2, count1Label, count2Label) => {
+  for (const x of arr1) {
+    const bla = arr2.filter(({ value }) => value === x.value);
+    if (bla.length) x.count2 = bla[0].count;
+    x.tooltipLabel = {
+      count: count1Label,
+      count2: count2Label,
+    };
+  }
+  return arr1;
+};
+
+export {
+  paginate,
+  isNumber,
+  constructUrl,
+  constructUrlWithQ,
+  addMissingYears,
+  combineArray,
+};

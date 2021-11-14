@@ -3,6 +3,8 @@ import { ResponsiveBar } from "@nivo/bar";
 import { ticks } from "d3-array";
 import _ from "lodash";
 import React from "react";
+import { countItems } from "../lib/data";
+import { addMissingYears, combineArray } from "../lib/util";
 
 const selectNiceTicks = (data, numTicks) => [
   ...new Set(
@@ -21,6 +23,18 @@ const tooltip = ({ value, data, id }) => (
     >
       {data.value}: {value}
       {data.tooltipLabel != null && `, ${data.tooltipLabel[id]}`}
+    </Text>
+  </div>
+);
+const tooltipOverview = ({ value, data, id }) => (
+  <div>
+    <Text
+      size="sm"
+      style={{ background: "white", padding: "0 0.1rem", opacity: 0.8 }}
+    >
+      {data.value}: {data.tooltipLabel[id] === "hit" && `${value} Ergbnisse`}
+      {data.tooltipLabel[id] !== "hit" &&
+        `${value} Fälle, auf die die Auswahl nicht zutrifft`}
     </Text>
   </div>
 );
@@ -74,4 +88,43 @@ const HorizontalBarChart = ({ data, formatPerc = false }) => {
   );
 };
 
-export { VerticalBarChart, HorizontalBarChart };
+const OverviewChart = ({ data, hits, onClick }) => {
+  const theme = useMantineTheme();
+
+  const hitsId = new Set(hits.map(({ key }) => key));
+
+  const hitsData = countItems(hits.map(({ year }) => year));
+  const noHitsData = countItems(
+    data.filter(({ key }) => !hitsId.has(key)).map(({ year }) => year)
+  );
+
+  const procData = _.orderBy(
+    combineArray(addMissingYears(data, hitsData), noHitsData, "hit", "nohit"),
+    "value"
+  );
+
+  return (
+    <div style={{ height: 100 }}>
+      <ResponsiveBar
+        animate={false}
+        enableGridY={false}
+        enableLabel={false}
+        valueFormat={(x) => (x == 0 ? null : x)}
+        margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+        axisLeft={null}
+        colors={["#BFBFC1", "#EAEAEC"]}
+        axisBottom={{
+          tickValues: selectNiceTicks(data, 3),
+        }}
+        data={procData}
+        indexBy={"value"}
+        keys={["count", "count2"]}
+        padding={0}
+        tooltip={tooltipOverview}
+        onClick={onClick}
+      />
+    </div>
+  );
+};
+
+export { VerticalBarChart, HorizontalBarChart, OverviewChart };

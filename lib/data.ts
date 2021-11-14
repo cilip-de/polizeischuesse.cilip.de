@@ -18,8 +18,8 @@ if (process.env.NODE_ENV === "production") HOST = "http://cilip.app.vis.one";
 
 // value, column, positive label, negative label
 const TAGS = [
-  ["schusswechsel", "Schusswechsel", "Schusswechsel", "kein Schusswechsel"],
-  ["sek", "Sondereinsatzbeamte", "SEK-Beteiligung", "ohne SEK-Beteiligung"],
+  ["schusswechsel", "Schusswechsel", "Schusswechsel", "Kein Schusswechsel"],
+  ["sek", "Sondereinsatzbeamte", "SEK-Beteiligung", "Ohne SEK-Beteiligung"],
   [
     "vgbeamte",
     "Verletzte/getötete Beamte",
@@ -66,7 +66,7 @@ const TAGS = [
   ["men", "männlich", "Männlich", "Nicht männlich"],
 ];
 
-const SEARCH_KEYES = ["Name", "Szenarium", "weapon", "place", "state"];
+const SEARCH_KEYES = ["Name", "Szenarium"];
 
 const countItems = (arr, sort = false) => {
   const counts = {};

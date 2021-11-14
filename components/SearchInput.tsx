@@ -7,7 +7,6 @@ const SearchInput = ({ q, selection, setSearchedData, setSearchedQ }) => {
   return (
     <TextInput
       value={q}
-      style={{ marginBottom: "2rem" }}
       label="Suche"
       placeholder="z. B. Wohnung, Flucht, Rücken, Kopf"
       onChange={async (event) => {
