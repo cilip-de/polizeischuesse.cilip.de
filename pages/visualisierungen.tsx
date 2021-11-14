@@ -116,20 +116,22 @@ const CasesPerYearWeapon = ({ data }) => {
   );
 };
 
+const makeDowData = (data) => {
+  const dataDow = countItems(
+    _.orderBy(data, "dow", "desc").map(({ dowPrint }) => dowPrint)
+  );
+  // make Sunday last day of week
+  dataDow.unshift(dataDow.pop());
+  return dataDow;
+};
+
+export { makeDowData };
+
 const Auswertung: NextPage = ({ data, options }) => {
   const boolData = boolAtr.map((x) => ({
     count: data.filter((d) => d[x].includes("Ja")).length / data.length,
     value: x,
   }));
-
-  const makeDowData = (data) => {
-    const dataDow = countItems(
-      _.orderBy(data, "dow", "desc").map(({ dowPrint }) => dowPrint)
-    );
-    // make Sunday last day of week
-    dataDow.unshift(dataDow.pop());
-    return dataDow;
-  };
 
   const noWeaponSekYes = data.filter((x) => x[boolAtr[1]].includes("Ja"));
 

@@ -5,6 +5,7 @@ import _ from "lodash";
 import React from "react";
 import { countItems } from "../lib/data";
 import { addMissingYears, combineArray } from "../lib/util";
+import { makeDowData } from "../pages/visualisierungen";
 
 const selectNiceTicks = (data, numTicks) => [
   ...new Set(
@@ -132,4 +133,26 @@ const OverviewChart = ({ data, hits, onClick }) => {
   );
 };
 
-export { VerticalBarChart, HorizontalBarChart, OverviewChart };
+const DowChart = ({ data }) => {
+  const dataDow = makeDowData(data);
+
+  const theme = useMantineTheme();
+  const margin = { top: 10, right: 10, bottom: 10, left: 70 };
+
+  return (
+    <div style={{ height: 20 * dataDow.length + margin.top + margin.bottom }}>
+      <ResponsiveBar
+        margin={margin}
+        layout={"horizontal"}
+        axisRight={null}
+        enableGridY={false}
+        axisBottom={null}
+        colors={[theme.colors.indigo[2], theme.colors.indigo[1]]}
+        data={dataDow}
+        {...commonProps}
+      />
+    </div>
+  );
+};
+
+export { VerticalBarChart, HorizontalBarChart, OverviewChart, DowChart };

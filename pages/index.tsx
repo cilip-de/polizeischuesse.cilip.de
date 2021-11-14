@@ -6,7 +6,6 @@ import {
   Grid,
   Group,
   Space,
-  Spoiler,
   Text,
   Title,
 } from "@mantine/core";
@@ -16,6 +15,7 @@ import Head from "next/head";
 import Link from "next/link";
 import React from "react";
 import CaseList from "../components/CaseList";
+import { DowChart } from "../components/charts";
 import { setupData } from "../lib/data";
 
 const Home: NextPage = ({
@@ -90,62 +90,71 @@ const Home: NextPage = ({
           </Grid>
 
           <Space h="xl" />
-          <Spoiler
-            maxHeight={60}
-            showLabel={<div style={{ textAlign: "center" }}>Zeige mehr</div>}
-            hideLabel={null}
-          >
-            <Grid>
-              <Col span={12} sm={8}>
+          <Grid>
+            <Col span={12} sm={8}>
+              <Text>
+                Jedes Jahr veröffentlicht die Konferenz der Innenminister*innen
+                der Bundesländer eine neue{" "}
+                <b>Statistik zum polizeilichen Schusswaffengebrauch</b> des
+                Vorjahres. Neben Warnschüssen oder Schüssen auf Tiere und Sachen
+                werden auch Polizeikugeln auf Personen und daraus resultierende
+                Todesfälle gezählt.
+              </Text>
+              <Space h="xl" />
+              <Text>
+                Die ab 1984 von den <b>Behörden geführte Aufstellung</b> ist
+                jedoch <b>anonym</b>, es wird nicht auf die einzelnen Taten
+                eingegangen. Die Statistik gibt auch keine Auskunft über die
+                Opfer.{" "}
+                <b>
+                  Seit 1976 dokumentiert die Zeitschrift Bürgerrechte &
+                  Polizei/CILIP
+                </b>
+                . deshalb die Hintergründe zu den durch die Polizei verursachten
+                Todesfällen. Dabei sammeln wir Informationen zur Beteiligung von
+                Sondereinheiten, der Zahl jeweils abgegebener Schüsse und der
+                Situation in der sich die Schussabgabe zutrug.
+              </Text>
+              <Space h="xl" />
+              <Text>
+                So ist etwa von Bedeutung, ob die Getöteten selbst bewaffnet
+                waren, sich womöglich in einer psychischen Ausnahmesituation
+                befanden oder, wie es häufig geschieht, in ihrer eigenen Wohnung
+                erschossen wurden.
+              </Text>
+              <Space h="xl" />
+            </Col>
+            <Col span={12} sm={4}>
+              <Space h="xl" />
+              <Title order={5} align="right">
+                Todesschüsse pro Wochentag
+              </Title>
+              <DowChart data={data} />
+              <Group position="right">
+                <div>
+                  <Button variant="outline" color="gray" compact>
+                    <Link href="/visualisierungen" passHref>
+                      Mehr Visualisierungen
+                    </Link>
+                  </Button>
+                </div>
+                <div>
+                  <Space h="xl" />
+                  <img src="/cilip-logo-outline.svg" height="50" />
+                </div>
+                {/* <Space h="lg" />
+                <img src="/cilip_heft.png" />
                 <Text>
-                  Jedes Jahr veröffentlicht die Konferenz der
-                  Innenminister*innen der Bundesländer eine neue{" "}
-                  <b>Statistik zum polizeilichen Schusswaffengebrauch</b> des
-                  Vorjahres. Neben Warnschüssen oder Schüssen auf Tiere und
-                  Sachen werden auch Polizeikugeln auf Personen und daraus
-                  resultierende Todesfälle gezählt.
-                </Text>
-                <Space h="xl" />
-                <Text>
-                  Die ab 1984 von den <b>Behörden geführte Aufstellung</b> ist
-                  jedoch <b>anonym</b>, es wird nicht auf die einzelnen Taten
-                  eingegangen. Die Statistik gibt auch keine Auskunft über die
-                  Opfer.{" "}
-                  <b>
-                    Seit 1976 dokumentiert die Zeitschrift Bürgerrechte &
-                    Polizei/CILIP
-                  </b>
-                  . deshalb die Hintergründe zu den durch die Polizei
-                  verursachten Todesfällen. Dabei sammeln wir Informationen zur
-                  Beteiligung von Sondereinheiten, der Zahl jeweils abgegebener
-                  Schüsse und der Situation in der sich die Schussabgabe zutrug.
-                </Text>
-                <Space h="xl" />
-                <Text>
-                  So ist etwa von Bedeutung, ob die Getöteten selbst bewaffnet
-                  waren, sich womöglich in einer psychischen Ausnahmesituation
-                  befanden oder, wie es häufig geschieht, in ihrer eigenen
-                  Wohnung erschossen wurden.
-                </Text>
-                <Space h="xl" />
-              </Col>
-              <Col span={12} sm={4}>
-                {/* <img src="/cilip-logo-outline.svg" height="50" /> */}
-                {/* <Space h="lg" /> */}
-                <Group position="right">
-                  <img src="/cilip_heft.png" />
-                  <Text>
-                    <a href="https://www.cilip.de/zeitschrift-bestellen/">
-                      Heft bestellen
-                    </a>
-                  </Text>
-                </Group>
-
-                {/* <VisualizationCard data={options.year} /> */}
-                {/* <div style={{ padding: "1rem" }}></div> */}
-              </Col>
-            </Grid>
-          </Spoiler>
+                  <a href="https://www.cilip.de/zeitschrift-bestellen/">
+                    Heft bestellen
+                  </a>
+                </Text> */}
+              </Group>
+              {/* <VisualizationCard data={options.year} />
+               */}
+              {/* <div style={{ padding: "1rem" }}></div> */}
+            </Col>
+          </Grid>
 
           <Space h="xl" />
 
