@@ -86,7 +86,7 @@ const Case = ({ item, hideLink = false }) => {
           </Badge>
         )}
         {item.alkdrog && (
-          <Badge size="xs" color="blue" variant="light">
+          <Badge size="xs" color="cyan" variant="light">
             Mutm. Alkohol / Drogen
           </Badge>
         )}
@@ -96,7 +96,7 @@ const Case = ({ item, hideLink = false }) => {
           </Badge>
         )}
         {item.unschuss && (
-          <Badge size="xs" color="cyan" variant="light">
+          <Badge size="xs" color="green" variant="light">
             Unbeabsichtigte Schussabgabe
           </Badge>
         )}
@@ -113,7 +113,7 @@ const Case = ({ item, hideLink = false }) => {
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             {isNumber(item.Alter)
               ? `${item.Alter} Jahre`
-              : `Alter: ${item.Alter}`}
+              : `Alter: ${item.Alter.replace("Unbekannt", "unbekannt")}`}
             {item.sex.length > 0 && `, ${item.sex}`}
           </Text>
           <Space />

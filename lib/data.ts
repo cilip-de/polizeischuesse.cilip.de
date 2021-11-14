@@ -5,12 +5,13 @@ import localeData from "dayjs/plugin/localeData";
 import Fuse from "fuse.js";
 import _ from "lodash";
 import { getGeo } from "./geo";
+import { isNumber } from "./util";
 
 dayjs.locale("de");
 dayjs.extend(localeData);
 
 const PAGE_SIZE = 20;
-const SELECTABLE = ["year", "state", "place"];
+const SELECTABLE = ["year", "state", "place", "age"];
 
 let HOST = "http://localhost:3000";
 if (process.env.NODE_ENV === "production") HOST = "http://cilip.app.vis.one";
@@ -102,7 +103,7 @@ const preprocessData = (data) => {
 
   data.forEach((x, i) => {
     const date = dayjs(x["Datum"]);
-
+    x.key = i;
     x.year = date.get("year");
     x.dow = date.day();
     x.dowPrint = dayjs.weekdays()[x.dow];
@@ -111,7 +112,6 @@ const preprocessData = (data) => {
     x.monthPrint = dayjs.months()[x.month];
     x.datePrint = date.format("DD.MM.YYYY");
     x.beforeReunification = date.isBefore(dateReunification);
-    x.key = i;
     x.state = x["Bundesland"];
     x.east = eastStates.includes(x.state);
     x.place = x["Ort"];
@@ -122,6 +122,12 @@ const preprocessData = (data) => {
     x["Schussort Außen"] = x["Schussort"] === "Draußen" ? "Ja" : "";
     x["weiblich"] = x.sex == "weiblich" ? "Ja" : "";
     x["männlich"] = x.sex == "männlich" ? "Ja" : "";
+
+    if (isNumber(x["Alter"])) {
+      x.age = Math.floor(x["Alter"] / 5) * 5;
+    } else {
+      x.age = "Unbekannt";
+    }
 
     for (const [t, label] of TAGS) {
       x[t] = x[label].includes("Ja");
@@ -165,6 +171,17 @@ const setupData = async () => {
     true
   );
 
+  const age = countItems(
+    data.map((x) => x.age),
+    false
+  );
+
+  age.forEach((x, i) => {
+    if (i < age.length - 1)
+      x.label =
+        x.label.slice(0, 2) + `-${parseInt(x.value) + 4} ` + x.label.slice(3);
+  });
+
   fuse = new Fuse(data, {
     minMatchCharLength: 3,
     includeMatches: true,
@@ -178,7 +195,7 @@ const setupData = async () => {
   setupProps = {
     data,
     geoData,
-    options: { year, state, place, weapon },
+    options: { year, state, place, weapon, age },
     fuse,
     beforeReuni,
     afterReuni,

@@ -17,6 +17,7 @@ type Selection = {
   p: number;
   tags: string[];
   weapon: string;
+  age: string;
 };
 
 const CaseList = ({
@@ -131,7 +132,14 @@ const CaseList = ({
             <Col span={8}>
               <CategoryInput q={q} selection={selection} />
             </Col>
-            <Col span={4}>x</Col>
+            <Col span={4}>
+              <SelectInput
+                skey={"age"}
+                label={"Alter"}
+                selection={selection}
+                data={options.age}
+              />
+            </Col>
           </Grid>
         </Col>
         <Col span={4}>
