@@ -1,5 +1,4 @@
 import { Center, Col, Grid, Pagination, Text, Title } from "@mantine/core";
-import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { PAGE_SIZE, SELECTABLE } from "../lib/data";
@@ -108,16 +107,14 @@ const CaseList = ({
 
   resultList = paginate(resultList, PAGE_SIZE, p);
 
-  const notOnMobile = useMediaQuery("(min-width: 768px)");
-
   return (
     <div style={{ paddingBottom: "2rem" }}>
       <Grid>
-        <Col span={2} hidden={notOnMobile}></Col>
-        <Col span={12} xs={8} hidden={notOnMobile}>
+        <Col span={2} className="only-mobile"></Col>
+        <Col span={12} xs={8} className="only-mobile">
           <Map makersData={displayMarkers} />
         </Col>
-        <Col span={2} hidden={notOnMobile}></Col>
+        <Col span={2} className="only-mobile"></Col>
         <Col span={12} sm={8}>
           <Title order={2} id="chronik">
             Chronik
@@ -171,7 +168,7 @@ const CaseList = ({
           </Grid>
           {overChart}
         </Col>
-        <Col span={4} hidden={!notOnMobile}>
+        <Col span={4} className="only-non-mobile">
           <Map makersData={displayMarkers} />
         </Col>
       </Grid>

@@ -18,3 +18,15 @@ a {
 .mantine-Pagination-active {
   background-color: #BFBFC1
 }
+
+@media screen and (max-width: 768px) {
+  .only-non-mobile {
+      display:none; 
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .only-mobile {
+      display:none; 
+  }
+}
