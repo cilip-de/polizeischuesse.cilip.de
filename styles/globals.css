@@ -8,9 +8,13 @@ body {
 
 a {
   color: inherit;
-  text-decoration: none;
+  /* text-decoration: none; */
 }
 
 * {
   box-sizing: border-box;
+}
+
+.mantine-Pagination-active {
+  background-color: #BFBFC1
 }

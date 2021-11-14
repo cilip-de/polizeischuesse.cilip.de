@@ -1,9 +1,12 @@
 import {
   Button,
+  Center,
   Col,
   Container,
   Grid,
+  Group,
   Space,
+  Spoiler,
   Text,
   Title,
 } from "@mantine/core";
@@ -13,7 +16,6 @@ import Head from "next/head";
 import Link from "next/link";
 import React from "react";
 import CaseList from "../components/CaseList";
-import VisualizationCard from "../components/VisualizationCard";
 import { setupData } from "../lib/data";
 
 const Home: NextPage = ({
@@ -36,6 +38,33 @@ const Home: NextPage = ({
 
       <main>
         <Container>
+          <Space h="xl" />
+          <div>
+            <Group position="right">
+              <Button compact color="gray" variant="outline">
+                <Link href="/visualisierungen" passHref>
+                  Visualisierungen
+                </Link>
+              </Button>
+              <Button compact color="gray" variant="outline">
+                <Link href="/methodik" passHref>
+                  Methodik
+                </Link>
+              </Button>
+
+              <Button compact color="gray" variant="outline">
+                <Link href="/statistiken" passHref>
+                  Offizielle Statistiken
+                </Link>
+              </Button>
+
+              <Button compact color="gray" variant="outline">
+                <Link href="/taser" passHref>
+                  Tod durch Taser
+                </Link>
+              </Button>
+            </Group>
+          </div>
           <Grid>
             <Col span={12} sm={4} style={{ padding: "3rem" }}>
               <img style={{ width: "100%" }} src="/cover_7.jpg" />{" "}
@@ -61,76 +90,64 @@ const Home: NextPage = ({
           </Grid>
 
           <Space h="xl" />
-          <Grid>
-            <Col span={12} sm={8}>
-              <Text>
-                Jedes Jahr veröffentlicht die Konferenz der Innenminister*innen
-                der Bundesländer eine neue{" "}
-                <b>Statistik zum polizeilichen Schusswaffengebrauch</b> des
-                Vorjahres. Neben Warnschüssen oder Schüssen auf Tiere und Sachen
-                werden auch Polizeikugeln auf Personen und daraus resultierende
-                Todesfälle gezählt.
-              </Text>
-              <Space h="xl" />
-              <Text>
-                Die ab 1984 von den <b>Behörden geführte Aufstellung</b> ist
-                jedoch <b>anonym</b>, es wird nicht auf die einzelnen Taten
-                eingegangen. Die Statistik gibt auch keine Auskunft über die
-                Opfer.{" "}
-                <b>
-                  Seit 1976 dokumentiert die Zeitschrift Bürgerrechte &
-                  Polizei/CILIP
-                </b>
-                . deshalb die Hintergründe zu den durch die Polizei verursachten
-                Todesfällen. Dabei sammeln wir Informationen zur Beteiligung von
-                Sondereinheiten, der Zahl jeweils abgegebener Schüsse und der
-                Situation in der sich die Schussabgabe zutrug.
-              </Text>
-              <Space h="xl" />
-              <Text>
-                So ist etwa von Bedeutung, ob die Getöteten selbst bewaffnet
-                waren, sich womöglich in einer psychischen Ausnahmesituation
-                befanden oder, wie es häufig geschieht, in ihrer eigenen Wohnung
-                erschossen wurden.
-              </Text>
-              <Space h="xl" />
-              <img src="/cilip-logo-outline.svg" height="50" />
-            </Col>
-            <Col span={12} sm={4}>
-              <VisualizationCard data={options.year} />
-              <div style={{ padding: "1rem" }}>
-                <Link href="/methodik" passHref>
-                  <Button variant="light" fullWidth>
-                    Methodik
-                  </Button>
-                </Link>
-                <Space />
-                <Link href="/statistiken" passHref>
-                  <Button variant="light" fullWidth>
-                    Offizielle Statistiken
-                  </Button>
-                </Link>
-                <Space />
-                <Link href="/taser" passHref>
-                  <Button variant="light" fullWidth>
-                    Tod durch Taser
-                  </Button>
-                </Link>
-                <Space />
-                <Link href="/kontakt" passHref>
-                  <Button variant="light" fullWidth>
-                    Kontakt, Impressum, Datenschutz
-                  </Button>
-                </Link>
-              </div>
-            </Col>
-          </Grid>
+          <Spoiler
+            maxHeight={60}
+            showLabel={<div style={{ textAlign: "center" }}>Zeige mehr</div>}
+            hideLabel={null}
+          >
+            <Grid>
+              <Col span={12} sm={8}>
+                <Text>
+                  Jedes Jahr veröffentlicht die Konferenz der
+                  Innenminister*innen der Bundesländer eine neue{" "}
+                  <b>Statistik zum polizeilichen Schusswaffengebrauch</b> des
+                  Vorjahres. Neben Warnschüssen oder Schüssen auf Tiere und
+                  Sachen werden auch Polizeikugeln auf Personen und daraus
+                  resultierende Todesfälle gezählt.
+                </Text>
+                <Space h="xl" />
+                <Text>
+                  Die ab 1984 von den <b>Behörden geführte Aufstellung</b> ist
+                  jedoch <b>anonym</b>, es wird nicht auf die einzelnen Taten
+                  eingegangen. Die Statistik gibt auch keine Auskunft über die
+                  Opfer.{" "}
+                  <b>
+                    Seit 1976 dokumentiert die Zeitschrift Bürgerrechte &
+                    Polizei/CILIP
+                  </b>
+                  . deshalb die Hintergründe zu den durch die Polizei
+                  verursachten Todesfällen. Dabei sammeln wir Informationen zur
+                  Beteiligung von Sondereinheiten, der Zahl jeweils abgegebener
+                  Schüsse und der Situation in der sich die Schussabgabe zutrug.
+                </Text>
+                <Space h="xl" />
+                <Text>
+                  So ist etwa von Bedeutung, ob die Getöteten selbst bewaffnet
+                  waren, sich womöglich in einer psychischen Ausnahmesituation
+                  befanden oder, wie es häufig geschieht, in ihrer eigenen
+                  Wohnung erschossen wurden.
+                </Text>
+                <Space h="xl" />
+              </Col>
+              <Col span={12} sm={4}>
+                {/* <img src="/cilip-logo-outline.svg" height="50" /> */}
+                {/* <Space h="lg" /> */}
+                <Group position="right">
+                  <img src="/cilip_heft.png" />
+                  <Text>
+                    <a href="https://www.cilip.de/zeitschrift-bestellen/">
+                      Heft bestellen
+                    </a>
+                  </Text>
+                </Group>
+
+                {/* <VisualizationCard data={options.year} /> */}
+                {/* <div style={{ padding: "1rem" }}></div> */}
+              </Col>
+            </Grid>
+          </Spoiler>
 
           <Space h="xl" />
-
-          <Title order={2} id="chronik">
-            Chronik
-          </Title>
 
           <CaseList
             initialSearchedData={initialSearchedData}
@@ -141,6 +158,14 @@ const Home: NextPage = ({
             maxCases={maxCases}
           />
         </Container>
+        <Center>
+          <Text size="sm">
+            <Link href="/kontakt" passHref>
+              Kontakt, Impressum, Datenschutz
+            </Link>
+          </Text>
+        </Center>
+        <div style={{ height: "2rem" }}></div>
       </main>
     </div>
   );

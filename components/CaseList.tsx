@@ -1,4 +1,5 @@
-import { Center, Col, Grid, Pagination, Text } from "@mantine/core";
+import { Center, Col, Grid, Pagination, Text, Title } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { PAGE_SIZE, SELECTABLE } from "../lib/data";
@@ -107,10 +108,20 @@ const CaseList = ({
 
   resultList = paginate(resultList, PAGE_SIZE, p);
 
+  const notOnMobile = useMediaQuery("(min-width: 768px)");
+
   return (
     <div style={{ paddingBottom: "2rem" }}>
       <Grid>
-        <Col span={8}>
+        <Col span={2} hidden={notOnMobile}></Col>
+        <Col span={12} xs={8} hidden={notOnMobile}>
+          <Map makersData={displayMarkers} />
+        </Col>
+        <Col span={2} hidden={notOnMobile}></Col>
+        <Col span={12} sm={8}>
+          <Title order={2} id="chronik">
+            Chronik
+          </Title>
           <Grid style={{ marginBottom: "1rem", marginTop: "1rem" }}>
             {[
               ["year", "Jahr"],
@@ -160,13 +171,13 @@ const CaseList = ({
           </Grid>
           {overChart}
         </Col>
-        <Col span={4}>
+        <Col span={4} hidden={!notOnMobile}>
           <Map makersData={displayMarkers} />
         </Col>
       </Grid>
 
       <div style={{ minHeight: "100rem" }}>
-        <Center style={{ marginBottom: "1rem" }}>
+        <Center style={{ marginBottom: "1rem", marginTop: "1rem" }}>
           {enoughChars && numHits > 1 && numHits !== maxCases && (
             <Text>
               zeige {numHits} von {maxCases} polizeilichen Todesschüsse
@@ -179,7 +190,7 @@ const CaseList = ({
             <Text>ein polizeilicher Todesschuss</Text>
           )}
           {enoughChars && numHits === 0 && (
-            <Text>kein polizeilicher Todesschuss</Text>
+            <Text>kein polizeilicher Todesschuss entfält auf die Auswahl</Text>
           )}
           {!enoughChars && (
             <Text>Bitte mehr Zeichen für die Suche eingeben</Text>

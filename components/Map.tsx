@@ -29,8 +29,8 @@ const Map = ({ makersData }) => {
         projection="geoAzimuthalEqualArea"
         height={1100}
         projectionConfig={{
-          rotate: [-10.0, -51.0, 0],
-          scale: 8000,
+          rotate: [-10.4, -51.5, 0],
+          scale: 7900,
         }}
       >
         <Geographies geography={geoUrl}>

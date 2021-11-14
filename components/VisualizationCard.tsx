@@ -27,7 +27,7 @@ function VisualizationCard({ data }) {
       <Link href="/visualisierungen" passHref>
         <Button
           variant="light"
-          color="indigo"
+          // color="indigo"
           fullWidth
           style={{ marginTop: 14 }}
         >

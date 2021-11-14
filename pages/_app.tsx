@@ -1,6 +1,7 @@
 import { GlobalStyles, MantineProvider, NormalizeCSS } from "@mantine/core";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import "../styles/globals.css";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;

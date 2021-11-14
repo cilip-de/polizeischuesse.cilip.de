@@ -32,7 +32,9 @@ const tooltipOverview = ({ value, data, id }) => (
       size="sm"
       style={{ background: "white", padding: "0 0.1rem", opacity: 0.8 }}
     >
-      {data.value}: {data.tooltipLabel[id] === "hit" && `${value} Ergbnisse`}
+      {data.value}:{" "}
+      {data.tooltipLabel[id] === "hit" && value !== 1 && `${value} Fälle`}
+      {data.tooltipLabel[id] === "hit" && value === 1 && `1 Fall`}
       {data.tooltipLabel[id] !== "hit" &&
         `${value} Fälle, auf die die Auswahl nicht zutrifft`}
     </Text>
@@ -122,6 +124,9 @@ const OverviewChart = ({ data, hits, onClick }) => {
         padding={0}
         tooltip={tooltipOverview}
         onClick={onClick}
+        style={{
+          cursor: "pointer",
+        }}
       />
     </div>
   );
