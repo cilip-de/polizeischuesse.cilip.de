@@ -24,7 +24,7 @@ function VisualizationCard({ data }) {
         <Text size="sm">Anzahl der Todesschüsse 2010–2020</Text>
       </Group>
 
-      <Link href="/visualiserungen" passHref>
+      <Link href="/visualisierungen" passHref>
         <Button
           variant="light"
           color="indigo"
