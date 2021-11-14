@@ -66,21 +66,21 @@ const Home: NextPage = ({
             </Group>
           </div>
           <Grid>
-            <Col span={12} sm={4} style={{ padding: "3rem" }}>
+            <Col span={12} sm={4} style={{ padding: "2rem" }}>
               <img style={{ width: "100%" }} src="/cover_7.jpg" />{" "}
             </Col>
             <Col span={12} sm={8}>
               <div>
-                <Space h="xl" />
+                <Space h="sm" />
                 <Title order={1}>Polizeiliche Todesschüsse</Title>
                 {/* <Space h="sm" /> */}
                 <Title order={2}>In Deutschland</Title>
-                <Space h="xl" />
+                <Space h="sm" />
                 <Title order={3}>
                   Seit der Wiedervereinigung wurden {afterReuni} Personen durch
                   Kugeln der deutschen Polizei getötet.
                 </Title>
-                <Space h="xl" />
+                <Space h="sm" />
                 <Title order={4}>
                   Wir zählen von 1976 bis 1990 außerdem {beforeReuni} tödliche
                   Schüsse allein in Westdeutschland.
@@ -89,7 +89,6 @@ const Home: NextPage = ({
             </Col>
           </Grid>
 
-          <Space h="xl" />
           <Grid>
             <Col span={12} sm={8}>
               <Text>
@@ -100,7 +99,7 @@ const Home: NextPage = ({
                 werden auch Polizeikugeln auf Personen und daraus resultierende
                 Todesfälle gezählt.
               </Text>
-              <Space h="xl" />
+              <Space h="sm" />
               <Text>
                 Die ab 1984 von den <b>Behörden geführte Aufstellung</b> ist
                 jedoch <b>anonym</b>, es wird nicht auf die einzelnen Taten
@@ -115,7 +114,7 @@ const Home: NextPage = ({
                 Sondereinheiten, der Zahl jeweils abgegebener Schüsse und der
                 Situation in der sich die Schussabgabe zutrug.
               </Text>
-              <Space h="xl" />
+              <Space h="sm" />
               <Text>
                 So ist etwa von Bedeutung, ob die Getöteten selbst bewaffnet
                 waren, sich womöglich in einer psychischen Ausnahmesituation
@@ -154,7 +153,7 @@ const Home: NextPage = ({
               {/* <div style={{ padding: "1rem" }}></div> */}
             </Col>
           </Grid>
-          <Space />
+          <Space h="xl" />
           <CaseList
             initialSearchedData={initialSearchedData}
             data={data}
