@@ -122,7 +122,6 @@ const Home: NextPage = ({
                 befanden oder, wie es häufig geschieht, in ihrer eigenen Wohnung
                 erschossen wurden.
               </Text>
-              <Space h="xl" />
             </Col>
             <Col span={12} sm={4}>
               <Space h="xl" />
@@ -155,9 +154,7 @@ const Home: NextPage = ({
               {/* <div style={{ padding: "1rem" }}></div> */}
             </Col>
           </Grid>
-
-          <Space h="xl" />
-
+          <Space />
           <CaseList
             initialSearchedData={initialSearchedData}
             data={data}

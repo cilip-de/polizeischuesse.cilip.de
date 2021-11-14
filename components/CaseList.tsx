@@ -119,7 +119,7 @@ const CaseList = ({
           <Title order={2} id="chronik">
             Chronik
           </Title>
-          <Grid style={{ marginBottom: "1rem", marginTop: "1rem" }}>
+          <Grid style={{ marginBottom: "1rem", marginTop: "0.5rem" }}>
             {[
               ["year", "Jahr"],
               ["state", "Bundesland"],
