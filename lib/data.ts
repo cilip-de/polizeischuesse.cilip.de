@@ -102,6 +102,7 @@ const preprocessData = (data) => {
 
   data.forEach((x, i) => {
     const date = dayjs(x["Datum"]);
+
     x.year = date.get("year");
     x.dow = date.day();
     x.dowPrint = dayjs.weekdays()[x.dow];
@@ -157,6 +158,13 @@ const setupData = async () => {
     true
   );
 
+  const weapons = [];
+  data.forEach((x) => weapons.push(...x.weapon.split(", ")));
+  const weapon = countItems(
+    weapons.filter((x) => x.length),
+    true
+  );
+
   fuse = new Fuse(data, {
     minMatchCharLength: 3,
     includeMatches: true,
@@ -170,7 +178,7 @@ const setupData = async () => {
   setupProps = {
     data,
     geoData,
-    options: { year, state, place },
+    options: { year, state, place, weapon },
     fuse,
     beforeReuni,
     afterReuni,

@@ -3,14 +3,18 @@ import router from "next/router";
 import React from "react";
 import { constructUrl } from "../lib/util";
 
-const SelectInput = ({ key, label, selection, data }) => {
+const SelectInput = ({ skey, label, selection, data }) => {
   return (
     <Select
-      value={selection[key] || ""}
+      value={selection[skey] || ""}
       onChange={(x) =>
-        router.push(constructUrl({ ...selection, [key]: x, p: 1 }), undefined, {
-          scroll: false,
-        })
+        router.push(
+          constructUrl({ ...selection, [skey]: x, p: 1 }),
+          undefined,
+          {
+            scroll: false,
+          }
+        )
       }
       label={label}
       placeholder="auswählen"

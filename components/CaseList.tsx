@@ -16,6 +16,7 @@ type Selection = {
   q: string;
   p: number;
   tags: string[];
+  weapon: string;
 };
 
 const CaseList = ({
@@ -65,6 +66,9 @@ const CaseList = ({
     );
   }
 
+  if (selection.weapon)
+    resultList = resultList.filter((x) => x.weapon.includes(selection.weapon));
+
   const numHits = resultList.length;
   const totalPages = Math.ceil(resultList.length / PAGE_SIZE);
 
@@ -76,12 +80,12 @@ const CaseList = ({
     displayLocations.has(x.city + x.state)
   );
 
-  for (const x of displayMarkers) {
-    if (x["city"] == "Frankfurt am Main") console.log(x);
-  }
+  // for (const x of displayMarkers) {
+  //   if (x["city"] == "Frankfurt am Main") console.log(x);
+  // }
 
-  console.log(displayLocations);
-  console.log(displayMarkers);
+  // console.log(displayLocations);
+  // console.log(displayMarkers);
 
   resultList = paginate(resultList, PAGE_SIZE, p);
 
@@ -89,7 +93,6 @@ const CaseList = ({
     <div style={{ paddingBottom: "2rem" }}>
       <Grid>
         <Col span={8}>
-          <div style={{ height: "100px" }}></div>
           <Grid style={{ marginBottom: "2rem", marginTop: "1rem" }}>
             {[
               ["year", "Jahr"],
@@ -98,7 +101,7 @@ const CaseList = ({
             ].map(([key, label]) => (
               <Col span={4} key={key}>
                 <SelectInput
-                  key={key}
+                  skey={key}
                   label={label}
                   selection={selection}
                   data={options[key]}
@@ -113,6 +116,14 @@ const CaseList = ({
                 selection={selection}
                 setSearchedData={setSearchedData}
                 setSearchedQ={setSearchedQ}
+              />
+            </Col>
+            <Col span={4}>
+              <SelectInput
+                skey={"weapon"}
+                label={"Bewaffnung"}
+                selection={selection}
+                data={options.weapon}
               />
             </Col>
           </Grid>
