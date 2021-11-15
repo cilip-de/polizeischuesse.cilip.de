@@ -152,6 +152,18 @@ const Home: NextPage = ({
             </Col>
             <Col span={12} sm={4} className="only-non-mobile">
               <Space h="xl" />
+              <Group position="right">
+                <div>
+                  <a href="https://cilip.de">
+                    <img
+                      src="/cilip-logo-outline.svg"
+                      height="50"
+                      alt="Bürgerrechte & Polizei"
+                    />
+                  </a>
+                </div>
+              </Group>
+              <Space h="xl" />
               <Space h="xl" />
               <Group position="right" direction="column">
                 <Button
@@ -197,36 +209,6 @@ const Home: NextPage = ({
                   </Link>
                 </Button>
               </Group>
-              {/* <Title order={5} align="right"> */}
-              {/* Todesschüsse pro Wochentag */}
-              {/* </Title> */}
-              {/* <DowChart data={data} /> */}
-              <Group position="right">
-                {/* <div>
-                  <Button variant="outline" uppercase color="gray" compact>
-                    <Link href="/visualisierungen" passHref>
-                      Mehr Visualisierungen
-                    </Link>
-                  </Button>
-                </div> */}
-                <div>
-                  <Space h="xl" />
-
-                  <a href="https://cilip.de">
-                    <img src="/cilip-logo-outline.svg" height="50" />
-                  </a>
-                </div>
-                {/* <Space h="lg" />
-                <img src="/cilip_heft.png" />
-                <Text>
-                  <a href="https://www.cilip.de/zeitschrift-bestellen/">
-                    Heft bestellen
-                  </a>
-                </Text> */}
-              </Group>
-              {/* <VisualizationCard data={options.year} />
-               */}
-              {/* <div style={{ padding: "1rem" }}></div> */}
             </Col>
           </Grid>
           <Space h="xl" />
