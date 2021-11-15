@@ -55,6 +55,7 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
   return (
     <div style={{ height: 200 }}>
       <ResponsiveBar
+        enableGridY={false}
         valueFormat={(x) => (x == 0 ? null : x)}
         margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
         axisLeft={null}
@@ -155,4 +156,10 @@ const DowChart = ({ data }) => {
   );
 };
 
-export { VerticalBarChart, HorizontalBarChart, OverviewChart, DowChart };
+export {
+  VerticalBarChart,
+  HorizontalBarChart,
+  OverviewChart,
+  DowChart,
+  selectNiceTicks,
+};

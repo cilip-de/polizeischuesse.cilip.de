@@ -5,6 +5,7 @@ import { GetServerSideProps } from "next";
 import React from "react";
 import { HorizontalBarChart, VerticalBarChart } from "../components/charts";
 import Layout from "../components/Layout";
+import WeaponChart from "../components/WeaponChart";
 import { countItems, setupData } from "../lib/data";
 import { addMissingYears, combineArray, isNumber } from "../lib/util";
 
@@ -159,6 +160,7 @@ const Auswertung: NextPage = ({ data, options }) => {
       <Space h="lg" />
       <CasesPerYear data={data} />
       <CasesPerYearWeapon data={data} />
+      <WeaponChart data={data} />
       <div>
         <Title order={3}>
           Polizeiliche Todesschüsse pro Bundesland, je 1.000.000 Einwohner
