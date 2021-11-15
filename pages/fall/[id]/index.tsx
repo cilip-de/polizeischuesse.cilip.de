@@ -9,7 +9,7 @@ const CaseDetail: NextPage = (props) => {
   return (
     <Container>
       <div style={{ marginTop: "10rem" }}>
-        <Link href="/">
+        <Link href={props.taser ? "/taser" : "/"}>
           <a>
             <Text align="center">zurück zur Chronik</Text>
           </a>
@@ -28,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const casex = results.data
     .concat(taserData)
     .filter((x) => x["Fall"] == query.id)[0];
-  return { props: { case: casex } };
+  return { props: { case: casex, taser: query.id?.includes("taser") } };
 };
 
 export default CaseDetail;
