@@ -15,7 +15,6 @@ import Head from "next/head";
 import Link from "next/link";
 import React from "react";
 import CaseList from "../components/CaseList";
-import { DowChart } from "../components/charts";
 import { setupData } from "../lib/data";
 
 const Home: NextPage = ({
@@ -39,26 +38,46 @@ const Home: NextPage = ({
       <main>
         <Container>
           <Space h="xl" />
-          <div>
-            <Group position="right">
-              <Button compact color="gray" variant="outline">
+          <div className="only-mobile">
+            <Group position="center">
+              <Button
+                uppercase
+                style={{ width: "45%" }}
+                color="gray"
+                variant="outline"
+              >
                 <Link href="/visualisierungen" passHref>
                   Visualisierungen
                 </Link>
               </Button>
-              <Button compact color="gray" variant="outline">
+              <Button
+                uppercase
+                style={{ width: "45%" }}
+                color="gray"
+                variant="outline"
+              >
                 <Link href="/methodik" passHref>
                   Methodik
                 </Link>
               </Button>
 
-              <Button compact color="gray" variant="outline">
+              <Button
+                uppercase
+                style={{ width: "45%" }}
+                color="gray"
+                variant="outline"
+              >
                 <Link href="/statistiken" passHref>
                   Offizielle Statistiken
                 </Link>
               </Button>
 
-              <Button compact color="gray" variant="outline">
+              <Button
+                uppercase
+                style={{ width: "45%" }}
+                color="gray"
+                variant="outline"
+              >
                 <Link href="/taser" passHref>
                   Tod durch Taser
                 </Link>
@@ -99,6 +118,15 @@ const Home: NextPage = ({
                 werden auch Polizeikugeln auf Personen und daraus resultierende
                 Todesfälle gezählt.
               </Text>
+              <div className="only-mobile">
+                <Space h="lg" />
+                <Group position="center">
+                  <a href="https://cilip.de">
+                    <img src="/cilip-logo-outline.svg" height="50" />
+                  </a>
+                </Group>
+                <Space h="sm" />
+              </div>
               <Space h="sm" />
               <Text>
                 Die ab 1984 von den <b>Behörden geführte Aufstellung</b> ist
@@ -122,23 +150,71 @@ const Home: NextPage = ({
                 erschossen wurden.
               </Text>
             </Col>
-            <Col span={12} sm={4}>
+            <Col span={12} sm={4} className="only-non-mobile">
               <Space h="xl" />
-              <Title order={5} align="right">
-                Todesschüsse pro Wochentag
-              </Title>
-              <DowChart data={data} />
+              <Space h="xl" />
+              <Group position="right" direction="column">
+                <Button
+                  uppercase
+                  color="gray"
+                  variant="outline"
+                  style={{ width: "13rem" }}
+                >
+                  <Link href="/visualisierungen" passHref>
+                    Visualisierungen
+                  </Link>
+                </Button>
+                <Button
+                  uppercase
+                  color="gray"
+                  variant="outline"
+                  style={{ width: "13rem" }}
+                >
+                  <Link href="/methodik" passHref>
+                    Methodik
+                  </Link>
+                </Button>
+
+                <Button
+                  uppercase
+                  color="gray"
+                  variant="outline"
+                  style={{ width: "13rem", textDecoration: "none" }}
+                >
+                  <Link href="/statistiken" style={{ textDecoration: "none" }}>
+                    Offizielle Statistiken
+                  </Link>
+                </Button>
+
+                <Button
+                  uppercase
+                  color="gray"
+                  variant="outline"
+                  style={{ width: "13rem" }}
+                >
+                  <Link href="/taser" passHref>
+                    Tod durch Taser
+                  </Link>
+                </Button>
+              </Group>
+              {/* <Title order={5} align="right"> */}
+              {/* Todesschüsse pro Wochentag */}
+              {/* </Title> */}
+              {/* <DowChart data={data} /> */}
               <Group position="right">
-                <div>
-                  <Button variant="outline" color="gray" compact>
+                {/* <div>
+                  <Button variant="outline" uppercase color="gray" compact>
                     <Link href="/visualisierungen" passHref>
                       Mehr Visualisierungen
                     </Link>
                   </Button>
-                </div>
+                </div> */}
                 <div>
                   <Space h="xl" />
-                  <img src="/cilip-logo-outline.svg" height="50" />
+
+                  <a href="https://cilip.de">
+                    <img src="/cilip-logo-outline.svg" height="50" />
+                  </a>
                 </div>
                 {/* <Space h="lg" />
                 <img src="/cilip_heft.png" />
