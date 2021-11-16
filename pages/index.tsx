@@ -67,8 +67,8 @@ const Home: NextPage = ({
                 color="gray"
                 variant="outline"
               >
-                <Link href="/statistiken" passHref>
-                  Offizielle Statistiken
+                <Link href="/statistik" passHref>
+                  Offizielle Statistik
                 </Link>
               </Button>
 
@@ -85,31 +85,31 @@ const Home: NextPage = ({
             </Group>
           </div>
           <Grid>
-            <Col span={12} sm={4} style={{ padding: "2rem" }}>
-              <img style={{ width: "100%" }} src="/cover_7.jpg" />{" "}
+            <Col span={12} sm={4} style={{ padding: "1rem", paddingTop: "0" }}>
+              <img style={{ width: "100%" }} src="/cover_12.jpg" />{" "}
             </Col>
             <Col span={12} sm={8}>
               <div>
                 <Space h="sm" />
                 <Title order={1}>Polizeiliche Todesschüsse</Title>
                 {/* <Space h="sm" /> */}
-                <Title order={2}>In Deutschland</Title>
                 <Space h="sm" />
                 <Title order={3}>
                   Seit der Wiedervereinigung wurden {afterReuni} Personen durch
                   Kugeln der deutschen Polizei getötet.
                 </Title>
                 <Space h="sm" />
-                <Title order={4}>
+                <Text>
                   Wir zählen von 1976 bis 1990 außerdem {beforeReuni} tödliche
                   Schüsse allein in Westdeutschland.
-                </Title>
+                </Text>
               </div>
             </Col>
           </Grid>
 
           <Grid>
             <Col span={12} sm={8}>
+              <Space h="lg" />
               <Text>
                 Jedes Jahr veröffentlicht die Konferenz der Innenminister*innen
                 der Bundesländer eine neue{" "}
@@ -193,8 +193,8 @@ const Home: NextPage = ({
                   variant="outline"
                   style={{ width: "13rem", textDecoration: "none" }}
                 >
-                  <Link href="/statistiken" style={{ textDecoration: "none" }}>
-                    Offizielle Statistiken
+                  <Link href="/statistik" style={{ textDecoration: "none" }}>
+                    Offizielle Statistik
                   </Link>
                 </Button>
 
@@ -211,6 +211,7 @@ const Home: NextPage = ({
               </Group>
             </Col>
           </Grid>
+          <Space h="xl" />
           <Space h="xl" />
           <CaseList
             initialSearchedData={initialSearchedData}

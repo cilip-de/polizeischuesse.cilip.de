@@ -9,9 +9,16 @@ import { setupTaserData } from "../lib/data";
 const Taser: NextPage = ({ data }) => {
   return (
     <Layout
+      metaImg="taser_cover.jpg"
+      metaPath="taser"
       title="Tod durch Taser"
       description="Seit 2021 sammeln wir auch Todesfälle durch den polizeilichen Einsatz
     von Tasern."
+      cover={
+        <div>
+          <img src="/taser_cover.jpg" style={{ width: "100%" }} />
+        </div>
+      }
     >
       <div>
         Bis vor einigen Jahren waren lediglich Spezialeinheiten damit

@@ -61,47 +61,47 @@ const Case = ({ item, hideLink = false }) => {
     >
       <Group>
         {item.schusswechsel && (
-          <Badge size="xs" color="pink" variant="light">
+          <Badge size="sm" color="pink" variant="light">
             Schusswechsel
           </Badge>
         )}
         {item.sek && (
-          <Badge size="xs" color="grape" variant="light">
+          <Badge size="sm" color="grape" variant="light">
             SEK-Beteiligung
           </Badge>
         )}
         {item.vgbeamte && (
-          <Badge size="xs" color="violet" variant="light">
+          <Badge size="sm" color="violet" variant="light">
             Verletzte/getötete Beamte
           </Badge>
         )}
         {item.vorbaktion && (
-          <Badge size="xs" color="indigo" variant="light">
+          <Badge size="sm" color="indigo" variant="light">
             Vorbereitete Polizeiaktion
           </Badge>
         )}
         {item.psych && (
-          <Badge size="xs" color="blue" variant="light">
+          <Badge size="sm" color="blue" variant="light">
             Mutm. phsych. Ausnahmesituation
           </Badge>
         )}
         {item.alkdrog && (
-          <Badge size="xs" color="cyan" variant="light">
+          <Badge size="sm" color="cyan" variant="light">
             Mutm. Alkohol / Drogen
           </Badge>
         )}
         {item.famgew && (
-          <Badge size="xs" color="teal" variant="light">
+          <Badge size="sm" color="teal" variant="light">
             Mutm. famil. oder häusl. Gewalt
           </Badge>
         )}
         {item.unschuss && (
-          <Badge size="xs" color="green" variant="light">
+          <Badge size="sm" color="green" variant="light">
             Unbeabsichtigte Schussabgabe
           </Badge>
         )}
         {item.indoor && (
-          <Badge size="xs" color="lime" variant="light">
+          <Badge size="sm" color="lime" variant="light">
             Innenraum
           </Badge>
         )}
@@ -117,14 +117,14 @@ const Case = ({ item, hideLink = false }) => {
             {item.sex.length > 0 && `, ${item.sex}`}
           </Text>
           <Space />
-          <Text size="sm" style={{ lineHeight: 1.5 }}>
+          <Text size="sm" color="gray" style={{ lineHeight: 1.5 }}>
             Erschossen am {item.datePrint}
           </Text>
-          <Text size="sm" style={{ lineHeight: 1.5 }}>
+          <Text size="sm" color="gray" style={{ lineHeight: 1.5 }}>
             In {item.place}
             {item.state !== item.place && `, ${item.state}`}
           </Text>
-          <Text size="sm" style={{ lineHeight: 1.5 }}>
+          <Text size="sm" color="gray" style={{ lineHeight: 1.5 }}>
             {item.numShots.length > 0 &&
               item.numShots !== "1" &&
               `Mit ${item.numShots} Schüssen`}
@@ -132,11 +132,13 @@ const Case = ({ item, hideLink = false }) => {
               item.numShots === "1" &&
               `Mit einem Schuss`}
           </Text>
-          <Text size="sm" style={{ lineHeight: 1.5 }}>
+          <Text size="sm" color="gray" style={{ lineHeight: 1.5 }}>
             {item.weapon && `Bewaffnet mit ${item.weapon}`}
           </Text>
           <Space />
-          <Text size="sm">Quellen: {textToLinks(item["Quellen"])}</Text>
+          <Text size="sm" color="gray">
+            Quellen: {textToLinks(item["Quellen"])}
+          </Text>
           <div></div>
         </Col>
         <Col span={12} md={8} lg={8}>

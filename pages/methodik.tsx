@@ -1,3 +1,4 @@
+import { Center } from "@mantine/core";
 import type { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
@@ -6,8 +7,25 @@ import Layout from "../components/Layout";
 const Daten: NextPage = () => {
   return (
     <Layout
+      metaImg="methodik_cover.jpg"
+      metaPath="methodik"
       title="Methodik: Woher stammen unsere Informationen?"
       description="Wir zählen alle Fälle, in denen Menschen durch eine Polizeikugel gestorben sind. Dabei beziehen wir auch die sehr wenigen Situationen, in denen dies außerhalb des Dienstes oder bei bekannt gewordenen Fällen von Suizid geschieht, mit ein."
+      cover={
+        <div>
+          <Center>
+            <img
+              src="/methodik_cover.jpg"
+              style={{
+                width: "90%",
+                marginTop: "2rem",
+                marginLeft: "5%",
+                marginRight: "5%",
+              }}
+            />
+          </Center>
+        </div>
+      }
     >
       <div>
         Wir recherchieren unsere Fälle zum tödlichen Gebrauch von Schusswaffen

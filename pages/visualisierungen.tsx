@@ -151,6 +151,9 @@ const Auswertung: NextPage = ({ data, options }) => {
 
   return (
     <Layout
+      cover={null}
+      metaImg="vis_cover.jpg"
+      metaPath="visualisierungen"
       title="Visuelle Auswertung der Daten"
       description="Eine statische Auswertung der Daten aus der Chronik. Es fehlt noch mehr
     Text für die Beschreibung."

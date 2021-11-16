@@ -1,15 +1,28 @@
-import { Container, Space, Title } from "@mantine/core";
+import { Col, Container, Grid, Space, Title } from "@mantine/core";
 import Head from "next/head";
 import Link from "next/link";
 import React from "react";
 
-export default function Layout({ children, title, description }) {
+export default function Layout({
+  children,
+  title,
+  description,
+  cover,
+  metaImg,
+  metaPath,
+}) {
+  const hostname = "https://todesschuesse.cilip.de";
   return (
     <>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
         <link rel="icon" href="/favicon.ico" />
+        <meta property="og:title" content={title} />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content={`${hostname}/${metaImg}`} />
+        <meta property="og:url" content={`${hostname}/${metaPath}`} />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <Container>
@@ -18,9 +31,18 @@ export default function Layout({ children, title, description }) {
           <a>{"« zurück"}</a>
         </Link>
         <Space />
-        <Title order={1}>{title}</Title>
-        <Space h="sm" />
-        <Title order={4}>{description}</Title>
+
+        <Grid>
+          <Col span={12} md={4}>
+            {cover && cover}
+          </Col>
+          <Col span={12} md={8}>
+            <Title order={1}>{title}</Title>
+            <Space h="sm" />
+            <Title order={4}>{description}</Title>
+          </Col>
+        </Grid>
+
         <Space h="lg" />
         <main>{children}</main>
         <Space h="lg" />

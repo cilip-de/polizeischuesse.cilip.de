@@ -7,8 +7,15 @@ import Layout from "../components/Layout";
 const Statistiken: NextPage = ({ data }) => {
   return (
     <Layout
-      title="Offizielle Statistiken zu Polizeischüssen"
+      metaImg="statistik_cover.jpg"
+      metaPath="statistik"
+      title="Offizielle Statistik zu Polizeischüssen"
       description="1974 hat die Ständige Konferenz der Innenminister:innen und -senator:innen der Länder (IMK) die Deutsche Hochschule der Polizei (die damals noch Polizei-Führungsakademie hieß) mit der Erstellung einer jährlichen Schusswaffengebrauchsstatistik beauftragt."
+      cover={
+        <div>
+          <img src="/statistik_cover.jpg" style={{ width: "100%" }} />
+        </div>
+      }
     >
       <div>
         Sie wird im Frühjahr oder spätestens im Sommer des Folgejahres
@@ -32,9 +39,9 @@ const Statistiken: NextPage = ({ data }) => {
         Ministerium des Inneren, für Digitalisierung und Kommunen
         Baden-Württemberg.
       </div>
-      <Space />
+      <Space h="xl" />
       <Title order={3}>Fälle von polizeilichem Schusswaffengebrauch</Title>
-      <Space />
+      <Space h="xl" />
       <Grid>
         {data.documents.map((x) => (
           <Col span={4} md={2} lg={1} key={x.title}>
