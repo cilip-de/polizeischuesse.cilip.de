@@ -4,8 +4,8 @@ import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import React from "react";
 import { HorizontalBarChart, VerticalBarChart } from "../components/charts";
+import HeatMapChart from "../components/HeatMapChart";
 import Layout from "../components/Layout";
-import WeaponChart from "../components/WeaponChart";
 import { countItems, setupData } from "../lib/data";
 import { addMissingYears, combineArray, isNumber } from "../lib/util";
 
@@ -71,8 +71,7 @@ const CasesPerYear = ({ data }) => {
   return (
     <div>
       <Title order={3} align="center">
-        Polizeiliche Todesschüsse von {data[data.length - 1].year}–
-        {data[0].year}
+        Todesschüsse von {data[data.length - 1].year}–{data[0].year}
       </Title>
       <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
       <Text>
@@ -105,8 +104,8 @@ const CasesPerYearWeapon = ({ data }) => {
   return (
     <div>
       <Title order={3} align="center">
-        Polizeiliche Todesschüsse von {data[data.length - 1].year}–
-        {data[0].year}, Opfer mit Schusswaffe vs Stichwaffe
+        Todesschüsse von {data[data.length - 1].year}–{data[0].year}, Opfer mit
+        Schusswaffe vs Stichwaffe
       </Title>
       <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
       <Text>
@@ -160,16 +159,16 @@ const Auswertung: NextPage = ({ data, options }) => {
       <Space h="lg" />
       <CasesPerYear data={data} />
       <CasesPerYearWeapon data={data} />
-      <WeaponChart data={data} />
+      {/* <WeaponChart data={data} /> */}
       <div>
         <Title order={3} align="center">
-          Polizeiliche Todesschüsse pro Bundesland, je 1.000.000 Einwohner
+          Todesschüsse pro Bundesland, je 1.000.000 Einwohner
         </Title>
         <HorizontalBarChart data={perInhabSorted} />
       </div>
       <div>
         <Title order={3} align="center">
-          Polizeiliche Todesschüsse pro Stadt
+          Todesschüsse pro Stadt
         </Title>
         <HorizontalBarChart
           data={_.orderBy(options.place, "count", "desc")
@@ -179,7 +178,7 @@ const Auswertung: NextPage = ({ data, options }) => {
       </div>
       <div>
         <Title order={3} align="center">
-          Polizeiliche Todesschüsse pro Monat
+          Todesschüsse pro Monat
         </Title>
         <HorizontalBarChart
           data={countItems(
@@ -189,14 +188,13 @@ const Auswertung: NextPage = ({ data, options }) => {
       </div>
       <div>
         <Title order={3} align="center">
-          Polizeiliche Todesschüsse pro Wochentag, unterteilt nach
-          SEK-Beteiligung
+          Todesschüsse pro Wochentag, unterteilt nach SEK-Beteiligung
         </Title>
         <HorizontalBarChart data={dataSekNo2} />
       </div>
       <div>
         <Title order={3} align="center">
-          Polizeiliche Todesschüsse pro Tag im Monat
+          Todesschüsse pro Tag im Monat
         </Title>
         <VerticalBarChart data={countItems(data.map(({ dom }) => dom))} />
       </div>
@@ -218,6 +216,9 @@ const Auswertung: NextPage = ({ data, options }) => {
           maxValue={1}
           margin={{ top: 10, right: 10, bottom: 30, left: 300 }}
         />
+      </div>
+      <div>
+        <HeatMapChart data={data} leftLabels={options.states} />
       </div>
     </Layout>
   );

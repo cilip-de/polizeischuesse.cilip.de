@@ -1,70 +1,104 @@
-// install (please make sure versions match peerDependencies)
-// yarn add @nivo/core @nivo/heatmap
+import { Center, Text, useMantineTheme } from "@mantine/core";
 import { ResponsiveHeatMap } from "@nivo/heatmap";
+import _ from "lodash";
+import React from "react";
 
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
-const MyResponsiveHeatMap = ({ data /* see data tab */ }) => (
-  <ResponsiveHeatMap
-    data={data}
-    keys={[
-      "hot dog",
-      "burger",
-      "sandwich",
-      "kebab",
-      "fries",
-      "donut",
-      "junk",
-      "sushi",
-      "ramen",
-      "curry",
-      "udon",
-    ]}
-    indexBy="country"
-    margin={{ top: 100, right: 60, bottom: 60, left: 60 }}
-    forceSquare={true}
-    axisTop={{
-      orient: "top",
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: -90,
-      legend: "",
-      legendOffset: 36,
-    }}
-    axisRight={null}
-    axisBottom={null}
-    axisLeft={{
-      orient: "left",
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: "country",
-      legendPosition: "middle",
-      legendOffset: -40,
-    }}
-    cellOpacity={1}
-    cellBorderColor={{ from: "color", modifiers: [["darker", 0.4]] }}
-    labelTextColor={{ from: "color", modifiers: [["darker", 1.8]] }}
-    defs={[
-      {
-        id: "lines",
-        type: "patternLines",
-        background: "inherit",
-        color: "rgba(0, 0, 0, 0.1)",
-        rotation: -45,
-        lineWidth: 4,
-        spacing: 7,
-      },
-    ]}
-    fill={[{ id: "lines" }]}
-    animate={true}
-    motionConfig="wobbly"
-    motionStiffness={80}
-    motionDamping={9}
-    hoverTarget="cell"
-    cellHoverOthersOpacity={0.25}
-  />
-);
+const HeatMapChart = ({ data, leftLabels }) => {
+  const procData = [];
+
+  // const x = leftLabels.map(label => {
+  //   data.filter(x => x.states == label)
+  // })
+
+  const boolAtr = [
+    "Schusswechsel",
+    "Sondereinsatzbeamte",
+    "Verletzte/getötete Beamte",
+    "Vorbereitete Polizeiaktion",
+    "Opfer mit Schusswaffe",
+    "Unbeabsichtigte Schussabgabe",
+    "Hinweise auf familiäre oder häusliche Gewalt",
+    "Hinweise auf psychische Ausnahmesituation",
+    "Hinweise auf Alkohol- und/ oder Drogenkonsum",
+    "Schussort Innenraum",
+    "Schussort Außen",
+  ];
+
+  const boolData = (data) =>
+    boolAtr
+      .map((x) => ({
+        [x]: _.round(
+          (data.filter((d) => d[x].includes("Ja")).length / data.length) * 100,
+          0
+        ),
+      }))
+      .concat([
+        {
+          unbewaffnet: _.round(
+            (data.filter((x) => x.weapon == "").length / data.length) * 100
+          ),
+        },
+      ]);
+  const ans = _(data)
+    .groupBy("state")
+    .map((state, id) => ({
+      state: id,
+      ...Object.assign(...boolData(state)),
+    }))
+    .orderBy("state")
+    .value();
+
+  const theme = useMantineTheme();
+
+  console.log(ans);
+
+  return (
+    <div style={{ height: "800px" }}>
+      <ResponsiveHeatMap
+        data={ans}
+        keys={boolAtr.concat("unbewaffnet")}
+        indexBy="state"
+        margin={{ top: 250, right: 60, bottom: 30, left: 60 }}
+        forceSquare={true}
+        colors={theme.colors.indigo}
+        maxValue={100}
+        axisTop={{
+          orient: "top",
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: -90,
+          legend: "",
+          legendOffset: 36,
+        }}
+        axisRight={null}
+        axisBottom={null}
+        cellOpacity={1}
+        cellBorderColor={{ from: "color", modifiers: [["darker", 0.4]] }}
+        labelTextColor={{ from: "color", modifiers: [["darker", 1.8]] }}
+        defs={[
+          {
+            id: "lines",
+            type: "patternLines",
+            background: "inherit",
+            color: "rgba(0, 0, 0, 0.1)",
+            rotation: -45,
+            lineWidth: 4,
+            spacing: 7,
+          },
+        ]}
+        fill={[{ id: "lines" }]}
+        animate={true}
+        motionConfig="wobbly"
+        motionStiffness={80}
+        motionDamping={9}
+        hoverTarget="cell"
+        cellHoverOthersOpacity={0.25}
+      />
+      <Center>
+        <Text size="sm">Angaben in Prozent</Text>
+      </Center>
+    </div>
+  );
+};
+
+export default HeatMapChart;
