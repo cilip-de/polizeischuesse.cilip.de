@@ -10,7 +10,7 @@ const Statistiken: NextPage = ({ data }) => {
       metaImg="statistik_cover.jpg"
       metaPath="statistik"
       title="Offizielle Statistik zu Polizeischüssen"
-      description="1974 hat die Ständige Konferenz der Innenminister:innen und -senator:innen der Länder (IMK) die Deutsche Hochschule der Polizei (die damals noch Polizei-Führungsakademie hieß) mit der Erstellung einer jährlichen Schusswaffengebrauchsstatistik beauftragt."
+      description="1974 hat die Ständige Konferenz der Innenminister*innen und -senator*innen der Länder (IMK) die Deutsche Hochschule der Polizei (die damals noch Polizei-Führungsakademie hieß) mit der Erstellung einer jährlichen Schusswaffengebrauchsstatistik beauftragt."
       cover={
         <div>
           <img src="/statistik_cover.jpg" style={{ width: "100%" }} />
@@ -20,12 +20,11 @@ const Statistiken: NextPage = ({ data }) => {
       <div>
         Sie wird im Frühjahr oder spätestens im Sommer des Folgejahres
         abgeschlossen und enthält Zahlen zu sämtlichen, durch deutsche
-        Polizist:innen abgegebenen Schüsse. Neben Warnschüssen unterscheidet die
-        Übersicht zwischen dem Schusswaffengebrauch gegen Sachen und gegen
-        Personen. Im Bereich der Schüsse gegen Sachen werden diese überwiegend
-        auf gefährliche, kranke oder verletzte Tiere abgegeben. Eine weitere
-        Kategorie ist der unzulässige Schusswaffengebrauch, darunter auch gegen
-        Unbeteiligte. Gezählt werden schließlich auch Verletzte und Tote.
+        Polizist*innen abgegebenen Schüsse. Neben Warnschüssen unterscheidet die
+        Übersicht zwischen dem Schusswaffengebrauch gegen Tiere, Sachen und
+        gegen Personen. Eine weitere Kategorie ist der unzulässige
+        Schusswaffengebrauch, darunter auch gegen Unbeteiligte. Gezählt werden
+        schließlich auch Verletzte und Tote.
         <br />
         <br />
         Erst ab 1984 wird diese jährliche Übersicht auch veröffentlicht,
@@ -37,7 +36,8 @@ const Statistiken: NextPage = ({ data }) => {
         komplett. Für die Jahre davor liegen die Datenblätter nicht mehr
         durchgängig und auch nicht in digitaler Form vor, schreibt uns das
         Ministerium des Inneren, für Digitalisierung und Kommunen
-        Baden-Württemberg.
+        Baden-Württemberg. Sobald sie uns dennoch erreichen, werden wir sie hier
+        veröffentlichen.
       </div>
       <Space h="xl" />
       <Title order={3}>Fälle von polizeilichem Schusswaffengebrauch</Title>

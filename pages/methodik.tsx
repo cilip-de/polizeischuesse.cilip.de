@@ -10,7 +10,7 @@ const Daten: NextPage = () => {
       metaImg="methodik_cover.jpg"
       metaPath="methodik"
       title="Methodik: Woher stammen unsere Informationen?"
-      description="Wir zählen alle Fälle, in denen Menschen durch eine Polizeikugel gestorben sind. Dabei beziehen wir auch die sehr wenigen Situationen, in denen dies außerhalb des Dienstes oder bei bekannt gewordenen Fällen von Suizid geschieht, mit ein."
+      description="Seit 1976 sammelt die CILIP Informationen zu polizeilichen Todesschüssen; anfangs stammten die Statistiken von Falko Werkenthin, seit 1994 von Otto Diederichs. Wir zählen alle Fälle, in denen Menschen durch eine Polizeikugel gestorben sind."
       cover={
         <div>
           <Center>
@@ -28,55 +28,59 @@ const Daten: NextPage = () => {
       }
     >
       <div>
-        Wir recherchieren unsere Fälle zum tödlichen Gebrauch von Schusswaffen
-        und Tasern gewöhnlich in der Presse. Früher erfolgte dies durch die
-        Sichtung von gedruckten Tageszeitungen, heute ausschließlich im
-        Internet. Weitere Details haben wir anschließend bei den zuständigen
-        Polizeibehörden oder Staatsanwaltschaften erfragt. Deren Angaben sind
-        mit Vorsicht zu genießen, denn auch in der Presse überwiegt oft die
-        Darstellung und mithin die Sichtweise der Polizei. Auch die Hinweise zur
-        Beteiligung von polizeilichen Spezialkräften sind womöglich
-        unvollständig, möglicherweise wurde dies auch nicht immer von den
-        Zeitungen gemeldet.
+        Hier dokumentieren wir jedoch nur die dienstliche Verwendung der Waffen,
+        deshalb beziehen wir etwa die zahlreichen „erweiterten Suizide“, in
+        denen Polizisten zuvor Partnerinnen oder Angehörige töten, nicht ein.
+        Ebenfalls nicht gezählt sind Situationen, in denen dies außerhalb des
+        Dienstes erfolgt. Dies betrifft mindestens zwei Fälle von 1986 und 1995,
+        in denen Polizisten zur Aushilfe an einer Tankstelle arbeiteten und bei
+        einem Überfall ihre Dienstwaffe eingesetzt haben.
         <br />
         <br />
-        Unsere Sammlung gleichen wir vor der{" "}
+        Den tödlichen Gebrauch von Schusswaffen und Tasern recherchieren wir
+        gewöhnlich in der Presse. Früher erfolgte dies durch die Sichtung von
+        gedruckten Tageszeitungen, heute ausschließlich im Internet. Die Angaben
+        sind mit Vorsicht zu genießen, denn oft überwiegt darin die Darstellung
+        und mithin die Sichtweise der Polizei. Auch die Hinweise zur Beteiligung
+        von polizeilichen Spezialkräften sind womöglich unvollständig.
+        <br />
+        <br />
+        Weitere Details erfragen wir anschließend bei den zuständigen
+        Polizeibehörden oder Staatsanwaltschaften. Vor der{" "}
         <a href="https://www.cilip.de/category/polizeiliche-todesschuesse/">
           Veröffentlichung in unserer Zeitschrift
         </a>{" "}
-        mit der jährlichen Schusswaffengebrauchsstatistik der Deutschen
-        Hochschule der Polizei (DhPol) ab. Manchmal müssen wir dann Fälle
-        ergänzen, die uns nicht bekannt wurden. Mitunter korrigieren wir unsere
-        Zählung auch, etwa wenn die von uns gezählten Todesschüsse lediglich zu
-        einer schweren Verletzung geführt haben. Einige Fälle haben wir
-        womöglich auch nicht korrekt dargestellt, etwa wenn sich von uns
-        unbemerkt neue Sachverhalte ergeben haben und dies in der
-        Fallbeschreibung nicht ergänzt ist.
+        gleichen wir unsere Sammlung mit der jährlichen
+        Schusswaffengebrauchsstatistik der Deutschen Hochschule der Polizei
+        (DhPol) ab. Manchmal müssen wir dann Fälle ergänzen, die uns nicht
+        bekannt wurden. Mitunter korrigieren wir unsere Zählung auch, etwa wenn
+        die von uns gezählten Todesschüsse lediglich zu einer schweren
+        Verletzung geführt haben. Einige Fälle haben wir womöglich auch nicht
+        korrekt dargestellt, etwa wenn sich von uns unbemerkt neue Sachverhalte
+        ergeben haben und dies in der Fallbeschreibung nicht ergänzt ist.
         <br />
         <br />
-        Weitere Diskrepanzen ergeben sich, wenn die staatsanwaltlichen
-        Ermittlungen zu den Schusswaffengebräuchen noch nicht abgeschlossen
+        Diskrepanzen ergeben sich auch, wenn die staatsanwaltlichen Ermittlungen
+        zur Todesursache nach einem Schusswaffengebräuchen nicht abgeschlossen
         sind. Dann werden die Fälle als „offen“ bewertet, sie tauchen also in
-        der Jahresstatistik der DhPol nicht auf. Abhilfe würde eine Zählung
-        schaffen, die einen staatsanwaltlichen Vorbehalt vorsieht.
-        <br />
-        <br />
-        Unsere Fallbeschreibungen sind mit den Jahren etwas umfangreicher
-        geworden, für die Anfangszeit erläutern sie die Taten jedoch nur sehr
-        knapp. Wir haben es damals versäumt, die Meldungen mit Quellen zu
-        belegen und dies erst für die Ereignisse ab der Jahrtausendwende
-        nachgeholt. Deshalb sind viele Fälle nur schwer nachprüfbar, teilweise
-        bleiben sie auch unvollständig. So bleibt das Geschlecht der Getöteten
-        bis zum Jahr 1982 mitunter unbekannt.
+        der offiziellen Jahresstatistik nicht als „Tote“ auf. Dies hat die DhPol
+        erst ab 2014 mit der neuen Rubrik „noch nicht klassifizierte Fälle
+        (Folgen)“ berücksichtigt. Unsere Fallbeschreibungen sind mit den Jahren
+        etwas umfangreicher geworden, für die Anfangszeit erläutern sie die
+        Taten jedoch nur sehr knapp. Wir haben es damals versäumt, die Meldungen
+        mit Quellen zu belegen und dies erst für die Ereignisse ab der
+        Jahrtausendwende nachgeholt. Deshalb sind viele Fälle nur schwer
+        nachprüfbar, teilweise bleiben sie auch unvollständig. So bleibt das
+        Geschlecht der Getöteten bis zum Jahr 1982 mitunter unbekannt.
         <br />
         <br />
         Nachträglich haben wir die Fälle nach Hinweisen auf eine psychische
         Ausnahmesituation der Opfer durchsucht und markiert. Damit wollen wir
         unsere These stützen, dass dies seit einigen Jahren eine der häufigsten
         Todesursachen durch Polizeischüsse darstellt. Davon betroffen sind
-        ebenfalls sehr häufig Menschen in ihrer eigenen Wohnung, etwa wenn sich
-        diese in Reaktion auf das polizeiliche Eingreifen oder im Gefühl des
-        Bedrohtseins plötzlich mit einem Messer bewaffnen. Deshalb haben wir die
+        ebenfalls sehr häufig Menschen in ihrer eigenen Wohnung, etwa wenn sie
+        als Reaktion auf das polizeiliche Eindringen oder im Gefühl des
+        Bedrohtseins plötzlich zu einem Messer greifen. Deshalb haben wir die
         Fälle auch nach Schussabgaben innerhalb und außerhalb von Gebäuden
         sortiert. Nicht immer ließ sich dies jedoch exakt rekonstruieren. Für
         einen Überblick hilft auch die Suche in den einzelnen Meldungen mit dem
@@ -97,7 +101,11 @@ const Daten: NextPage = () => {
           Clemens Lorei
         </a>{" "}
         dokumentiert den polizeilichen Schusswaffengebrauch in Deutschland auf
-        seiner Webseite und beruft sich dabei oft auf die CILIP.
+        seiner Webseite und beruft sich dabei oft auf die CILIP. Die Kampagne
+        <a href="https://doku.deathincustody.info/">„Death in Custody“</a>{" "}
+        sammelt zudem Informationen zu Todesfällen von Schwarzen Menschen,
+        People of Color und von Rassismus betroffenen Personen in Gewahrsam
+        sowie durch Polizeigewalt im Allgemeinen.
       </div>
     </Layout>
   );

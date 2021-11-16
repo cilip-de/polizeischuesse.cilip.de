@@ -12,8 +12,7 @@ const Taser: NextPage = ({ data }) => {
       metaImg="taser_cover.jpg"
       metaPath="taser"
       title="Tod durch Taser"
-      description="Seit 2021 sammeln wir auch Todesfälle durch den polizeilichen Einsatz
-    von Tasern."
+      description="Seit 2021 sammeln wir auch Todesfälle durch den polizeilichen Einsatz von Tasern. Bis vor einigen Jahren waren lediglich Spezialeinheiten damit ausgerüstet. In einigen Bundesländern ist dies bereits auf „geschlossenen Einheiten“ der Landespolizei (Bayern) ausgeweitet, in anderen gehören die Geräte zur „Grundausstattung“ mehrerer Polizeipräsidien (Nordrhein-Westfalen, Hessen, Saarland). In Rheinland-Pfalz ist angeblich „jeder Streifenwagen“ mit einem Taser ausgestattet. "
       cover={
         <div>
           <img src="/taser_cover.jpg" style={{ width: "100%" }} />
@@ -21,14 +20,6 @@ const Taser: NextPage = ({ data }) => {
       }
     >
       <div>
-        Bis vor einigen Jahren waren lediglich Spezialeinheiten damit
-        ausgerüstet. In einigen Bundesländern ist dies bereits auf
-        „geschlossenen Einheiten“ der Landespolizei (Bayern) ausgeweitet, in
-        anderen gehören die Geräte zur „Grundausstattung“ mehrerer
-        Polizeipräsidien (NRW, Hessen, Saarland). In Rheinland-Pfalz ist
-        angeblich „jeder Streifenwagen“ mit einem Taser ausgestattet.
-        {/* <br /> */}
-        {/* <br /> */}
         Die Taser-Statistik stellen wir gesondert dar, denn die Elektroschocks
         führen zu deutlich anderen Todesursachen als Munition aus Schusswaffen.
         Die Opfer sterben an Herz- oder Kreislaufstillstand, Organversagen oder
@@ -36,7 +27,7 @@ const Taser: NextPage = ({ data }) => {
         <br />
         <br />
         Unsere Liste zeigt (mit Stand November 2021), dass Menschen größtenteils
-        innerhalb von Gebäuden getasert werden. Bei allen Betroffenen lassen die
+        innerhalb von Gebäuden getasert werden. Bei allen Getöteten lassen die
         Presseberichte auf eine psychische Ausnahmesituation bzw. Drogenkonsum
         schließen.
       </div>
