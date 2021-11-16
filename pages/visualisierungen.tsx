@@ -43,12 +43,12 @@ const boolAtr = [
   "Verletzte/getötete Beamte",
   "Vorbereitete Polizeiaktion",
   "Opfer mit Schusswaffe",
-  "Schussort Innenraum",
-  "Schussort Außen",
   "Unbeabsichtigte Schussabgabe",
   "Hinweise auf familiäre oder häusliche Gewalt",
   "Hinweise auf psychische Ausnahmesituation",
   "Hinweise auf Alkohol- und/ oder Drogenkonsum",
+  "Schussort Innenraum",
+  "Schussort Außen",
   "weiblich",
   "männlich",
 ];
@@ -70,7 +70,7 @@ const CasesPerYear = ({ data }) => {
 
   return (
     <div>
-      <Title order={3}>
+      <Title order={3} align="center">
         Polizeiliche Todesschüsse von {data[data.length - 1].year}–
         {data[0].year}
       </Title>
@@ -104,7 +104,7 @@ const CasesPerYearWeapon = ({ data }) => {
 
   return (
     <div>
-      <Title order={3}>
+      <Title order={3} align="center">
         Polizeiliche Todesschüsse von {data[data.length - 1].year}–
         {data[0].year}, Opfer mit Schusswaffe vs Stichwaffe
       </Title>
@@ -162,13 +162,15 @@ const Auswertung: NextPage = ({ data, options }) => {
       <CasesPerYearWeapon data={data} />
       <WeaponChart data={data} />
       <div>
-        <Title order={3}>
+        <Title order={3} align="center">
           Polizeiliche Todesschüsse pro Bundesland, je 1.000.000 Einwohner
         </Title>
         <HorizontalBarChart data={perInhabSorted} />
       </div>
       <div>
-        <Title order={3}>Polizeiliche Todesschüsse pro Stadt</Title>
+        <Title order={3} align="center">
+          Polizeiliche Todesschüsse pro Stadt
+        </Title>
         <HorizontalBarChart
           data={_.orderBy(options.place, "count", "desc")
             .slice(0, 20)
@@ -176,7 +178,9 @@ const Auswertung: NextPage = ({ data, options }) => {
         />
       </div>
       <div>
-        <Title order={3}>Polizeiliche Todesschüsse pro Monat</Title>
+        <Title order={3} align="center">
+          Polizeiliche Todesschüsse pro Monat
+        </Title>
         <HorizontalBarChart
           data={countItems(
             _.orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
@@ -184,25 +188,36 @@ const Auswertung: NextPage = ({ data, options }) => {
         />
       </div>
       <div>
-        <Title order={3}>
+        <Title order={3} align="center">
           Polizeiliche Todesschüsse pro Wochentag, unterteilt nach
           SEK-Beteiligung
         </Title>
         <HorizontalBarChart data={dataSekNo2} />
       </div>
       <div>
-        <Title order={3}>Polizeiliche Todesschüsse pro Tag im Monat</Title>
+        <Title order={3} align="center">
+          Polizeiliche Todesschüsse pro Tag im Monat
+        </Title>
         <VerticalBarChart data={countItems(data.map(({ dom }) => dom))} />
       </div>
       <div>
-        <Title order={3}>Alter der Opfer polizeilicher Todesschüsse</Title>
+        <Title order={3} align="center">
+          Alter der Opfer polizeilicher Todesschüsse
+        </Title>
         <VerticalBarChart
           data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
         />
       </div>
       <div>
-        <Title order={3}>Klassifikation</Title>
-        <HorizontalBarChart data={boolData} formatPerc />
+        <Title order={3} align="center">
+          Kategorien
+        </Title>
+        <HorizontalBarChart
+          data={boolData}
+          formatPerc
+          maxValue={1}
+          margin={{ top: 10, right: 10, bottom: 30, left: 300 }}
+        />
       </div>
     </Layout>
   );

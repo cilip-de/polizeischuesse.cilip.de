@@ -56,6 +56,7 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
     <div style={{ height: 200 }}>
       <ResponsiveBar
         enableGridY={false}
+        labelSkipHeight={10}
         valueFormat={(x) => (x == 0 ? null : x)}
         margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
         axisLeft={null}
@@ -70,14 +71,15 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
   );
 };
 
-const HorizontalBarChart = ({ data, formatPerc = false }) => {
+const HorizontalBarChart = ({ data, formatPerc = false, ...rest }) => {
   const theme = useMantineTheme();
 
-  const margin = { top: 10, right: 10, bottom: 30, left: 200 };
+  const margin = { top: 10, right: 10, bottom: 30, left: 150 };
 
   return (
     <div style={{ height: 20 * data.length + margin.top + margin.bottom }}>
       <ResponsiveBar
+        labelSkipWidth={20}
         valueFormat={(x) => (formatPerc ? _.round(x * 100, 0) + " %" : x)}
         margin={margin}
         layout={"horizontal"}
@@ -87,6 +89,7 @@ const HorizontalBarChart = ({ data, formatPerc = false }) => {
         colors={[theme.colors.indigo[2], theme.colors.indigo[1]]}
         data={data}
         {...commonProps}
+        {...rest}
       />
     </div>
   );
