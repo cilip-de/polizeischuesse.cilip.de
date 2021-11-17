@@ -52,13 +52,56 @@ const commonProps = {
 const VerticalBarChart = ({ data, numTicks = 3 }) => {
   const theme = useMantineTheme();
 
+  let legend = undefined;
+
+  if (data[0].tooltipLabel) {
+    legend = [
+      {
+        data: [
+          {
+            id: "count",
+            label: data[0].tooltipLabel.count,
+            color: theme.colors.indigo[2],
+          },
+          {
+            id: "count2",
+            label: data[0].tooltipLabel.count2,
+            color: theme.colors.indigo[1],
+          },
+        ],
+        anchor: "bottom-right",
+        direction: "column",
+        justify: false,
+        translateX: 120,
+        translateY: 0,
+        itemsSpacing: 2,
+        itemWidth: 100,
+        itemHeight: 20,
+        itemDirection: "left-to-right",
+        itemOpacity: 0.85,
+        symbolSize: 20,
+        effects: [
+          {
+            on: "hover",
+            style: {
+              itemOpacity: 1,
+            },
+          },
+        ],
+      },
+    ];
+  }
+
+  console.log(data);
+
   return (
     <div style={{ height: 200 }}>
       <ResponsiveBar
+        legends={legend}
         enableGridY={false}
         labelSkipHeight={10}
         valueFormat={(x) => (x == 0 ? null : x)}
-        margin={{ top: 10, right: 10, bottom: 30, left: 10 }}
+        margin={{ top: 10, right: 150, bottom: 30, left: 10 }}
         axisLeft={null}
         colors={[theme.colors.indigo[2], theme.colors.indigo[1]]}
         axisBottom={{
@@ -74,11 +117,52 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
 const HorizontalBarChart = ({ data, formatPerc = false, ...rest }) => {
   const theme = useMantineTheme();
 
-  const margin = { top: 10, right: 10, bottom: 30, left: 150 };
+  let legend = undefined;
+
+  if (data[0].tooltipLabel) {
+    legend = [
+      {
+        data: [
+          {
+            id: "count",
+            label: data[0].tooltipLabel.count,
+            color: theme.colors.indigo[2],
+          },
+          {
+            id: "count2",
+            label: data[0].tooltipLabel.count2,
+            color: theme.colors.indigo[1],
+          },
+        ],
+        anchor: "bottom-right",
+        direction: "column",
+        justify: false,
+        translateX: 120,
+        translateY: 0,
+        itemsSpacing: 2,
+        itemWidth: 100,
+        itemHeight: 20,
+        itemDirection: "left-to-right",
+        itemOpacity: 0.85,
+        symbolSize: 20,
+        effects: [
+          {
+            on: "hover",
+            style: {
+              itemOpacity: 1,
+            },
+          },
+        ],
+      },
+    ];
+  }
+
+  const margin = { top: 10, right: 160, bottom: 30, left: 150 };
 
   return (
     <div style={{ height: 20 * data.length + margin.top + margin.bottom }}>
       <ResponsiveBar
+        legends={legend}
         labelSkipWidth={20}
         valueFormat={(x) => (formatPerc ? _.round(x * 100, 0) + " %" : x)}
         margin={margin}

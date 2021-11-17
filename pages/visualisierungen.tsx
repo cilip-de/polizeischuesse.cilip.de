@@ -83,20 +83,20 @@ const CasesPerYear = ({ data }) => {
 };
 
 const CasesPerYearWeapon = ({ data }) => {
-  const eastData = countItems(
+  const schussData = countItems(
     data
       .filter(({ weapon }) => weapon.includes("Schusswaffe"))
       .map(({ year }) => year)
   );
-  const westData = countItems(
+  const stichData = countItems(
     data
       .filter(({ weapon }) => weapon.includes("Stichwaffe"))
       .map(({ year }) => year)
   );
 
   const procData = combineArray(
-    addMissingYears(data, eastData),
-    westData,
+    addMissingYears(data, stichData),
+    schussData,
     "Schusswaffe",
     "Stichwaffe"
   );
@@ -140,7 +140,12 @@ const Auswertung: NextPage = ({ data, options }) => {
   const dataSekYes = makeDowData(noWeaponSekYes);
   const dataSekNo = makeDowData(noWeaponSekNo);
 
-  const dataSekNo2 = combineArray(dataSekNo, dataSekYes, "ohne SEK", "mit SEK");
+  const dataSekNo2 = combineArray(
+    dataSekNo,
+    dataSekYes,
+    "ohne SEK-Beteiligung",
+    "mit SEK-Beteiligung"
+  );
 
   const perInhab = _.cloneDeep(options.state);
   perInhab.forEach((x) => {
