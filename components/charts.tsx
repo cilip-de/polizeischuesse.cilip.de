@@ -101,7 +101,7 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
         enableGridY={false}
         labelSkipHeight={10}
         valueFormat={(x) => (x == 0 ? null : x)}
-        margin={{ top: 10, right: 150, bottom: 30, left: 10 }}
+        margin={{ top: 10, right: 214, bottom: 30, left: 10 }}
         axisLeft={null}
         colors={[theme.colors.indigo[2], theme.colors.indigo[1]]}
         axisBottom={{

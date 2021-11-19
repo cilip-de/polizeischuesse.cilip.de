@@ -64,8 +64,8 @@ const CasesPerYear = ({ data }) => {
   const procData = combineArray(
     westData,
     eastData,
-    "Westdeutschland",
-    "Ostdeutschland"
+    "Alte Bundesländer u. Berlin",
+    "Neue Bundesländer ohne Berlin"
   );
 
   return (
