@@ -15,12 +15,16 @@ const getGeo = async (data) => {
       },
     };
   });
+
   const body = {
     provider: "here",
-    locations: _.uniqBy(locationsInput, (x) =>
-      [x.query.city, x.query.state].join()
+    locations: _.uniqBy(
+      locationsInput.filter((x) => x.query.city != "Unbekannt"),
+      (x) => [x.query.city, x.query.state].join()
     ),
   };
+
+  // console.log(body.locations.length);
 
   const resp = await fetch("https://geocode.app.vis.one/", {
     method: "POST",
@@ -39,9 +43,37 @@ const getGeo = async (data) => {
 
   const resp_json = await resp.json();
 
-  return resp_json.locations.map((x) =>
-    _.pick(x, ["city", "state", "latitude", "longitude"])
+  for (const x of resp_json.locations) {
+    console.log(resp_json.query);
+    if (x.city && x.state) continue;
+
+    if (!x.city && x.latitude && x.county) x.city = x.county;
+    else console.log(x);
+  }
+
+  // the API modified the city / state so keep the old ones
+  const result = _.uniq(
+    resp_json.locations.map((x) => ({
+      city: x.query.city,
+      state: x.query.state,
+      latitude: x.latitude,
+      longitude: x.longitude,
+    }))
   );
+
+  // there are duplicates, need to investigate, FIXME
+
+  // const duplicated = _(result)
+  //   .groupBy((x) => x.state + x.city)
+  //   .pickBy((x) => x.length > 1)
+  //   .keys()
+  //   .value();
+
+  // for (const x of duplicated) {
+  //   console.log(result.filter((y) => y.state + y.city === x));
+  // }
+
+  return _.uniqBy(result, (x) => x.city + x.state);
 };
 
 export { getGeo };

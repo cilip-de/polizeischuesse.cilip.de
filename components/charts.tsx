@@ -92,8 +92,6 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
     ];
   }
 
-  console.log(data);
-
   return (
     <div style={{ height: 200 }}>
       <ResponsiveBar
@@ -195,27 +193,24 @@ const OverviewChart = ({ data, hits, onClick }) => {
   );
 
   return (
-    <div style={{ height: 100 }}>
+    <div style={{ height: 120 }}>
       <ResponsiveBar
         animate={false}
         enableGridY={false}
         enableLabel={false}
-        valueFormat={(x) => (x == 0 ? null : x)}
-        margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+        // valueFormat={(x) => (x == 0 ? null : x)}
+        margin={{ top: 0, right: 0, bottom: 20, left: 0 }}
         axisLeft={null}
         colors={["#BFBFC1", "#EAEAEC"]}
         axisBottom={{
-          tickValues: selectNiceTicks(data, 3),
+          tickValues: selectNiceTicks(procData, 0),
         }}
         data={procData}
         indexBy={"value"}
         keys={["count", "count2"]}
-        padding={0}
+        // padding={-0.01}
         tooltip={tooltipOverview}
         onClick={onClick}
-        style={{
-          cursor: "pointer",
-        }}
       />
     </div>
   );

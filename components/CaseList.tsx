@@ -174,28 +174,78 @@ const CaseList = ({
       </Grid>
 
       <div style={{ minHeight: "100rem" }}>
-        <Center style={{ marginBottom: "1rem", marginTop: "1rem" }}>
-          {enoughChars && numHits > 1 && numHits !== maxCases && (
-            <Text>
-              zeige {numHits} von {maxCases} polizeilichen Todesschüsse
-            </Text>
-          )}
-          {enoughChars && numHits > 1 && numHits === maxCases && (
-            <Text>{numHits} polizeiliche Todesschüsse</Text>
-          )}
-          {enoughChars && numHits === 1 && (
-            <Text>ein polizeilicher Todesschuss</Text>
-          )}
-          {enoughChars && numHits === 0 && (
-            <Text>kein polizeilicher Todesschuss entfält auf die Auswahl</Text>
-          )}
-          {!enoughChars && (
-            <Text>Bitte mehr Zeichen für die Suche eingeben</Text>
-          )}
-        </Center>
+        <div className="only-mobile">
+          <Center style={{ marginBottom: "1rem", marginTop: "1rem" }}>
+            {enoughChars && numHits > 1 && numHits !== maxCases && (
+              <Text>
+                zeige {numHits} von {maxCases} polizeilichen Todesschüsse
+              </Text>
+            )}
+            {enoughChars && numHits > 1 && numHits === maxCases && (
+              <Text>{numHits} polizeiliche Todesschüsse</Text>
+            )}
+            {enoughChars && numHits === 1 && (
+              <Text>ein polizeilicher Todesschuss</Text>
+            )}
+            {enoughChars && numHits === 0 && (
+              <Text>
+                kein polizeilicher Todesschuss entfält auf die Auswahl
+              </Text>
+            )}
+            {!enoughChars && (
+              <Text>Bitte mehr Zeichen für die Suche eingeben</Text>
+            )}
+          </Center>
+        </div>
+        <Grid className="only-non-mobile">
+          <Col span={8}>
+            <Center
+              style={{
+                marginLeft: ".5rem",
+                marginBottom: "2rem",
+                marginTop: "0rem",
+              }}
+            >
+              {enoughChars && numHits > 1 && numHits !== maxCases && (
+                <Text color="gray">
+                  zeige {numHits} von {maxCases} polizeilichen Todesschüsse
+                </Text>
+              )}
+              {enoughChars && numHits > 1 && numHits === maxCases && (
+                <Text color="gray">{numHits} polizeiliche Todesschüsse</Text>
+              )}
+              {enoughChars && numHits === 1 && (
+                <Text color="gray">ein polizeilicher Todesschuss</Text>
+              )}
+              {enoughChars && numHits === 0 && (
+                <Text color="gray">
+                  kein polizeilicher Todesschuss entfält auf die Auswahl
+                </Text>
+              )}
+              {!enoughChars && (
+                <Text color="gray">
+                  Bitte mehr Zeichen für die Suche eingeben
+                </Text>
+              )}
+            </Center>
+          </Col>
+          <Col span={4}>
+            <div style={{ marginBottom: "2rem", marginTop: "0rem" }}>
+              <Text align="center" color="gray">
+                {displayMarkers.length !== geoData.length &&
+                  displayMarkers.length > 1 &&
+                  `an ${displayMarkers.length} von ${geoData.length} Orten`}
+                {displayMarkers.length === geoData.length &&
+                  `an ${geoData.length} Orten`}
+                {displayMarkers.length === 1 && `an einem Ort`}
+              </Text>
+            </div>
+          </Col>
+        </Grid>
         {enoughChars && maxCases !== numHits && (
-          <Center style={{ marginBottom: "1rem" }}>
+          <Center style={{ marginBottom: "2rem" }}>
             <Text
+              color="gray"
               onClick={() => {
                 router.push("/#chronik", undefined, { scroll: false });
                 setSearchedData(null);
@@ -203,7 +253,6 @@ const CaseList = ({
               }}
               size="sm"
               style={{
-                paddingLeft: "1rem",
                 cursor: "pointer",
                 textDecoration: "underline",
               }}
