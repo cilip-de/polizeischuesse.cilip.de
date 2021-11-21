@@ -9,12 +9,13 @@ import {
 
 const geoUrl = "/de_topo.json";
 
-const Map = ({ makersData }) => {
+const Map = ({ makersData, setInputPlace }) => {
   const markers = _.uniqBy(
     makersData.map((x) => ({
       key: x.city + x.state,
       name: x.city,
       coordinates: [x["longitude"], x["latitude"]],
+      count: x.count,
     })),
     "key"
   );
@@ -45,15 +46,16 @@ const Map = ({ makersData }) => {
             ))
           }
         </Geographies>
-        {markers.map(({ name, coordinates, key }) => (
+        {markers.map(({ name, coordinates, key, count }) => (
           <Marker key={key} coordinates={coordinates}>
             <circle
-              r={10}
+              r={10 + count / 2}
               fill="grey"
               fillOpacity="0.4"
               stroke="#fff"
               strokeWidth={2}
               onMouseOver={() => setShowMarker([name])}
+              onClick={() => setInputPlace(name)}
               // onMouseOut={() => setShowMarker([])}
             />
             {showMarker.includes(name) && (

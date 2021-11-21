@@ -1,4 +1,5 @@
 import { Center, Col, Grid, Pagination, Text, Title } from "@mantine/core";
+import _ from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { PAGE_SIZE, SELECTABLE } from "../lib/data";
@@ -74,13 +75,19 @@ const CaseList = ({
   const numHits = resultList.length;
   const totalPages = Math.ceil(resultList.length / PAGE_SIZE);
 
-  const displayLocations = new Set(
-    resultList.map((x) => x["Ort"] + x["Bundesland"])
+  const displayLocations = _.countBy(
+    resultList,
+    (x) => x["Ort"] + x["Bundesland"]
   );
 
   const displayMarkers = geoData.filter((x) =>
-    displayLocations.has(x.city + x.state)
+    displayLocations.hasOwnProperty(x.city + x.state)
   );
+
+  displayMarkers.forEach((x) => {
+    x.count = displayLocations[x.city + x.state];
+  });
+
 
   const overChart = (
     <OverviewChart
@@ -112,7 +119,18 @@ const CaseList = ({
       <Grid>
         <Col span={2} className="only-mobile"></Col>
         <Col span={12} xs={8} className="only-mobile">
-          <Map makersData={displayMarkers} />
+          <Map
+            makersData={displayMarkers}
+            setInputPlace={(x) =>
+              router.push(
+                constructUrl({ ...selection, place: x, p: 1 }),
+                undefined,
+                {
+                  scroll: false,
+                }
+              )
+            }
+          />{" "}
         </Col>
         <Col span={2} className="only-mobile"></Col>
         <Col span={12} sm={8}>
@@ -169,7 +187,18 @@ const CaseList = ({
           {overChart}
         </Col>
         <Col span={4} className="only-non-mobile">
-          <Map makersData={displayMarkers} />
+          <Map
+            makersData={displayMarkers}
+            setInputPlace={(x) =>
+              router.push(
+                constructUrl({ ...selection, place: x, p: 1 }),
+                undefined,
+                {
+                  scroll: false,
+                }
+              )
+            }
+          />
         </Col>
       </Grid>
 
