@@ -99,7 +99,7 @@ const Home: NextPage = ({
                   Kugeln der deutschen Polizei getötet.
                 </Title>
                 <Space h="sm" />
-                <Text>
+                <Text size="lg">
                   Wir zählen von 1976 bis 1990 außerdem {beforeReuni} tödliche
                   Schüsse allein in Westdeutschland.
                 </Text>
@@ -222,13 +222,47 @@ const Home: NextPage = ({
             maxCases={maxCases}
           />
         </Container>
+        <Space h="xl" />
         <Center>
-          <Text size="sm">
+          <Text size="lg">
             <Link href="/kontakt" passHref>
-              Kontakt, Impressum, Datenschutz
+              Kontakt, Impressum und Datenschutz
             </Link>
           </Text>
         </Center>
+        <Space h="xl" />
+        <Space h="xl" />
+        <Center>
+          <Text size="sm" color="gray" align="center">
+            Umgesetzt von{" "}
+            <a
+              style={{ textDecoration: "inherit" }}
+              href="//johannesfilter.com"
+            >
+              Johannes Filter
+            </a>{" "}
+            und{" "}
+            <a style={{ textDecoration: "inherit" }} href="//digit.so36.net/">
+              Matthias Monroy
+            </a>
+            <br />
+            basierend auf{" "}
+            <a
+              style={{ textDecoration: "inherit" }}
+              href="https://www.cilip.de/category/polizeiliche-todesschuesse/"
+            >
+              jahrzehntelanger Recherchen
+            </a>{" "}
+            von Otto Diederichs,
+            <br />
+            Falco Werkenthin und der{" "}
+            <a style={{ textDecoration: "inherit" }} href="//cilip.de">
+              Bürgerrechte & Polizei/CILIP-Redaktion
+            </a>
+            .
+          </Text>
+        </Center>
+        <Space h="xl" />
         <div style={{ height: "2rem" }}></div>
       </main>
     </div>

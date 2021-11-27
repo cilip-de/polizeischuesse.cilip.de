@@ -10,7 +10,7 @@ const Daten: NextPage = () => {
       metaImg="methodik_cover.jpg"
       metaPath="methodik"
       title="Methodik: Woher stammen unsere Informationen?"
-      description="Seit 1976 sammelt die CILIP Informationen zu polizeilichen Todesschüssen; anfangs stammten die Statistiken von Falko Werkenthin, seit 1994 von Otto Diederichs. Wir zählen alle Fälle, in denen Menschen durch eine Polizeikugel gestorben sind."
+      description="Seit 1976 sammelt die CILIP Informationen zu polizeilichen Todesschüssen; anfangs stammten die Statistiken von Falco Werkenthin, seit 1994 von Otto Diederichs. Wir zählen alle Fälle, in denen Menschen durch eine Polizeikugel gestorben sind."
       cover={
         <div>
           <Center>
