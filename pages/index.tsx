@@ -136,8 +136,8 @@ const Home: NextPage = ({
                 <b>
                   Seit 1976 dokumentiert die Zeitschrift Bürgerrechte &
                   Polizei/CILIP
-                </b>
-                . deshalb die Hintergründe zu den durch die Polizei verursachten
+                </b>{" "}
+                deshalb die Hintergründe zu den durch die Polizei verursachten
                 Todesfällen. Dabei sammeln wir Informationen zur Beteiligung von
                 Sondereinheiten, der Zahl jeweils abgegebener Schüsse und der
                 Situation in der sich die Schussabgabe zutrug.
@@ -233,6 +233,19 @@ const Home: NextPage = ({
         <Space h="xl" />
         <Space h="xl" />
         <Center>
+          <Text style={{ maxWidth: "25rem" }} align="center">
+            Die Zeitschrift Bürgerrechte & Polizei/CILIP liefert seit 1978
+            kritische Analysen zur Politik und Praxis Innerer Sicherheit in
+            Deutschland und Europa.
+            <br />
+            <a href="https://www.cilip.de/zeitschrift-bestellen/abonnement/">
+              Jetzt ein Abo abschließen!
+            </a>
+          </Text>
+        </Center>
+        <Space h="xl" />
+        <Space h="xl" />
+        <Center>
           <Text size="sm" color="gray" align="center">
             Umgesetzt von{" "}
             <a
@@ -253,9 +266,8 @@ const Home: NextPage = ({
             >
               jahrzehntelanger Recherchen
             </a>{" "}
-            von Otto Diederichs,
-            <br />
-            Falco Werkenthin und der{" "}
+            von
+            <br /> Otto Diederichs und der{" "}
             <a style={{ textDecoration: "inherit" }} href="//cilip.de">
               Bürgerrechte & Polizei/CILIP-Redaktion
             </a>

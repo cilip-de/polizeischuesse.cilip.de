@@ -10,7 +10,7 @@ const Daten: NextPage = () => {
       metaImg="methodik_cover.jpg"
       metaPath="methodik"
       title="Methodik: Woher stammen unsere Informationen?"
-      description="Seit 1976 sammelt die CILIP Informationen zu polizeilichen Todesschüssen; anfangs stammten die Statistiken von Falco Werkenthin, seit 1994 von Otto Diederichs. Wir zählen alle Fälle, in denen Menschen durch eine Polizeikugel gestorben sind."
+      description="Seit 1976 sammelt die CILIP Informationen zu polizeilichen Todesschüssen. Wir zählen alle Fälle, in denen Menschen durch eine Polizeikugel gestorben sind."
       cover={
         <div>
           <Center>
@@ -18,7 +18,7 @@ const Daten: NextPage = () => {
               src="/methodik_cover.jpg"
               style={{
                 width: "90%",
-                marginTop: "2rem",
+                marginTop: "0.5rem",
                 marginLeft: "5%",
                 marginRight: "5%",
               }}
@@ -37,12 +37,11 @@ const Daten: NextPage = () => {
         einem Überfall ihre Dienstwaffe eingesetzt haben.
         <br />
         <br />
-        Den tödlichen Gebrauch von Schusswaffen und Tasern recherchieren wir
-        gewöhnlich in der Presse. Früher erfolgte dies durch die Sichtung von
-        gedruckten Tageszeitungen, heute ausschließlich im Internet. Die Angaben
+        Die Todesschüsse recherchiert unser Redakteur Otto Diederichs gewöhnlich
+        in der Presse. Früher erfolgte dies durch die Sichtung von gedruckten
+        Tageszeitungen, heute ausschließlich im Internet. Die dortigen Angaben
         sind mit Vorsicht zu genießen, denn oft überwiegt darin die Darstellung
-        und mithin die Sichtweise der Polizei. Auch die Hinweise zur Beteiligung
-        von polizeilichen Spezialkräften sind womöglich unvollständig.
+        und mithin die Sichtweise der Polizei.
         <br />
         <br />
         Weitere Details erfragen wir anschließend bei den zuständigen
@@ -60,18 +59,20 @@ const Daten: NextPage = () => {
         ergeben haben und dies in der Fallbeschreibung nicht ergänzt ist.
         <br />
         <br />
-        Diskrepanzen ergeben sich auch, wenn die staatsanwaltlichen Ermittlungen
-        zur Todesursache nach einem Schusswaffengebräuchen nicht abgeschlossen
-        sind. Dann werden die Fälle als „offen“ bewertet, sie tauchen also in
-        der offiziellen Jahresstatistik nicht als „Tote“ auf. Dies hat die DhPol
+        Diskrepanzen ergeben sich, wenn die staatsanwaltlichen Ermittlungen zur
+        Todesursache nach einem Schusswaffengebräuchen nicht abgeschlossen sind.
+        Dann werden die Fälle als „offen“ bewertet, sie tauchen also in der
+        offiziellen Jahresstatistik nicht als „Tote“ auf. Dies hat die DhPol
         erst ab 2014 mit der neuen Rubrik „noch nicht klassifizierte Fälle
-        (Folgen)“ berücksichtigt. Unsere Fallbeschreibungen sind mit den Jahren
-        etwas umfangreicher geworden, für die Anfangszeit erläutern sie die
-        Taten jedoch nur sehr knapp. Wir haben es damals versäumt, die Meldungen
-        mit Quellen zu belegen und dies erst für die Ereignisse ab der
-        Jahrtausendwende nachgeholt. Deshalb sind viele Fälle nur schwer
-        nachprüfbar, teilweise bleiben sie auch unvollständig. So bleibt das
-        Geschlecht der Getöteten bis zum Jahr 1982 mitunter unbekannt.
+        (Folgen)“ berücksichtigt.
+        <br />
+        <br />
+        Unsere Fallbeschreibungen sind mit den Jahren umfangreicher geworden,
+        für die Anfangszeit erläutern sie die Taten jedoch nur knapp. So bleibt
+        etwa das Geschlecht der Getöteten bis zum Jahr 1982 häufig offen. In der
+        neuen Übersicht haben wir ab den Nullerjahren Online-Quellen
+        nachgetragen. Nachweise zu den früheren Ereignissen finden sich in
+        unserem Zeitungsarchiv, in das wir auf Anfrage gern Einblick gewähren.
         <br />
         <br />
         Nachträglich haben wir die Fälle nach Hinweisen auf eine psychische
@@ -83,8 +84,7 @@ const Daten: NextPage = () => {
         Bedrohtseins plötzlich zu einem Messer greifen. Deshalb haben wir die
         Fälle auch nach Schussabgaben innerhalb und außerhalb von Gebäuden
         sortiert. Nicht immer ließ sich dies jedoch exakt rekonstruieren. Für
-        einen Überblick hilft auch die Suche in den einzelnen Meldungen mit dem
-        Stichwort{" "}
+        einen Überblick dazu hilft die Suche in den Meldungen mit dem Stichwort{" "}
         <Link href="/?q=Wohnun&p=1#chronik">
           <a>„Wohnung“</a>
         </Link>

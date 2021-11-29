@@ -10,6 +10,7 @@ export default function Layout({
   cover,
   metaImg,
   metaPath,
+  fullWidth = false,
 }) {
   const hostname = "https://todesschuesse.cilip.de";
   return (
@@ -44,7 +45,12 @@ export default function Layout({
         </Grid>
 
         <Space h="lg" />
-        <main>{children}</main>
+        <Grid>
+          <Col span={4} md={4}></Col>
+          <Col span={12} md={fullWidth ? 12 : 8}>
+            <main>{children}</main>
+          </Col>
+        </Grid>
         <Space h="lg" />
       </Container>
     </>

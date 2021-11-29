@@ -156,6 +156,7 @@ const Auswertung: NextPage = ({ data, options }) => {
 
   return (
     <Layout
+      fullWidth
       cover={null}
       metaImg="vis_cover.jpg"
       metaPath="visualisierungen"

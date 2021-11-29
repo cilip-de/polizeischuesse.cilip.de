@@ -1,4 +1,4 @@
-import { Space, Title } from "@mantine/core";
+import { Col, Grid, Space, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import React from "react";
@@ -9,6 +9,7 @@ import { setupTaserData } from "../lib/data";
 const Taser: NextPage = ({ data }) => {
   return (
     <Layout
+      fullWidth
       metaImg="taser_cover.jpg"
       metaPath="taser"
       title="Tod durch Taser"
@@ -19,21 +20,27 @@ const Taser: NextPage = ({ data }) => {
         </div>
       }
     >
-      <div>
-        Die Taser-Statistik stellen wir gesondert dar, denn die Elektroschocks
-        führen zu deutlich anderen Todesursachen als Munition aus Schusswaffen.
-        Die Opfer sterben an Herz- oder Kreislaufstillstand, Organversagen oder
-        sie ersticken an Erbrochenem.
-        <br />
-        <br />
-        Unsere Liste zeigt (mit Stand November 2021), dass Menschen größtenteils
-        innerhalb von Gebäuden getasert werden. Bei allen Getöteten lassen die
-        Presseberichte auf eine psychische Ausnahmesituation bzw. Drogenkonsum
-        schließen.
-      </div>
+      <Grid>
+        <Col span={4}></Col>
+        <Col span={12} md={8}>
+          <div>
+            Die Taser-Statistik stellen wir gesondert dar, denn die
+            Elektroschocks führen zu deutlich anderen Todesursachen als Munition
+            aus Schusswaffen. Die Opfer sterben an Herz- oder
+            Kreislaufstillstand, Organversagen oder sie ersticken an
+            Erbrochenem.
+            <br />
+            <br />
+            Unsere Liste zeigt (mit Stand November 2021), dass Menschen
+            größtenteils innerhalb von Gebäuden getasert werden. Bei allen
+            Getöteten lassen die Presseberichte auf eine psychische
+            Ausnahmesituation bzw. Drogenkonsum schließen.
+          </div>
+        </Col>
+      </Grid>
       <Space />
-      <Title order={2} id="chronik">
-        Chronik
+      <Title style={{ marginLeft: "1rem" }} order={2} id="chronik">
+        Chronik der Tasertoten
       </Title>
       <Space />
       <div>
