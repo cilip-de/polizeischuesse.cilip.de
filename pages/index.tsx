@@ -31,8 +31,18 @@ const Home: NextPage = ({
     <div>
       <Head>
         <title>Polizeiliche Todesschüsse</title>
-        <meta name="description" content="Polizeiliche Todesschüsse" />
-        <link rel="icon" href="/favicon.ico" />
+        <meta
+          name="description"
+          content="Seit der Wiedervereinigung wurden 307 Personen durch Kugeln der deutschen Polizei getötet. Wir zählen von 1976 bis 1990 außerdem 146 tödliche Schüsse allein in Westdeutschland."
+        />
+        <meta property="og:title" content="Polizeiliche Todesschüsse" />
+        <meta property="og:type" content="article" />
+        <meta
+          property="og:image"
+          content="https://todesschuesse.cilip.de/preview.jpg"
+        />
+        <meta property="og:url" content="https://todesschuesse.cilip.de/" />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
       <main>

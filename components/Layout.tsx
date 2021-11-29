@@ -12,13 +12,12 @@ export default function Layout({
   metaPath,
   fullWidth = false,
 }) {
-  const hostname = "https://todesschuesse.cilip.de";
+  const hostname = "https://polizeischuesse.cilip.de";
   return (
     <>
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="icon" href="/favicon.ico" />
         <meta property="og:title" content={title} />
         <meta property="og:type" content="article" />
         <meta property="og:image" content={`${hostname}/${metaImg}`} />
