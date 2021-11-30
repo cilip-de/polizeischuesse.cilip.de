@@ -95,7 +95,11 @@ const HeatMapChart = ({ data, leftLabels }) => {
         cellHoverOthersOpacity={0.25}
       />
       <Center>
-        <Text size="sm">Angaben in Prozent</Text>
+        <Text>
+          Alle Angaben sind in Prozent. Die Werte sind mir Vorsicht zu genießen,
+          da es in einigen Ländern nur wenige Fälle gibt. So z. B. in Saarland
+          (4), Mecklenburg-Vorpommern (5) und Bremen (5).
+        </Text>
       </Center>
     </div>
   );

@@ -1,7 +1,8 @@
-import { Space, Text, Title } from "@mantine/core";
+import { Col, Grid, Space, Text, Title } from "@mantine/core";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
+import Link from "next/link";
 import React from "react";
 import { HorizontalBarChart, VerticalBarChart } from "../components/charts";
 import HeatMapChart from "../components/HeatMapChart";
@@ -71,12 +72,9 @@ const CasesPerYear = ({ data }) => {
   return (
     <div>
       <Title order={3} align="center">
-        Todesschüsse von {data[data.length - 1].year}–{data[0].year}
+        Todesschüsse {data[data.length - 1].year}–{data[0].year}
       </Title>
       <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
-      <Text>
-        Berlin zählt zu Westdeutschland und wird nicht weiter aufgeschlüsselt.
-      </Text>
       <Space h="lg" />
     </div>
   );
@@ -97,20 +95,17 @@ const CasesPerYearWeapon = ({ data }) => {
   const procData = combineArray(
     addMissingYears(data, stichData),
     schussData,
-    "Schusswaffe",
-    "Stichwaffe"
+    "Stichwaffe",
+    "Schusswaffe"
   );
 
   return (
     <div>
       <Title order={3} align="center">
-        Todesschüsse von {data[data.length - 1].year}–{data[0].year}, Opfer mit
+        Todesschüsse {data[data.length - 1].year}–{data[0].year}, Opfer mit
         Schusswaffe vs Stichwaffe
       </Title>
       <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
-      <Text>
-        Berlin zählt zu Westdeutschland und wird nicht weiter aufgeschlüsselt.
-      </Text>
       <Space h="lg" />
     </div>
   );
@@ -158,26 +153,61 @@ const Auswertung: NextPage = ({ data, options }) => {
     <Layout
       fullWidth
       cover={null}
-      metaImg="vis_cover.jpg"
+      metaImg="preview.jpg"
       metaPath="visualisierungen"
-      title="Visuelle Auswertung der Daten"
-      description="Eine statische Auswertung der Daten aus der Chronik. Es fehlt noch mehr
-    Text für die Beschreibung."
+      title="Visualiserungen der Todesschüsse"
+      description="Wir haben unsere gesammelten Fälle umfangreich analysiert und zeigen u. a. wie sich Todesschüsse auf Wochtentage verteilen und das Opfer häufiger Stichwafffen, früher hingegen Schusswaffen besaßen."
     >
-      <Text>Hier noch eine kurze Erklärung</Text>
-      <Space h="lg" />
+      <Grid>
+        <Col span={4}></Col>
+        <Col span={12} md={8}>
+          <Text>
+            Die enstammten unserer <Link href="/">Chronik</Link>. In dem{" "}
+            <Link href="/">Method</Link>-Abschnitt erklären wir, wie wir die
+            Daten erhoben haben. Wir bieten die{" "}
+            <a href="/data.csv" download>
+              Daten zum Donwload
+            </a>{" "}
+            an für eigene Auswertungen.
+          </Text>
+        </Col>
+      </Grid>
+      <Space h="xl" />
+      <Space h="xl" />
+      <Space h="xl" />
       <CasesPerYear data={data} />
+      <Space h="xl" />
+      <Space h="xl" />
+      <Space h="xl" />
       <CasesPerYearWeapon data={data} />
+      <Text>
+        Die Angabe zu der Bewaffnung der Täter:innen beruft aus Angaben der
+        beteiligen Polizisten. Die Angaben sind daher nicht verlässlich. So gibt
+        es zu XX unterschiedliche Aussagen.
+      </Text>
       {/* <WeaponChart data={data} /> */}
+      <Space h="xl" />
+      <Space h="xl" />
+      <Space h="xl" />
       <div>
         <Title order={3} align="center">
-          Todesschüsse pro Bundesland, je 1.000.000 Einwohner
+          Todesschüsse {data[data.length - 1].year}–{data[0].year} pro
+          Bundesland, je 1.000.000 Einwohner
         </Title>
         <HorizontalBarChart data={perInhabSorted} />
+        <Text>
+          Es gilt zu beachten, dass in den Stadtstaaten weniger Leute leben als
+          sich in ihr Aufhalten. Durch ihre Funktion als Ballungsraum zieht sie
+          mehr Menschen an, die in der Einwohnerzahl nicht berücksichtigt
+          werden. Dadruch wird der relative Anteil erhöht.
+        </Text>
       </div>
+      <Space h="xl" />
+      <Space h="xl" />
+      <Space h="xl" />
       <div>
         <Title order={3} align="center">
-          Todesschüsse pro Stadt
+          Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Stadt
         </Title>
         <HorizontalBarChart
           data={_.orderBy(options.place, "count", "desc")
@@ -187,7 +217,7 @@ const Auswertung: NextPage = ({ data, options }) => {
       </div>
       <div>
         <Title order={3} align="center">
-          Todesschüsse pro Monat
+          Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Monat
         </Title>
         <HorizontalBarChart
           data={countItems(
@@ -197,19 +227,22 @@ const Auswertung: NextPage = ({ data, options }) => {
       </div>
       <div>
         <Title order={3} align="center">
-          Todesschüsse pro Wochentag, unterteilt nach SEK-Beteiligung
+          Todesschüsse {data[data.length - 1].year}–{data[0].year} pro
+          Wochentag, unterteilt nach SEK-Beteiligung
         </Title>
         <HorizontalBarChart data={dataSekNo2} />
       </div>
       <div>
         <Title order={3} align="center">
-          Todesschüsse pro Tag im Monat
+          Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Tag im
+          Monat
         </Title>
         <VerticalBarChart data={countItems(data.map(({ dom }) => dom))} />
       </div>
       <div>
         <Title order={3} align="center">
-          Alter der Opfer polizeilicher Todesschüsse
+          Alter der Opfer von Todesschüssen {data[data.length - 1].year}–
+          {data[0].year}
         </Title>
         <VerticalBarChart
           data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
@@ -217,7 +250,8 @@ const Auswertung: NextPage = ({ data, options }) => {
       </div>
       <div>
         <Title order={3} align="center">
-          Kategorien
+          Weitere Umstände zu Todesschüssen {data[data.length - 1].year}–
+          {data[0].year} (sofern bekannt)
         </Title>
         <HorizontalBarChart
           data={boolData}
@@ -227,7 +261,15 @@ const Auswertung: NextPage = ({ data, options }) => {
         />
       </div>
       <div>
+        <Title order={3} align="center">
+          Verteilung der Umstände von Todesschüssen {data[data.length - 1].year}
+          –{data[0].year} auf Bundesländer (Angaben in Prozent)
+        </Title>
         <HeatMapChart data={data} leftLabels={options.states} />
+        <Space h="lg" />
+        <Space h="lg" />
+        <Space h="lg" />
+        <Space h="lg" />
       </div>
     </Layout>
   );
