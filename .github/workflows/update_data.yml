@@ -1,0 +1,27 @@
+name: Update data from remote location
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "36 0 * * *"
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v2
+
+      - name: Fetch shootings data
+        uses: githubocto/flat@v3
+        with:
+          http_url: ${{ secrets.SHOOTINGS_REMOTE }}
+          downloaded_filename: public/data.csv
+          mask: true
+
+      - name: Fetch taser data
+        uses: githubocto/flat@v3
+        with:
+          http_url: ${{ secrets.TASER_REMOTE }}
+          downloaded_filename: public/taser.csv
+          mask: true
