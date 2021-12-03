@@ -155,8 +155,8 @@ const Auswertung: NextPage = ({ data, options }) => {
       cover={null}
       metaImg="preview.jpg"
       metaPath="visualisierungen"
-      title="Visualiserungen der Todesschüsse"
-      description="Wir haben unsere gesammelten Fälle umfangreich analysiert und zeigen u. a. wie sich Todesschüsse auf Wochtentage verteilen und das Opfer häufiger Stichwafffen, früher hingegen Schusswaffen besaßen."
+      title="Visualisierungen der Todesschüsse"
+      description="Wir haben unsere gesammelten Fälle umfangreich analysiert und zeigen u. a. wie sich Todesschüsse auf Wochtentage verteilen und das Opfer häufiger Stichwaffen, früher hingegen Schusswaffen besaßen."
     >
       <Grid>
         <Col span={4}></Col>

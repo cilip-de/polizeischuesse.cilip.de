@@ -33,7 +33,7 @@ const textToLinks = (text) => {
     .split(" ")
     .filter((x) => x !== "");
 
-  if (links.length === 0) return "TBA";
+  if (links.length === 0) return "auf Anfrage";
 
   return links.map((x, i) => (
     <a
