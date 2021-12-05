@@ -50,44 +50,24 @@ const Home: NextPage = ({
           <Space h="xl" />
           <div className="only-mobile">
             <Group position="center">
-              <Button
-                uppercase
-                style={{ width: "45%" }}
-                color="gray"
-                variant="outline"
-              >
+              <Button style={{ width: "45%" }} color="gray" variant="outline">
                 <Link href="/visualisierungen" passHref>
                   Visualisierungen
                 </Link>
               </Button>
-              <Button
-                uppercase
-                style={{ width: "45%" }}
-                color="gray"
-                variant="outline"
-              >
+              <Button style={{ width: "45%" }} color="gray" variant="outline">
                 <Link href="/methodik" passHref>
                   Methodik
                 </Link>
               </Button>
 
-              <Button
-                uppercase
-                style={{ width: "45%" }}
-                color="gray"
-                variant="outline"
-              >
+              <Button style={{ width: "45%" }} color="gray" variant="outline">
                 <Link href="/statistik" passHref>
                   Offizielle Statistik
                 </Link>
               </Button>
 
-              <Button
-                uppercase
-                style={{ width: "45%" }}
-                color="gray"
-                variant="outline"
-              >
+              <Button style={{ width: "45%" }} color="gray" variant="outline">
                 <Link href="/taser" passHref>
                   Tod durch Taser
                 </Link>
