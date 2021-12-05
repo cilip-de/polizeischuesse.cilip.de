@@ -110,7 +110,7 @@ const VerticalBarChart = ({ data, numTicks = 3, mobile = false }) => {
         margin={{
           top: 10,
           right: mobile ? 0 : 214,
-          bottom: mobile ? 100 : 30,
+          bottom: mobile && data[0].tooltipLabel ? 100 : 30,
           left: mobile ? 0 : 10,
         }}
         axisLeft={null}
@@ -154,10 +154,10 @@ const HorizontalBarChart = ({
         anchor: "bottom-right",
         direction: "column",
         justify: false,
-        translateX: 120,
-        translateY: 0,
+        translateX: mobile ? -30 : 120,
+        translateY: mobile ? 80 : 0,
         itemsSpacing: 2,
-        itemWidth: 100,
+        itemWidth: mobile ? 170 : 100,
         itemHeight: 20,
         itemDirection: "left-to-right",
         itemOpacity: 0.85,
@@ -177,7 +177,7 @@ const HorizontalBarChart = ({
   const margin = {
     top: 10,
     right: mobile ? 0 : 160,
-    bottom: 30,
+    bottom: mobile && data[0].tooltipLabel ? 100 : 30,
     left: mobile ? 140 : 150,
   };
   return (
