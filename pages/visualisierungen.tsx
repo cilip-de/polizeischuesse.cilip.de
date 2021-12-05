@@ -325,8 +325,23 @@ const Auswertung: NextPage = ({ data, options }) => {
           data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
         />
         <VerticalBarChart
-          data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
+          data={countItems(data.map(({ age }) => age).filter(isNumber))}
           mobile
+          tooltip={({ value, data, id }) => (
+            <div>
+              <Text
+                size="sm"
+                style={{
+                  background: "white",
+                  padding: "0 0.1rem",
+                  opacity: 0.8,
+                }}
+              >
+                {data.value}-{parseInt(data.value) + 4} Jahre: {value}
+                {data.tooltipLabel != null && `, ${data.tooltipLabel[id]}`}
+              </Text>
+            </div>
+          )}
         />
       </div>
       <Space h="xl" />

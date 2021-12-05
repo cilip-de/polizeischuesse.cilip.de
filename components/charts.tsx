@@ -49,7 +49,7 @@ const commonProps = {
   tooltip,
 };
 
-const VerticalBarChart = ({ data, numTicks = 3, mobile = false }) => {
+const VerticalBarChart = ({ data, numTicks = 3, mobile = false, ...rest }) => {
   const theme = useMantineTheme();
 
   let legend = undefined;
@@ -121,6 +121,7 @@ const VerticalBarChart = ({ data, numTicks = 3, mobile = false }) => {
         data={data}
         {...commonProps}
         {...(mobile ? { padding: 0.1 } : {})}
+        {...rest}
       />
     </div>
   );
