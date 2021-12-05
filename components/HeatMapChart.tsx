@@ -3,7 +3,7 @@ import { ResponsiveHeatMap } from "@nivo/heatmap";
 import _ from "lodash";
 import React from "react";
 
-const HeatMapChart = ({ data, leftLabels }) => {
+const HeatMapChart = ({ data, mobile = false }) => {
   const procData = [];
 
   // const x = leftLabels.map(label => {
@@ -42,7 +42,7 @@ const HeatMapChart = ({ data, leftLabels }) => {
   const ans = _(data)
     .groupBy("state")
     .map((state, id) => ({
-      state: id,
+      state: id.replace("Mecklenburg-Vorpommern", "Mecklenburg-Vorp."),
       ...Object.assign(...boolData(state)),
     }))
     .orderBy("state")
@@ -51,12 +51,15 @@ const HeatMapChart = ({ data, leftLabels }) => {
   const theme = useMantineTheme();
 
   return (
-    <div style={{ height: "800px" }}>
+    <div
+      style={{ height: mobile ? "600px" : "800px" }}
+      className={mobile ? "only-mobile" : "only-non-mobile"}
+    >
       <ResponsiveHeatMap
         data={ans}
         keys={boolAtr.concat("unbewaffnet")}
         indexBy="state"
-        margin={{ top: 250, right: 60, bottom: 30, left: 60 }}
+        margin={{ top: 250, right: 0, bottom: 30, left: mobile ? 120 : 60 }}
         forceSquare={true}
         colors={theme.colors.indigo}
         maxValue={100}

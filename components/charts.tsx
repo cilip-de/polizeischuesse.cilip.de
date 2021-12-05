@@ -49,7 +49,7 @@ const commonProps = {
   tooltip,
 };
 
-const VerticalBarChart = ({ data, numTicks = 3 }) => {
+const VerticalBarChart = ({ data, numTicks = 3, mobile = false }) => {
   const theme = useMantineTheme();
 
   let legend = undefined;
@@ -72,10 +72,10 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
         anchor: "bottom-right",
         direction: "column",
         justify: false,
-        translateX: 120,
-        translateY: 0,
+        translateX: mobile ? -30 : 120,
+        translateY: mobile ? 80 : 0,
         itemsSpacing: 2,
-        itemWidth: 100,
+        itemWidth: mobile ? 170 : 100,
         itemHeight: 20,
         itemDirection: "left-to-right",
         itemOpacity: 0.85,
@@ -93,13 +93,26 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
   }
 
   return (
-    <div style={{ height: 200 }}>
+    <div
+      className={mobile ? "only-mobile" : "only-non-mobile"}
+      style={{
+        height: mobile ? 300 : 200,
+      }}
+    >
       <ResponsiveBar
+        theme={{
+          fontSize: mobile ? 8 : 12,
+        }}
         legends={legend}
         enableGridY={false}
         labelSkipHeight={10}
         valueFormat={(x) => (x == 0 ? null : x)}
-        margin={{ top: 10, right: 214, bottom: 30, left: 10 }}
+        margin={{
+          top: 10,
+          right: mobile ? 0 : 214,
+          bottom: mobile ? 100 : 30,
+          left: mobile ? 0 : 10,
+        }}
         axisLeft={null}
         colors={[theme.colors.indigo[2], theme.colors.indigo[1]]}
         axisBottom={{
@@ -107,12 +120,18 @@ const VerticalBarChart = ({ data, numTicks = 3 }) => {
         }}
         data={data}
         {...commonProps}
+        {...(mobile ? { padding: 0.1 } : {})}
       />
     </div>
   );
 };
 
-const HorizontalBarChart = ({ data, formatPerc = false, ...rest }) => {
+const HorizontalBarChart = ({
+  data,
+  formatPerc = false,
+  mobile = false,
+  ...rest
+}) => {
   const theme = useMantineTheme();
 
   let legend = undefined;
@@ -155,10 +174,17 @@ const HorizontalBarChart = ({ data, formatPerc = false, ...rest }) => {
     ];
   }
 
-  const margin = { top: 10, right: 160, bottom: 30, left: 150 };
-
+  const margin = {
+    top: 10,
+    right: mobile ? 0 : 160,
+    bottom: 30,
+    left: mobile ? 140 : 150,
+  };
   return (
-    <div style={{ height: 20 * data.length + margin.top + margin.bottom }}>
+    <div
+      className={mobile ? "only-mobile" : "only-non-mobile"}
+      style={{ height: 20 * data.length + margin.top + margin.bottom }}
+    >
       <ResponsiveBar
         legends={legend}
         labelSkipWidth={20}

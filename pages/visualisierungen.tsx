@@ -75,6 +75,11 @@ const CasesPerYear = ({ data }) => {
         Todesschüsse {data[data.length - 1].year}–{data[0].year}
       </Title>
       <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
+      <VerticalBarChart
+        data={_.orderBy(procData, "value")}
+        numTicks={5}
+        mobile
+      />
       <Space h="lg" />
     </div>
   );
@@ -106,6 +111,11 @@ const CasesPerYearWeapon = ({ data }) => {
         Schusswaffe vs Stichwaffe
       </Title>
       <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
+      <VerticalBarChart
+        data={_.orderBy(procData, "value")}
+        numTicks={5}
+        mobile
+      />
       <Space h="lg" />
     </div>
   );
@@ -221,6 +231,7 @@ const Auswertung: NextPage = ({ data, options }) => {
           Bundesland, je 1.000.000 Einwohner
         </Title>
         <HorizontalBarChart data={perInhabSorted} />
+        <HorizontalBarChart data={perInhabSorted} mobile />
         <MiddleContent>
           Es gilt zu beachten, dass in den Stadtstaaten weniger Leute leben als
           sich in ihr Aufhalten. Durch ihre Funktion als Ballungsraum zieht die
@@ -241,6 +252,12 @@ const Auswertung: NextPage = ({ data, options }) => {
             .slice(0, 20)
             .reverse()}
         />
+        <HorizontalBarChart
+          mobile
+          data={_.orderBy(options.place, "count", "desc")
+            .slice(0, 20)
+            .reverse()}
+        />
       </div>
       <Space h="xl" />
       <Space h="xl" />
@@ -249,6 +266,12 @@ const Auswertung: NextPage = ({ data, options }) => {
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Monat
         </Title>
         <HorizontalBarChart
+          data={countItems(
+            _.orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
+          )}
+        />
+        <HorizontalBarChart
+          mobile
           data={countItems(
             _.orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
           )}
@@ -264,6 +287,7 @@ const Auswertung: NextPage = ({ data, options }) => {
           </Title>
         </MiddleContent>
         <HorizontalBarChart data={dataSekNo2} />
+        <HorizontalBarChart data={dataSekNo2} mobile />
       </div>
       <Space h="xl" />
       <Space h="xl" />
@@ -273,6 +297,10 @@ const Auswertung: NextPage = ({ data, options }) => {
           Monat
         </Title>
         <VerticalBarChart data={countItems(data.map(({ dom }) => dom))} />
+        <VerticalBarChart
+          data={countItems(data.map(({ dom }) => dom))}
+          mobile
+        />
       </div>
       <Space h="xl" />
       <Space h="xl" />
@@ -283,6 +311,10 @@ const Auswertung: NextPage = ({ data, options }) => {
         </Title>
         <VerticalBarChart
           data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
+        />
+        <VerticalBarChart
+          data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
+          mobile
         />
       </div>
       <Space h="xl" />
@@ -300,6 +332,13 @@ const Auswertung: NextPage = ({ data, options }) => {
           maxValue={1}
           margin={{ top: 10, right: 10, bottom: 30, left: 300 }}
         />
+        <HorizontalBarChart
+          mobile
+          data={boolData}
+          formatPerc
+          maxValue={1}
+          margin={{ top: 10, right: 0, bottom: 30, left: 230 }}
+        />
       </div>
       <Space h="xl" />
       <Space h="xl" />
@@ -308,7 +347,8 @@ const Auswertung: NextPage = ({ data, options }) => {
           Verteilung der Umstände von Todesschüssen {data[data.length - 1].year}
           –{data[0].year} auf Bundesländer (Angaben in Prozent)
         </Title>
-        <HeatMapChart data={data} leftLabels={options.states} />
+        <HeatMapChart data={data} />
+        <HeatMapChart data={data} mobile />
       </MiddleContent>
       <Space h="xl" />
       <Space h="xl" />
