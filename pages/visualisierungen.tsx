@@ -1,4 +1,4 @@
-import { Col, Grid, Space, Text, Title } from "@mantine/core";
+import { Center, Col, Grid, Space, Text, Title } from "@mantine/core";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
@@ -122,6 +122,15 @@ const makeDowData = (data) => {
 
 export { makeDowData };
 
+const MiddleContent = ({ children }) => (
+  <Grid>
+    <Col span={2}></Col>
+    <Col span={12} sm={8}>
+      {children}
+    </Col>
+  </Grid>
+);
+
 const Auswertung: NextPage = ({ data, options }) => {
   const boolData = boolAtr.map((x) => ({
     count: data.filter((d) => d[x].includes("Ja")).length / data.length,
@@ -152,39 +161,56 @@ const Auswertung: NextPage = ({ data, options }) => {
   return (
     <Layout
       fullWidth
-      cover={null}
-      metaImg="preview.jpg"
+      cover={
+        <div>
+          <Center>
+            <img
+              src="/vis_cover.png"
+              style={{
+                width: "90%",
+                marginTop: "0.5rem",
+                marginLeft: "5%",
+                marginRight: "5%",
+              }}
+            />
+          </Center>
+        </div>
+      }
+      otherContent={
+        <>
+          <Space h="xl" />
+          <Text>
+            Alle Daten stammen aus unserer <Link href="/">Chronik</Link>. In dem{" "}
+            <Link href="/">Abschnitt zu Methodik</Link> beschreiben wir die
+            Datenerhebung. Wir bieten die{" "}
+            <a href="/data.csv" download>
+              Rohdaten zum Download
+            </a>{" "}
+            an für eigene Auswertungen.
+          </Text>
+        </>
+      }
+      metaImg="vis_sm_preview.png"
       metaPath="visualisierungen"
       title="Visualisierungen der Todesschüsse"
       description="Wir haben unsere gesammelten Fälle umfangreich analysiert und zeigen u. a. wie sich Todesschüsse auf Wochtentage verteilen und das Opfer häufiger Stichwaffen, früher hingegen Schusswaffen besaßen."
     >
-      <Grid>
-        <Col span={4}></Col>
-        <Col span={12} md={8}>
-          <Text>
-            Die enstammten unserer <Link href="/">Chronik</Link>. In dem{" "}
-            <Link href="/">Method</Link>-Abschnitt erklären wir, wie wir die
-            Daten erhoben haben. Wir bieten die{" "}
-            <a href="/data.csv" download>
-              Daten zum Donwload
-            </a>{" "}
-            an für eigene Auswertungen.
-          </Text>
-        </Col>
-      </Grid>
-      <Space h="xl" />
-      <Space h="xl" />
       <Space h="xl" />
       <CasesPerYear data={data} />
       <Space h="xl" />
       <Space h="xl" />
-      <Space h="xl" />
       <CasesPerYearWeapon data={data} />
-      <Text>
-        Die Angabe zu der Bewaffnung der Täter:innen beruft aus Angaben der
-        beteiligen Polizisten. Die Angaben sind daher nicht verlässlich. So gibt
-        es zu XX unterschiedliche Aussagen.
-      </Text>
+      <MiddleContent>
+        <Text>
+          Die Angabe zu der Bewaffnung der Täter:innen beruht oft nur auf den
+          Angaben der beteiligten Polizist:innen. Die Aussagen sind manchmal
+          umstritten, wie beim Tod von{" "}
+          <a href="https://polizeischuesse.cilip.de/fall/cilip-2016-10">
+            Hussam Fadl
+          </a>{" "}
+          in einer Berliner Flüchtlingsunterkuft.
+        </Text>
+      </MiddleContent>
       {/* <WeaponChart data={data} /> */}
       <Space h="xl" />
       <Space h="xl" />
@@ -195,12 +221,13 @@ const Auswertung: NextPage = ({ data, options }) => {
           Bundesland, je 1.000.000 Einwohner
         </Title>
         <HorizontalBarChart data={perInhabSorted} />
-        <Text>
+        <MiddleContent>
           Es gilt zu beachten, dass in den Stadtstaaten weniger Leute leben als
-          sich in ihr Aufhalten. Durch ihre Funktion als Ballungsraum zieht sie
-          mehr Menschen an, die in der Einwohnerzahl nicht berücksichtigt
-          werden. Dadruch wird der relative Anteil erhöht.
-        </Text>
+          sich in ihr Aufhalten. Durch ihre Funktion als Ballungsraum zieht die
+          Städte Menschen an, die in der Einwohnerzahl nicht berücksichtigt
+          werden. Dadurch ist der relative Anteil in Berlin, Hamburg und Bremen
+          erhöht.
+        </MiddleContent>
       </div>
       <Space h="xl" />
       <Space h="xl" />
@@ -215,6 +242,8 @@ const Auswertung: NextPage = ({ data, options }) => {
             .reverse()}
         />
       </div>
+      <Space h="xl" />
+      <Space h="xl" />
       <div>
         <Title order={3} align="center">
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Monat
@@ -225,13 +254,19 @@ const Auswertung: NextPage = ({ data, options }) => {
           )}
         />
       </div>
+      <Space h="xl" />
+      <Space h="xl" />
       <div>
-        <Title order={3} align="center">
-          Todesschüsse {data[data.length - 1].year}–{data[0].year} pro
-          Wochentag, unterteilt nach SEK-Beteiligung
-        </Title>
+        <MiddleContent>
+          <Title order={3} align="center">
+            Todesschüsse {data[data.length - 1].year}–{data[0].year} pro
+            Wochentag, unterteilt nach SEK-Beteiligung
+          </Title>
+        </MiddleContent>
         <HorizontalBarChart data={dataSekNo2} />
       </div>
+      <Space h="xl" />
+      <Space h="xl" />
       <div>
         <Title order={3} align="center">
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Tag im
@@ -239,6 +274,8 @@ const Auswertung: NextPage = ({ data, options }) => {
         </Title>
         <VerticalBarChart data={countItems(data.map(({ dom }) => dom))} />
       </div>
+      <Space h="xl" />
+      <Space h="xl" />
       <div>
         <Title order={3} align="center">
           Alter der Opfer von Todesschüssen {data[data.length - 1].year}–
@@ -248,11 +285,15 @@ const Auswertung: NextPage = ({ data, options }) => {
           data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
         />
       </div>
+      <Space h="xl" />
+      <Space h="xl" />
       <div>
-        <Title order={3} align="center">
-          Weitere Umstände zu Todesschüssen {data[data.length - 1].year}–
-          {data[0].year} (sofern bekannt)
-        </Title>
+        <MiddleContent>
+          <Title order={3} align="center">
+            Weitere Umstände zu Todesschüssen {data[data.length - 1].year}–
+            {data[0].year} (sofern bekannt)
+          </Title>
+        </MiddleContent>
         <HorizontalBarChart
           data={boolData}
           formatPerc
@@ -260,17 +301,21 @@ const Auswertung: NextPage = ({ data, options }) => {
           margin={{ top: 10, right: 10, bottom: 30, left: 300 }}
         />
       </div>
-      <div>
+      <Space h="xl" />
+      <Space h="xl" />
+      <MiddleContent>
         <Title order={3} align="center">
           Verteilung der Umstände von Todesschüssen {data[data.length - 1].year}
           –{data[0].year} auf Bundesländer (Angaben in Prozent)
         </Title>
         <HeatMapChart data={data} leftLabels={options.states} />
-        <Space h="lg" />
-        <Space h="lg" />
-        <Space h="lg" />
-        <Space h="lg" />
-      </div>
+      </MiddleContent>
+      <Space h="xl" />
+      <Space h="xl" />
+      <Space h="xl" />
+      <Space h="xl" />
+      <Space h="xl" />
+      <Space h="xl" />
     </Layout>
   );
 };

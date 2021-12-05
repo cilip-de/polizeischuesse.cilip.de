@@ -94,7 +94,7 @@ const HeatMapChart = ({ data, leftLabels }) => {
       />
       <Center>
         <Text>
-          Alle Angaben sind in Prozent. Die Werte sind mir Vorsicht zu genießen,
+          Alle Angaben sind in Prozent. Die Werte sind mit Vorsicht zu genießen,
           da es in einigen Ländern nur wenige Fälle gibt. So z. B. in Saarland
           (4), Mecklenburg-Vorpommern (5) und Bremen (5).
         </Text>
