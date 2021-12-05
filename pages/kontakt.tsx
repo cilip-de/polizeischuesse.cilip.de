@@ -1,5 +1,6 @@
-import { Space, Title } from "@mantine/core";
+import { Center, Space, Title } from "@mantine/core";
 import type { NextPage } from "next";
+import Link from "next/link";
 import React from "react";
 import Layout from "../components/Layout";
 
@@ -108,19 +109,43 @@ vertreten durch den Vorstand: Norbert Pütter
 const Kontakt: NextPage = () => {
   return (
     <Layout
+      metaImg="contact_cover.jpg"
+      metaPath="kontakt"
       title="Wie ihr uns erreichen könnt"
       description="und einige rechtliche Informationen"
+      cover={
+        <div>
+          <Center>
+            <img
+              src="/contact_cover.jpg"
+              style={{
+                width: "90%",
+                marginTop: "0.5rem",
+                marginLeft: "5%",
+                marginRight: "5%",
+              }}
+            />
+          </Center>
+        </div>
+      }
+      otherContent={
+        <>
+          <Space h="xl" />
+          <Title order={2}>Kontakt</Title>
+          <Space />
+          <div>
+            Schreibt uns bitte eine E-Mail an{" "}
+            <a href="mailto:info@cilip">info@cilip.de</a> und folgt uns auf
+            Twitter <a href="https://twitter.com/cilip_de">@cilip_de</a>. Nutzt
+            auch gern unser <Link href="/fall-melden">Kontakt-Formular</Link> um
+            uns Updates zu Fällen zu schicken.
+          </div>
+          <Space />
+          <Title order={2}>Impressum</Title>
+          <Space />
+        </>
+      }
     >
-      <Title order={2}>Kontakt</Title>
-      <Space />
-      <div>
-        Schreibt uns bitte eine E-Mail an{" "}
-        <a href="mailto:info@cilip">info@cilip.de</a> und folgt uns auf Twitter{" "}
-        <a href="https://twitter.com/cilip_de">@cilip_de</a>.
-      </div>
-      <Space />
-      <Title order={2}>Impressum</Title>
-      <Space />
       <div>
         Verantwortlich für die Webseite im Sinne des TDG, MDStV sowie des
         Presserechts ist das

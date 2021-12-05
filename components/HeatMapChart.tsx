@@ -50,8 +50,6 @@ const HeatMapChart = ({ data, leftLabels }) => {
 
   const theme = useMantineTheme();
 
-  console.log(ans);
-
   return (
     <div style={{ height: "800px" }}>
       <ResponsiveHeatMap

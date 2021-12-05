@@ -11,6 +11,7 @@ export default function Layout({
   metaImg,
   metaPath,
   fullWidth = false,
+  otherContent = null,
 }) {
   const hostname = "https://polizeischuesse.cilip.de";
   return (
@@ -40,6 +41,7 @@ export default function Layout({
             <Title order={1}>{title}</Title>
             <Space h="sm" />
             <Title order={4}>{description}</Title>
+            {otherContent}
           </Col>
         </Grid>
 

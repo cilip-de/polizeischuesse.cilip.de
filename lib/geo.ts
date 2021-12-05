@@ -44,7 +44,6 @@ const getGeo = async (data) => {
   const resp_json = await resp.json();
 
   for (const x of resp_json.locations) {
-    console.log(resp_json.query);
     if (x.city && x.state) continue;
 
     if (!x.city && x.latitude && x.county) x.city = x.county;
