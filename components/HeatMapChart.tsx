@@ -27,7 +27,19 @@ const HeatMapChart = ({ data, mobile = false }) => {
   const boolData = (data) =>
     boolAtr
       .map((x) => ({
-        [x]: _.round(
+        [x
+          .replace(
+            "Hinweise auf familiäre oder häusliche Gewalt",
+            "Mutm. famil. oder häusl. Gewalt"
+          )
+          .replace(
+            "Hinweise auf Alkohol- und/ oder Drogenkonsum",
+            "Mutm. Alkohol- o. Drogenkonsum"
+          )
+          .replace(
+            "Hinweise auf psychische Ausnahmesituation",
+            "Mutm. phsych. Ausnahmesituation"
+          )]: _.round(
           (data.filter((d) => d[x].includes("Ja")).length / data.length) * 100,
           0
         ),
@@ -57,9 +69,30 @@ const HeatMapChart = ({ data, mobile = false }) => {
     >
       <ResponsiveHeatMap
         data={ans}
-        keys={boolAtr.concat("unbewaffnet")}
+        keys={boolAtr
+          .map((x) =>
+            x
+              .replace(
+                "Hinweise auf familiäre oder häusliche Gewalt",
+                "Mutm. famil. oder häusl. Gewalt"
+              )
+              .replace(
+                "Hinweise auf Alkohol- und/ oder Drogenkonsum",
+                "Mutm. Alkohol- o. Drogenkonsum"
+              )
+              .replace(
+                "Hinweise auf psychische Ausnahmesituation",
+                "Mutm. phsych. Ausnahmesituation"
+              )
+          )
+          .concat("unbewaffnet")}
         indexBy="state"
-        margin={{ top: 250, right: 0, bottom: 30, left: mobile ? 120 : 60 }}
+        margin={{
+          top: mobile ? 150 : 250,
+          right: 0,
+          bottom: 30,
+          left: mobile ? 120 : 60,
+        }}
         forceSquare={true}
         colors={theme.colors.indigo}
         maxValue={100}

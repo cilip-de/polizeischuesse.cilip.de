@@ -144,7 +144,19 @@ const MiddleContent = ({ children }) => (
 const Auswertung: NextPage = ({ data, options }) => {
   const boolData = boolAtr.map((x) => ({
     count: data.filter((d) => d[x].includes("Ja")).length / data.length,
-    value: x,
+    value: x
+      .replace(
+        "Hinweise auf familiäre oder häusliche Gewalt",
+        "Mutm. famil. oder häusl. Gewalt"
+      )
+      .replace(
+        "Hinweise auf Alkohol- und/ oder Drogenkonsum",
+        "Mutm. Alkohol- o. Drogenkonsum"
+      )
+      .replace(
+        "Hinweise auf psychische Ausnahmesituation",
+        "Mutm. phsych. Ausnahmesituation"
+      ),
   }));
 
   const noWeaponSekYes = data.filter((x) => x[boolAtr[1]].includes("Ja"));
@@ -337,7 +349,7 @@ const Auswertung: NextPage = ({ data, options }) => {
           data={boolData}
           formatPerc
           maxValue={1}
-          margin={{ top: 10, right: 0, bottom: 30, left: 230 }}
+          margin={{ top: 10, right: 0, bottom: 30, left: 200 }}
         />
       </div>
       <Space h="xl" />
