@@ -17,11 +17,11 @@ const CaseDetail: NextPage = (props) => {
         <meta property="og:type" content="article" />
         <meta
           property="og:image"
-          content="https://todesschuesse.cilip.de/preview.jpg"
+          content="https://polizeischuesse.cilip.de/preview.jpg"
         />
         <meta
           property="og:url"
-          content={`https://todesschuesse.cilip.de/fall/${props.id}`}
+          content={`https://polizeischuesse.cilip.de/fall/${props.id}`}
         />
         <meta name="twitter:card" content="summary" />
       </Head>

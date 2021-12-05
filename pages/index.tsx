@@ -39,9 +39,9 @@ const Home: NextPage = ({
         <meta property="og:type" content="article" />
         <meta
           property="og:image"
-          content="https://todesschuesse.cilip.de/preview.jpg"
+          content="https://polizeischuesse.cilip.de/preview.jpg"
         />
-        <meta property="og:url" content="https://todesschuesse.cilip.de/" />
+        <meta property="og:url" content="https://polizeischuesse.cilip.de/" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
