@@ -50,20 +50,50 @@ const Home: NextPage = ({
           <Space h="xl" />
           <div className="only-mobile">
             <Group position="center">
-              <Button style={{ width: "45%" }} color="gray" variant="outline">
-                <Link href="/visualisierungen">Visualisierungen</Link>
-              </Button>
-              <Button style={{ width: "45%" }} color="gray" variant="outline">
-                <Link href="/methodik">Methodik</Link>
-              </Button>
-
-              <Button style={{ width: "45%" }} color="gray" variant="outline">
-                <Link href="/statistik">Offizielle Statistik</Link>
-              </Button>
-
-              <Button style={{ width: "45%" }} color="gray" variant="outline">
-                <Link href="/taser">Tod durch Taser</Link>
-              </Button>
+              <div style={{ width: "45%" }}>
+                <Link href="/visualisierungen" passHref>
+                  <Button
+                    color="gray"
+                    variant="outline"
+                    style={{ width: "100%" }}
+                  >
+                    Visualisierungen
+                  </Button>
+                </Link>
+              </div>
+              <div style={{ width: "45%" }}>
+                <Link href="/methodik" passHref>
+                  <Button
+                    color="gray"
+                    variant="outline"
+                    style={{ width: "100%" }}
+                  >
+                    Methodik
+                  </Button>
+                </Link>
+              </div>
+              <div style={{ width: "45%" }}>
+                <Link href="/statistik" passHref>
+                  <Button
+                    color="gray"
+                    variant="outline"
+                    style={{ width: "100%" }}
+                  >
+                    Offizielle Statistik
+                  </Button>
+                </Link>
+              </div>
+              <div style={{ width: "45%" }}>
+                <Link href="/taser" passHref>
+                  <Button
+                    color="gray"
+                    variant="outline"
+                    style={{ width: "100%" }}
+                  >
+                    Tod durch Taser
+                  </Button>
+                </Link>
+              </div>
             </Group>
           </div>
           <Grid>
@@ -148,42 +178,54 @@ const Home: NextPage = ({
               <Space h="xl" />
               <Space h="xl" />
               <Group position="right" direction="column">
-                <Button
-                  uppercase
-                  color="gray"
-                  variant="outline"
-                  style={{ width: "13rem" }}
-                >
-                  <Link href="/visualisierungen">Visualisierungen</Link>
-                </Button>
-                <Button
-                  uppercase
-                  color="gray"
-                  variant="outline"
-                  style={{ width: "13rem" }}
-                >
-                  <Link href="/methodik">Methodik</Link>
-                </Button>
-
-                <Button
-                  uppercase
-                  color="gray"
-                  variant="outline"
-                  style={{ width: "13rem", textDecoration: "none" }}
-                >
-                  <Link href="/statistik" style={{ textDecoration: "none" }}>
-                    Offizielle Statistik
+                <div>
+                  <Link href="/visualisierungen" passHref>
+                    <Button
+                      uppercase
+                      color="gray"
+                      variant="outline"
+                      style={{ width: "13rem" }}
+                    >
+                      Visualisierungen
+                    </Button>
                   </Link>
-                </Button>
-
-                <Button
-                  uppercase
-                  color="gray"
-                  variant="outline"
-                  style={{ width: "13rem" }}
-                >
-                  <Link href="/taser">Tod durch Taser</Link>
-                </Button>
+                </div>
+                <div>
+                  <Link href="/methodik" passHref>
+                    <Button
+                      uppercase
+                      color="gray"
+                      variant="outline"
+                      style={{ width: "13rem" }}
+                    >
+                      Methodik
+                    </Button>
+                  </Link>
+                </div>
+                <div>
+                  <Link href="/statistik" passHref>
+                    <Button
+                      uppercase
+                      color="gray"
+                      variant="outline"
+                      style={{ width: "13rem" }}
+                    >
+                      Offizielle Statistik
+                    </Button>
+                  </Link>
+                </div>
+                <div>
+                  <Link href="/taser" passHref>
+                    <Button
+                      uppercase
+                      color="gray"
+                      variant="outline"
+                      style={{ width: "13rem" }}
+                    >
+                      Tod durch Taser
+                    </Button>
+                  </Link>
+                </div>
               </Group>
             </Col>
           </Grid>
