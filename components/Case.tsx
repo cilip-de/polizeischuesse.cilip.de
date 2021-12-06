@@ -109,7 +109,7 @@ const Case = ({ item, hideLink = false }) => {
       <Space />
       <Grid>
         <Col span={12} md={4} lg={4}>
-          <Text weight={500}>{item["Name"].replace(`, ${item.sex}`, "")}</Text>
+          <Text weight={500}>{item["Name"]}</Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             {isNumber(item.Alter)
               ? `${item.Alter} Jahre`

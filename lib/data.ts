@@ -123,6 +123,8 @@ const preprocessData = (data) => {
     x["weiblich"] = x.sex == "weiblich" ? "Ja" : "";
     x["männlich"] = x.sex == "männlich" ? "Ja" : "";
 
+    x["Name"].replace(`, ${x.sex}`, "");
+
     if (isNumber(x["Alter"])) {
       x.age = Math.floor(x["Alter"] / 5) * 5;
     } else {
