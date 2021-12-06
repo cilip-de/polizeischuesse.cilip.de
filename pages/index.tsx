@@ -51,26 +51,18 @@ const Home: NextPage = ({
           <div className="only-mobile">
             <Group position="center">
               <Button style={{ width: "45%" }} color="gray" variant="outline">
-                <Link href="/visualisierungen" passHref>
-                  Visualisierungen
-                </Link>
+                <Link href="/visualisierungen">Visualisierungen</Link>
               </Button>
               <Button style={{ width: "45%" }} color="gray" variant="outline">
-                <Link href="/methodik" passHref>
-                  Methodik
-                </Link>
+                <Link href="/methodik">Methodik</Link>
               </Button>
 
               <Button style={{ width: "45%" }} color="gray" variant="outline">
-                <Link href="/statistik" passHref>
-                  Offizielle Statistik
-                </Link>
+                <Link href="/statistik">Offizielle Statistik</Link>
               </Button>
 
               <Button style={{ width: "45%" }} color="gray" variant="outline">
-                <Link href="/taser" passHref>
-                  Tod durch Taser
-                </Link>
+                <Link href="/taser">Tod durch Taser</Link>
               </Button>
             </Group>
           </div>
@@ -162,9 +154,7 @@ const Home: NextPage = ({
                   variant="outline"
                   style={{ width: "13rem" }}
                 >
-                  <Link href="/visualisierungen" passHref>
-                    Visualisierungen
-                  </Link>
+                  <Link href="/visualisierungen">Visualisierungen</Link>
                 </Button>
                 <Button
                   uppercase
@@ -172,9 +162,7 @@ const Home: NextPage = ({
                   variant="outline"
                   style={{ width: "13rem" }}
                 >
-                  <Link href="/methodik" passHref>
-                    Methodik
-                  </Link>
+                  <Link href="/methodik">Methodik</Link>
                 </Button>
 
                 <Button
@@ -194,9 +182,7 @@ const Home: NextPage = ({
                   variant="outline"
                   style={{ width: "13rem" }}
                 >
-                  <Link href="/taser" passHref>
-                    Tod durch Taser
-                  </Link>
+                  <Link href="/taser">Tod durch Taser</Link>
                 </Button>
               </Group>
             </Col>
@@ -215,9 +201,7 @@ const Home: NextPage = ({
         <Space h="xl" />
         <Center>
           <Text size="lg">
-            <Link href="/kontakt" passHref>
-              Kontakt, Impressum und Datenschutz
-            </Link>
+            <Link href="/kontakt">Kontakt, Impressum und Datenschutz</Link>
           </Text>
         </Center>
         <Space h="xl" />
