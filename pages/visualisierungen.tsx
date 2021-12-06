@@ -203,8 +203,8 @@ const Auswertung: NextPage = ({ data, options }) => {
           <Space h="xl" />
           <Text>
             Alle Daten stammen aus unserer <Link href="/">Chronik</Link>. In dem{" "}
-            <Link href="/">Abschnitt zu Methodik</Link> beschreiben wir die
-            Datenerhebung. Wir bieten die{" "}
+            <Link href="/methodik">Abschnitt zu Methodik</Link> beschreiben wir
+            die Datenerhebung. Wir bieten die{" "}
             <a href="/data.csv" download>
               Rohdaten zum Download
             </a>{" "}
@@ -227,7 +227,11 @@ const Auswertung: NextPage = ({ data, options }) => {
           Die Angabe zu der Bewaffnung der Täter:innen beruht oft nur auf den
           Angaben der beteiligten Polizist:innen. Die Aussagen sind manchmal
           umstritten, wie beim Tod von{" "}
-          <a href="https://polizeischuesse.cilip.de/fall/cilip-2016-10">
+          <a
+            href="https://polizeischuesse.cilip.de/fall/cilip-2016-10"
+            target="_blank"
+            rel="nofollow noreferrer"
+          >
             Hussam Fadl
           </a>{" "}
           in einer Berliner Flüchtlingsunterkuft.

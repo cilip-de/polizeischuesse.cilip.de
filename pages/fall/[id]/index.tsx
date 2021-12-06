@@ -1,4 +1,5 @@
-import { Container, Text } from "@mantine/core";
+import { Button, Center, Code, Container, Space, Text } from "@mantine/core";
+import { useClipboard } from "@mantine/hooks";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -7,6 +8,8 @@ import Case from "../../../components/Case";
 import { setupData, setupTaserData } from "../../../lib/data";
 
 const CaseDetail: NextPage = (props) => {
+  const clipboard = useClipboard({ timeout: 99999999999999 });
+
   const smTitle = `Polizeilicher Todesschuss am ${props.case.datePrint} in ${props.case.place}`;
   return (
     <>
@@ -26,15 +29,31 @@ const CaseDetail: NextPage = (props) => {
         <meta name="twitter:card" content="summary" />
       </Head>
       <Container>
-        <div style={{ marginTop: "10rem" }}>
+        <div style={{ marginTop: "5rem" }}>
           <Link href={props.taser ? "/taser" : "/"}>
             <a>
-              <Text align="center">zurück zur Chronik</Text>
+              <Text align="center">Zur Chronik</Text>
             </a>
           </Link>
           <div style={{ marginTop: "2rem" }}>
             <Case item={props.case} hideLink />
           </div>
+          <Center>
+            <Code className="only-non-mobile">{`https://polizeischuesse.cilip.de/fall/${props.id}`}</Code>
+            <Space />
+            <Button
+              size="sm"
+              color={"gray"}
+              onClick={() =>
+                clipboard.copy(
+                  `https://polizeischuesse.cilip.de/fall/${props.id}`
+                )
+              }
+            >
+              {clipboard.copied ? "Link kopiert" : "Link kopieren"}
+            </Button>
+          </Center>
+          <Space h="xl" />
         </div>
       </Container>
     </>

@@ -1,6 +1,6 @@
 import { Col, Container, Grid, Space, Title } from "@mantine/core";
 import Head from "next/head";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 
 export default function Layout({
@@ -14,6 +14,8 @@ export default function Layout({
   otherContent = null,
 }) {
   const hostname = "https://polizeischuesse.cilip.de";
+  const router = useRouter();
+
   return (
     <>
       <Head>
@@ -28,9 +30,16 @@ export default function Layout({
 
       <Container>
         <Space />
-        <Link href="/">
-          <a>{"« zurück"}</a>
-        </Link>
+        <a
+          href="#"
+          onClick={() => {
+            // if there is any page to go back to (otherwise this would close the page)
+            if (window.history.state.idx === 0) router.push("/");
+            else router.back();
+          }}
+        >
+          {"« zurück"}
+        </a>
         <Space />
 
         <Grid>
