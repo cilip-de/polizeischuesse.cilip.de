@@ -30,8 +30,9 @@ export default function Layout({
 
       <Container>
         <Space />
-        <a
-          href="#"
+        <span
+          role="navigation"
+          style={{ textDecoration: "underline", cursor: "pointer" }}
           onClick={() => {
             // if there is any page to go back to (otherwise this would close the page)
             if (window.history.state.idx === 0) router.push("/");
@@ -39,7 +40,7 @@ export default function Layout({
           }}
         >
           {"« zurück"}
-        </a>
+        </span>
         <Space />
 
         <Grid>
