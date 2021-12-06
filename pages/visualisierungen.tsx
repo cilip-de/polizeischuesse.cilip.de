@@ -20,7 +20,7 @@ Brandenburg 2531071
 Bremen 680130
 Hamburg 1852478
 Hessen 6293154
-Mecklenburg-Vorpommern 1610774
+Mecklenburg-Vorp. 1610774
 Niedersachsen 8003421
 Nordrhein-Westfalen 17925570
 Rheinland-Pfalz 4098391
@@ -219,7 +219,7 @@ const Auswertung: NextPage = ({ data, options }) => {
   const perInhabWestSorted = _.orderBy(inhabDataWest, "count");
 
   const inhabDataAfter = countItems(
-    data.filter((x) => !x.beforeReunification).map((x) => x.Bundesland),
+    data.filter((x) => !x.beforeReunification).map((x) => x.Bundesland.replace("Mecklenburg-Vorpommern", "Mecklenburg-Vorp.")),
     true
   );
 

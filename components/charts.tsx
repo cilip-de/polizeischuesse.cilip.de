@@ -177,7 +177,7 @@ const HorizontalBarChart = ({
 
   const margin = {
     top: 10,
-    right: mobile ? 0 : 160,
+    right: mobile ? 0 : 120,
     bottom: mobile && data[0].tooltipLabel ? 100 : 30,
     left: mobile ? 140 : 150,
   };
@@ -188,7 +188,7 @@ const HorizontalBarChart = ({
     >
       <ResponsiveBar
         legends={legend}
-        labelSkipWidth={20}
+        labelSkipWidth={15}
         valueFormat={(x) => (formatPerc ? _.round(x * 100, 0) + " %" : x)}
         margin={margin}
         layout={"horizontal"}
