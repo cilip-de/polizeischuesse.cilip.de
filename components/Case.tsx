@@ -82,7 +82,7 @@ const Case = ({ item, hideLink = false }) => {
         )}
         {item.psych && (
           <Badge size="sm" color="blue" variant="light">
-            Mutm. phsych. Ausnahmesituation
+            Mutm. psych. Ausnahmesituation
           </Badge>
         )}
         {item.alkdrog && (

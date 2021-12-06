@@ -38,7 +38,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
           )
           .replace(
             "Hinweise auf psychische Ausnahmesituation",
-            "Mutm. phsych. Ausnahmesituation"
+            "Mutm. psych. Ausnahmesituation"
           )]: _.round(
           (data.filter((d) => d[x].includes("Ja")).length / data.length) * 100,
           0
@@ -82,7 +82,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
               )
               .replace(
                 "Hinweise auf psychische Ausnahmesituation",
-                "Mutm. phsych. Ausnahmesituation"
+                "Mutm. psych. Ausnahmesituation"
               )
           )
           .concat("unbewaffnet")}
@@ -130,9 +130,9 @@ const HeatMapChart = ({ data, mobile = false }) => {
       />
       <Center>
         <Text>
-          Alle Angaben sind in Prozent. Die Werte sind mit Vorsicht zu genießen,
-          da es in einigen Ländern nur wenige Fälle gibt. So z. B. in Saarland
-          (4), Mecklenburg-Vorpommern (5) und Bremen (5).
+          Die Werte sind mit Vorsicht zu genießen, da es in einigen Ländern nur
+          wenige Fälle gibt. So z. B. in Saarland (4), Mecklenburg-Vorpommern
+          (5) und Bremen (5).
         </Text>
       </Center>
     </div>

@@ -155,7 +155,7 @@ const Auswertung: NextPage = ({ data, options }) => {
       )
       .replace(
         "Hinweise auf psychische Ausnahmesituation",
-        "Mutm. phsych. Ausnahmesituation"
+        "Mutm. psych. Ausnahmesituation"
       ),
   }));
 
@@ -244,17 +244,10 @@ const Auswertung: NextPage = ({ data, options }) => {
       <div>
         <Title order={3} align="center">
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro
-          Bundesland, je 1.000.000 Einwohner
+          Bundesland, je eine Mio. Einwohner
         </Title>
         <HorizontalBarChart data={perInhabSorted} />
         <HorizontalBarChart data={perInhabSorted} mobile />
-        <MiddleContent>
-          Es gilt zu beachten, dass in den Stadtstaaten weniger Leute leben als
-          sich in ihr Aufhalten. Durch ihre Funktion als Ballungsraum zieht die
-          Städte Menschen an, die in der Einwohnerzahl nicht berücksichtigt
-          werden. Dadurch ist der relative Anteil in Berlin, Hamburg und Bremen
-          erhöht.
-        </MiddleContent>
       </div>
       <Space h="xl" />
       <Space h="xl" />
