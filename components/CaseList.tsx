@@ -2,7 +2,7 @@ import { Center, Col, Grid, Pagination, Text, Title } from "@mantine/core";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { PAGE_SIZE, SELECTABLE } from "../lib/data";
+import { PAGE_SIZE, SELECTABLE, setupOptions } from "../lib/data";
 import { constructUrl, constructUrlWithQ, paginate } from "../lib/util";
 import Case from "./Case";
 import CategoryInput from "./CategoryInput";
@@ -88,7 +88,6 @@ const CaseList = ({
     x.count = displayLocations[x.city + x.state];
   });
 
-
   const overChart = (
     <OverviewChart
       data={data}
@@ -112,6 +111,7 @@ const CaseList = ({
   // console.log(displayLocations);
   // console.log(displayMarkers);
 
+  options = setupOptions(resultList);
   resultList = paginate(resultList, PAGE_SIZE, p);
 
   return (

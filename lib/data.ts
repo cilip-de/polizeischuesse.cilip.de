@@ -96,6 +96,37 @@ const eastStates =
     " "
   );
 
+const setupOptions = (data) => {
+  const year = _.orderBy(countItems(data.map((x) => x.year)), "value", "desc");
+  const state = countItems(
+    data.map((x) => x.Bundesland),
+    true
+  );
+  const place = countItems(
+    data.map((x) => x.Ort),
+    true
+  );
+
+  const weapons = [];
+  data.forEach((x) => weapons.push(...x.weapon.split(", ")));
+  const weapon = countItems(
+    weapons.filter((x) => x.length),
+    true
+  );
+
+  const age = countItems(
+    data.map((x) => x.age),
+    false
+  );
+
+  age.forEach((x, i) => {
+    if (i < age.length - 1)
+      x.label =
+        x.label.slice(0, 2) + `-${parseInt(x.value) + 4} ` + x.label.slice(3);
+  });
+  return { year, state, place, weapon, age };
+};
+
 const preprocessData = (data) => {
   data = _.orderBy(data, "Datum", "desc");
 
@@ -156,34 +187,6 @@ const setupData = async () => {
     "length"
   );
 
-  const year = _.orderBy(countItems(data.map((x) => x.year)), "value", "desc");
-  const state = countItems(
-    data.map((x) => x.Bundesland),
-    true
-  );
-  const place = countItems(
-    data.map((x) => x.Ort),
-    true
-  );
-
-  const weapons = [];
-  data.forEach((x) => weapons.push(...x.weapon.split(", ")));
-  const weapon = countItems(
-    weapons.filter((x) => x.length),
-    true
-  );
-
-  const age = countItems(
-    data.map((x) => x.age),
-    false
-  );
-
-  age.forEach((x, i) => {
-    if (i < age.length - 1)
-      x.label =
-        x.label.slice(0, 2) + `-${parseInt(x.value) + 4} ` + x.label.slice(3);
-  });
-
   fuse = new Fuse(data, {
     minMatchCharLength: 3,
     includeMatches: true,
@@ -197,7 +200,7 @@ const setupData = async () => {
   setupProps = {
     data,
     geoData,
-    options: { year, state, place, weapon, age },
+    options: setupOptions(data),
     fuse,
     beforeReuni,
     afterReuni,
@@ -211,6 +214,7 @@ const setupTaserData = async () => {
 };
 
 export {
+  setupOptions,
   setupData,
   countItems,
   setupTaserData,
