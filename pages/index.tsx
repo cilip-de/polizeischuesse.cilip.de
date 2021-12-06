@@ -134,7 +134,11 @@ const Home: NextPage = ({
                 <Space h="lg" />
                 <Group position="center">
                   <a href="https://cilip.de">
-                    <img src="/cilip-logo-outline.svg" height="50" />
+                    <img
+                      src="/cilip-logo-outline.svg"
+                      height="80"
+                      alt="CILIP logo"
+                    />
                   </a>
                 </Group>
                 <Space h="sm" />
@@ -169,8 +173,8 @@ const Home: NextPage = ({
                   <a href="https://cilip.de">
                     <img
                       src="/cilip-logo-outline.svg"
-                      height="50"
-                      alt="Bürgerrechte & Polizei"
+                      height="80"
+                      alt="CILIP logo"
                     />
                   </a>
                 </div>
