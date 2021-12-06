@@ -33,9 +33,41 @@ Thüringen 2120237
   .trim()
   .split("\n");
 
+// 1990: https://en.wikipedia.org/wiki/Demographics_of_Hamburg
+// 1989: https://de.wikipedia.org/wiki/West-Berlin
+// 1990: https://de.wikipedia.org/wiki/Baden-W%C3%BCrttemberg
+// 1987: https://de.wikipedia.org/wiki/Bayern
+// 1990: https://de.wikipedia.org/wiki/Einwohnerentwicklung_von_Bremen
+// 1990: https://de.wikipedia.org/wiki/Hessen#Einwohnerentwicklung
+// 1987: https://de.wikipedia.org/wiki/Niedersachsen#Bev%C3%B6lkerungsentwicklung
+// 1990: https://de.wikipedia.org/wiki/Nordrhein-Westfalen#Bev%C3%B6lkerung
+// 1990: https://de.wikipedia.org/wiki/Rheinland-Pfalz#Bev%C3%B6lkerung
+// 1990: https://de.wikipedia.org/wiki/Saarland#Bev%C3%B6lkerung
+// 1990: https://en.wikipedia.org/wiki/Schleswig-Holstein#Demographics
+const inhabWest1990 = `
+Baden-Württemberg 9822027 
+Bayern 10902643
+Berlin 2130525 
+Bremen 551219 
+Hamburg 1652363
+Hessen 5763310
+Niedersachsen 7163602 
+Nordrhein-Westfalen 17349651 
+Rheinland-Pfalz 3763510 
+Saarland 1072963 
+Schleswig-Holstein 2626127
+`
+  .trim()
+  .split("\n");
+
 const landInhab = {};
 for (const x of inhab) {
   landInhab[x.split(" ")[0]] = parseInt(x.split(" ")[1]) / 1000000;
+}
+
+const landInhabWest = {};
+for (const x of inhabWest1990) {
+  landInhabWest[x.split(" ")[0]] = parseInt(x.split(" ")[1]) / 1000000;
 }
 
 const boolAtr = [
@@ -173,12 +205,47 @@ const Auswertung: NextPage = ({ data, options }) => {
     "mit SEK-Beteiligung"
   );
 
-  const perInhab = _.cloneDeep(options.state);
-  perInhab.forEach((x) => {
+  const inhabDataWest = countItems(
+    data
+      .filter((x) => x.beforeReunification && !x.east)
+      .map((x) => x.Bundesland),
+    true
+  );
+
+  inhabDataWest.forEach((x) => {
+    x.count = _.round(x.count / landInhabWest[x.value], 2);
+  });
+
+  const perInhabWestSorted = _.orderBy(inhabDataWest, "count");
+
+  const inhabDataAfter = countItems(
+    data.filter((x) => !x.beforeReunification).map((x) => x.Bundesland),
+    true
+  );
+
+  inhabDataAfter.forEach((x) => {
     x.count = _.round(x.count / landInhab[x.value], 2);
   });
 
-  const perInhabSorted = _.orderBy(perInhab, "count");
+  const inhabDataAfterSorted = _.orderBy(inhabDataAfter, "count");
+
+  const cityWest = countItems(
+    data.filter((x) => x.beforeReunification && !x.east).map((x) => x.place),
+    true
+  );
+
+  const cityDataWest = _.orderBy(cityWest, "count", "desc")
+    .slice(0, 20)
+    .reverse();
+
+  const cityAfter = countItems(
+    data.filter((x) => !x.beforeReunification).map((x) => x.place),
+    true
+  );
+
+  const cityDataAfter = _.orderBy(cityAfter, "count", "desc")
+    .slice(0, 20)
+    .reverse();
 
   return (
     <Layout
@@ -215,7 +282,7 @@ const Auswertung: NextPage = ({ data, options }) => {
       metaImg="vis_sm_preview.png"
       metaPath="visualisierungen"
       title="Visualisierungen der Todesschüsse"
-      description="Wir haben unsere gesammelten Fälle umfangreich analysiert und zeigen u. a. wie sich Todesschüsse auf Wochtentage verteilen und das Opfer häufiger Stichwaffen, früher hingegen Schusswaffen besaßen."
+      description="Wir haben unsere gesammelten Polizeischüsse umfangreich analysiert und zeigen u. a. wie sich polizeiliche Todesschüsse auf Wochtentage verteilen und das Opfer häufiger Stichwaffen, früher hingegen Schusswaffen besaßen."
     >
       <Space h="xl" />
       <CasesPerYear data={data} />
@@ -243,30 +310,50 @@ const Auswertung: NextPage = ({ data, options }) => {
       <Space h="xl" />
       <div>
         <Title order={3} align="center">
-          Todesschüsse {data[data.length - 1].year}–{data[0].year} pro
-          Bundesland, je eine Mio. Einwohner
+          Todesschüsse pro Bundesland, je eine Mio. Einwohner
         </Title>
-        <HorizontalBarChart data={perInhabSorted} />
-        <HorizontalBarChart data={perInhabSorted} mobile />
+        <Space h="xl" />
+        <Grid>
+          <Col span={12} md={6}>
+            <Title order={4} align="center">
+              Westdeutschland 1976–1990
+            </Title>
+            <HorizontalBarChart data={perInhabWestSorted} />
+            <HorizontalBarChart data={perInhabWestSorted} mobile />
+          </Col>
+          <Col span={12} md={6}>
+            <Title order={4} align="center">
+              Bundesrepublik 1990–2021
+            </Title>
+            <HorizontalBarChart data={inhabDataAfterSorted} />
+            <HorizontalBarChart data={inhabDataAfterSorted} mobile />
+          </Col>
+        </Grid>
       </div>
       <Space h="xl" />
       <Space h="xl" />
       <Space h="xl" />
       <div>
         <Title order={3} align="center">
-          Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Stadt
+          Todesschüsse pro Stadt
         </Title>
-        <HorizontalBarChart
-          data={_.orderBy(options.place, "count", "desc")
-            .slice(0, 20)
-            .reverse()}
-        />
-        <HorizontalBarChart
-          mobile
-          data={_.orderBy(options.place, "count", "desc")
-            .slice(0, 20)
-            .reverse()}
-        />
+        <Space h="xl" />
+        <Grid>
+          <Col span={12} md={6}>
+            <Title order={4} align="center">
+              Westdeutschland 1976–1990
+            </Title>
+            <HorizontalBarChart data={cityDataWest} />
+            <HorizontalBarChart mobile data={cityDataWest} />
+          </Col>
+          <Col span={12} md={6}>
+            <Title order={4} align="center">
+              Bundesrepublik 1990–2021
+            </Title>
+            <HorizontalBarChart data={cityDataAfter} />
+            <HorizontalBarChart mobile data={cityDataAfter} />
+          </Col>
+        </Grid>
       </div>
       <Space h="xl" />
       <Space h="xl" />
