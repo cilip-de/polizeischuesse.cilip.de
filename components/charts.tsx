@@ -177,7 +177,7 @@ const HorizontalBarChart = ({
 
   const margin = {
     top: 10,
-    right: mobile ? 0 : 120,
+    right: mobile ? 0 : data[0].tooltipLabel ? 160 : 120,
     bottom: mobile && data[0].tooltipLabel ? 100 : 30,
     left: mobile ? 140 : 150,
   };
