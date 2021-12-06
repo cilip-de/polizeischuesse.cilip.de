@@ -215,7 +215,12 @@ const OverviewChart = ({ data, hits, onClick }) => {
   );
 
   const procData = _.orderBy(
-    combineArray(addMissingYears(data, hitsData), noHitsData, "hit", "nohit"),
+    combineArray(
+      addMissingYears(data, hitsData, data[data.length - 1].year, data[0].year),
+      noHitsData,
+      "hit",
+      "nohit"
+    ),
     "value"
   );
 

@@ -24,9 +24,12 @@ const constructUrlWithQ = (q, params) => {
   return constructUrl(params);
 };
 
-const addMissingYears = (data, arr) => {
+const addMissingYears = (data, arr, minYear = null, maxYear = null) => {
   const years = arr.map(({ value }) => parseInt(value));
-  for (const i of _.range(data[data.length - 1].year, data[0].year)) {
+  for (const i of _.range(
+    maxYear || data[data.length - 1].year,
+    minYear || data[0].year
+  )) {
     if (!years.includes(i)) arr.push({ value: `${i}`, count: 0 });
   }
   return arr;
