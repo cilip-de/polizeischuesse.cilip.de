@@ -64,7 +64,7 @@ server {
 {{ else if eq $scheme "https"}}
 
 # START CILIP
-proxy_cache_path /tmp/cilipcache levels=1:2 keys_zone=cilipcache:10m max_size=1g inactive=60m use_temp_path=off;
+proxy_cache_path /tmp/cilipcache levels=1:2 keys_zone=cilipcache:10m max_size=1g inactive=20m use_temp_path=off;
 # END CILIP
 
 server {
