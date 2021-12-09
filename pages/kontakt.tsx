@@ -132,14 +132,20 @@ const Kontakt: NextPage = () => {
         <>
           <Space h="xl" />
           <Title order={2}>Kontakt</Title>
-          <Space />
-          <div>
+          <p>
             Schreibt uns bitte eine E-Mail an{" "}
             <a href="mailto:info@cilip">info@cilip.de</a> und folgt uns auf
             Twitter <a href="https://twitter.com/cilip_de">@cilip_de</a>. Nutzt
             auch gern unser <Link href="/fall-melden">Kontakt-Formular</Link> um
             uns Updates zu Fällen zu schicken.
-          </div>
+          </p>
+          <p>
+            Die Software-Code dieser Webseite ist auf{" "}
+            <a href="https://github.com/cilip-de/polizeischuesse.cilip.de">
+              GitHub
+            </a>
+            .
+          </p>
           <Space />
           <Title order={2}>Impressum</Title>
           <Space />
