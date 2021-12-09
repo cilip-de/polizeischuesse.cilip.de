@@ -3,7 +3,7 @@ name: Update data from remote location
 on:
   workflow_dispatch:
   schedule:
-    - cron: "36 0 * * *"
+    - cron: "30 7-19 * * *"
 
 jobs:
   fetch:
