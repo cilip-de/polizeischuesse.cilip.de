@@ -140,7 +140,7 @@ const Kontakt: NextPage = () => {
             uns Updates zu Fällen zu schicken.
           </p>
           <p>
-            Die Software-Code dieser Webseite ist auf{" "}
+            Der Software-Code dieser Webseite ist auf{" "}
             <a href="https://github.com/cilip-de/polizeischuesse.cilip.de">
               GitHub
             </a>
