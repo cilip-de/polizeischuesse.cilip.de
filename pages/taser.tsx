@@ -49,7 +49,7 @@ const Taser: NextPage = ({ data }) => {
       <Space />
       <div>
         {data.map((x) => (
-          <Case item={x} key={x.key} />
+          <Case item={x} key={x.key} isTaser />
         ))}
       </div>
     </Layout>

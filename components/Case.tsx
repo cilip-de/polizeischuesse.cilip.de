@@ -48,7 +48,7 @@ const textToLinks = (text) => {
   ));
 };
 
-const Case = ({ item, hideLink = false }) => {
+const Case = ({ item, hideLink = false, isTaser = false }) => {
   for (const term of SEARCH_KEYES) {
     item[term] = constructHighlights(item, term);
   }
@@ -118,7 +118,7 @@ const Case = ({ item, hideLink = false }) => {
           </Text>
           <Space />
           <Text size="sm" color="gray" style={{ lineHeight: 1.5 }}>
-            Erschossen am {item.datePrint}
+            {isTaser ? "Getasert" : "Erschossen"} am {item.datePrint}
           </Text>
           <Text size="sm" color="gray" style={{ lineHeight: 1.5 }}>
             In {item.place}

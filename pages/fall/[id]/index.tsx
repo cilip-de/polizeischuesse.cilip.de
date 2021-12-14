@@ -36,7 +36,7 @@ const CaseDetail: NextPage = (props) => {
             </a>
           </Link>
           <div style={{ marginTop: "2rem" }}>
-            <Case item={props.case} hideLink />
+            <Case item={props.case} hideLink isTaser={props.taser} />
           </div>
           <Center>
             <Code className="only-non-mobile">{`https://polizeischuesse.cilip.de/fall/${props.id}`}</Code>
