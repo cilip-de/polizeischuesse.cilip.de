@@ -1,4 +1,5 @@
 import { Col, Grid, Space, Title } from "@mantine/core";
+import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import React from "react";
@@ -32,18 +33,14 @@ const Statistiken: NextPage = ({ data }) => {
         <a href="https://fragdenstaat.de/anfrage/falle-von-polizeilichem-schusswaffengebrauch-fur-die-jahre-2011-bis-2013/">
           nach mehreren Anfragen nach dem Informationsfreiheitsgesetz
         </a>{" "}
-        veröffentlichen wir die Schusswaffengebrauchsstatistik ab 1994 erstmals
-        komplett. Für die Jahre davor liegen die Datenblätter nicht mehr
-        durchgängig und auch nicht in digitaler Form vor, schreibt uns das
-        Ministerium des Inneren, für Digitalisierung und Kommunen
-        Baden-Württemberg. Sobald sie uns dennoch erreichen, werden wir sie hier
-        veröffentlichen.
+        veröffentlichen wir die Schusswaffengebrauchsstatistik erstmals
+        komplett.
       </div>
       <Space h="xl" />
       <Title order={3}>Fälle von polizeilichem Schusswaffengebrauch</Title>
       <Space h="xl" />
       <Grid>
-        {data.documents.map((x) => (
+        {_.orderBy(data.documents, "title", "desc").map((x) => (
           <Col span={4} md={2} lg={1} key={x.title}>
             <a target="_blank" href={x.site_url} rel="noreferrer">
               {x.title.replace(/[^0-9]/g, "")}
