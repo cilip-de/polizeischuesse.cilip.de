@@ -33,7 +33,7 @@ const Home: NextPage = ({
         <title>Polizeiliche Todesschüsse ab 1976</title>
         <meta
           name="description"
-          content="Seit der Wiedervereinigung wurden 307 Personen durch Kugeln der deutschen Polizei getötet. Wir zählen von 1976 bis 1990 außerdem 146 tödliche Schüsse allein in Westdeutschland."
+          content="Seit der Wiedervereinigung wurden mindestens 307 Personen durch Kugeln der deutschen Polizei getötet. Wir zählen von 1976 bis 1990 außerdem 146 tödliche Schüsse allein in Westdeutschland."
         />
         <meta property="og:title" content="Polizeiliche Todesschüsse ab 1976" />
         <meta property="og:type" content="article" />
@@ -107,8 +107,8 @@ const Home: NextPage = ({
                 {/* <Space h="sm" /> */}
                 <Space h="sm" />
                 <Title order={3}>
-                  Seit der Wiedervereinigung wurden {afterReuni} Personen durch
-                  Kugeln der deutschen Polizei getötet.
+                  Seit der Wiedervereinigung wurden mindestens {afterReuni}{" "}
+                  Personen durch Kugeln der deutschen Polizei getötet.
                 </Title>
                 <Space h="sm" />
                 <Text size="lg">

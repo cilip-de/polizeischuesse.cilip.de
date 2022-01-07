@@ -111,9 +111,7 @@ const Case = ({ item, hideLink = false, isTaser = false }) => {
         <Col span={12} md={4} lg={4}>
           <Text weight={500}>{item["Name"]}</Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
-            {isNumber(item.Alter)
-              ? `${item.Alter} Jahre`
-              : `Alter: ${item.Alter.replace("Unbekannt", "unbekannt")}`}
+            {isNumber(item.Alter) ? `${item.Alter} Jahre` : `Alter: unbekannt`}
             {item.sex.length > 0 && `, ${item.sex}`}
           </Text>
           <Space />
