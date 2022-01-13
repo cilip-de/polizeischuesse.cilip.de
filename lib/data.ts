@@ -63,7 +63,7 @@ const TAGS = [
     "Schussort Innenraum",
     "Schussort nicht Innenraum",
   ],
-  ["men", "männlich", "Männlich", "Nicht männlich"],
+  ["men", "männlich", "Männlich", "Weiblich"],
 ];
 
 const SEARCH_KEYES = ["Name", "Szenarium"];
