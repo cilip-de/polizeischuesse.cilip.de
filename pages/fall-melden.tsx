@@ -13,7 +13,7 @@ const Statistiken: NextPage = ({ data }) => {
       metaImg="new_case_cover.jpg"
       metaPath="statistik"
       title="Fall melden"
-      description="Du hast Hinweise zu neuen oder alten Fälle? Bitte hinterlasse uns eine Nachricht per Kontakt-Formular. Wenn möglich, dann schick uns Links zu Online-Zeitungsmeldungen."
+      description="Du hast Hinweise zu neuen oder alten Fällen? Bitte hinterlasse uns eine Nachricht per Kontakt-Formular. Wenn möglich, dann schick uns Links zu Online-Zeitungsmeldungen."
       cover={
         <div>
           <img src="/new_case_cover.jpg" style={{ width: "100%" }} />
