@@ -105,7 +105,20 @@ const Daten: NextPage = () => {
         <a href="https://doku.deathincustody.info/">„Death in Custody“</a>{" "}
         sammelt zudem Informationen zu Todesfällen von Schwarzen Menschen,
         People of Color und von Rassismus betroffenen Personen in Gewahrsam
-        sowie durch Polizeigewalt im Allgemeinen.
+        sowie durch Polizeigewalt im Allgemeinen. Außerdem dokumentiert die{" "}
+        <a href="https://www.ari-dok.org/webdokumentation/">
+          Antirassistische Initiative e.V.
+        </a>{" "}
+        seit 1993 Geschehnisse, in denen Geflüchtete durch staatliche Maßnahmen
+        sowie durch rassistische Angriffe der Bevölkerung verletzt wurden oder
+        zu Tode kamen. Die Webseiten{" "}
+        <a href="https://www.copservation.de/">„Copservation“</a> und
+        <a href="https://keinfreund-keinhelfer.net/">
+          „Kein Freund, kein Helfer“
+        </a>{" "}
+        sammeln indes Übergriffe und Verstöße von Polizist*innen. Eine ähnliche
+        Übersicht gibt es auf{" "}
+        <a href="https://www.reddit.com/r/pozilei/">Reddit</a>.
       </div>
     </Layout>
   );
