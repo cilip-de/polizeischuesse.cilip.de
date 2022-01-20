@@ -19,7 +19,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
     "Unbeabsichtigte Schussabgabe",
     "Hinweise auf familiäre oder häusliche Gewalt",
     "Hinweise auf psychische Ausnahmesituation",
-    "Hinweise auf Alkohol- und/ oder Drogenkonsum",
+    // "Hinweise auf Alkohol- und/ oder Drogenkonsum",
     "Schussort Innenraum",
     "Schussort Außen",
   ];
