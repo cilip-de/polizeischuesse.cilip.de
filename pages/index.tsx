@@ -156,7 +156,7 @@ const Home: NextPage = ({
                 deshalb die Hintergründe zu den durch die Polizei verursachten
                 Todesfällen. Dabei sammeln wir Informationen zur Beteiligung von
                 Sondereinheiten, der Zahl jeweils abgegebener Schüsse und der
-                Situation in der sich die Schussabgabe zutrug.
+                Situation, in der sich die Schussabgabe zutrug.
               </Text>
               <Space h="sm" />
               <Text>
