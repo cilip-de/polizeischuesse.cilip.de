@@ -90,7 +90,7 @@ const Home: NextPage = ({
                     variant="outline"
                     style={{ width: "100%" }}
                   >
-                    Tod durch Taser
+                    Tod mit Taser
                   </Button>
                 </Link>
               </div>
@@ -226,7 +226,7 @@ const Home: NextPage = ({
                       variant="outline"
                       style={{ width: "13rem" }}
                     >
-                      Tod durch Taser
+                      Tod mit Taser
                     </Button>
                   </Link>
                 </div>
