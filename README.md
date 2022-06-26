@@ -1,32 +1,41 @@
+# [`polizeischuesse.cilip.de`](https://polizeischuesse.cilip.de)
+
+Documenting and visualizing fatal police shootings in Germany.
+
+## Installation and usage
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
-
-First, run the development server:
-
 ```bash
+git clone git@github.com:cilip-de/polizeischuesse.cilip.de.git && cd polizeischuesse.cilip.de
+npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+You need to have in instance of <https://github.com/beyondopen/geocode-cache-service> running to geocode locations. Set the appropiate env variables below (user, pw, host).
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```bash
+GEO_USER=x
+GEO_PW=x
+GEO_HOST=x
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+# For the contact form to send emails
+EMAIL_SENDER=x@jx.x
+EMAIL_PW=x
+EMAIL_HOST=x
+EMAIL_RECIPIENTS="x <x@x.org>, x x <x@x.de>"
 
-## Learn More
+# https://sentry.io
+SENTRY_DSN=x
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You may use [Dokku](https://github.com/dokku/dokku) to deploy this app without further adaption (besides setting the envs).
+Otherwise, follow the [Next.js docs](https://nextjs.org/docs/deployment) to, e.g., host on Vercel.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Affero General Public License 3.0
