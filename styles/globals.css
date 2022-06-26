@@ -19,17 +19,17 @@ button a {
 }
 
 .mantine-Pagination-active {
-  background-color: #BFBFC1
+  background-color: #bfbfc1;
 }
 
 @media screen and (max-width: 768px) {
   .only-non-mobile {
-      display:none; 
+    display: none;
   }
 }
 
 @media screen and (min-width: 769px) {
   .only-mobile {
-      display:none; 
+    display: none;
   }
 }

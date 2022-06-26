@@ -9,7 +9,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "pretty": "prettier --write ."
   },
   "dependencies": {
     "@mantine/core": "^3.1.8",
@@ -41,6 +42,7 @@
     "@types/react-simple-maps": "^1.0.7",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
+    "prettier": "^2.7.1",
     "typescript": "4.4.3"
   }
 }
