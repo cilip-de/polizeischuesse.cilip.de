@@ -24,9 +24,9 @@ const getGeo = async (data) => {
     ),
   };
 
-  // console.log(body.locations.length);
+  if (!process.env.GEO_HOST) throw "ENV not set for GEO_HOST";
 
-  const resp = await fetch("https://geocode.app.vis.one/", {
+  const resp = await fetch(process.env.GEO_HOST, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -59,18 +59,6 @@ const getGeo = async (data) => {
       longitude: x.longitude,
     }))
   );
-
-  // there are duplicates, need to investigate, FIXME
-
-  // const duplicated = _(result)
-  //   .groupBy((x) => x.state + x.city)
-  //   .pickBy((x) => x.length > 1)
-  //   .keys()
-  //   .value();
-
-  // for (const x of duplicated) {
-  //   console.log(result.filter((y) => y.state + y.city === x));
-  // }
 
   return _.uniqBy(result, (x) => x.city + x.state);
 };
