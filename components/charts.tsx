@@ -230,7 +230,7 @@ const OverviewChart = ({ data, hits, onClick }) => {
         enableGridY={false}
         enableLabel={false}
         // valueFormat={(x) => (x == 0 ? null : x)}
-        margin={{ top: 0, right: 0, bottom: 25, left: 0 }}
+        margin={{ top: 0, right: 1, bottom: 25, left: 1 }}
         axisLeft={null}
         colors={["#BFBFC1", "#EAEAEC"]}
         axisBottom={{
