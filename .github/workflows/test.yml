@@ -1,0 +1,24 @@
+name: Test
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - run: >
+          echo "[auth]" > .sentryclirc &&
+          echo "token=${{ secrets.SENTRY_TOKEN }}" >> .sentryclirc &&
+          echo "GEO_USER=${{ secrets.GEO_USER }}" >> .env.local &&
+          echo "GEO_PW=${{ secrets.GEO_PW }}" >> .env.local &&
+          echo "GEO_HOST=${{ secrets.GEO_HOST }}" >> .env.local
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - run: npx playwright install --with-deps chromium
+      - run: npm install
+      - run: npm run build
+      - run: npm start &
+      - run: npm test

@@ -10,7 +10,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "pretty": "prettier --write ."
+    "pretty": "prettier --write .",
+    "test": "playwright test"
   },
   "dependencies": {
     "@mantine/core": "^3.1.8",
@@ -34,6 +35,7 @@
     "react-simple-maps": "^2.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.22.2",
     "@types/d3-array": "^3.0.2",
     "@types/d3-fetch": "^3.0.1",
     "@types/express-rate-limit": "^5.1.3",
