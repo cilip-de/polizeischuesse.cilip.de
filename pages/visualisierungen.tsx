@@ -3,7 +3,6 @@ import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
-import React from "react";
 import { HorizontalBarChart, VerticalBarChart } from "../components/charts";
 import HeatMapChart from "../components/HeatMapChart";
 import Layout from "../components/Layout";
@@ -219,7 +218,11 @@ const Auswertung: NextPage = ({ data, options }) => {
   const perInhabWestSorted = _.orderBy(inhabDataWest, "count");
 
   const inhabDataAfter = countItems(
-    data.filter((x) => !x.beforeReunification).map((x) => x.Bundesland.replace("Mecklenburg-Vorpommern", "Mecklenburg-Vorp.")),
+    data
+      .filter((x) => !x.beforeReunification)
+      .map((x) =>
+        x.Bundesland.replace("Mecklenburg-Vorpommern", "Mecklenburg-Vorp.")
+      ),
     true
   );
 

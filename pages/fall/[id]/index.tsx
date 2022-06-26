@@ -3,7 +3,6 @@ import { useClipboard } from "@mantine/hooks";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import React from "react";
 import Case from "../../../components/Case";
 import { setupData, setupTaserData } from "../../../lib/data";
 

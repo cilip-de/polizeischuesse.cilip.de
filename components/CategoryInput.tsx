@@ -1,6 +1,5 @@
 import { MultiSelect } from "@mantine/core";
 import router from "next/router";
-import React from "react";
 import { TAGS } from "../lib/data";
 import { constructUrlWithQ } from "../lib/util";
 

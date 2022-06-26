@@ -2,7 +2,6 @@ import { Text, useMantineTheme } from "@mantine/core";
 import { ResponsiveBar } from "@nivo/bar";
 import { ticks } from "d3-array";
 import _ from "lodash";
-import React from "react";
 import { countItems } from "../lib/data";
 import { addMissingYears, combineArray } from "../lib/util";
 import { makeDowData } from "../pages/visualisierungen";

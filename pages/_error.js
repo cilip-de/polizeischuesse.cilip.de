@@ -1,6 +1,6 @@
-import NextErrorComponent from 'next/error';
+import NextErrorComponent from "next/error";
 
-import * as Sentry from '@sentry/nextjs';
+import * as Sentry from "@sentry/nextjs";
 
 const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
   if (!hasGetInitialPropsRun && err) {
@@ -51,7 +51,7 @@ MyError.getInitialProps = async ({ res, err, asPath }) => {
   // information about what the error might be. This is unexpected and may
   // indicate a bug introduced in Next.js, so record it in Sentry
   Sentry.captureException(
-    new Error(`_error.js getInitialProps missing data at path: ${asPath}`),
+    new Error(`_error.js getInitialProps missing data at path: ${asPath}`)
   );
   await Sentry.flush(2000);
 

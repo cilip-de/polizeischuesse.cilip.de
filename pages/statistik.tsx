@@ -2,7 +2,6 @@ import { Col, Grid, Space, Title } from "@mantine/core";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
-import React from "react";
 import Layout from "../components/Layout";
 
 const Statistiken: NextPage = ({ data }) => {

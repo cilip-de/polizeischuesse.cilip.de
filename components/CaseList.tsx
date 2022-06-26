@@ -1,7 +1,7 @@
 import { Center, Col, Grid, Pagination, Text, Title } from "@mantine/core";
 import _ from "lodash";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { PAGE_SIZE, SELECTABLE, setupOptions } from "../lib/data";
 import { constructUrl, constructUrlWithQ, paginate } from "../lib/util";
 import Case from "./Case";

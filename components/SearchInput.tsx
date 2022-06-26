@@ -1,7 +1,7 @@
 import { TextInput } from "@mantine/core";
 import _ from "lodash";
 import router from "next/router";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { constructUrlWithQ } from "../lib/util";
 
 const SearchInput = ({ q, selection, setSearchedData, setSearchedQ }) => {

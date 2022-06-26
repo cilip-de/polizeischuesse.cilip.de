@@ -1,6 +1,5 @@
 import { Select } from "@mantine/core";
 import router from "next/router";
-import React from "react";
 import { constructUrl } from "../lib/util";
 
 const SelectInput = ({ skey, label, selection, data }) => {

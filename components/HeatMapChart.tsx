@@ -1,7 +1,6 @@
 import { Center, Text, useMantineTheme } from "@mantine/core";
 import { ResponsiveHeatMap } from "@nivo/heatmap";
 import _ from "lodash";
-import React from "react";
 
 const HeatMapChart = ({ data, mobile = false }) => {
   const procData = [];

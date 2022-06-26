@@ -1,7 +1,6 @@
 import { Col, Grid, Space, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
-import React from "react";
 import Case from "../components/Case";
 import Layout from "../components/Layout";
 import { setupTaserData } from "../lib/data";

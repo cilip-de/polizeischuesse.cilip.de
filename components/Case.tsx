@@ -1,5 +1,4 @@
 import { Badge, Card, Col, Grid, Group, Space, Text } from "@mantine/core";
-import React from "react";
 import { SEARCH_KEYES } from "../lib/data";
 import { isNumber } from "../lib/util";
 

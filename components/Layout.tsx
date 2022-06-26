@@ -1,7 +1,6 @@
 import { Col, Container, Grid, Space, Title } from "@mantine/core";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React from "react";
 
 export default function Layout({
   children,
