@@ -19,7 +19,7 @@
     "@mantine/next": "^3.1.8",
     "@nivo/bar": "^0.74.0",
     "@nivo/heatmap": "^0.74.0",
-    "@nivo/line": "^0.74.0",
+    "@nivo/line": "^0.79.1",
     "@sentry/nextjs": "^7.3.0",
     "d3-array": "^2.12.1",
     "d3-dsv": "^3.0.1",
