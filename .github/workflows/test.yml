@@ -17,8 +17,10 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "16"
+      - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npm install
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: 0
       - run: npm run build
       - run: npm start &
       - run: npm test
