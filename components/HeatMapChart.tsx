@@ -3,12 +3,6 @@ import { ResponsiveHeatMap } from "@nivo/heatmap";
 import _ from "lodash";
 
 const HeatMapChart = ({ data, mobile = false }) => {
-  const procData = [];
-
-  // const x = leftLabels.map(label => {
-  //   data.filter(x => x.states == label)
-  // })
-
   const boolAtr = [
     "Schusswechsel",
     "Sondereinsatzbeamte",
@@ -23,7 +17,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
     "Schussort Außen",
   ];
 
-  const boolData = (data) =>
+  const boolData = (data: [any, ...any[]]) =>
     boolAtr
       .map((x) => ({
         [x
@@ -61,31 +55,41 @@ const HeatMapChart = ({ data, mobile = false }) => {
 
   const theme = useMantineTheme();
 
+  const keys = boolAtr
+    .map((x) =>
+      x
+        .replace(
+          "Hinweise auf familiäre oder häusliche Gewalt",
+          "Mutm. famil. oder häusl. Gewalt"
+        )
+        .replace(
+          "Hinweise auf Alkohol- und/ oder Drogenkonsum",
+          "Mutm. Alkohol- o. Drogenkonsum"
+        )
+        .replace(
+          "Hinweise auf psychische Ausnahmesituation",
+          "Mutm. psych. Ausnahmesituation"
+        )
+    )
+    .concat("unbewaffnet");
+  console.log(ans);
+
+  const ansFixed = ans.map((x: any) => {
+    return {
+      id: x.state,
+      data: keys.map((key) => ({ x: key, y: x[key] })),
+    };
+  });
+
+  console.log(ansFixed);
+
   return (
     <div
       style={{ height: mobile ? "600px" : "800px" }}
       className={mobile ? "only-mobile" : "only-non-mobile"}
     >
       <ResponsiveHeatMap
-        data={ans}
-        keys={boolAtr
-          .map((x) =>
-            x
-              .replace(
-                "Hinweise auf familiäre oder häusliche Gewalt",
-                "Mutm. famil. oder häusl. Gewalt"
-              )
-              .replace(
-                "Hinweise auf Alkohol- und/ oder Drogenkonsum",
-                "Mutm. Alkohol- o. Drogenkonsum"
-              )
-              .replace(
-                "Hinweise auf psychische Ausnahmesituation",
-                "Mutm. psych. Ausnahmesituation"
-              )
-          )
-          .concat("unbewaffnet")}
-        indexBy="state"
+        data={ansFixed}
         margin={{
           top: mobile ? 150 : 250,
           right: 0,
@@ -93,39 +97,29 @@ const HeatMapChart = ({ data, mobile = false }) => {
           left: mobile ? 120 : 60,
         }}
         forceSquare={true}
-        colors={theme.colors.indigo}
-        maxValue={100}
+        colors={{
+          type: "quantize",
+          colors: theme.colors.indigo,
+          minValue: 0,
+          maxValue: 100,
+        }}
         axisTop={{
-          orient: "top",
           tickSize: 5,
           tickPadding: 5,
-          tickRotation: -90,
+          tickRotation: -45,
           legend: "",
-          legendOffset: 36,
         }}
         axisRight={null}
         axisBottom={null}
-        cellOpacity={1}
-        cellBorderColor={{ from: "color", modifiers: [["darker", 0.4]] }}
-        labelTextColor={{ from: "color", modifiers: [["darker", 1.8]] }}
-        defs={[
-          {
-            id: "lines",
-            type: "patternLines",
-            background: "inherit",
-            color: "rgba(0, 0, 0, 0.1)",
-            rotation: -45,
-            lineWidth: 4,
-            spacing: 7,
-          },
-        ]}
-        fill={[{ id: "lines" }]}
+        opacity={1}
+        inactiveOpacity={0.5}
+        labelTextColor={(x) => {
+          console.log(x);
+          return x.value > 50 ? "whitesmoke" : "black";
+        }}
         animate={true}
-        motionConfig="wobbly"
-        motionStiffness={80}
-        motionDamping={9}
+        motionConfig="gentle"
         hoverTarget="cell"
-        cellHoverOthersOpacity={0.25}
       />
       <Center>
         <Text>

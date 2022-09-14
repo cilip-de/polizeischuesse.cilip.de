@@ -44,16 +44,16 @@ Thüringen 2120237
 // 1990: https://de.wikipedia.org/wiki/Saarland#Bev%C3%B6lkerung
 // 1990: https://en.wikipedia.org/wiki/Schleswig-Holstein#Demographics
 const inhabWest1990 = `
-Baden-Württemberg 9822027 
+Baden-Württemberg 9822027
 Bayern 10902643
-Berlin 2130525 
-Bremen 551219 
+Berlin 2130525
+Bremen 551219
 Hamburg 1652363
 Hessen 5763310
-Niedersachsen 7163602 
-Nordrhein-Westfalen 17349651 
-Rheinland-Pfalz 3763510 
-Saarland 1072963 
+Niedersachsen 7163602
+Nordrhein-Westfalen 17349651
+Rheinland-Pfalz 3763510
+Saarland 1072963
 Schleswig-Holstein 2626127
 `
   .trim()
