@@ -27,7 +27,7 @@ const Statistiken: NextPage = ({ data }) => {
         schließlich auch Verletzte und Tote.
         <br />
         <br />
-        Erst ab 1984 wird diese jährliche Übersicht auch veröffentlicht,
+        Erst ab 1984 wird diese jährliche Übersicht auch herausgegeben,
         allerdings nur auf Nachfrage bei der IMK. Nach{" "}
         <a href="https://fragdenstaat.de/anfrage/falle-von-polizeilichem-schusswaffengebrauch-fur-die-jahre-2011-bis-2013/">
           nach mehreren Anfragen nach dem Informationsfreiheitsgesetz
