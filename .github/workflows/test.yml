@@ -2,6 +2,10 @@ name: Test
 
 on: [push]
 
+env:
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1 # Skip downloading during yarn install
+  PLAYWRIGHT_BROWSERS_PATH: 0 # Places binaries to node_modules/@playwright/test
+
 jobs:
   tests:
     runs-on: ubuntu-latest
@@ -17,10 +21,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "16"
+      - run: npx playwright install-deps
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
-        env:
-          PLAYWRIGHT_BROWSERS_PATH: 0
+      - run: npx playwright install chromium
       - run: npm run build
       - run: npm start &
       - run: npm test
