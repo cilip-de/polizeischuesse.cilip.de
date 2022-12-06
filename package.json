@@ -24,7 +24,7 @@
     "d3-array": "^2.12.1",
     "d3-dsv": "^3.0.1",
     "d3-fetch": "^3.0.1",
-    "dayjs": "^1.11.5",
+    "dayjs": "^1.11.7",
     "emailjs": "^4.0.1",
     "express-rate-limit": "^5.5.1",
     "fuse.js": "^6.6.2",
