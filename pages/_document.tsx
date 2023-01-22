@@ -12,12 +12,12 @@ export default class _Document extends Document {
       _paq.push(['trackPageView']);
       _paq.push(['enableLinkTracking']);
       (function() {
-        var u="//matomo.beyondopen.de/";
+        var u="https://matomo.daten.cool/";
         _paq.push(['setTrackerUrl', u+'matomo.php']);
-        _paq.push(['setSiteId', '16']);
+        _paq.push(['setSiteId', '4']);
         var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-      })();`;
+        g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
+      })()`;
     return (
       <Html lang="de">
         <Head />

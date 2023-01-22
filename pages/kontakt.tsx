@@ -100,7 +100,7 @@ vertreten durch den Vorstand: Norbert Pütter
     <br> Die Logs mit den Daten der Nutzer werden nach spätestens 6 Monaten gelöscht.
     <br>
     <br>
-    <a href="https://matomo.beyondopen.de/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=&fontColor=&fontSize=&fontFamily=">Matomo-Einstellungen hier ändern.</a>
+    <a href="https://matomo.daten.cool/index.php?module=CoreAdminHome&action=optOut&language=en&backgroundColor=&fontColor=&fontSize=&fontFamily=">Matomo-Einstellungen hier ändern.</a>
 
 </p>
 <a href="https://datenschutz-generator.de" class="dsg1-6" rel="nofollow" target="_blank">Erstellt mit Datenschutz-Generator.de von RA Dr. Thomas Schwenke</a>`;
