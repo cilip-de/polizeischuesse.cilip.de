@@ -65,6 +65,10 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const casex = results.data
     .concat(taserData)
     .filter((x) => x["Fall"] == query.id)[0];
+
+  // 404
+  if (casex == null) return { notFound: true };
+
   return {
     props: { case: casex, taser: query.id?.includes("taser"), id: query.id },
   };
