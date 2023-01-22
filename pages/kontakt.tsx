@@ -134,9 +134,14 @@ const Kontakt: NextPage = () => {
           <p>
             Schreibt uns bitte eine E-Mail an{" "}
             <a href="mailto:info@cilip">info@cilip.de</a> und folgt uns auf
-            Twitter <a href="https://twitter.com/cilip_de">@cilip_de</a>. Nutzt
-            auch gern unser <Link href="/fall-melden">Kontakt-Formular</Link> um
-            uns Updates zu Fällen zu schicken.
+            Twitter <a href="https://twitter.com/cilip_de">@cilip_de</a> und
+            Mastodon{" "}
+            <a href="https://social.tchncs.de/@cilip">
+              @social.tchncs.de/@cilip
+            </a>
+            . Nutzt auch gern unser{" "}
+            <Link href="/fall-melden">Kontakt-Formular</Link> um uns Updates zu
+            Fällen zu schicken.
           </p>
           <p>
             Der Software-Code dieser Webseite ist auf{" "}

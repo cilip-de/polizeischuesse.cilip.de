@@ -266,6 +266,13 @@ const Home: NextPage = ({
         <Space h="xl" />
         <Space h="xl" />
         <Center>
+          <a
+            style={{ display: "none" }}
+            rel="me"
+            href="https://@social.tchncs.de/@cilip"
+          >
+            Mastodon
+          </a>
           <Text size="sm" color="gray" align="center">
             Umgesetzt von{" "}
             <a
