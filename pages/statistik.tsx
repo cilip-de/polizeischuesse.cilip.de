@@ -30,7 +30,7 @@ const Statistiken: NextPage = ({ data }) => {
         Erst ab 1984 wird diese jährliche Übersicht auch herausgegeben,
         allerdings nur auf Nachfrage bei der IMK. Nach{" "}
         <a href="https://fragdenstaat.de/anfrage/falle-von-polizeilichem-schusswaffengebrauch-fur-die-jahre-2011-bis-2013/">
-          nach mehreren Anfragen nach dem Informationsfreiheitsgesetz
+          mehreren Anfragen nach dem Informationsfreiheitsgesetz
         </a>{" "}
         veröffentlichen wir die Schusswaffengebrauchsstatistik erstmals
         komplett.
