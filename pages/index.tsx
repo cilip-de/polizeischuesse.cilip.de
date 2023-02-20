@@ -291,7 +291,7 @@ const Home: NextPage = ({
               style={{ textDecoration: "inherit" }}
               href="https://www.cilip.de/category/polizeiliche-todesschuesse/"
             >
-              jahrzehntelanger Recherchen
+              jahrzehntelangen Recherchen
             </a>{" "}
             von
             <br /> Otto Diederichs und der{" "}
