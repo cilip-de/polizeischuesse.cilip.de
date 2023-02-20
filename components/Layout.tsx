@@ -33,9 +33,12 @@ export default function Layout({
           role="navigation"
           style={{ textDecoration: "underline", cursor: "pointer" }}
           onClick={() => {
+            // hotfix
+            router.push("/");
+
             // if there is any page to go back to (otherwise this would close the page)
-            if (window.history.state.idx === 0) router.push("/");
-            else router.back();
+            // if (window.history.state.idx === 0) router.push("/");
+            // else router.back();
           }}
         >
           {"« zurück"}
