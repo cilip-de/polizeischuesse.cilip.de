@@ -110,12 +110,9 @@ const Daten: NextPage = () => {
         </a>{" "}
         seit 1993 Geschehnisse, in denen Geflüchtete durch staatliche Maßnahmen
         sowie durch rassistische Angriffe der Bevölkerung verletzt wurden oder
-        zu Tode kamen. Die Webseiten{" "}
-        <a href="https://www.copservation.de/">„Copservation“</a> und 
-        <a href="https://keinfreund-keinhelfer.net/">
-          „Kein Freund, kein Helfer“
-        </a>{" "}
-        sammeln indes Übergriffe und Verstöße von Polizist*innen. Eine ähnliche
+        zu Tode kamen. Die Webseite{" "}
+        <a href="https://www.copservation.de/">„Copservation“</a>
+        sammelt indes Übergriffe und Verstöße von Polizist*innen. Eine ähnliche
         Übersicht gibt es auf{" "}
         <a href="https://www.reddit.com/r/pozilei/">Reddit</a>.
       </div>
