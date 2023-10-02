@@ -3,9 +3,9 @@ import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
-import { HorizontalBarChart, VerticalBarChart } from "../components/charts";
 import HeatMapChart from "../components/HeatMapChart";
 import Layout from "../components/Layout";
+import { HorizontalBarChart, VerticalBarChart } from "../components/charts";
 import { countItems, setupData } from "../lib/data";
 import { addMissingYears, combineArray, isNumber } from "../lib/util";
 
@@ -326,7 +326,7 @@ const Auswertung: NextPage = ({ data, options }) => {
           </Col>
           <Col span={12} md={6}>
             <Title order={4} align="center">
-              Bundesrepublik 1990–2021
+              Bundesrepublik 1990–{data[0].year}
             </Title>
             <HorizontalBarChart data={inhabDataAfterSorted} />
             <HorizontalBarChart data={inhabDataAfterSorted} mobile />
@@ -351,7 +351,7 @@ const Auswertung: NextPage = ({ data, options }) => {
           </Col>
           <Col span={12} md={6}>
             <Title order={4} align="center">
-              Bundesrepublik 1990–2021
+              Bundesrepublik 1990–{data[0].year}
             </Title>
             <HorizontalBarChart data={cityDataAfter} />
             <HorizontalBarChart mobile data={cityDataAfter} />

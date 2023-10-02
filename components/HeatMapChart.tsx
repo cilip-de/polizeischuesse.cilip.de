@@ -72,7 +72,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
         )
     )
     .concat("unbewaffnet");
-  console.log(ans);
+  // console.log(ans);
 
   const ansFixed = ans.map((x: any) => {
     return {
@@ -81,7 +81,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
     };
   });
 
-  console.log(ansFixed);
+  // console.log(ansFixed);
 
   return (
     <div
@@ -114,7 +114,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
         opacity={1}
         inactiveOpacity={0.5}
         labelTextColor={(x) => {
-          console.log(x);
+          // console.log(x);
           return x.value > 50 ? "whitesmoke" : "black";
         }}
         animate={true}
