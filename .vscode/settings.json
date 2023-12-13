@@ -8,5 +8,10 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
     }
+  },
+  "[typescript][typescriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
   }
 }

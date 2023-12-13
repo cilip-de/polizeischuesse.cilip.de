@@ -9,7 +9,7 @@ import { setupData, setupTaserData } from "../../../lib/data";
 const CaseDetail: NextPage = (props) => {
   const clipboard = useClipboard({ timeout: 99999999999999 });
 
-  const smTitle = `Polizeilicher Todesschuss am ${props.case.datePrint} in ${props.case.place}`;
+  const smTitle = `Tod durch Polizeischuss am ${props.case.datePrint} in ${props.case.place}`;
   return (
     <>
       <Head>
