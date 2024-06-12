@@ -31,7 +31,12 @@ const Taser: NextPage = ({ data }) => {
             Elektroschocks führen zu deutlich anderen Todesursachen als Munition
             aus Schusswaffen. Die Opfer sterben an Herz- oder
             Kreislaufstillstand, Organversagen oder sie ersticken an
-            Erbrochenem.
+            Erbrochenem. Warum Taser ein riskantes Einsatzmittel sind, zeigt
+            Professor Andreas Ruch in{" "}
+            <a href="https://verfassungsblog.de/polizei-und-taser/">
+              seinem Beitrag im Verfassungsblog
+            </a>
+            .
             <br />
             <br />
             Unsere Liste zeigt (mit Stand November 2021), dass Menschen
