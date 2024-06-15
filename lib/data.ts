@@ -176,7 +176,7 @@ let setupProps = null;
 const setupData = async () => {
   if (setupProps !== null) return setupProps;
 
-  let data = await csv(`${HOST}/data.csv`);
+  let data = (await csv(`${HOST}/data.csv`)).filter((x) => x["Fall"]);
 
   const geoData = await getGeo(data);
 
@@ -209,17 +209,17 @@ const setupData = async () => {
 };
 
 const setupTaserData = async () => {
-  let data = await csv(`${HOST}/taser.csv`);
+  let data = (await csv(`${HOST}/taser.csv`)).filter((x) => x["Fall"]);
   return preprocessData(data);
 };
 
 export {
-  setupOptions,
-  setupData,
-  countItems,
-  setupTaserData,
-  SELECTABLE,
   PAGE_SIZE,
-  TAGS,
   SEARCH_KEYES,
+  SELECTABLE,
+  TAGS,
+  countItems,
+  setupData,
+  setupOptions,
+  setupTaserData,
 };
