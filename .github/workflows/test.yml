@@ -20,7 +20,7 @@ jobs:
           echo "GEO_HOST=${{ secrets.GEO_HOST }}" >> .env.local
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: "18"
       - run: npx playwright install-deps
       - run: npm ci
       - run: npx playwright install chromium
