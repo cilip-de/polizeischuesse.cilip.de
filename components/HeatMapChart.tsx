@@ -44,6 +44,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
           ),
         },
       ]);
+
   const ans = _(data)
     .groupBy("state")
     .map((state, id) => ({
@@ -52,6 +53,8 @@ const HeatMapChart = ({ data, mobile = false }) => {
     }))
     .orderBy("state")
     .value();
+
+  const perStateCounts = _(data).countBy("state").value();
 
   const theme = useMantineTheme();
 
@@ -120,12 +123,33 @@ const HeatMapChart = ({ data, mobile = false }) => {
         animate={true}
         motionConfig="gentle"
         hoverTarget="cell"
+        tooltip={(data) => (
+          <div
+            style={{
+              padding: 12,
+              color: "black",
+              background: "white",
+              border: "1px solid #ccc",
+            }}
+          >
+            {data.cell.serieId} und {data.cell.data.x}: {data.cell.value}% der{" "}
+            {
+              perStateCounts[
+                data.cell.serieId.replace(
+                  "Mecklenburg-Vorp.",
+                  "Mecklenburg-Vorpommern"
+                )
+              ]
+            }{" "}
+            Fälle
+          </div>
+        )}
       />
       <Center>
         <Text>
-          Die Werte sind mit Vorsicht zu genießen, da es in einigen Ländern nur
-          wenige Fälle gibt. So z. B. in Saarland (4), Mecklenburg-Vorpommern
-          (5) und Bremen (5).
+          {`Die Werte sind mit Vorsicht zu genießen, da es in einigen Ländern nur
+          wenige Fälle gibt. So z. B. in Saarland (${perStateCounts["Saarland"]}), Mecklenburg-Vorpommern
+          (${perStateCounts["Mecklenburg-Vorpommern"]}) und Bremen (${perStateCounts["Bremen"]}).`}
         </Text>
       </Center>
     </div>

@@ -248,8 +248,6 @@ const Visualisierungen: NextPage = ({ data, options }) => {
     .slice(0, 20)
     .reverse();
 
-  console.log(cityDataAfter, cityDataWest, cityAfter, cityWest);
-
   return (
     <Layout
       fullWidth
