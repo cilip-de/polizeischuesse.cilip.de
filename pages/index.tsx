@@ -13,7 +13,6 @@ import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import React from "react";
 import CaseList from "../components/CaseList";
 import { setupData } from "../lib/data";
 
@@ -46,6 +45,13 @@ const Home: NextPage = ({
       </Head>
 
       <main>
+        <a
+          style={{ display: "none" }}
+          rel="me"
+          href="https://@social.tchncs.de/@cilip"
+        >
+          Mastodon
+        </a>
         <Container>
           <Space h="xl" />
           <div className="only-mobile">
@@ -266,13 +272,6 @@ const Home: NextPage = ({
         <Space h="xl" />
         <Space h="xl" />
         <Center>
-          <a
-            style={{ display: "none" }}
-            rel="me"
-            href="https://@social.tchncs.de/@cilip"
-          >
-            Mastodon
-          </a>
           <Text size="sm" color="gray" align="center">
             Umgesetzt von{" "}
             <a
