@@ -20,7 +20,7 @@
     "@nivo/bar": "^0.80.0",
     "@nivo/heatmap": "^0.80.0",
     "@nivo/line": "^0.80.0",
-    "@sentry/nextjs": "^7.31.1",
+    "@sentry/nextjs": "^8.35.0",
     "d3-array": "^3.2.4",
     "d3-dsv": "^3.0.1",
     "d3-fetch": "^3.0.1",
