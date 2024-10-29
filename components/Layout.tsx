@@ -28,6 +28,13 @@ export default function Layout({
       </Head>
 
       <Container>
+        <a
+          style={{ display: "none" }}
+          rel="me"
+          href="https://social.tchncs.de/@cilip"
+        >
+          Mastodon
+        </a>
         <Space />
         <span
           role="navigation"
@@ -66,13 +73,6 @@ export default function Layout({
         </Grid>
         <Space h="lg" />
         {/* Verification */}
-        <a
-          style={{ display: "none" }}
-          rel="me"
-          href="https://social.tchncs.de/@cilip"
-        >
-          Mastodon
-        </a>
       </Container>
     </>
   );
