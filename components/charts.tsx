@@ -242,6 +242,9 @@ const OverviewChart = ({ data, hits, onClick }) => {
         // padding={-0.01}
         tooltip={tooltipOverview}
         onClick={onClick}
+        onMouseEnter={(_datum, event) => {
+          event.currentTarget.style.cursor = "pointer";
+        }}
       />
     </div>
   );
@@ -270,9 +273,9 @@ const DowChart = ({ data }) => {
 };
 
 export {
-  VerticalBarChart,
+  DowChart,
   HorizontalBarChart,
   OverviewChart,
-  DowChart,
   selectNiceTicks,
+  VerticalBarChart,
 };

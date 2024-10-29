@@ -172,7 +172,7 @@ const MiddleContent = ({ children }) => (
   </Grid>
 );
 
-const Auswertung: NextPage = ({ data, options }) => {
+const Visualisierungen: NextPage = ({ data, options }) => {
   const boolData = boolAtr.map((x) => ({
     count: data.filter((d) => d[x].includes("Ja")).length / data.length,
     value: x
@@ -205,9 +205,7 @@ const Auswertung: NextPage = ({ data, options }) => {
   );
 
   const inhabDataWest = countItems(
-    data
-      .filter((x) => x.beforeReunification && !x.east)
-      .map((x) => x.Bundesland),
+    data.filter((x) => x.beforeReunification && !x.east).map((x) => x.state),
     true
   );
 
@@ -221,7 +219,7 @@ const Auswertung: NextPage = ({ data, options }) => {
     data
       .filter((x) => !x.beforeReunification)
       .map((x) =>
-        x.Bundesland.replace("Mecklenburg-Vorpommern", "Mecklenburg-Vorp.")
+        x.state.replace("Mecklenburg-Vorpommern", "Mecklenburg-Vorp.")
       ),
     true
   );
@@ -249,6 +247,8 @@ const Auswertung: NextPage = ({ data, options }) => {
   const cityDataAfter = _.orderBy(cityAfter, "count", "desc")
     .slice(0, 20)
     .reverse();
+
+  console.log(cityDataAfter, cityDataWest, cityAfter, cityWest);
 
   return (
     <Layout
@@ -485,4 +485,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
-export default Auswertung;
+export default Visualisierungen;

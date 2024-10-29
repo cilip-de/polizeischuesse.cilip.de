@@ -47,7 +47,7 @@ const Taser: NextPage = ({ data }) => {
         </Col>
       </Grid>
       <Space />
-      <Title style={{ marginLeft: "1rem" }} order={2} id="chronik">
+      <Title style={{ marginTop: "1rem" }} order={2} id="chronik">
         Chronik der Tasertoten
       </Title>
       <Space />

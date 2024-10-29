@@ -58,7 +58,7 @@ const Case = ({ item, hideLink = false, isTaser = false }) => {
       padding="sm"
       style={{ marginBottom: "2rem", position: "relative" }}
     >
-      <Group>
+      <Group style={{ paddingLeft: "-1rem" }}>
         {item.schusswechsel && (
           <Badge size="sm" color="pink" variant="light">
             Schusswechsel
@@ -105,7 +105,7 @@ const Case = ({ item, hideLink = false, isTaser = false }) => {
           </Badge>
         )}
       </Group>
-      <Space />
+      <Space h="sm" />
       <Grid>
         <Col span={12} md={4} lg={4}>
           <Text weight={500}>{item["Name"]}</Text>

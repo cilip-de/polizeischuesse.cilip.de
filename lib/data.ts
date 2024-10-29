@@ -99,7 +99,7 @@ const eastStates =
 const setupOptions = (data) => {
   const year = _.orderBy(countItems(data.map((x) => x.year)), "value", "desc");
   const state = countItems(
-    data.map((x) => x.Bundesland),
+    data.map((x) => x.state),
     true
   );
   const place = countItems(
@@ -143,9 +143,9 @@ const preprocessData = (data) => {
     x.monthPrint = dayjs.months()[x.month];
     x.datePrint = date.format("DD.MM.YYYY");
     x.beforeReunification = date.isBefore(dateReunification);
-    x.state = x["Bundesland"];
+    x.state = x["Bundesland"].trim();
     x.east = eastStates.includes(x.state);
-    x.place = x["Ort"];
+    x.place = x["Ort"].trim();
     x.weapon = x["Waffen"];
     x.sex = x["Geschlecht"];
     x.numShots = x["Anzahl im Einsatz abgegebener polizeilicher Schüsse"];
@@ -178,9 +178,9 @@ const setupData = async () => {
 
   let data = (await csv(`${HOST}/data.csv`)).filter((x) => x["Fall"]);
 
-  const geoData = await getGeo(data);
-
   data = preprocessData(data);
+
+  const geoData = await getGeo(data);
 
   const [beforeReuni, afterReuni] = _.map(
     _.partition(data, "beforeReunification"),
@@ -214,12 +214,12 @@ const setupTaserData = async () => {
 };
 
 export {
+  countItems,
   PAGE_SIZE,
   SEARCH_KEYES,
   SELECTABLE,
-  TAGS,
-  countItems,
   setupData,
   setupOptions,
   setupTaserData,
+  TAGS,
 };

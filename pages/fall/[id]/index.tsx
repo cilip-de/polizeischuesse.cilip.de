@@ -9,7 +9,11 @@ import { setupData, setupTaserData } from "../../../lib/data";
 const CaseDetail: NextPage = (props) => {
   const clipboard = useClipboard({ timeout: 99999999999999 });
 
-  const smTitle = `Tod durch Polizeischuss am ${props.case.datePrint} in ${props.case.place}`;
+  const isTaser = props.taser;
+
+  const smTitle = `${
+    isTaser ? "Tod nach Tasereinsatz" : "Tod durch Polizeischuss"
+  } am ${props.case.datePrint} in ${props.case.place}`;
   return (
     <>
       <Head>
@@ -29,11 +33,9 @@ const CaseDetail: NextPage = (props) => {
       </Head>
       <Container>
         <div style={{ marginTop: "5rem" }}>
-          <Link href={props.taser ? "/taser" : "/"}>
-            <a>
-              <Text align="center">Zur Chronik</Text>
-            </a>
-          </Link>
+          <Text align="center">
+            <Link href={isTaser ? "/taser" : "/"}>Zur Chronik</Link>
+          </Text>
           <div style={{ marginTop: "2rem" }}>
             <Case item={props.case} hideLink isTaser={props.taser} />
           </div>

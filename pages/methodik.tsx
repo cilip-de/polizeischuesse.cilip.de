@@ -84,9 +84,7 @@ const Daten: NextPage = () => {
         Fälle auch nach Schussabgaben innerhalb und außerhalb von Gebäuden
         sortiert. Nicht immer ließ sich dies jedoch exakt rekonstruieren. Für
         einen Überblick dazu hilft die Suche in den Meldungen mit dem Stichwort{" "}
-        <Link href="/?q=Wohnun&p=1#chronik">
-          <a>„Wohnung“</a>
-        </Link>
+        <Link href="/?q=Wohnun&p=1#chronik">„Wohnung“</Link>
         .
         <br />
         <br />
@@ -101,7 +99,7 @@ const Daten: NextPage = () => {
         </a>{" "}
         dokumentiert den polizeilichen Schusswaffengebrauch in Deutschland auf
         seiner Webseite und beruft sich dabei oft auf die CILIP. Die Kampagne
-        <a href="https://doku.deathincustody.info/">„Death in Custody“</a>{" "} 
+        <a href="https://doku.deathincustody.info/">„Death in Custody“</a>{" "}
         sammelt zudem Informationen zu Todesfällen von Schwarzen Menschen,
         People of Color und von Rassismus betroffenen Personen in Gewahrsam
         sowie durch Polizeigewalt im Allgemeinen. Außerdem dokumentiert die{" "}

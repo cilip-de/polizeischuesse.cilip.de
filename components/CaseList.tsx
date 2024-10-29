@@ -77,7 +77,7 @@ const CaseList = ({
 
   const displayLocations = _.countBy(
     resultList,
-    (x) => x["Ort"] + x["Bundesland"]
+    (x) => x["place"] + x["state"]
   );
 
   const displayMarkers = geoData.filter((x) =>

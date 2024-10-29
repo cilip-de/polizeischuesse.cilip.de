@@ -65,6 +65,14 @@ export default function Layout({
           </Col>
         </Grid>
         <Space h="lg" />
+        {/* Verification */}
+        <a
+          style={{ display: "none" }}
+          rel="me"
+          href="https://social.tchncs.de/@cilip"
+        >
+          Mastodon
+        </a>
       </Container>
     </>
   );

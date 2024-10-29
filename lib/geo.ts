@@ -6,8 +6,8 @@ const getGeo = async (data) => {
   const locationsInput = data.map((x) => {
     return {
       query: {
-        city: x["Ort"],
-        state: x["Bundesland"],
+        city: x.place,
+        state: x.state,
         county: null,
         address: null,
         district: null,

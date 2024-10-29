@@ -41,7 +41,12 @@ const Statistiken: NextPage = ({ data }) => {
       <Grid>
         {_.orderBy(data.documents, "title", "desc").map((x) => (
           <Col span={4} md={2} lg={1} key={x.title}>
-            <a target="_blank" href={x.site_url} rel="noreferrer">
+            <a
+              target="_blank"
+              href={x.site_url}
+              rel="noreferrer"
+              style={{ fontFamily: "monospace" }}
+            >
               {x.title.replace(/[^0-9]/g, "")}
             </a>
           </Col>

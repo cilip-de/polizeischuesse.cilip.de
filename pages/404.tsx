@@ -6,9 +6,7 @@ const NotFound: NextPage = () => {
     <div style={{ textAlign: "center" }}>
       <h1>Die Seite konnte nicht gefunden werden (404).</h1>
 
-      <Link href="/">
-        <a>Zur Webseite</a>
-      </Link>
+      <Link href="/">Zur Webseite</Link>
     </div>
   );
 };
