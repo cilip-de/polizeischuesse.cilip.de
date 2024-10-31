@@ -42,16 +42,10 @@ const Home: NextPage = ({
         />
         <meta property="og:url" content="https://polizeischuesse.cilip.de/" />
         <meta name="twitter:card" content="summary_large_image" />
+        <link href="https://@social.tchncs.de/@cilip" rel="me"></link>
       </Head>
 
       <main>
-        <a
-          style={{ display: "none" }}
-          rel="me"
-          href="https://@social.tchncs.de/@cilip"
-        >
-          Mastodon
-        </a>
         <Container>
           <Space h="xl" />
           <div className="only-mobile">
