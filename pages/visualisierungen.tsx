@@ -3,9 +3,12 @@ import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
-import HeatMapChart from "../components/HeatMapChart";
+import {
+  HorizontalBarChart,
+  VerticalBarChart,
+} from "../components/charts/charts";
+import HeatMapChart from "../components/charts/HeatMapChart";
 import Layout from "../components/Layout";
-import { HorizontalBarChart, VerticalBarChart } from "../components/charts";
 import { countItems, setupData } from "../lib/data";
 import { addMissingYears, combineArray, isNumber } from "../lib/util";
 
@@ -59,12 +62,12 @@ Schleswig-Holstein 2626127
   .trim()
   .split("\n");
 
-const landInhab = {};
+const landInhab: { [key: string]: number } = {};
 for (const x of inhab) {
   landInhab[x.split(" ")[0]] = parseInt(x.split(" ")[1]) / 1000000;
 }
 
-const landInhabWest = {};
+const landInhabWest: { [key: string]: number } = {};
 for (const x of inhabWest1990) {
   landInhabWest[x.split(" ")[0]] = parseInt(x.split(" ")[1]) / 1000000;
 }
@@ -85,7 +88,7 @@ const boolAtr = [
   "männlich",
 ];
 
-const CasesPerYear = ({ data }) => {
+const CasesPerYear = ({ data }: { data: any }) => {
   const eastData = countItems(
     data.filter(({ east }) => east).map(({ year }) => year)
   );

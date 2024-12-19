@@ -4,8 +4,20 @@ import router from "next/router";
 import { useMemo } from "react";
 import { constructUrlWithQ } from "../lib/util";
 
-const SearchInput = ({ q, selection, setSearchedData, setSearchedQ }) => {
-  const doStuff = async (newQ) => {
+interface SearchInputProps {
+  q: string;
+  selection: { p: number; [key: string]: any };
+  setSearchedData: (data: any) => void;
+  setSearchedQ: (q: string) => void;
+}
+
+const SearchInput = ({
+  q,
+  selection,
+  setSearchedData,
+  setSearchedQ,
+}: SearchInputProps) => {
+  const doStuff = async (newQ: string) => {
     if (selection.p > 1) {
       router.replace(
         constructUrlWithQ(newQ, {
@@ -37,7 +49,7 @@ const SearchInput = ({ q, selection, setSearchedData, setSearchedQ }) => {
 
   const fetchSearch = useMemo(() => _.debounce(doStuff, 500), []);
 
-  const searchFunc = async (event) => {
+  const searchFunc = async (event: { currentTarget: { value: any } }) => {
     const newQ = event.currentTarget.value;
     setSearchedQ(newQ);
     fetchSearch(newQ);

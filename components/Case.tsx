@@ -3,7 +3,11 @@ import { SEARCH_KEYES } from "../lib/data";
 import { isNumber } from "../lib/util";
 
 // https://dev.to/noclat/using-fuse-js-with-react-to-build-an-advanced-search-with-highlighting-4b93
-const highlight = (value, indices = [], i = 1) => {
+const highlight = (
+  value: string,
+  indices: number[][] = [],
+  i: number = 1
+): JSX.Element | string => {
   const pair = indices[indices.length - i];
   return !pair ? (
     value
@@ -16,38 +20,64 @@ const highlight = (value, indices = [], i = 1) => {
   );
 };
 
-const constructHighlights = (item, attr) => {
-  let text = item[attr];
+interface Match {
+  key: string;
+  value: string;
+  indices: number[][];
+}
 
-  const descMatches = (item.matches || []).filter((x) => x.key === attr);
+interface Item {
+  [key: string]: any;
+  matches?: Match[];
+}
+
+const constructHighlights = (
+  item: Item,
+  attr: string
+): JSX.Element | string => {
+  let text: JSX.Element | string = item[attr];
+
+  const descMatches: Match[] = (item.matches || []).filter(
+    (x) => x.key === attr
+  );
   if (descMatches.length) {
     text = highlight(descMatches[0].value, descMatches[0].indices);
   }
   return text;
 };
 
-const textToLinks = (text) => {
+const textToLinks = (text: string): JSX.Element => {
   const links = text
     .trim()
     .split(" ")
     .filter((x) => x !== "");
 
-  if (links.length === 0) return "auf Anfrage";
+  if (links.length === 0) return <span>auf Anfrage</span>;
 
-  return links.map((x, i) => (
-    <a
-      target="_blank"
-      rel="noreferrer"
-      key={x}
-      style={{ color: "inherit", textDecoration: "inherit" }}
-      href={x}
-    >
-      [{i + 1}]
-    </a>
-  ));
+  return (
+    <>
+      {links.map((x, i) => (
+        <a
+          target="_blank"
+          rel="noreferrer"
+          key={x}
+          style={{ color: "inherit", textDecoration: "inherit" }}
+          href={x}
+        >
+          [{i + 1}]
+        </a>
+      ))}
+    </>
+  );
 };
 
-const Case = ({ item, hideLink = false, isTaser = false }) => {
+interface CaseProps {
+  item: Item;
+  hideLink?: boolean;
+  isTaser?: boolean;
+}
+
+const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
   for (const term of SEARCH_KEYES) {
     item[term] = constructHighlights(item, term);
   }

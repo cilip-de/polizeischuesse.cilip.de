@@ -2,7 +2,14 @@ import { Select } from "@mantine/core";
 import router from "next/router";
 import { constructUrl } from "../lib/util";
 
-const SelectInput = ({ skey, label, selection, data }) => {
+interface SelectInputProps {
+  skey: string;
+  label: string;
+  selection: { [key: string]: any };
+  data: { value: string; label: string }[];
+}
+
+const SelectInput = ({ skey, label, selection, data }: SelectInputProps) => {
   return (
     <Select
       value={selection[skey] || ""}

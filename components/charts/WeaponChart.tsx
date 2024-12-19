@@ -1,7 +1,7 @@
 import { ResponsiveLine } from "@nivo/line";
 import _ from "lodash";
-import { countItems } from "../lib/data";
-import { addMissingYears } from "../lib/util";
+import { countItems } from "../../lib/data";
+import { addMissingYears } from "../../lib/util";
 
 const WeaponChart = ({ data }) => {
   const doData = (tag) => {

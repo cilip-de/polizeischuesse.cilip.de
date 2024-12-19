@@ -6,7 +6,7 @@ import { PAGE_SIZE, SELECTABLE, setupOptions } from "../lib/data";
 import { constructUrl, constructUrlWithQ, paginate } from "../lib/util";
 import Case from "./Case";
 import CategoryInput from "./CategoryInput";
-import { OverviewChart } from "./charts";
+import { OverviewChart } from "./charts/charts";
 import Map from "./Map";
 import SearchInput from "./SearchInput";
 import SelectInput from "./SelectInput";

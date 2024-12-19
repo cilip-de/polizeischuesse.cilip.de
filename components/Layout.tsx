@@ -2,6 +2,19 @@ import { Col, Container, Grid, Space, Title } from "@mantine/core";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
+import { ReactNode } from "react";
+
+interface LayoutProps {
+  children: ReactNode;
+  title: string;
+  description: string;
+  cover?: ReactNode;
+  metaImg: string;
+  metaPath: string;
+  fullWidth?: boolean;
+  otherContent?: ReactNode;
+}
+
 export default function Layout({
   children,
   title,
@@ -11,7 +24,7 @@ export default function Layout({
   metaPath,
   fullWidth = false,
   otherContent = null,
-}) {
+}: LayoutProps) {
   const hostname = "https://polizeischuesse.cilip.de";
   const router = useRouter();
 

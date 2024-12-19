@@ -3,7 +3,18 @@ import router from "next/router";
 import { TAGS } from "../lib/data";
 import { constructUrlWithQ } from "../lib/util";
 
-const CategoryInput = ({ q, selection }) => {
+interface Selection {
+  tags: string[];
+  [key: string]: any;
+}
+
+const CategoryInput = ({
+  q,
+  selection,
+}: {
+  q: string;
+  selection: Selection;
+}) => {
   return (
     <MultiSelect
       clearable

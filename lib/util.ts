@@ -5,7 +5,7 @@ const paginate = (array: [], pageSize: number, pageNumber: number) => {
   return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 };
 
-const isNumber = (n) => {
+const isNumber = (n: any): boolean => {
   return !isNaN(parseFloat(n)) && isFinite(n);
 };
 
@@ -19,12 +19,33 @@ const constructUrl = (params: Partial<Selection>) => {
   return `/?${paramsString.join("&")}#chronik`;
 };
 
-const constructUrlWithQ = (q, params) => {
+interface ConstructUrlWithQParams {
+  [key: string]: any;
+}
+
+const constructUrlWithQ = (
+  q: string | null,
+  params: ConstructUrlWithQParams
+): string => {
   if (q !== null) params["q"] = q;
   return constructUrl(params);
 };
 
-const addMissingYears = (data, arr, minYear = null, maxYear = null) => {
+interface DataItem {
+  year: number;
+}
+
+interface ArrItem {
+  value: string;
+  count: number;
+}
+
+const addMissingYears = (
+  data: DataItem[],
+  arr: ArrItem[],
+  minYear: number | null = null,
+  maxYear: number | null = null
+): ArrItem[] => {
   const years = arr.map(({ value }) => parseInt(value));
   for (const i of _.range(
     maxYear || data[data.length - 1].year,
@@ -35,7 +56,22 @@ const addMissingYears = (data, arr, minYear = null, maxYear = null) => {
   return arr;
 };
 
-const combineArray = (arr1, arr2, count1Label, count2Label) => {
+interface ArrayItem {
+  value: string;
+  count: number;
+  count2?: number;
+  tooltipLabel?: {
+    count: string;
+    count2: string;
+  };
+}
+
+const combineArray = (
+  arr1: ArrayItem[],
+  arr2: ArrayItem[],
+  count1Label: string,
+  count2Label: string
+): ArrayItem[] => {
   for (const x of arr1) {
     const bla = arr2.filter(({ value }) => value === x.value);
     if (bla.length) x.count2 = bla[0].count;
@@ -48,10 +84,10 @@ const combineArray = (arr1, arr2, count1Label, count2Label) => {
 };
 
 export {
-  paginate,
-  isNumber,
-  constructUrl,
-  constructUrlWithQ,
   addMissingYears,
   combineArray,
+  constructUrl,
+  constructUrlWithQ,
+  isNumber,
+  paginate,
 };

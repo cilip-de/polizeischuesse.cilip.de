@@ -2,20 +2,41 @@ import { Text, useMantineTheme } from "@mantine/core";
 import { ResponsiveBar } from "@nivo/bar";
 import { ticks } from "d3-array";
 import _ from "lodash";
-import { countItems } from "../lib/data";
-import { addMissingYears, combineArray } from "../lib/util";
-import { makeDowData } from "../pages/visualisierungen";
+import { countItems } from "../../lib/data";
+import { addMissingYears, combineArray } from "../../lib/util";
+import { makeDowData } from "../../pages/visualisierungen";
 
-const selectNiceTicks = (data, numTicks) => [
-  ...new Set(
-    ticks(0, data.length, numTicks)
-      .concat([0, data.length - 1])
-      .filter((x) => x < data.length)
-      .map((x) => data[x].value)
+interface DataItem {
+  value: string;
+  count: number;
+  count2?: number;
+  tooltipLabel?: {
+    count: string;
+    count2: string;
+    [key: string]: string;
+  };
+}
+
+const selectNiceTicks = (data: DataItem[], numTicks: number): string[] => [
+  ...Array.from(
+    new Set(
+      ticks(0, data.length, numTicks)
+        .concat([0, data.length - 1])
+        .filter((x) => x < data.length)
+        .map((x) => data[x].value)
+    )
   ),
 ];
 
-const tooltip = ({ value, data, id }) => (
+const tooltip = ({
+  value,
+  data,
+  id,
+}: {
+  value: number;
+  data: DataItem;
+  id: string;
+}) => (
   <div>
     <Text
       size="sm"
@@ -26,16 +47,32 @@ const tooltip = ({ value, data, id }) => (
     </Text>
   </div>
 );
-const tooltipOverview = ({ value, data, id }) => (
+
+const tooltipOverview = ({
+  value,
+  data,
+  id,
+}: {
+  value: number;
+  data: DataItem;
+  id: string;
+}) => (
   <div>
     <Text
       size="sm"
       style={{ background: "white", padding: "0 0.1rem", opacity: 0.8 }}
     >
       {data.value}:{" "}
-      {data.tooltipLabel[id] === "hit" && value !== 1 && `${value} Fälle`}
-      {data.tooltipLabel[id] === "hit" && value === 1 && `1 Fall`}
-      {data.tooltipLabel[id] !== "hit" &&
+      {data.tooltipLabel &&
+        data.tooltipLabel[id] === "hit" &&
+        value !== 1 &&
+        `${value} Fälle`}
+      {data.tooltipLabel &&
+        data.tooltipLabel[id] === "hit" &&
+        value === 1 &&
+        `1 Fall`}
+      {data.tooltipLabel &&
+        data.tooltipLabel[id] !== "hit" &&
         `${value} Fälle, auf die die Auswahl nicht zutrifft`}
     </Text>
   </div>

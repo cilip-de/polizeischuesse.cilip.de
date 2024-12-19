@@ -68,8 +68,8 @@ const TAGS = [
 
 const SEARCH_KEYES = ["Name", "Szenarium"];
 
-const countItems = (arr, sort = false) => {
-  const counts = {};
+const countItems = (arr: string[], sort = false) => {
+  const counts: { [key: string]: number } = {};
   for (const y of arr) {
     counts[y] = counts[y] ? counts[y] + 1 : 1;
   }
@@ -96,18 +96,36 @@ const eastStates =
     " "
   );
 
-const setupOptions = (data) => {
-  const year = _.orderBy(countItems(data.map((x) => x.year)), "value", "desc");
+interface OptionItem {
+  value: string;
+  label: string;
+  count: number;
+}
+
+interface SetupOptions {
+  year: OptionItem[];
+  state: OptionItem[];
+  place: OptionItem[];
+  weapon: OptionItem[];
+  age: OptionItem[];
+}
+
+const setupOptions = (data: ProcessedDataItem[]): SetupOptions => {
+  const year = _.orderBy(
+    countItems(data.map((x) => x.year.toString())),
+    "value",
+    "desc"
+  );
   const state = countItems(
     data.map((x) => x.state),
     true
   );
   const place = countItems(
-    data.map((x) => x.Ort),
+    data.map((x) => x.place),
     true
   );
 
-  const weapons = [];
+  const weapons: string[] = [];
   data.forEach((x) => weapons.push(...x.weapon.split(", ")));
   const weapon = countItems(
     weapons.filter((x) => x.length),
@@ -115,7 +133,7 @@ const setupOptions = (data) => {
   );
 
   const age = countItems(
-    data.map((x) => x.age),
+    data.map((x) => x.age.toString()),
     false
   );
 
@@ -127,7 +145,42 @@ const setupOptions = (data) => {
   return { year, state, place, weapon, age };
 };
 
-const preprocessData = (data) => {
+interface RawDataItem {
+  Datum: string;
+  Bundesland: string;
+  Ort: string;
+  Waffen: string;
+  Geschlecht: string;
+  "Anzahl im Einsatz abgegebener polizeilicher Schüsse": string;
+  Schussort: string;
+  Alter: string;
+  [key: string]: any;
+}
+
+interface ProcessedDataItem extends RawDataItem {
+  key: number;
+  year: number;
+  dow: number;
+  dowPrint: string;
+  dom: number;
+  month: number;
+  monthPrint: string;
+  datePrint: string;
+  beforeReunification: boolean;
+  state: string;
+  east: boolean;
+  place: string;
+  weapon: string;
+  sex: string;
+  numShots: string;
+  "Schussort Innenraum": string;
+  "Schussort Außen": string;
+  weiblich: string;
+  männlich: string;
+  age: number | string;
+}
+
+const preprocessData = (data: RawDataItem[]): ProcessedDataItem[] => {
   data = _.orderBy(data, "Datum", "desc");
 
   const dateReunification = dayjs("1990-10-3");
@@ -157,7 +210,7 @@ const preprocessData = (data) => {
     x["Name"].replace(`, ${x.sex}`, "");
 
     if (isNumber(x["Alter"])) {
-      x.age = Math.floor(x["Alter"] / 5) * 5;
+      x.age = Math.floor(Number(x["Alter"]) / 5) * 5;
     } else {
       x.age = "Unbekannt";
     }
@@ -167,18 +220,40 @@ const preprocessData = (data) => {
     }
   });
 
-  return data;
+  return data as ProcessedDataItem[];
 };
 
 let fuse = null;
-let setupProps = null;
+interface DataItem {
+  Datum: string;
+  Bundesland: string;
+  Ort: string;
+  Waffen: string;
+  Geschlecht: string;
+  "Anzahl im Einsatz abgegebener polizeilicher Schüsse": string;
+  Alter: string;
+  [key: string]: any;
+}
+
+interface SetupProps {
+  data: DataItem[];
+  geoData: any;
+  options: ReturnType<typeof setupOptions>;
+  fuse: Fuse<DataItem>;
+  beforeReuni: number;
+  afterReuni: number;
+}
+
+let setupProps: SetupProps | null = null;
 
 const setupData = async () => {
   if (setupProps !== null) return setupProps;
 
-  let data = (await csv(`${HOST}/data.csv`)).filter((x) => x["Fall"]);
+  let data = (await csv(`${HOST}/data.csv`)).filter(
+    (x) => x["Fall"]
+  ) as DataItem[];
 
-  data = preprocessData(data);
+  const processedData = preprocessData(data as RawDataItem[]);
 
   const geoData = await getGeo(data);
 
@@ -200,7 +275,7 @@ const setupData = async () => {
   setupProps = {
     data,
     geoData,
-    options: setupOptions(data),
+    options: setupOptions(processedData),
     fuse,
     beforeReuni,
     afterReuni,
@@ -210,7 +285,7 @@ const setupData = async () => {
 
 const setupTaserData = async () => {
   let data = (await csv(`${HOST}/taser.csv`)).filter((x) => x["Fall"]);
-  return preprocessData(data);
+  return preprocessData(data as RawDataItem[]);
 };
 
 export {

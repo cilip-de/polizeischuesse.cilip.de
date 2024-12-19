@@ -1,6 +1,6 @@
 import { Button, Card, Group, Text, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
-import { VerticalBarChart } from "./charts";
+import { VerticalBarChart } from "./charts/charts";
 
 function VisualizationCard({ data }) {
   const theme = useMantineTheme();
