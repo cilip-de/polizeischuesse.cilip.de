@@ -1,20 +1,23 @@
 import { Text, useMantineTheme } from "@mantine/core";
-import { ResponsiveBar } from "@nivo/bar";
+import { BarDatum, BarTooltipProps, ResponsiveBar } from "@nivo/bar";
 import { ticks } from "d3-array";
 import _ from "lodash";
 import { countItems } from "../../lib/data";
 import { addMissingYears, combineArray } from "../../lib/util";
 import { makeDowData } from "../../pages/visualisierungen";
 
-interface DataItem {
+interface DataItem extends BarDatum {
   value: string;
   count: number;
   count2?: number;
+  count3?: number;
   tooltipLabel?: {
     count: string;
     count2: string;
+    count3: string;
     [key: string]: string;
   };
+  [key: string]: any;
 }
 
 const selectNiceTicks = (data: DataItem[], numTicks: number): string[] => [
@@ -28,15 +31,7 @@ const selectNiceTicks = (data: DataItem[], numTicks: number): string[] => [
   ),
 ];
 
-const tooltip = ({
-  value,
-  data,
-  id,
-}: {
-  value: number;
-  data: DataItem;
-  id: string;
-}) => (
+const tooltip: React.FC<BarTooltipProps<DataItem>> = ({ value, data, id }) => (
   <div>
     <Text
       size="sm"
@@ -80,12 +75,21 @@ const tooltipOverview = ({
 
 const commonProps = {
   indexBy: "value",
-  keys: ["count", "count2"],
+  keys: ["count", "count2", "count3"],
   padding: 0.2,
   tooltip,
 };
 
-const VerticalBarChart = ({ data, numTicks = 3, mobile = false, ...rest }) => {
+const VerticalBarChart = ({
+  data,
+  numTicks = 3,
+  mobile = false,
+  ...rest
+}: {
+  data: DataItem[];
+  numTicks?: number;
+  mobile?: boolean;
+}) => {
   const theme = useMantineTheme();
 
   let legend = undefined;
@@ -93,6 +97,7 @@ const VerticalBarChart = ({ data, numTicks = 3, mobile = false, ...rest }) => {
   if (data[0].tooltipLabel) {
     legend = [
       {
+        dataFrom: "keys",
         data: [
           {
             id: "count",
@@ -104,12 +109,17 @@ const VerticalBarChart = ({ data, numTicks = 3, mobile = false, ...rest }) => {
             label: data[0].tooltipLabel.count2,
             color: theme.colors.indigo[1],
           },
-        ],
+          {
+            id: "count3",
+            label: data[0].tooltipLabel.count3,
+            color: theme.colors.indigo[3],
+          },
+        ].filter((x) => x.label),
         anchor: "bottom-right",
         direction: "column",
         justify: false,
         translateX: mobile ? -30 : 120,
-        translateY: mobile ? 80 : 0,
+        translateY: mobile ? 90 : 0,
         itemsSpacing: 2,
         itemWidth: mobile ? 170 : 100,
         itemHeight: 20,
@@ -140,17 +150,20 @@ const VerticalBarChart = ({ data, numTicks = 3, mobile = false, ...rest }) => {
           fontSize: mobile ? 8 : 12,
         }}
         legends={legend}
-        enableGridY={false}
-        labelSkipHeight={10}
+        enableGridY={rest.gridYValues != null}
         valueFormat={(x) => (x == 0 ? null : x)}
         margin={{
           top: 10,
           right: mobile ? 0 : 214,
           bottom: mobile && data[0].tooltipLabel ? 100 : 30,
-          left: mobile ? 0 : 10,
+          left: mobile ? 0 : rest.axisLeft ? 50 : 10,
         }}
         axisLeft={null}
-        colors={[theme.colors.indigo[2], theme.colors.indigo[1]]}
+        colors={[
+          theme.colors.indigo[2],
+          theme.colors.indigo[1],
+          theme.colors.indigo[3],
+        ]}
         axisBottom={{
           tickValues: selectNiceTicks(data, numTicks),
         }}
@@ -186,6 +199,11 @@ const HorizontalBarChart = ({
             id: "count2",
             label: data[0].tooltipLabel.count2,
             color: theme.colors.indigo[1],
+          },
+          {
+            id: "count3",
+            label: data[0].tooltipLabel.count3,
+            color: theme.colors.indigo[3],
           },
         ],
         anchor: "bottom-right",
@@ -225,7 +243,9 @@ const HorizontalBarChart = ({
       <ResponsiveBar
         legends={legend}
         labelSkipWidth={15}
-        valueFormat={(x) => (formatPerc ? _.round(x * 100, 0) + " %" : x)}
+        valueFormat={(x) =>
+          formatPerc ? _.round(x * 100, 0) + " %" : x.toString()
+        }
         margin={margin}
         layout={"horizontal"}
         axisRight={null}
@@ -269,13 +289,13 @@ const OverviewChart = ({ data, hits, onClick }) => {
         // valueFormat={(x) => (x == 0 ? null : x)}
         margin={{ top: 0, right: 1, bottom: 25, left: 1 }}
         axisLeft={null}
-        colors={["#BFBFC1", "#EAEAEC"]}
+        colors={["#BFBFC1", "#EAEAEC", "#EAEAEC"]}
         axisBottom={{
           tickValues: selectNiceTicks(procData, 0),
         }}
         data={procData}
         indexBy={"value"}
-        keys={["count", "count2"]}
+        keys={["count", "count2", "count3"]}
         // padding={-0.01}
         tooltip={tooltipOverview}
         onClick={onClick}
@@ -301,7 +321,11 @@ const DowChart = ({ data }) => {
         axisRight={null}
         enableGridY={false}
         axisBottom={null}
-        colors={[theme.colors.indigo[2], theme.colors.indigo[1]]}
+        colors={[
+          theme.colors.indigo[2],
+          theme.colors.indigo[1],
+          theme.colors.indigo[3],
+        ]}
         data={dataDow}
         {...commonProps}
       />

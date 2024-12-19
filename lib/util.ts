@@ -60,9 +60,11 @@ interface ArrayItem {
   value: string;
   count: number;
   count2?: number;
+  count3?: number;
   tooltipLabel?: {
     count: string;
     count2: string;
+    count3?: string;
   };
 }
 
@@ -73,8 +75,8 @@ const combineArray = (
   count2Label: string
 ): ArrayItem[] => {
   for (const x of arr1) {
-    const bla = arr2.filter(({ value }) => value === x.value);
-    if (bla.length) x.count2 = bla[0].count;
+    const sameValue = arr2.filter(({ value }) => value === x.value);
+    if (sameValue.length) x.count2 = sameValue[0].count;
     x.tooltipLabel = {
       count: count1Label,
       count2: count2Label,
@@ -83,9 +85,43 @@ const combineArray = (
   return arr1;
 };
 
+const combineThree = (
+  arr1: ArrayItem[],
+  arr2: ArrayItem[],
+  arr3: ArrayItem[],
+  count1Label: string,
+  count2Label: string,
+  count3Label: string
+): ArrayItem[] => {
+  for (const x of arr1) {
+    const sameValue = arr2.filter(({ value }) => value === x.value);
+    if (sameValue.length) x.count2 = sameValue[0].count;
+    x.tooltipLabel = {
+      count: count1Label,
+      count2: count2Label,
+    };
+  }
+  for (const x of arr1) {
+    const sameValue = arr3.filter(({ value }) => value === x.value);
+    if (sameValue.length) x.count3 = sameValue[0].count;
+
+    if (!x.tooltipLabel) {
+      x.tooltipLabel = {
+        count: count1Label,
+        count2: count2Label,
+        count3: count3Label,
+      };
+    } else {
+      x.tooltipLabel.count3 = count3Label;
+    }
+  }
+  return arr1;
+};
+
 export {
   addMissingYears,
   combineArray,
+  combineThree,
   constructUrl,
   constructUrlWithQ,
   isNumber,
