@@ -249,20 +249,20 @@ let setupProps: SetupProps | null = null;
 const setupData = async () => {
   if (setupProps !== null) return setupProps;
 
-  let data = (await csv(`${HOST}/data.csv`)).filter(
+  const data = (await csv(`${HOST}/data.csv`)).filter(
     (x) => x["Fall"]
   ) as DataItem[];
 
   const processedData = preprocessData(data as RawDataItem[]);
 
-  const geoData = await getGeo(data);
+  const geoData = await getGeo(processedData);
 
   const [beforeReuni, afterReuni] = _.map(
     _.partition(data, "beforeReunification"),
     "length"
   );
 
-  fuse = new Fuse(data, {
+  fuse = new Fuse(processedData, {
     minMatchCharLength: 3,
     includeMatches: true,
     findAllMatches: false,
@@ -273,7 +273,7 @@ const setupData = async () => {
   });
 
   setupProps = {
-    data,
+    data: processedData,
     geoData,
     options: setupOptions(processedData),
     fuse,
@@ -284,7 +284,7 @@ const setupData = async () => {
 };
 
 const setupTaserData = async () => {
-  let data = (await csv(`${HOST}/taser.csv`)).filter((x) => x["Fall"]);
+  const data = (await csv(`${HOST}/taser.csv`)).filter((x) => x["Fall"]);
   return preprocessData(data as RawDataItem[]);
 };
 
