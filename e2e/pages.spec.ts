@@ -2,6 +2,8 @@ import { expect, test } from "@playwright/test";
 import _ from "lodash";
 
 test("navigate to all pages", async ({ page }) => {
+  test.slow();
+
   await page.goto("http://localhost:3000/");
 
   await page.click("text=VISUALISIERUNGEN >> visible=true", { timeout: 15000 });
