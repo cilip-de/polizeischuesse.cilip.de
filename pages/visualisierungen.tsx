@@ -1,7 +1,8 @@
-import { Center, Col, Grid, Space, Text, Title } from "@mantine/core";
+import { Col, Grid, Space, Text, Title } from "@mantine/core";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import {
   HorizontalBarChart,
@@ -11,6 +12,8 @@ import HeatMapChart from "../components/charts/HeatMapChart";
 import Layout from "../components/Layout";
 import { countItems, setupData } from "../lib/data";
 import { addMissingYears, combineArray, isNumber } from "../lib/util";
+
+import visCover from "../public/vis_cover.png";
 
 // https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Bevoelkerungsstand/Tabellen/bevoelkerung-nichtdeutsch-laender.html
 // Stand 21. Juni 2021
@@ -255,19 +258,17 @@ const Visualisierungen: NextPage = ({ data, options }) => {
     <Layout
       fullWidth
       cover={
-        <div>
-          <Center>
-            <img
-              src="/vis_cover.png"
-              style={{
-                width: "90%",
-                marginTop: "0.5rem",
-                marginLeft: "5%",
-                marginRight: "5%",
-              }}
-            />
-          </Center>
-        </div>
+        <Image
+          src={visCover}
+          alt="Visualisierungen Cover"
+          style={{
+            width: "90%",
+            height: "auto",
+            marginTop: "0.5rem",
+            marginLeft: "5%",
+            marginRight: "5%",
+          }}
+        />
       }
       otherContent={
         <>

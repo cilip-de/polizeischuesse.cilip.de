@@ -2,7 +2,9 @@ import { Col, Grid, Space, Title } from "@mantine/core";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
+import Image from "next/image";
 import Layout from "../components/Layout";
+import staCov from "../public/statistik_cover.jpg";
 
 const Statistiken: NextPage = ({ data }) => {
   return (
@@ -12,9 +14,17 @@ const Statistiken: NextPage = ({ data }) => {
       title="Offizielle Statistik zu Polizeischüssen"
       description="1974 hat die Ständige Konferenz der Innenminister*innen und -senator*innen der Länder (IMK) die Deutsche Hochschule der Polizei (die damals noch Polizei-Führungsakademie hieß) mit der Erstellung einer jährlichen Schusswaffengebrauchsstatistik beauftragt."
       cover={
-        <div>
-          <img src="/statistik_cover.jpg" style={{ width: "100%" }} />
-        </div>
+        <Image
+          src={staCov}
+          alt="Statistik Cover"
+          style={{
+            width: "90%",
+            height: "auto",
+            marginTop: "0.5rem",
+            marginLeft: "5%",
+            marginRight: "5%",
+          }}
+        />
       }
     >
       <div>

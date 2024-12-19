@@ -1,5 +1,6 @@
-import { Center, Space, Title } from "@mantine/core";
+import { Space, Title } from "@mantine/core";
 import type { NextPage } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import Layout from "../components/Layout";
 
@@ -105,6 +106,8 @@ vertreten durch den Vorstand: Norbert Pütter
 </p>
 <a href="https://datenschutz-generator.de" class="dsg1-6" rel="nofollow" target="_blank">Erstellt mit Datenschutz-Generator.de von RA Dr. Thomas Schwenke</a>`;
 
+import contactCover from "../public/contact_cover.jpg";
+
 const Kontakt: NextPage = () => {
   return (
     <Layout
@@ -113,19 +116,17 @@ const Kontakt: NextPage = () => {
       title="Wie ihr uns erreichen könnt"
       description="und einige rechtliche Informationen"
       cover={
-        <div>
-          <Center>
-            <img
-              src="/contact_cover.jpg"
-              style={{
-                width: "90%",
-                marginTop: "0.5rem",
-                marginLeft: "5%",
-                marginRight: "5%",
-              }}
-            />
-          </Center>
-        </div>
+        <Image
+          src={contactCover}
+          alt="Contact cover"
+          style={{
+            width: "90%",
+            height: "auto",
+            marginTop: "0.5rem",
+            marginLeft: "5%",
+            marginRight: "5%",
+          }}
+        />
       }
       otherContent={
         <>

@@ -12,9 +12,13 @@ import {
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import CaseList from "../components/CaseList";
 import { setupData } from "../lib/data";
+
+import cilipLogo from "../public/cilip-logo-outline.svg";
+import cover from "../public/cover_12.jpg";
 
 const Home: NextPage = ({
   data,
@@ -98,7 +102,11 @@ const Home: NextPage = ({
           </div>
           <Grid>
             <Col span={12} sm={4} style={{ padding: "1rem", paddingTop: "0" }}>
-              <img style={{ width: "100%" }} src="/cover_12.jpg" />{" "}
+              <Image
+                style={{ width: "100%", height: "auto" }}
+                src={cover}
+                alt="Cover image"
+              />
             </Col>
             <Col span={12} sm={8}>
               <div>
@@ -134,9 +142,9 @@ const Home: NextPage = ({
                 <Space h="lg" />
                 <Group position="center">
                   <a href="https://cilip.de">
-                    <img
-                      src="/cilip-logo-outline.svg"
-                      height="80"
+                    <Image
+                      src={cilipLogo}
+                      style={{ height: "80px", width: "auto" }}
                       alt="CILIP logo"
                     />
                   </a>
@@ -171,10 +179,10 @@ const Home: NextPage = ({
               <Group position="right">
                 <div>
                   <a href="https://cilip.de">
-                    <img
-                      src="/cilip-logo-outline.svg"
-                      height="80"
+                    <Image
+                      src={cilipLogo}
                       alt="CILIP logo"
+                      style={{ height: "80px", width: "auto" }}
                     />
                   </a>
                 </div>

@@ -1,7 +1,9 @@
-import { Center } from "@mantine/core";
 import type { NextPage } from "next";
+import Image from "next/image";
 import Link from "next/link";
+
 import Layout from "../components/Layout";
+import medCov from "../public/methodik_cover.jpg";
 
 const Daten: NextPage = () => {
   return (
@@ -11,19 +13,17 @@ const Daten: NextPage = () => {
       title="Methodik: Woher stammen unsere Informationen?"
       description="Seit 1976 sammelt die CILIP Informationen zu polizeilichen Todesschüssen. Wir zählen alle Fälle, in denen Menschen durch eine Polizeikugel gestorben sind."
       cover={
-        <div>
-          <Center>
-            <img
-              src="/methodik_cover.jpg"
-              style={{
-                width: "90%",
-                marginTop: "0.5rem",
-                marginLeft: "5%",
-                marginRight: "5%",
-              }}
-            />
-          </Center>
-        </div>
+        <Image
+          src={medCov}
+          alt="Methodik Cover"
+          style={{
+            width: "90%",
+            height: "auto",
+            marginTop: "0.5rem",
+            marginLeft: "5%",
+            marginRight: "5%",
+          }}
+        />
       }
     >
       <div>

@@ -1,9 +1,11 @@
 import { Col, Grid, Space, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
+import Image from "next/image";
 import Case from "../components/Case";
 import Layout from "../components/Layout";
 import { setupTaserData } from "../lib/data";
+import taserCover from "../public/taser_cover.jpg";
 
 const Taser: NextPage = ({ data }) => {
   return (
@@ -14,13 +16,17 @@ const Taser: NextPage = ({ data }) => {
       title="Tod mit Taser"
       description="Seit 2021 sammeln wir auch Todesfälle nach dem polizeilichen Einsatz von Tasern. Bis vor einigen Jahren waren lediglich Spezialeinheiten damit ausgerüstet. In einigen Bundesländern ist dies bereits auf geschlossene Einheiten der Landespolizei (Bayern) ausgeweitet, in anderen gehören die Geräte zur Grundausstattung mehrerer Polizeipräsidien (Nordrhein-Westfalen, Hessen, Saarland). In Rheinland-Pfalz ist angeblich jeder Streifenwagen mit einem Taser ausgestattet."
       cover={
-        <div>
-          <img
-            src="/taser_cover.jpg"
-            style={{ width: "100%" }}
-            alt="Illustration eines Tasers"
-          />
-        </div>
+        <Image
+          src={taserCover}
+          alt="Taser"
+          style={{
+            width: "90%",
+            height: "auto",
+            marginTop: "0.5rem",
+            marginLeft: "5%",
+            marginRight: "5%",
+          }}
+        />
       }
     >
       <Grid>
