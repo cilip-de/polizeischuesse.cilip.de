@@ -218,7 +218,7 @@ const CaseList = ({
             )}
             {enoughChars && numHits === 0 && (
               <Text>
-                kein polizeilicher Todesschuss entfält auf die Auswahl
+                kein polizeilicher Todesschuss entfällt auf die Auswahl
               </Text>
             )}
             {!enoughChars && (
