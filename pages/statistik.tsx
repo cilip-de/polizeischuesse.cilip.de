@@ -44,13 +44,13 @@ const Statistiken: NextPage<StatistikenProps> = ({
       }
     >
       <div>
-        Sie wird im Frühjahr oder spätestens im Sommer des Folgejahres
-        abgeschlossen und enthält Zahlen zu sämtlichen, durch deutsche
-        Polizist*innen abgegebenen Schüsse. Neben Warnschüssen unterscheidet die
-        Übersicht zwischen dem Schusswaffengebrauch gegen Tiere, Sachen und
-        gegen Personen. Eine weitere Kategorie ist der unzulässige
-        Schusswaffengebrauch, darunter auch gegen Unbeteiligte. Gezählt werden
-        schließlich auch Verletzte und Tote.
+        Sie wird im Frühjahr oder spätestens im Sommer des Folgejahres 
+        abgeschlossen und enthält Zahlen zu sämtlichen, 
+        durch Polizist*innen der Länder und des Bundes abgegebenen Schüssen. 
+        Dieser Schusswaffengebrauch gegen Personen und ihnen zugeordnete Sachen 
+        wird in sechs Kategorien dargestellt. Gezählt werden davon Verletzte und Tote 
+        sowie Suizide von Polizist*innen. Dokumentiert ist außerdem das Töten von Tieren. 
+        Eine weitere Kategorie ist der unzulässige Schusswaffengebrauch. 
         <br />
         <br />
         Erst ab 1984 wird diese jährliche Übersicht auch herausgegeben,
