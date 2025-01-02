@@ -280,7 +280,17 @@ const Visualisierungen: NextPage = ({ data, options }) => {
             <a href="/data.csv" download>
               Rohdaten zum Download
             </a>{" "}
-            an für eigene Auswertungen.
+            an für eigene Auswertungen. Die Daten sind unter der{" "}
+            <a
+              href="https://creativecommons.org/licenses/by/4.0/deed.de"
+              target="_blank"
+              rel="nofollow noreferrer"
+            >
+              CC BY 4.0
+            </a>{" "}
+            Lizenz veröffentlicht. Veröffentlichungen sollten als Quelle
+            &quot;Bürgerrechte &amp; Polizei/CILIP&quot; angeben und auf diese
+            Seite verlinken.
           </Text>
         </>
       }
