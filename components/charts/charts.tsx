@@ -154,7 +154,7 @@ const VerticalBarChart = ({
         valueFormat={(x) => (x == 0 ? null : x)}
         margin={{
           top: 10,
-          right: mobile ? 0 : 214,
+          right: mobile ? 0 : 220,
           bottom: mobile && data[0].tooltipLabel ? 100 : 30,
           left: mobile ? 0 : rest.axisLeft ? 50 : 10,
         }}
