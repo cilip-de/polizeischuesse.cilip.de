@@ -109,7 +109,7 @@ const Daten: NextPage = () => {
         seit 1993 Geschehnisse, in denen Geflüchtete durch staatliche Maßnahmen
         sowie durch rassistische Angriffe der Bevölkerung verletzt wurden oder
         zu Tode kamen. Die Webseite{" "}
-        <a href="https://www.copservation.de/">„Copservation“</a>
+        <a href="https://www.copservation.de/">„Copservation“</a> 
         sammelt indes Übergriffe und Verstöße von Polizist*innen. Eine ähnliche
         Übersicht gibt es auf{" "}
         <a href="https://www.reddit.com/r/pozilei/">Reddit</a>.
