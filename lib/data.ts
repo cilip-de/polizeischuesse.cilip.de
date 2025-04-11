@@ -201,7 +201,8 @@ const preprocessData = (data: RawDataItem[]): ProcessedDataItem[] => {
     x.place = x["Ort"].trim();
     x.weapon = x["Waffen"];
     x.sex = x["Geschlecht"];
-    x.numShots = x["Anzahl im Einsatz abgegebener polizeilicher Schüsse"];
+    x.numShots =
+      x["Anzahl im Einsatz abgegebener polizeilicher Schüsse"] || "0";
     x["Schussort Innenraum"] = x["Schussort"] === "Drin" ? "Ja" : "";
     x["Schussort Außen"] = x["Schussort"] === "Draußen" ? "Ja" : "";
     x["weiblich"] = x.sex == "weiblich" ? "Ja" : "";
