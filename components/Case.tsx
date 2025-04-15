@@ -151,7 +151,7 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
             In {item.place}
             {item.state !== item.place && `, ${item.state}`}
           </Text>
-          <Text size="sm" color="gray" style={{ lineHeight: 1.5 }}>
+          <Text hidden size="sm" color="gray" style={{ lineHeight: 1.5 }}>
             {item.numShots.length > 0 &&
               item.numShots !== "0" &&
               item.numShots !== "1" &&
