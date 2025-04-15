@@ -153,6 +153,7 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
           </Text>
           <Text size="sm" color="gray" style={{ lineHeight: 1.5 }}>
             {item.numShots.length > 0 &&
+              item.numShots !== "0" &&
               item.numShots !== "1" &&
               `Mit ${item.numShots} Schüssen`}
             {item.numShots.length > 0 &&
