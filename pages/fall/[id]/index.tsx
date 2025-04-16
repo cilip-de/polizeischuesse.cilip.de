@@ -15,11 +15,11 @@ const CaseDetail: NextPage = (props) => {
     isTaser ? "Tod nach Tasereinsatz" : "Tod durch Polizeischuss"
   } am ${props.case.datePrint} in ${props.case.place}`;
 
-  const ogImage = `https://polizeischuesse.cilip.de/api/og?line1="am ${
+  const ogImage = `https://polizeischuesse.cilip.de/api/og?line1=am ${
     props.case.datePrint
-  }"&line2="in ${props.case.place}"&title="${
+  }&line2=in ${props.case.place}, ${props.case.state}&title=${
     isTaser ? "Tod nach Tasereinsatz" : "Polizeilicher Todesschuss"
-  }"`;
+  }`;
 
   return (
     <>
