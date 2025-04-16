@@ -42,7 +42,7 @@ const Home: NextPage = ({
         <meta property="og:type" content="article" />
         <meta
           property="og:image"
-          content="https://polizeischuesse.cilip.de/preview.jpg"
+          content="https://polizeischuesse.cilip.de/images/og.jepg"
         />
         <meta property="og:url" content="https://polizeischuesse.cilip.de/" />
         <meta name="twitter:card" content="summary_large_image" />
