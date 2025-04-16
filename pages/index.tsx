@@ -17,8 +17,8 @@ import Link from "next/link";
 import CaseList from "../components/CaseList";
 import { setupData } from "../lib/data";
 
-import cilipLogo from "../public/cilip-logo-outline.svg";
 import cover from "../public/cover_12.jpg";
+import cilipLogo from "../public/images/cilip_new.svg";
 
 const Home: NextPage = ({
   data,
@@ -142,11 +142,7 @@ const Home: NextPage = ({
                 <Space h="lg" />
                 <Group position="center">
                   <a href="https://cilip.de">
-                    <Image
-                      src={cilipLogo}
-                      style={{ height: "80px", width: "auto" }}
-                      alt="CILIP logo"
-                    />
+                    <Image src={cilipLogo} alt="CILIP" />
                   </a>
                 </Group>
                 <Space h="sm" />
