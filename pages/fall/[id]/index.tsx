@@ -14,6 +14,13 @@ const CaseDetail: NextPage = (props) => {
   const smTitle = `${
     isTaser ? "Tod nach Tasereinsatz" : "Tod durch Polizeischuss"
   } am ${props.case.datePrint} in ${props.case.place}`;
+
+  const ogImage = `https://polizeischuesse.cilip.de/api/og?line1="am ${
+    props.case.datePrint
+  }"&line2="in ${props.case.place}"&title="${
+    isTaser ? "Tod nach Tasereinsatz" : "Polizeilicher Todesschuss"
+  }"`;
+
   return (
     <>
       <Head>
@@ -21,10 +28,7 @@ const CaseDetail: NextPage = (props) => {
         <meta name="description" content={props.case["Szenarium"]} />
         <meta property="og:title" content={smTitle} />
         <meta property="og:type" content="article" />
-        <meta
-          property="og:image"
-          content="https://polizeischuesse.cilip.de/preview.jpg"
-        />
+        <meta property="og:image" content={ogImage} />
         <meta
           property="og:url"
           content={`https://polizeischuesse.cilip.de/fall/${props.id}`}
