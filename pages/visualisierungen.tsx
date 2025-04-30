@@ -288,9 +288,9 @@ const Visualisierungen: NextPage = ({ data, options }) => {
             >
               CC BY 4.0
             </a>{" "}
-            Lizenz veröffentlicht. Veröffentlichungen sollten als Quelle
-            &quot;Bürgerrechte &amp; Polizei/CILIP&quot; angeben und auf diese
-            Seite verlinken.
+            Lizenz veröffentlicht. Veröffentlichungen müssen als Quelle
+            &quot;Bürgerrechte &amp; Polizei/CILIP&quot; angeben und auf
+            polizeischuesse.cilip.de verlinken.
           </Text>
         </>
       }

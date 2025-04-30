@@ -270,6 +270,27 @@ const Home: NextPage = ({
         <Space h="xl" />
         <Space h="xl" />
         <Center>
+          <Text
+            size="sm"
+            color="gray"
+            align="center"
+            style={{ maxWidth: "25rem" }}
+          >
+            Alle Daten auf dieser Webseite sind unter der{" "}
+            <a
+              href="https://creativecommons.org/licenses/by/4.0/deed.de"
+              target="_blank"
+              rel="nofollow noreferrer"
+            >
+              CC BY 4.0
+            </a>{" "}
+            Lizenz veröffentlicht. Veröffentlichungen müssen als Quelle
+            "Bürgerrechte & Polizei/CILIP" angeben und auf
+            polizeischuesse.cilip.de verlinken.
+          </Text>
+        </Center>
+        <Space h="xl" />
+        <Center>
           <Text size="sm" color="gray" align="center">
             Umgesetzt von{" "}
             <a
