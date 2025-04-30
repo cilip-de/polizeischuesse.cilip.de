@@ -282,7 +282,7 @@ const setupData = async () => {
   const numShotsThisYear = processedData.filter(
     (x) => x.year === dayjs().year()
   ).length;
-  const averageShotsThisYear = numShotsThisYear / dayjs().month();
+  const averageShotsThisYear = numShotsThisYear / (dayjs().month() + 1);
   // console.log(averageShotsThisYear);
 
   fuse = new Fuse(processedData, {
