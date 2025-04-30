@@ -17,6 +17,8 @@ import Link from "next/link";
 import CaseList from "../components/CaseList";
 import { setupData } from "../lib/data";
 
+import dayjs from "dayjs";
+import _ from "lodash";
 import cover from "../public/cover_12.jpg";
 import cilipLogo from "../public/images/cilip_new.svg";
 
@@ -29,6 +31,7 @@ const Home: NextPage = ({
   maxCases,
   afterReuni,
   beforeReuni,
+  averages,
 }) => {
   return (
     <div>
@@ -36,7 +39,7 @@ const Home: NextPage = ({
         <title>Polizeiliche Todesschüsse ab 1976</title>
         <meta
           name="description"
-          content="Seit der Wiedervereinigung wurden mindestens 307 Personen durch Kugeln der deutschen Polizei getötet. Wir zählen von 1976 bis 1990 außerdem 146 tödliche Schüsse allein in Westdeutschland."
+          content={`Seit der Wiedervereinigung wurden mindestens ${afterReuni} Personen durch Kugeln der deutschen Polizei getötet. Wir zählen von 1976 bis 1990 außerdem ${beforeReuni} tödliche Schüsse allein in Westdeutschland.`}
         />
         <meta property="og:title" content="Polizeiliche Todesschüsse ab 1976" />
         <meta property="og:type" content="article" />
@@ -168,6 +171,15 @@ const Home: NextPage = ({
                 waren, sich womöglich in einer psychischen Ausnahmesituation
                 befanden oder, wie es häufig geschieht, in ihrer eigenen Wohnung
                 erschossen wurden.
+              </Text>
+              <Space h="sm" />
+              <Text size="sm" color="gray">
+                Im Durchschnitt sind seit der Wiedervereinigung{" "}
+                {_.round(averages[0], 1)} Personen pro Monat von der Polizei
+                erschossen wurden. Im Jahr {dayjs().year()} wurden bis jetzt
+                durchschnittlich {_.round(averages[2], 1)} Personen pro Monat
+                erschossen. Im letzten Jahr waren es {_.round(averages[1], 1)}{" "}
+                Menschen pro Monat.
               </Text>
             </Col>
             <Col span={12} sm={4} className="only-non-mobile">
@@ -330,7 +342,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const selection = { q: "", p: "1", ...context.query };
 
   const { q } = selection;
-  const { data, geoData, options, fuse, beforeReuni, afterReuni } =
+  const { data, geoData, options, fuse, beforeReuni, afterReuni, averages } =
     await setupData();
 
   if (selection.p !== null) selection.p = parseInt(selection.p);
@@ -356,6 +368,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       maxCases: data.length,
       beforeReuni,
       afterReuni,
+      averages,
     },
   };
 };

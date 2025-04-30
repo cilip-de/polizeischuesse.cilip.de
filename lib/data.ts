@@ -243,6 +243,7 @@ interface SetupProps {
   fuse: Fuse<DataItem>;
   beforeReuni: number;
   afterReuni: number;
+  averages: number[];
 }
 
 let setupProps: SetupProps | null = null;
@@ -258,10 +259,31 @@ const setupData = async () => {
 
   const geoData = await getGeo(processedData);
 
+  // Use data and not processedData to get the correct counts
   const [beforeReuni, afterReuni] = _.map(
     _.partition(data, "beforeReunification"),
     "length"
   );
+
+  const numMonthsSinceGermanReunification = dayjs().diff(
+    dayjs("1990-10-3"),
+    "month"
+  );
+
+  const averageMonthlyShots = afterReuni / numMonthsSinceGermanReunification;
+  // console.log(averageMonthlyShots);
+
+  const numShotsLastYear = processedData.filter(
+    (x) => x.year === dayjs().year() - 1
+  ).length;
+  const averageShotsLastYear = numShotsLastYear / 12;
+  // console.log(averageShotsLastYear);
+
+  const numShotsThisYear = processedData.filter(
+    (x) => x.year === dayjs().year()
+  ).length;
+  const averageShotsThisYear = numShotsThisYear / dayjs().month();
+  // console.log(averageShotsThisYear);
 
   fuse = new Fuse(processedData, {
     minMatchCharLength: 3,
@@ -280,6 +302,7 @@ const setupData = async () => {
     fuse,
     beforeReuni,
     afterReuni,
+    averages: [averageMonthlyShots, averageShotsLastYear, averageShotsThisYear],
   };
   return setupProps;
 };
