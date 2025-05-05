@@ -72,6 +72,8 @@ const sentryWebpackPluginOptions = {
   project: "polizeischuesse",
   token: process.env.SENTRY_TOKEN,
 
+  // Hides source maps from generated client bundles
+  hideSourceMaps: true,
   sourceMaps: { disable: true },
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
