@@ -17,7 +17,13 @@ export default async function handler(
   let data = (await setupData()).data;
 
   const shootings = data.map((caseItem: any) => ({
-    title: `Polizeilicher Todesschuss am ${caseItem.datePrint} in ${caseItem.Ort}, ${caseItem.state}`,
+    title: `Polizeilicher Todesschuss am ${caseItem.datePrint} in ${
+      caseItem.Ort
+    }${
+      caseItem.state && caseItem.state !== caseItem.Ort
+        ? `, ${caseItem.state}`
+        : ""
+    }`,
     description: caseItem.Szenarium || "Keine Beschreibung verfügbar.",
     link: `https://polizeischuesse.cilip.de/fall/${caseItem.Fall}`,
     pubDate: new Date(caseItem.Datum).toUTCString(),
@@ -25,7 +31,11 @@ export default async function handler(
 
   const taser = await setupTaserData();
   const taserShootings = taser.map((caseItem: any) => ({
-    title: `Tod nach Tasereinsatz am ${caseItem.datePrint} in ${caseItem.Ort}, ${caseItem.state}`,
+    title: `Tod nach Tasereinsatz am ${caseItem.datePrint} in ${caseItem.Ort}${
+      caseItem.state && caseItem.state !== caseItem.Ort
+        ? `, ${caseItem.state}`
+        : ""
+    }`,
     description: caseItem.Szenarium || "Keine Beschreibung verfügbar.",
     link: `https://polizeischuesse.cilip.de/fall/${caseItem.Fall}`,
     pubDate: new Date(caseItem.Datum).toUTCString(),
