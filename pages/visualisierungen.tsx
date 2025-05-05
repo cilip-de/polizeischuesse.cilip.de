@@ -13,6 +13,7 @@ import Layout from "../components/Layout";
 import { countItems, setupData } from "../lib/data";
 import { addMissingYears, combineArray, isNumber } from "../lib/util";
 
+import dayjs from "dayjs";
 import visCover from "../public/vis_cover.png";
 
 // https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Bevoelkerungsstand/Tabellen/bevoelkerung-nichtdeutsch-laender.html
@@ -178,7 +179,7 @@ const MiddleContent = ({ children }) => (
   </Grid>
 );
 
-const Visualisierungen: NextPage = ({ data, options }) => {
+const Visualisierungen: NextPage = ({ data, options, averages }) => {
   const boolData = boolAtr.map((x) => ({
     count: data.filter((d) => d[x].includes("Ja")).length / data.length,
     value: x
@@ -301,6 +302,16 @@ const Visualisierungen: NextPage = ({ data, options }) => {
     >
       <Space h="xl" />
       <CasesPerYear data={data} />
+
+      <MiddleContent>
+        <Text>
+          Seit 1990 erschoss die Polizei im Durchschnitt{" "}
+          {_.round(averages[0], 1)} Personen pro Monat. Im Jahr {dayjs().year()}{" "}
+          sind es bis jetzt {_.round(averages[2], 1)} Personen, im Jahr zuvor
+          waren es {_.round(averages[1], 1)}.
+        </Text>
+      </MiddleContent>
+
       <Space h="xl" />
       <Space h="xl" />
       <CasesPerYearWeapon data={data} />
@@ -487,12 +498,13 @@ const Visualisierungen: NextPage = ({ data, options }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { data, options } = await setupData();
+  const { data, options, averages } = await setupData();
 
   return {
     props: {
       data,
       options,
+      averages,
     },
   };
 };

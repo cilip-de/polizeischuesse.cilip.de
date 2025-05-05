@@ -270,19 +270,21 @@ const setupData = async () => {
     "month"
   );
 
+  const now = dayjs();
   const averageMonthlyShots = afterReuni / numMonthsSinceGermanReunification;
   // console.log(averageMonthlyShots);
 
   const numShotsLastYear = processedData.filter(
-    (x) => x.year === dayjs().year() - 1
+    (x) => x.year === now.year() - 1
   ).length;
   const averageShotsLastYear = numShotsLastYear / 12;
   // console.log(averageShotsLastYear);
 
   const numShotsThisYear = processedData.filter(
-    (x) => x.year === dayjs().year()
+    (x) => x.year === now.year()
   ).length;
-  const averageShotsThisYear = numShotsThisYear / (dayjs().month() + 1);
+  const averageShotsThisYear =
+    numShotsThisYear / (now.month() + now.date() / now.daysInMonth());
   // console.log(averageShotsThisYear);
 
   fuse = new Fuse(processedData, {

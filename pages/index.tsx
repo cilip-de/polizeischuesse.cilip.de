@@ -17,8 +17,6 @@ import Link from "next/link";
 import CaseList from "../components/CaseList";
 import { setupData } from "../lib/data";
 
-import dayjs from "dayjs";
-import _ from "lodash";
 import cover from "../public/cover_12.jpg";
 import cilipLogo from "../public/images/cilip_new.svg";
 
@@ -173,14 +171,6 @@ const Home: NextPage = ({
                 erschossen wurden.
               </Text>
               <Space h="sm" />
-              <Text size="sm" color="gray">
-                Im Durchschnitt sind seit der Wiedervereinigung{" "}
-                {_.round(averages[0], 1)} Personen pro Monat von der Polizei
-                erschossen wurden. Im Jahr {dayjs().year()} wurden bis jetzt
-                durchschnittlich {_.round(averages[2], 1)} Personen pro Monat
-                erschossen. Im letzten Jahr waren es {_.round(averages[1], 1)}{" "}
-                Menschen pro Monat.
-              </Text>
             </Col>
             <Col span={12} sm={4} className="only-non-mobile">
               <Space h="xl" />
