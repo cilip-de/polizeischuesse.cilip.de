@@ -20,7 +20,26 @@ export default class _Document extends Document {
       })()`;
     return (
       <Html lang="de">
-        <Head />
+        <Head>
+          <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="Polizeiliche Todesschüsse"
+            href="/api/feed?type=shootings"
+          />
+          <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="Todesfälle nach Tasereinsatz"
+            href="/api/feed?type=taser"
+          />
+          <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="Alle Fälle"
+            href="/api/feed?type=all"
+          />
+        </Head>
         <body>
           <Main />
           <NextScript />

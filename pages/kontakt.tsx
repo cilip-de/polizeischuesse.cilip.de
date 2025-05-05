@@ -135,8 +135,11 @@ const Kontakt: NextPage = () => {
           <p>
             Schreibt uns bitte eine E-Mail an{" "}
             <a href="mailto:info@cilip">info@cilip.de</a> und folgt uns auf
-            Twitter <a href="https://twitter.com/cilip_de">@cilip_de</a> und
-            Mastodon{" "}
+            BlueSky{" "}
+            <a href="https://bsky.app/profile/cilip-de.bsky.social">
+              @cilip-de.bsky.social
+            </a>{" "}
+            und Mastodon{" "}
             <a href="https://social.tchncs.de/@cilip">
               @social.tchncs.de/@cilip
             </a>
@@ -152,7 +155,20 @@ const Kontakt: NextPage = () => {
             .
           </p>
           <Space />
-          <Title order={2}>Impressum</Title>
+          <Title order={2}>RSS-Feeds</Title>
+          <Link href="/api/feed?type=shootings" passHref>
+            RSS: Polizeiliche Todesschüsse
+          </Link>
+          <br />
+          <Link href="/api/feed?type=taser" passHref>
+            RSS: Todesfälle nach Tasereinsatz
+          </Link>
+          <br />
+          <Link href="/api/feed?type=all" passHref>
+            RSS: Alle Fälle
+          </Link>
+          <Space h="xl" />
+          <Title order={3}>Impressum</Title>
           <Space />
         </>
       }
