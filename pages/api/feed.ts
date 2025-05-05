@@ -28,10 +28,11 @@ export default async function handler(
       .replace(/'/g, "&apos;");
 
   const feed = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Polizeiliche Todesschüsse</title>
     <link>https://polizeischuesse.cilip.de</link>
+    <atom:link href="https://polizeischuesse.cilip.de/api/feed" rel="self" type="application/rss+xml" />
     <description>Chronik der polizeilichen Todesschüsse in Deutschland</description>
     <language>de-de</language>
     ${blogPosts
@@ -42,6 +43,7 @@ export default async function handler(
       <link>${escapeXml(post.link)}</link>
       <description>${escapeXml(post.description)}</description>
       <pubDate>${post.pubDate}</pubDate>
+      <guid>${escapeXml(post.link)}</guid>
     </item>`
       )
       .join("")}
