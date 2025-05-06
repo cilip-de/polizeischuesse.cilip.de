@@ -1,4 +1,6 @@
 import { Center, Col, Grid, Space, Text, Title } from "@mantine/core";
+import { ResponsiveLine } from "@nivo/line";
+import { csv } from "d3-fetch";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
@@ -7,7 +9,87 @@ import Layout from "../components/Layout";
 import { setupTaserData } from "../lib/data";
 import taserCover from "../public/taser_cover.jpg";
 
-const Taser: NextPage = ({ data }) => {
+// make sure parent container have a defined height when using
+// responsive component, otherwise height will be 0 and
+// no chart will be rendered.
+// website examples showcase many properties,
+// you'll often use just a few of them.
+const MyResponsiveLine = ({ data }) => (
+  <ResponsiveLine
+    data={data}
+    lineWidth={3}
+    colors={{ scheme: "set1" }}
+    margin={{ top: 50, right: 20, bottom: 50, left: 60 }}
+    xScale={{ type: "point" }}
+    yScale={{
+      type: "linear",
+    }}
+    // yFormat=" >-.2f"
+    axisTop={null}
+    axisRight={null}
+    axisBottom={{
+      tickSize: 5,
+      tickPadding: 5,
+      tickRotation: 0,
+      legend: "Jahr",
+      legendOffset: 36,
+      legendPosition: "middle",
+      // truncateTickAt: 0,
+    }}
+    axisLeft={{
+      tickValues: 5,
+      tickSize: 5,
+      tickPadding: 5,
+      tickRotation: 0,
+      legend: "Anzahl",
+      legendOffset: -40,
+      legendPosition: "middle",
+      // truncateTickAt: 0,
+    }}
+    // enableGridX={false}
+    // enableGridY={false}
+    // enablePoints={true}
+    gridXValues={5}
+    gridYValues={5}
+    pointSize={20}
+    pointColor={{ theme: "background" }}
+    pointBorderWidth={2}
+    pointBorderColor={{ from: "seriesColor" }}
+    pointLabelYOffset={-12}
+    useMesh={true}
+    legends={[
+      {
+        anchor: "bottom-right",
+        direction: "column",
+        justify: false,
+
+        itemBackground: "white",
+        // translateX: 100,
+        // translateY: 0,
+        itemsSpacing: 0,
+        itemDirection: "left-to-right",
+        itemWidth: 150,
+        itemHeight: 20,
+        itemOpacity: 0.75,
+        symbolSize: 12,
+        symbolShape: "circle",
+        symbolBorderColor: "rgba(0, 0, 0, .5)",
+        effects: [
+          {
+            on: "hover",
+            style: {
+              itemBackground: "rgba(0, 0, 0, .03)",
+              itemOpacity: 1,
+            },
+          },
+        ],
+      },
+    ]}
+    role="application"
+  />
+);
+
+const Taser: NextPage = ({ data, stats }) => {
   return (
     <Layout
       fullWidth
@@ -53,6 +135,13 @@ const Taser: NextPage = ({ data }) => {
         </Col>
       </Grid>
       <Space />
+      <Title style={{ marginTop: "1rem" }} order={2} id="statistik">
+        Taser-Statistik
+      </Title>
+      <div style={{ height: "40vh", width: "90%", margin: "0 auto" }}>
+        <MyResponsiveLine data={stats} />
+      </div>
+      <Space />
       <Title style={{ marginTop: "1rem" }} order={2} id="chronik">
         Chronik der Tasertoten
       </Title>
@@ -89,9 +178,33 @@ const Taser: NextPage = ({ data }) => {
 export const getServerSideProps: GetServerSideProps = async () => {
   const data = await setupTaserData();
 
+  const rawStats = await csv(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/official_taser_statistics.csv`
+  );
+
+  const keys = Object.keys(rawStats[0]);
+  console.log("keys", keys);
+
+  const stats = keys.slice(1).map((key) => {
+    const data = rawStats.map((x) => ({
+      x: x[keys[0]],
+      y: +x[key],
+    }));
+
+    return {
+      id: key,
+      data,
+    };
+  });
+
+  console.log("rawStats", rawStats);
+
+  console.log("stats", JSON.stringify(stats));
+
   return {
     props: {
       data,
+      stats,
     },
   };
 };
