@@ -32,3 +32,10 @@ jobs:
           http_url: ${{ secrets.OFFICIAL_REMOTE }}
           downloaded_filename: public/official_statistics.csv
           mask: true
+
+      - name: Fetch official taser data
+        uses: githubocto/flat@v3
+        with:
+          http_url: ${{ secrets.OFFICIAL_TASER_REMOTE }}
+          downloaded_filename: public/official_taser_statistics.csv
+          mask: true
