@@ -82,7 +82,7 @@ const Statistiken: NextPage<StatistikenProps> = ({
       <Space h="xl" />
       <Space h="xl" />
       <ShortsPerYear wData={wData} />
-      <SimpleChart data={s1} title={"Verletze durch Polizeischüsse"} />
+      <SimpleChart data={s1} title={"Verletzte durch Polizeischüsse"} />
       <SimpleChart data={s2} title={"Schüsse gegen Tiere"} />
       <SimpleChart data={s3} title={"Selbsttötung von Polizist:innen"} />
       <SimpleChart data={s4} title={"Unbeabsichtigte Schussauslösung"} />
