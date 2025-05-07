@@ -131,7 +131,7 @@ const Taser: NextPage = ({ data, stats }) => {
       metaImg="taser_cover.jpg"
       metaPath="taser"
       title="Tod mit Taser"
-      description="Seit 2021 sammeln wir auch Todesfälle nach dem polizeilichen Einsatz von Tasern. Bis vor einigen Jahren waren lediglich Spezialeinheiten damit ausgerüstet. In einigen Bundesländern ist dies bereits auf geschlossene Einheiten der Landespolizei (Bayern) ausgeweitet, in anderen gehören die Geräte zur Grundausstattung mehrerer Polizeipräsidien (Nordrhein-Westfalen, Hessen, Saarland). In Rheinland-Pfalz ist angeblich jeder Streifenwagen mit einem Taser ausgestattet."
+      description='Wir sammeln auch Todesfälle nach dem polizeilichen Einsatz von Tasern (die es nach offizieller Darstellung nicht gibt). Bis vor einigen Jahren waren lediglich Spezialeinheiten mit diesen "Distanz-Elektroimpulsgeräten" ausgerüstet, nach und nach weiten Bundesländer dies auf den Streifendienst aus. Andere erproben den Einsatz an ausgewählten Direktionen in Pilotprojekten.'
       cover={
         <Image
           src={taserCover}
