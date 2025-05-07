@@ -46,12 +46,9 @@ const MyResponsiveLine = ({ data }) => (
       legendPosition: "middle",
       // truncateTickAt: 0,
     }}
-    // enableGridX={false}
-    // enableGridY={false}
-    // enablePoints={true}
     gridXValues={5}
     gridYValues={5}
-    pointSize={20}
+    pointSize={10}
     pointColor={{ theme: "background" }}
     pointBorderWidth={2}
     pointBorderColor={{ from: "seriesColor" }}
@@ -62,7 +59,6 @@ const MyResponsiveLine = ({ data }) => (
         anchor: "bottom-right",
         direction: "column",
         justify: false,
-
         itemBackground: "white",
         // translateX: 100,
         // translateY: 0,
@@ -185,17 +181,20 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const keys = Object.keys(rawStats[0]);
   console.log("keys", keys);
 
-  const stats = keys.slice(1).map((key) => {
-    const data = rawStats.map((x) => ({
-      x: x[keys[0]],
-      y: +x[key],
-    }));
+  const stats = keys
+    .slice(1)
+    .reverse()
+    .map((key) => {
+      const data = rawStats.map((x) => ({
+        x: x[keys[0]],
+        y: +x[key],
+      }));
 
-    return {
-      id: key,
-      data,
-    };
-  });
+      return {
+        id: key,
+        data,
+      };
+    });
 
   console.log("rawStats", rawStats);
 
