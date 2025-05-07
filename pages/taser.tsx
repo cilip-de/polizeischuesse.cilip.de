@@ -189,7 +189,7 @@ const Taser: NextPage = ({ data, stats }) => {
           medizinische Versorgung. Dass Menschen auch nach PsychKG eingewiesen
           werden, verweist darauf, dass sie nicht zwingend wegen des
           Taser-Einsatzes behandelt werden mussten. Siehe auch die{" "}
-          <a href="#dokumente">Dokumente weiter unten </a>.
+          <a href="#dokumente">Dokumente weiter unten</a>.
         </Text>
       </div>
       <Space />
