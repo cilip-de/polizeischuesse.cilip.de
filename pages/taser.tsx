@@ -176,6 +176,25 @@ const Taser: NextPage = ({ data, stats }) => {
       <div style={{ height: "40vh", width: "90%", margin: "0 auto" }}>
         <MyResponsiveLine data={stats} />
       </div>
+      <div>
+        <Text size="sm" color="gray" align="left">
+          Seit 2020 führt das Polizeitechnische Institut der Deutschen
+          Hochschule der Polizei nach einem Beschluss der IMK Informationen zu
+          Taser-Einsätzen aus Ländern und Bund zusammen. Diese konnten wir durch
+          eine IFG-Anfrage befreien. Unsere Gesamtzahlen stammen aus
+          Einzelangaben zu: Spezialeinheiten (alle Bundesländer, Bundespolizei
+          und Zoll), Streifendienst (Stand Mai 2025: Bayern, Brandenburg,
+          Bremen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland,
+          Schleswig-Holstein), Pilotprojekte (Stand Mai 2025: Berlin, Hamburg,
+          Hessen, Schleswig-Holstein, Bundespolizei). In den Statistiken werden
+          (anders als zum Schusswaffengebrauch) auch Alter, Geschlecht und
+          Alkohol- oder Drogenkonsum der betroffenen Person genannt, außerdem
+          Verletzungen und eine anschließend notwendige medizinische Versorgung.
+          Dass Menschen auch nach PsychKG eingewiesen werden, verweist darauf,
+          dass sie nicht zwingend wegen des Taser-Einsatzes behandelt werden
+          mussten.
+        </Text>
+      </div>
       <Space />
       <Title style={{ marginTop: "1rem" }} order={2} id="chronik">
         Chronik der Tasertoten
@@ -240,7 +259,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   );
 
   const keys = Object.keys(rawStats[0]);
-  console.log("keys", keys);
+  // console.log("keys", keys);
 
   const stats = keys
     .slice(1)
@@ -257,9 +276,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
       };
     });
 
-  console.log("rawStats", rawStats);
+  // console.log("rawStats", rawStats);
 
-  console.log("stats", JSON.stringify(stats));
+  // console.log("stats", JSON.stringify(stats));
 
   return {
     props: {
