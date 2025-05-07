@@ -9,6 +9,45 @@ import Layout from "../components/Layout";
 import { setupTaserData } from "../lib/data";
 import taserCover from "../public/taser_cover.jpg";
 
+const links = [
+  [
+    "https://archiv.cilip.de/Dokumente/2020_Taser_Wirkbetrieb.pdf",
+    "2020 Taser Wirkbetrieb",
+  ],
+  [
+    "https://archiv.cilip.de/Dokumente/2020_Taser-Pilotprojekte.pdf",
+    "2020 Taser Pilotprojekte",
+  ],
+  ["https://archiv.cilip.de/Dokumente/2020_Taser_SEK.pdf", "2020 Taser SEK"],
+  [
+    "https://archiv.cilip.de/Dokumente/2021_Taser_Wirkbetrieb.pdf",
+    "2021 Taser Wirkbetrieb",
+  ],
+  [
+    "https://archiv.cilip.de/Dokumente/2021_Taser-Pilotprojekte.pdf",
+    "2021 Taser Pilotprojekte",
+  ],
+  ["https://archiv.cilip.de/Dokumente/2021_Taser_SEK.pdf", "2021 Taser SEK"],
+  [
+    "https://archiv.cilip.de/Dokumente/2022_Taser_Wirkbetrieb.pdf",
+    "2022 Taser Wirkbetrieb",
+  ],
+  [
+    "https://archiv.cilip.de/Dokumente/2022_Taser-Pilotprojekte.pdf",
+    "2022 Taser Pilotprojekte",
+  ],
+  ["https://archiv.cilip.de/Dokumente/2022_Taser_SEK.pdf", "2022 Taser SEK"],
+  [
+    "https://archiv.cilip.de/Dokumente/2023_Taser_Wirkbetrieb.pdf",
+    "2023 Taser Wirkbetrieb",
+  ],
+  [
+    "https://archiv.cilip.de/Dokumente/2023_Taser-Pilotprojekte.pdf",
+    "2023 Taser Pilotprojekte",
+  ],
+  ["https://archiv.cilip.de/Dokumente/2023_Taser_SEK.pdf", "2023 Taser SEK"],
+];
+
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
@@ -147,6 +186,28 @@ const Taser: NextPage = ({ data, stats }) => {
           <Case item={x} key={x.key} isTaser />
         ))}
       </div>
+      <Title style={{ marginTop: "2rem" }} order={2} id="dokumente">
+        Dokumente zur Taser-Statistik
+      </Title>
+      <div style={{ textAlign: "center", marginTop: "2rem" }}>
+        <Grid>
+          {links.map((x) => (
+            <Col span={4} key={x[1]}>
+              <a
+                target="_blank"
+                href={x[0]}
+                rel="noreferrer"
+                style={{ fontFamily: "monospace" }}
+              >
+                {x[1]}
+              </a>
+            </Col>
+          ))}
+        </Grid>
+      </div>
+      <Space h="xl" />
+      <Space h="xl" />
+
       <Center>
         <Text
           size="sm"
