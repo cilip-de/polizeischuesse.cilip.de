@@ -84,8 +84,16 @@ const Statistiken: NextPage<StatistikenProps> = ({
       <ShortsPerYear wData={wData} />
       <SimpleChart data={s1} title={"Verletzte durch Polizeischüsse"} />
       <SimpleChart data={s2} title={"Schüsse gegen Tiere"} />
-      <SimpleChart data={s3} title={"Selbsttötung von Polizist:innen"} />
-      <SimpleChart data={s4} title={"Unbeabsichtigte Schussauslösung"} />
+      <SimpleChart
+        data={s3}
+        title={"Selbsttötung von Polizist:innen"}
+        style={{ maxWidth: "30rem", margin: "0 auto" }}
+      />
+      <SimpleChart
+        data={s4}
+        title={"Unbeabsichtigte Schussauslösung"}
+        style={{ maxWidth: "30rem", margin: "0 auto" }}
+      />
     </Layout>
   );
 };

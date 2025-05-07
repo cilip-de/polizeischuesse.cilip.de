@@ -48,7 +48,15 @@ const ShortsPerYear = ({ wData }) => {
   );
 };
 
-const SimpleChart = ({ data, title }) => {
+const SimpleChart = ({
+  data,
+  title,
+  style,
+}: {
+  data: any[];
+  title: string;
+  style?: React.CSSProperties;
+}) => {
   const sums = data.map((x) => x.count);
   const maxValues = Math.max(...sums);
 
@@ -59,7 +67,7 @@ const SimpleChart = ({ data, title }) => {
 
   const tickValues = [0, realMax / 2, realMax];
   return (
-    <div>
+    <div style={style}>
       <Title order={3} align="center">
         {title}{" "}
         <span style={{ whiteSpace: "nowrap" }}>
