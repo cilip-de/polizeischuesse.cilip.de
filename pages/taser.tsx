@@ -58,7 +58,7 @@ const MyResponsiveLine = ({ data }) => (
     data={data}
     lineWidth={3}
     colors={{ scheme: "set1" }}
-    margin={{ top: 50, right: 20, bottom: 50, left: 60 }}
+    margin={{ top: 20, right: 20, bottom: 50, left: 60 }}
     xScale={{ type: "point" }}
     yScale={{
       type: "linear",
@@ -178,21 +178,22 @@ const Taser: NextPage = ({ data, stats }) => {
           Hochschule der Polizei nach einem Beschluss der IMK Informationen zu
           Taser-Einsätzen aus Ländern und Bund zusammen. Diese konnten wir durch
           eine IFG-Anfrage befreien. Unsere Gesamtzahlen stammen aus
-          Einzelangaben zu: Spezialeinheiten (alle Bundesländer, Bundespolizei
-          und Zoll), Streifendienst (Stand Mai 2025: Bayern, Brandenburg,
-          Bremen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland,
-          Schleswig-Holstein), Pilotprojekte (Stand Mai 2025: Berlin, Hamburg,
-          Hessen, Schleswig-Holstein, Bundespolizei). In den Statistiken werden
-          (anders als zum Schusswaffengebrauch) auch Alter, Geschlecht und
-          Alkohol- oder Drogenkonsum der betroffenen Person genannt, außerdem
-          Verletzungen und eine anschließend notwendige medizinische Versorgung.
-          Dass Menschen auch nach PsychKG eingewiesen werden, verweist darauf,
-          dass sie nicht zwingend wegen des Taser-Einsatzes behandelt werden
-          mussten.
+          Einzelangaben zu: <b>Spezialeinheiten</b> (alle Bundesländer,
+          Bundespolizei und Zoll), <b>Streifendienst</b> (Stand Mai 2025:
+          Bayern, Brandenburg, Bremen, Nordrhein-Westfalen, Rheinland-Pfalz,
+          Saarland, Schleswig-Holstein), <b>Pilotprojekte</b> (Stand Mai 2025:
+          Berlin, Hamburg, Hessen, Schleswig-Holstein, Bundespolizei). In den
+          Statistiken werden (anders als zum Schusswaffengebrauch) auch Alter,
+          Geschlecht und Alkohol- oder Drogenkonsum der betroffenen Person
+          genannt, außerdem Verletzungen und eine anschließend notwendige
+          medizinische Versorgung. Dass Menschen auch nach PsychKG eingewiesen
+          werden, verweist darauf, dass sie nicht zwingend wegen des
+          Taser-Einsatzes behandelt werden mussten. Siehe auch die{" "}
+          <a href="#dokumente">Dokumente weiter unten </a>.
         </Text>
       </div>
       <Space />
-      <Title style={{ marginTop: "1rem" }} order={2} id="chronik">
+      <Title style={{ marginTop: "2rem" }} order={2} id="chronik">
         Chronik der Tasertoten
       </Title>
       <Space />
@@ -267,7 +268,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
       }));
 
       return {
-        id: key,
+        id: key
+          .replaceAll("erfolgreich", '"erfolgreich"')
+          .replaceAll("ohne Verletzung", '"ohne Verletzung"')
+          .replaceAll("unbewaffnet", '"unbewaffnet"'),
         data,
       };
     });
