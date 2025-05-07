@@ -159,13 +159,9 @@ const Taser: NextPage = ({ data, stats }) => {
             <a href="https://verfassungsblog.de/polizei-und-taser/">
               seinem Beitrag im Verfassungsblog
             </a>
-            .
-            <br />
-            <br />
-            Unsere Liste zeigt (mit Stand November 2021), dass Menschen
-            größtenteils innerhalb von Gebäuden getasert werden. Bei allen
-            Getöteten lassen die Presseberichte auf eine psychische
-            Ausnahmesituation bzw. Drogenkonsum schließen.
+            . Unsere Liste zeigt, dass viele Getötete innerhalb von Gebäuden
+            getasert wurden; die Bericht dazu lassen auch oft auf eine
+            psychische Ausnahmesituation bzw. Drogenkonsum schließen.
           </div>
         </Col>
       </Grid>
