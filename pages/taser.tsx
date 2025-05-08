@@ -182,13 +182,16 @@ const Taser: NextPage = ({ data, stats }) => {
           Bundespolizei und Zoll), <b>Streifendienst</b> (Stand Mai 2025:
           Bayern, Brandenburg, Bremen, Nordrhein-Westfalen, Rheinland-Pfalz,
           Saarland, Schleswig-Holstein), <b>Pilotprojekte</b> (Stand Mai 2025:
-          Berlin, Hamburg, Hessen, Schleswig-Holstein, Bundespolizei). In den
-          Statistiken werden (anders als zum Schusswaffengebrauch) auch Alter,
-          Geschlecht und Alkohol- oder Drogenkonsum der betroffenen Person
-          genannt, außerdem Verletzungen und eine anschließend notwendige
-          medizinische Versorgung. Dass Menschen auch nach PsychKG eingewiesen
-          werden, verweist darauf, dass sie nicht zwingend wegen des
-          Taser-Einsatzes behandelt werden mussten. Siehe auch die{" "}
+          Berlin, Hamburg, Hessen, Schleswig-Holstein, Bundespolizei).
+          Dokumentiert wird darin aber <b>nur das Ziehen der Waffe</b> - die
+          Zahl von Androhungen des Tasereinsatzes ohne anschließendes Auslösen
+          lag etwa in NRW im Jahr 2023 um den Faktor 3 höher. In den Statistiken
+          werden (anders als zum Schusswaffengebrauch) auch Alter, Geschlecht
+          und Alkohol- oder Drogenkonsum der betroffenen Person genannt,
+          außerdem Verletzungen und eine anschließend notwendige medizinische
+          Versorgung. Dass Menschen auch nach PsychKG eingewiesen werden,
+          verweist darauf, dass sie nicht zwingend wegen des Taser-Einsatzes
+          behandelt werden mussten. Siehe auch die{" "}
           <a href="#dokumente">Dokumente weiter unten</a>.
         </Text>
       </div>
