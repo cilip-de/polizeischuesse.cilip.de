@@ -1,3 +1,5 @@
+// FIXME: Use the case id via get a get param and not all the text
+
 import { ImageResponse } from "@vercel/og";
 
 export const config = {
@@ -26,7 +28,6 @@ export default async function handler(req: Request) {
           height: "100%",
           flexDirection: "column",
           alignItems: "center",
-          // background: "lavender",
           justifyContent: "center",
           padding: 40,
           color: "black",
@@ -80,9 +81,4 @@ export default async function handler(req: Request) {
       ],
     }
   );
-}
-
-async function fetchFont(url: string) {
-  const res = await fetch(url);
-  return res.arrayBuffer();
 }

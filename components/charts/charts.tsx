@@ -1,6 +1,7 @@
 import { Text, useMantineTheme } from "@mantine/core";
 import { BarDatum, BarTooltipProps, ResponsiveBar } from "@nivo/bar";
 import { ticks } from "d3-array";
+import dayjs from "dayjs";
 import _ from "lodash";
 import { countItems } from "../../lib/data";
 import { addMissingYears, combineArray } from "../../lib/util";
@@ -289,9 +290,23 @@ const OverviewChart = ({ data, hits, onClick }) => {
         // valueFormat={(x) => (x == 0 ? null : x)}
         margin={{ top: 0, right: 1, bottom: 25, left: 1 }}
         axisLeft={null}
-        colors={["#BFBFC1", "#EAEAEC", "#EAEAEC"]}
+        colors={(x) => {
+          if (x.indexValue === dayjs().year().toString()) {
+            return (
+              {
+                count: theme.colors.indigo[2],
+                count2: theme.colors.indigo[1],
+                count3: theme.colors.indigo[1],
+              }[x.id] || theme.colors.indigo[2]
+            );
+          }
+          return (
+            { count: "#BFBFC1", count2: "#EAEAEC", count3: "#EAEAEC" }[x.id] ||
+            "#BFBFC1" // Default color
+          );
+        }}
         axisBottom={{
-          tickValues: selectNiceTicks(procData, 0),
+          tickValues: selectNiceTicks(procData, 4),
         }}
         data={procData}
         indexBy={"value"}

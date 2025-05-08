@@ -53,7 +53,7 @@ const Home: NextPage = ({
       <main>
         <Container>
           <Space h="xl" />
-          <div className="only-mobile">
+          <div className="only-mobile" style={{ marginBottom: "2rem" }}>
             <Group position="center">
               <div style={{ width: "45%" }}>
                 <Link href="/visualisierungen" passHref>
@@ -143,7 +143,11 @@ const Home: NextPage = ({
                 <Space h="lg" />
                 <Group position="center">
                   <a href="https://cilip.de">
-                    <Image src={cilipLogo} alt="CILIP" />
+                    <Image
+                      src={cilipLogo}
+                      alt="CILIP"
+                      style={{ maxWidth: "100%" }}
+                    />
                   </a>
                 </Group>
                 <Space h="sm" />
