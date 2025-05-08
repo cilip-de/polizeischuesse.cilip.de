@@ -21,6 +21,7 @@
     "@nivo/heatmap": "^0.93.0",
     "@nivo/line": "^0.93.0",
     "@sentry/nextjs": "^9.15.0",
+    "@tabler/icons-react": "^3.31.0",
     "@vercel/og": "^0.6.8",
     "d3-array": "^3.2.4",
     "d3-dsv": "^3.0.1",
