@@ -263,7 +263,7 @@ const Home: NextPage = ({
         <Space h="xl" />
         <Space h="xl" />
         <Center>
-          <Text style={{ maxWidth: "25rem" }} align="center">
+          <Text style={{ maxWidth: "25rem", padding: "0.5rem" }} align="center">
             Die Zeitschrift Bürgerrechte & Polizei/CILIP liefert seit 1978
             kritische Analysen zur Politik und Praxis Innerer Sicherheit in
             Deutschland und Europa.
@@ -280,7 +280,7 @@ const Home: NextPage = ({
             size="sm"
             color="gray"
             align="center"
-            style={{ maxWidth: "25rem" }}
+            style={{ maxWidth: "25rem", padding: "0.5rem" }}
           >
             Alle Daten auf dieser Webseite sind unter der{" "}
             <a
@@ -297,7 +297,12 @@ const Home: NextPage = ({
         </Center>
         <Space h="xl" />
         <Center>
-          <Text size="sm" color="gray" align="center">
+          <Text
+            size="sm"
+            color="gray"
+            align="center"
+            style={{ maxWidth: "25rem", padding: "0.5rem" }}
+          >
             Umgesetzt von{" "}
             <a
               style={{ textDecoration: "inherit" }}

@@ -211,7 +211,8 @@ const HorizontalBarChart = ({
             label: data[0].tooltipLabel.count3,
             color: theme.colors.indigo[3],
           },
-        ],
+        ].filter((x) => x.label),
+
         anchor: "bottom-right",
         direction: "column",
         justify: false,

@@ -292,9 +292,26 @@ const CaseList = ({
         )}
 
         {enoughChars && resultList.map((x) => <Case item={x} key={x.key} />)}
-        {enoughChars && (
+        {enoughChars && numHits > PAGE_SIZE && (
           <Center>
             <Pagination
+              className="only-non-mobile"
+              total={totalPages}
+              page={p}
+              onChange={(newPage) =>
+                router.push(
+                  constructUrlWithQ(q, {
+                    ...selection,
+                    p: newPage,
+                  }),
+                  undefined,
+                  { scroll: false }
+                )
+              }
+            />
+            <Pagination
+              className="only-mobile"
+              size={"sm"}
               total={totalPages}
               page={p}
               onChange={(newPage) =>
