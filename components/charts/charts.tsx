@@ -21,11 +21,16 @@ interface DataItem extends BarDatum {
   [key: string]: any;
 }
 
-const selectNiceTicks = (data: DataItem[], numTicks: number): string[] => [
+const selectNiceTicks = (
+  data: DataItem[],
+  numTicks: number,
+  startOffset = 0,
+  endOffset = 0
+): string[] => [
   ...Array.from(
     new Set(
-      ticks(0, data.length, numTicks)
-        .concat([0, data.length - 1])
+      ticks(startOffset, data.length, numTicks - endOffset)
+        .concat([startOffset, data.length - 1 - endOffset])
         .filter((x) => x < data.length)
         .map((x) => data[x].value)
     )
@@ -288,7 +293,7 @@ const OverviewChart = ({ data, hits, onClick }) => {
         enableGridY={false}
         enableLabel={false}
         // valueFormat={(x) => (x == 0 ? null : x)}
-        margin={{ top: 0, right: 1, bottom: 25, left: 1 }}
+        margin={{ top: 0, right: 0, bottom: 25, left: 0 }}
         axisLeft={null}
         colors={(x) => {
           if (x.indexValue === dayjs().year().toString()) {
@@ -306,7 +311,7 @@ const OverviewChart = ({ data, hits, onClick }) => {
           );
         }}
         axisBottom={{
-          tickValues: selectNiceTicks(procData, 4),
+          tickValues: selectNiceTicks(procData, 5, 1, 1),
         }}
         data={procData}
         indexBy={"value"}
