@@ -28,7 +28,7 @@ export default async function handler(req: Request) {
           alignItems: "center",
           // background: "lavender",
           justifyContent: "center",
-          padding: 50,
+          padding: 40,
           color: "black",
         }}
       >
@@ -36,6 +36,7 @@ export default async function handler(req: Request) {
           style={{
             opacity: 1,
             textAlign: "center",
+            lineHeight: 1,
             fontSize: 128,
             fontFamily: "'Inter', sans-serif",
           }}
@@ -46,8 +47,8 @@ export default async function handler(req: Request) {
           style={{
             color: "black",
             textAlign: "center",
-            marginTop: 20,
-            fontSize: 50,
+            marginTop: 40,
+            fontSize: 70,
             fontFamily: "'Inter', sans-serif",
           }}
         >
@@ -58,7 +59,7 @@ export default async function handler(req: Request) {
             color: "black",
             textAlign: "center",
             marginTop: 20,
-            fontSize: 50,
+            fontSize: 60,
             fontFamily: "'Inter', sans-serif",
             marginBottom: 100,
           }}
