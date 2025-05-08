@@ -110,7 +110,7 @@ const CaseDetail: NextPage = (props) => {
           </Center>
           <Space h="xl" />
         </div>
-        <Text align="center">
+        <Text align="center" style={{ marginBottom: "5rem" }}>
           <Link href={isTaser ? "/taser" : "/"}>
             Zurück zur Chronik mit allen Fällen
           </Link>
