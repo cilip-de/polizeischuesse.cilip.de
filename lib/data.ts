@@ -13,8 +13,10 @@ dayjs.extend(localeData);
 const PAGE_SIZE = 20;
 const SELECTABLE = ["year", "state", "place", "age"];
 
+// Fixme
 let HOST = "http://localhost:3000";
-if (process.env.NODE_ENV === "production") HOST = "http://cilip.app.vis.one";
+if (process.env.NODE_ENV === "production")
+  HOST = "http://polizeischuesse.cilip.de";
 
 // value, column, positive label, negative label
 const TAGS = [
