@@ -59,7 +59,7 @@ const Home: NextPage = ({
               alt="Nominiert Grimme Online Award 2025"
               style={{
                 position: "fixed",
-                right: 5,
+                left: 5,
                 top: 5,
                 height: "80px",
                 width: "auto",
