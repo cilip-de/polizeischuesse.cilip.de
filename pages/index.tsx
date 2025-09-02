@@ -19,7 +19,6 @@ import { setupData } from "../lib/data";
 
 import cover from "../public/cover_12.jpg";
 import cilipLogo from "../public/images/cilip_new.svg";
-import goa2025 from "../public/images/grimme-online-2025.jpg";
 
 const Home: NextPage = ({
   data,
@@ -52,40 +51,6 @@ const Home: NextPage = ({
       </Head>
 
       <main>
-        <Group position="center" className="only-non-mobile">
-          <a href="https://www.grimme-online-award.de/2025/nominierte/nominierte-detail/d/chronik-polizeilicher-todesschuesse-1976-2025">
-            <Image
-              src={goa2025}
-              alt="Nominiert Grimme Online Award 2025"
-              style={{
-                position: "fixed",
-                left: 5,
-                top: 5,
-                height: "80px",
-                width: "auto",
-                zIndex: 1000,
-                borderRadius: "4px",
-              }}
-            />
-          </a>
-        </Group>
-        <Group position="center" className="only-mobile">
-          <a href="https://www.grimme-online-award.de/2025/nominierte/nominierte-detail/d/chronik-polizeilicher-todesschuesse-1976-2025">
-            <Image
-              src={goa2025}
-              alt="Nominiert Grimme Online Award 2025"
-              style={{
-                // position: "fixed",
-                // right: 5,
-                // top: 5,
-                height: "80px",
-                width: "auto",
-                zIndex: 1000,
-                borderRadius: "4px",
-              }}
-            />
-          </a>
-        </Group>
         <Container>
           <Space h="xl" />
           <div className="only-mobile" style={{ marginBottom: "2rem" }}>
