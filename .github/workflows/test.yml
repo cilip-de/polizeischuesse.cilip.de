@@ -26,6 +26,8 @@ jobs:
       - run: npm ci
       - run: npx playwright install chromium
       - run: npm run build
-      - run: npm start &
-      - run: npx wait-on http://localhost:3000 --timeout 30000
+      - run: |
+          npm start > /dev/null 2>&1 &
+          sleep 5
+          npx wait-on http://localhost:3000 --timeout 60000
       - run: npm test
