@@ -21,10 +21,11 @@ jobs:
           echo "NEXT_PUBLIC_BASE_URL='http://localhost:3000'" >> .env.local
       - uses: actions/setup-node@v2
         with:
-          node-version: "18"
+          node-version: "22"
       - run: npx playwright install-deps
       - run: npm ci
       - run: npx playwright install chromium
       - run: npm run build
       - run: npm start &
+      - run: npx wait-on http://localhost:3000 --timeout 30000
       - run: npm test
