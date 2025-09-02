@@ -39,3 +39,4 @@ data-wrangling/.ipynb_checkpoints
 
 # Sentry Config File
 .env.sentry-build-plugin
+.claude/settings.local.json
