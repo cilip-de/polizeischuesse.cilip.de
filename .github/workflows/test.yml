@@ -25,9 +25,10 @@ jobs:
       - run: npx playwright install-deps
       - run: npm ci
       - run: npx playwright install chromium
-      - run: npm run build
+      - run: npm run build  
       - run: |
           npm run dev &
           echo "Waiting for server to start..."
-          npx wait-on http://localhost:3000 --timeout 60000 --verbose
+          sleep 15
+          echo "Server should be ready now"
       - run: npm test
