@@ -1,7 +1,6 @@
 import { GlobalStyles, MantineProvider, NormalizeCSS } from "@mantine/core";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import StatusBar from "../components/StatusBar";
 import "../styles/globals.css";
 
 export default function App(props: AppProps) {
@@ -44,7 +43,6 @@ export default function App(props: AppProps) {
       >
         <NormalizeCSS />
         <GlobalStyles />
-        <StatusBar />
         <Component {...pageProps} />
       </MantineProvider>
     </>
