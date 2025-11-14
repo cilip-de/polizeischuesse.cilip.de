@@ -332,7 +332,7 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
           </Text>
         </>
       }
-      metaImg="vis_sm_preview.png"
+      metaImg="api/og-viz"
       metaPath="visualisierungen"
       title="Visualisierungen der Todesschüsse"
       description="Wir haben unsere gesammelten Polizeischüsse umfangreich analysiert und zeigen u. a. wie sich polizeiliche Todesschüsse auf Wochtentage verteilen und das Opfer häufiger Stichwaffen, früher hingegen Schusswaffen besaßen."
