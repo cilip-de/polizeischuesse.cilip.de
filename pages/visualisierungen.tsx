@@ -159,6 +159,42 @@ const CasesPerYearWeapon = ({ data }) => {
   );
 };
 
+const CasesPerYearPsych = ({ data }) => {
+  const noPsychData = countItems(
+    data
+      .filter(({ psych }) => !psych)
+      .map(({ year }) => year)
+  );
+  const psychData = countItems(
+    data
+      .filter(({ psych }) => psych)
+      .map(({ year }) => year)
+  );
+
+  const procData = combineArray(
+    addMissingYears(data, noPsychData),
+    psychData,
+    "Keine psych. Ausnahmesituation",
+    "Psych. Ausnahmesituation"
+  );
+
+  return (
+    <div>
+      <Title order={3} align="center">
+        Todesschüsse {data[data.length - 1].year}–{data[0].year}, Hinweise auf
+        psychische Ausnahmesituation
+      </Title>
+      <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
+      <VerticalBarChart
+        data={_.orderBy(procData, "value")}
+        numTicks={5}
+        mobile
+      />
+      <Space h="lg" />
+    </div>
+  );
+};
+
 const makeDowData = (data) => {
   const dataDow = countItems(
     _.orderBy(data, "dow", "desc").map(({ dowPrint }) => dowPrint)
@@ -331,6 +367,17 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
         </Text>
       </MiddleContent>
       {/* <WeaponChart data={data} /> */}
+      <Space h="xl" />
+      <Space h="xl" />
+      <CasesPerYearPsych data={data} />
+      <MiddleContent>
+        <Text>
+          In vielen Fällen befanden sich die Getöteten in einer psychischen
+          Ausnahmesituation. Die Polizei wird häufig gerufen, wenn Menschen in
+          einer Krise sind und professionelle Hilfe benötigen würden. Oft
+          eskaliert die Situation tödlich.
+        </Text>
+      </MiddleContent>
       <Space h="xl" />
       <Space h="xl" />
       <Space h="xl" />
