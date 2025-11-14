@@ -7,6 +7,23 @@ body {
 }
 
 a {
+  color: #228be6;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #1c7ed6;
+  text-decoration: underline;
+}
+
+a:focus {
+  outline: 2px solid #228be6;
+  outline-offset: 2px;
+}
+
+/* For links that should inherit color (like in cards or special contexts) */
+a[style*="color: inherit"],
+a[style*="inherit"] {
   color: inherit;
 }
 
@@ -16,6 +33,34 @@ button a {
 
 * {
   box-sizing: border-box;
+}
+
+/* Skip link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Enhanced focus indicators */
+*:focus-visible {
+  outline: 2px solid #228be6;
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #228be6;
+  outline-offset: 2px;
 }
 
 .mantine-Pagination-active {

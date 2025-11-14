@@ -138,6 +138,7 @@ const CaseList = ({
           <AnchorHeading order={2} id="chronik">
             Chronik
           </AnchorHeading>
+          <div role="search" aria-label="Suche und Filter für polizeiliche Todesschüsse">
           <Grid style={{ marginBottom: "1rem", marginTop: "0.5rem" }}>
             {[
               ["year", "Jahr"],
@@ -186,6 +187,7 @@ const CaseList = ({
             </Col>
           </Grid>
           {overChart}
+          </div>
         </Col>
         <Col span={4} className="only-non-mobile">
           <Map
@@ -204,7 +206,12 @@ const CaseList = ({
       </Grid>
 
       <div style={{ minHeight: "100rem" }}>
-        <div className="only-mobile">
+        <div
+          className="only-mobile"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           <Center style={{ marginBottom: "1rem", marginTop: "1rem" }}>
             {enoughChars && numHits > 1 && numHits !== maxCases && (
               <Text>
@@ -235,6 +242,9 @@ const CaseList = ({
                 marginBottom: "2rem",
                 marginTop: "0rem",
               }}
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
             >
               {enoughChars && numHits > 1 && numHits !== maxCases && (
                 <Text color="gray">
@@ -274,21 +284,26 @@ const CaseList = ({
         </Grid>
         {enoughChars && maxCases !== numHits && (
           <Center style={{ marginBottom: "2rem" }}>
-            <Text
-              color="gray"
+            <button
               onClick={() => {
                 router.push("/#chronik", undefined, { scroll: false });
                 setSearchedData(null);
                 setSearchedQ("");
               }}
-              size="sm"
               style={{
+                background: "none",
+                border: "none",
+                padding: "0.25rem 0.5rem",
                 cursor: "pointer",
                 textDecoration: "underline",
+                color: "#868e96",
+                fontSize: "0.875rem",
+                font: "inherit",
               }}
+              aria-label="Auswahl zurücksetzen und alle Fälle anzeigen"
             >
               Auswahl zurücksetzen
-            </Text>
+            </button>
           </Center>
         )}
 

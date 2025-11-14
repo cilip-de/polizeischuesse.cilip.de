@@ -33,8 +33,14 @@ const AnchorHeading = ({ id, children, style, ...titleProps }: AnchorHeadingProp
       <Title id={id} {...titleProps} style={{ margin: 0 }}>
         {children}
       </Title>
-      <div
+      <button
         onClick={handleClick}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
         style={{
           opacity: isHovered || clipboard.copied ? 1 : 0,
           transition: "opacity 0.2s",
@@ -46,16 +52,20 @@ const AnchorHeading = ({ id, children, style, ...titleProps }: AnchorHeadingProp
           fontSize: "0.875rem",
           userSelect: "none",
           flexShrink: 0,
+          background: "none",
+          border: "none",
+          padding: "0.25rem",
         }}
         title={clipboard.copied ? "Link kopiert!" : "Link kopieren"}
+        aria-label={clipboard.copied ? "Link kopiert" : "Link zur Überschrift kopieren"}
       >
-        <IconLink size={20} />
+        <IconLink size={20} aria-hidden="true" />
         {clipboard.copied && (
           <span style={{ fontSize: "0.75rem", whiteSpace: "nowrap" }}>
             Kopiert!
           </span>
         )}
-      </div>
+      </button>
     </div>
   );
 };

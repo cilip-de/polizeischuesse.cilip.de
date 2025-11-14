@@ -90,6 +90,8 @@ const HeatMapChart = ({ data, mobile = false }) => {
     <div
       style={{ height: mobile ? "600px" : "800px" }}
       className={mobile ? "only-mobile" : "only-non-mobile"}
+      role="img"
+      aria-label="Heatmap-Diagramm zeigt prozentuale Verteilung von Merkmalen polizeilicher Todesschüsse nach Bundesland"
     >
       <ResponsiveHeatMap
         data={ansFixed}

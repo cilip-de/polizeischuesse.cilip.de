@@ -36,7 +36,11 @@ const Map = ({ makersData, setInputPlace }) => {
   if (!isClient) return null;
 
   return (
-    <div suppressHydrationWarning>
+    <div
+      suppressHydrationWarning
+      role="img"
+      aria-label={`Karte von Deutschland mit ${markers.length} markierten Orten von polizeilichen Todesschüssen. Klicken Sie auf die Markierungen um nach Ort zu filtern.`}
+    >
       <ComposableMap
         projection="geoAzimuthalEqualArea"
         height={1100}
@@ -44,6 +48,7 @@ const Map = ({ makersData, setInputPlace }) => {
           rotate: [-10.4, -51.5, 0],
           scale: 7900,
         }}
+        aria-hidden="true"
       >
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
@@ -68,7 +73,16 @@ const Map = ({ makersData, setInputPlace }) => {
               onMouseOver={() => setShowMarker([name])}
               onClick={() => setInputPlace(name)}
               onMouseOut={debounceClear}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setInputPlace(name);
+                }
+              }}
               style={{ cursor: "pointer" }}
+              tabIndex={0}
+              role="button"
+              aria-label={`${name}: ${count} ${count === 1 ? 'Fall' : 'Fälle'}`}
             />
           </Marker>
         ))}

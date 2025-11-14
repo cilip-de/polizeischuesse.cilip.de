@@ -150,6 +150,8 @@ const VerticalBarChart = ({
       style={{
         height: mobile ? 300 : 200,
       }}
+      role="img"
+      aria-label="Balkendiagramm der Datenverteilung"
     >
       <ResponsiveBar
         theme={{
@@ -246,6 +248,8 @@ const HorizontalBarChart = ({
     <div
       className={mobile ? "only-mobile" : "only-non-mobile"}
       style={{ height: 20 * data.length + margin.top + margin.bottom }}
+      role="img"
+      aria-label="Horizontales Balkendiagramm der Datenverteilung"
     >
       <ResponsiveBar
         legends={legend}
@@ -288,7 +292,11 @@ const OverviewChart = ({ data, hits, onClick }) => {
   );
 
   return (
-    <div style={{ height: 120 }}>
+    <div
+      style={{ height: 120 }}
+      role="img"
+      aria-label="Übersichtsdiagramm mit jährlicher Verteilung der Fälle. Klicken Sie auf einen Balken um nach Jahr zu filtern."
+    >
       <ResponsiveBar
         animate={false}
         enableGridY={false}
@@ -335,7 +343,11 @@ const DowChart = ({ data }) => {
   const margin = { top: 10, right: 10, bottom: 10, left: 70 };
 
   return (
-    <div style={{ height: 20 * dataDow.length + margin.top + margin.bottom }}>
+    <div
+      style={{ height: 20 * dataDow.length + margin.top + margin.bottom }}
+      role="img"
+      aria-label="Balkendiagramm der Verteilung nach Wochentag"
+    >
       <ResponsiveBar
         margin={margin}
         layout={"horizontal"}

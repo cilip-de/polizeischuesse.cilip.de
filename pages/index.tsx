@@ -34,6 +34,9 @@ const Home: NextPage = ({
 }) => {
   return (
     <div>
+      <a href="#main-content" className="skip-link">
+        Zum Hauptinhalt springen
+      </a>
       <Head>
         <title>Polizeiliche Todesschüsse ab 1976</title>
         <meta
@@ -51,7 +54,7 @@ const Home: NextPage = ({
         <link href="https://@social.tchncs.de/@cilip" rel="me"></link>
       </Head>
 
-      <main>
+      <main id="main-content">
         <Group position="center" className="only-non-mobile">
           <a href="https://www.grimme-online-award.de/2025/nominierte/nominierte-detail/d/chronik-polizeilicher-todesschuesse-1976-2025">
             <Image

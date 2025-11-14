@@ -40,6 +40,10 @@ export default function Layout({
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
+      <a href="#main-content" className="skip-link">
+        Zum Hauptinhalt springen
+      </a>
+
       <Container>
         <a
           style={{ display: "none" }}
@@ -49,9 +53,7 @@ export default function Layout({
           Mastodon
         </a>
         <Space />
-        <span
-          role="navigation"
-          style={{ textDecoration: "underline", cursor: "pointer" }}
+        <button
           onClick={() => {
             // hotfix
             router.push("/");
@@ -60,9 +62,19 @@ export default function Layout({
             // if (window.history.state.idx === 0) router.push("/");
             // else router.back();
           }}
+          style={{
+            background: "none",
+            border: "none",
+            padding: 0,
+            textDecoration: "underline",
+            cursor: "pointer",
+            font: "inherit",
+            color: "inherit",
+          }}
+          aria-label="Zurück zur Startseite"
         >
           {"« zurück"}
-        </span>
+        </button>
         <Space />
 
         <Grid>
@@ -81,7 +93,7 @@ export default function Layout({
         <Grid>
           <Col span={4} md={4}></Col>
           <Col span={12} md={fullWidth ? 12 : 8}>
-            <main>{children}</main>
+            <main id="main-content">{children}</main>
           </Col>
         </Grid>
         <Space h="lg" />

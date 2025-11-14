@@ -28,7 +28,11 @@ const WeaponChart = ({ data }) => {
   ];
 
   return (
-    <div style={{ height: "300px" }}>
+    <div
+      style={{ height: "300px" }}
+      role="img"
+      aria-label="Liniendiagramm zeigt zeitliche Entwicklung der Bewaffnung der Opfer mit Schusswaffen, Stichwaffen und Gas-/Schreckschusswaffen"
+    >
       <ResponsiveLine
         data={procData}
         margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
