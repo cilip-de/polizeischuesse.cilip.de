@@ -14,6 +14,11 @@ interface StatistikenProps {
   pdfs: {
     documents: { title: string; site_url: string }[];
   };
+  wData: any[];
+  s1: any[];
+  s2: any[];
+  s3: any[];
+  s4: any[];
 }
 
 const Statistiken: NextPage<StatistikenProps> = ({
@@ -60,11 +65,15 @@ const Statistiken: NextPage<StatistikenProps> = ({
           mehreren Anfragen nach dem Informationsfreiheitsgesetz
         </a>{" "}
         veröffentlichen wir die Schusswaffengebrauchsstatistik erstmals
-        komplett.
+        komplett. Die aus den PDFs extrahierten Daten stehen auch als{" "}
+        <a href="/official_statistics.csv" download>
+          CSV-Datei zum Download
+        </a>{" "}
+        zur Verfügung.
       </div>
       <Space h="xl" />
-      <AnchorHeading order={3} id="faelle-von-polizeilichem-schusswaffengebrauch">
-        Fälle von polizeilichem Schusswaffengebrauch
+      <AnchorHeading order={3} id="offizielle-statistiken">
+        Offizielle Statistiken (PDF-Dokumente)
       </AnchorHeading>
       <Space h="xl" />
       <Grid>
@@ -83,13 +92,27 @@ const Statistiken: NextPage<StatistikenProps> = ({
       </Grid>
       <Space h="xl" />
       <Space h="xl" />
+      <AnchorHeading order={3} id="visualisierungen">
+        Visualisierungen der offiziellen Statistiken
+      </AnchorHeading>
+      <Space h="xl" />
+      <div>
+        Um die Daten aus den oben verlinkten PDF-Dokumenten zugänglicher und
+        verständlicher zu machen, haben wir die statistischen Angaben extrahiert
+        und in den folgenden Visualisierungen aufbereitet. Die Diagramme zeigen
+        die zeitliche Entwicklung verschiedener Kategorien des polizeilichen
+        Schusswaffengebrauchs: Warnschüsse, Schüsse gegen Personen und Sachen,
+        Verletzte, Schusswaffengebrauch gegen Tiere sowie Selbsttötungen und
+        unbeabsichtigte Schussauslösungen von Polizistinnen und Polizisten.
+      </div>
+      <Space h="xl" />
       <Space h="xl" />
       <ShortsPerYear wData={wData} />
       <SimpleChart data={s1} title={"Verletzte durch Polizeischüsse"} />
       <SimpleChart data={s2} title={"Schüsse gegen Tiere"} />
       <SimpleChart
         data={s3}
-        title={"Selbsttötung von Polizist:innen"}
+        title={"Selbsttötungen und Selbsttötungsversuche von Polizistinnen und Polizisten"}
         style={{ maxWidth: "30rem", margin: "0 auto" }}
       />
       <SimpleChart

@@ -126,24 +126,28 @@ const HeatMapChart = ({ data, mobile = false }) => {
         motionConfig="gentle"
         hoverTarget="cell"
         tooltip={(data) => (
-          <div
-            style={{
-              padding: 12,
-              color: "black",
-              background: "white",
-              border: "1px solid #ccc",
-            }}
-          >
-            {data.cell.serieId} und {data.cell.data.x}: {data.cell.value}% der{" "}
-            {
-              perStateCounts[
-                data.cell.serieId.replace(
-                  "Mecklenburg-Vorp.",
-                  "Mecklenburg-Vorpommern"
-                )
-              ]
-            }{" "}
-            Fälle
+          <div>
+            <Text
+              size="sm"
+              style={{
+                background: "white",
+                padding: "0.3rem 0.5rem",
+                opacity: 0.95,
+              }}
+            >
+              <strong>{data.cell.serieId}</strong>
+              <br />
+              <strong>{data.cell.data.x}:</strong> {data.cell.value}% der{" "}
+              {
+                perStateCounts[
+                  data.cell.serieId.replace(
+                    "Mecklenburg-Vorp.",
+                    "Mecklenburg-Vorpommern"
+                  )
+                ]
+              }{" "}
+              Fälle
+            </Text>
           </div>
         )}
       />

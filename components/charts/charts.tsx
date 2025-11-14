@@ -7,6 +7,7 @@ import { countItems } from "../../lib/data";
 import { addMissingYears, combineArray } from "../../lib/util";
 import { makeDowData } from "../../pages/visualisierungen";
 
+
 interface DataItem extends BarDatum {
   value: string;
   count: number;
@@ -41,7 +42,7 @@ const tooltip: React.FC<BarTooltipProps<DataItem>> = ({ value, data, id }) => (
   <div>
     <Text
       size="sm"
-      style={{ background: "white", padding: "0 0.1rem", opacity: 0.8 }}
+      style={{ background: "white", padding: "0.3rem 0.5rem", opacity: 0.95 }}
     >
       {data.value}: {value}
       {data.tooltipLabel != null && `, ${data.tooltipLabel[id]}`}
@@ -61,7 +62,7 @@ const tooltipOverview = ({
   <div>
     <Text
       size="sm"
-      style={{ background: "white", padding: "0 0.1rem", opacity: 0.8 }}
+      style={{ background: "white", padding: "0.3rem 0.5rem", opacity: 0.95 }}
     >
       {data.value}:{" "}
       {data.tooltipLabel &&
@@ -95,12 +96,14 @@ const VerticalBarChart = ({
   data: DataItem[];
   numTicks?: number;
   mobile?: boolean;
+  tooltip?: any;
+  [key: string]: any;
 }) => {
   const theme = useMantineTheme();
 
   let legend = undefined;
 
-  if (data[0].tooltipLabel) {
+  if (data && data.length > 0 && data[0].tooltipLabel) {
     legend = [
       {
         dataFrom: "keys",
@@ -144,6 +147,22 @@ const VerticalBarChart = ({
     ];
   }
 
+  // Get the visible tick values from the x-axis
+  const visibleTicks = new Set(selectNiceTicks(data, numTicks));
+
+  // Custom label function: only show labels where x-axis label is also shown
+  const labelFormatter = (d: any) => {
+    const value = d.value;
+    // Don't show label for zero values
+    if (value == 0) return "";
+
+    // Only show label if this bar's x-axis label is visible
+    if (visibleTicks.has(d.indexValue)) {
+      return value;
+    }
+    return "";
+  };
+
   return (
     <div
       className={mobile ? "only-mobile" : "only-non-mobile"}
@@ -159,11 +178,11 @@ const VerticalBarChart = ({
         }}
         legends={legend}
         enableGridY={rest.gridYValues != null}
-        valueFormat={(x) => (x == 0 ? null : x)}
+        label={labelFormatter}
         margin={{
           top: 10,
           right: mobile ? 0 : 220,
-          bottom: mobile && data[0].tooltipLabel ? 100 : 30,
+          bottom: mobile && data && data.length > 0 && data[0].tooltipLabel ? 100 : 30,
           left: mobile ? 0 : rest.axisLeft ? 50 : 10,
         }}
         axisLeft={null}
@@ -194,7 +213,7 @@ const HorizontalBarChart = ({
 
   let legend = undefined;
 
-  if (data[0].tooltipLabel) {
+  if (data && data.length > 0 && data[0].tooltipLabel) {
     legend = [
       {
         data: [
@@ -238,10 +257,37 @@ const HorizontalBarChart = ({
     ];
   }
 
+  // Smart label filtering: show ~50% of labels for charts with many bars
+  const labelFormatter = (d: any) => {
+    const value = d.value;
+    const dataLength = data.length;
+    const index = data.findIndex((item) => item.value === d.indexValue);
+
+    // Don't show label for zero values
+    if (value == 0) return "";
+
+    // Always show first and last labels
+    if (index === 0 || index === dataLength - 1) {
+      return formatPerc ? _.round(value * 100, 0) + " %" : value.toString();
+    }
+
+    // For charts with many items, show every 2nd or 3rd label
+    if (dataLength > 15) {
+      const step = dataLength > 20 ? 3 : 2;
+      if (index % step === 0) {
+        return formatPerc ? _.round(value * 100, 0) + " %" : value.toString();
+      }
+      return "";
+    }
+
+    // For charts with fewer items, show all labels
+    return formatPerc ? _.round(value * 100, 0) + " %" : value.toString();
+  };
+
   const margin = {
     top: 10,
-    right: mobile ? 0 : data[0].tooltipLabel ? 160 : 120,
-    bottom: mobile && data[0].tooltipLabel ? 100 : 30,
+    right: mobile ? 0 : (data && data.length > 0 && data[0].tooltipLabel ? 160 : 120),
+    bottom: mobile && data && data.length > 0 && data[0].tooltipLabel ? 100 : 30,
     left: mobile ? 140 : 150,
   };
   return (
@@ -254,9 +300,7 @@ const HorizontalBarChart = ({
       <ResponsiveBar
         legends={legend}
         labelSkipWidth={15}
-        valueFormat={(x) =>
-          formatPerc ? _.round(x * 100, 0) + " %" : x.toString()
-        }
+        label={labelFormatter}
         margin={margin}
         layout={"horizontal"}
         axisRight={null}
