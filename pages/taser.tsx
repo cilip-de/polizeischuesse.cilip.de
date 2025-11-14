@@ -1,9 +1,10 @@
-import { Center, Col, Grid, Space, Text, Title } from "@mantine/core";
+import { Center, Col, Grid, Space, Text } from "@mantine/core";
 import { ResponsiveLine } from "@nivo/line";
 import { csv } from "d3-fetch";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
+import AnchorHeading from "../components/AnchorHeading";
 import Case from "../components/Case";
 import Layout from "../components/Layout";
 import { setupTaserData } from "../lib/data";
@@ -166,9 +167,9 @@ const Taser: NextPage = ({ data, stats }) => {
         </Col>
       </Grid>
       <Space />
-      <Title style={{ marginTop: "1rem" }} order={2} id="statistik">
+      <AnchorHeading style={{ marginTop: "1rem" }} order={2} id="statistik">
         Taser-Statistik
-      </Title>
+      </AnchorHeading>
       <div style={{ height: "40vh", width: "90%", margin: "0 auto" }}>
         <MyResponsiveLine data={stats} />
       </div>
@@ -196,18 +197,18 @@ const Taser: NextPage = ({ data, stats }) => {
         </Text>
       </div>
       <Space />
-      <Title style={{ marginTop: "2rem" }} order={2} id="chronik">
+      <AnchorHeading style={{ marginTop: "2rem" }} order={2} id="chronik">
         Chronik der Tasertoten
-      </Title>
+      </AnchorHeading>
       <Space />
       <div>
         {data.map((x) => (
           <Case item={x} key={x.key} isTaser />
         ))}
       </div>
-      <Title style={{ marginTop: "2rem" }} order={2} id="dokumente">
+      <AnchorHeading style={{ marginTop: "2rem" }} order={2} id="dokumente">
         Dokumente zur Taser-Statistik
-      </Title>
+      </AnchorHeading>
       <div style={{ textAlign: "center", marginTop: "2rem" }}>
         <Grid>
           {links.map((x) => (

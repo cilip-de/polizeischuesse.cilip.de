@@ -4,6 +4,7 @@ import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import AnchorHeading from "../components/AnchorHeading";
 import {
   HorizontalBarChart,
   VerticalBarChart,
@@ -109,9 +110,9 @@ const CasesPerYear = ({ data }: { data: any }) => {
 
   return (
     <div>
-      <Title order={3} align="center">
+      <AnchorHeading order={3} align="center" id="todesschuesse-pro-jahr">
         Todesschüsse {data[data.length - 1].year}–{data[0].year}
-      </Title>
+      </AnchorHeading>
       <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
       <VerticalBarChart
         data={_.orderBy(procData, "value")}
@@ -144,10 +145,10 @@ const CasesPerYearWeapon = ({ data }) => {
 
   return (
     <div>
-      <Title order={3} align="center">
+      <AnchorHeading order={3} align="center" id="bewaffnung">
         Todesschüsse {data[data.length - 1].year}–{data[0].year}, Opfer mit
         Schusswaffe vs Stichwaffe
-      </Title>
+      </AnchorHeading>
       <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
       <VerticalBarChart
         data={_.orderBy(procData, "value")}
@@ -180,10 +181,10 @@ const CasesPerYearPsych = ({ data }) => {
 
   return (
     <div>
-      <Title order={3} align="center">
+      <AnchorHeading order={3} align="center" id="psychische-ausnahmesituation">
         Todesschüsse {data[data.length - 1].year}–{data[0].year}, Hinweise auf
         psychische Ausnahmesituation
-      </Title>
+      </AnchorHeading>
       <VerticalBarChart data={_.orderBy(procData, "value")} numTicks={5} />
       <VerticalBarChart
         data={_.orderBy(procData, "value")}
@@ -382,9 +383,9 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <Space h="xl" />
       <div>
-        <Title order={3} align="center">
+        <AnchorHeading order={3} align="center" id="pro-bundesland">
           Todesschüsse pro Bundesland, je eine Mio. Einwohner
-        </Title>
+        </AnchorHeading>
         <Space h="xl" />
         <Grid>
           <Col span={12} md={6}>
@@ -407,9 +408,9 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <Space h="xl" />
       <div>
-        <Title order={3} align="center">
+        <AnchorHeading order={3} align="center" id="pro-stadt">
           Todesschüsse pro Stadt
-        </Title>
+        </AnchorHeading>
         <Space h="xl" />
         <Grid>
           <Col span={12} md={6}>
@@ -431,9 +432,9 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <Space h="xl" />
       <div>
-        <Title order={3} align="center">
+        <AnchorHeading order={3} align="center" id="pro-monat">
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Monat
-        </Title>
+        </AnchorHeading>
         <HorizontalBarChart
           data={countItems(
             _.orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
@@ -450,10 +451,10 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <div>
         <MiddleContent>
-          <Title order={3} align="center">
+          <AnchorHeading order={3} align="center" id="pro-wochentag">
             Todesschüsse {data[data.length - 1].year}–{data[0].year} pro
             Wochentag, unterteilt nach SEK-Beteiligung
-          </Title>
+          </AnchorHeading>
         </MiddleContent>
         <HorizontalBarChart data={dataSekNo2} />
         <HorizontalBarChart data={dataSekNo2} mobile />
@@ -461,10 +462,10 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <Space h="xl" />
       <div>
-        <Title order={3} align="center">
+        <AnchorHeading order={3} align="center" id="pro-tag-im-monat">
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Tag im
           Monat
-        </Title>
+        </AnchorHeading>
         <VerticalBarChart data={countItems(data.map(({ dom }) => dom))} />
         <VerticalBarChart
           data={countItems(data.map(({ dom }) => dom))}
@@ -474,10 +475,10 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <Space h="xl" />
       <div>
-        <Title order={3} align="center">
+        <AnchorHeading order={3} align="center" id="alter">
           Alter der Opfer von Todesschüssen {data[data.length - 1].year}–
           {data[0].year}
-        </Title>
+        </AnchorHeading>
         <VerticalBarChart
           data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
         />
@@ -505,10 +506,10 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <div>
         <MiddleContent>
-          <Title order={3} align="center">
+          <AnchorHeading order={3} align="center" id="weitere-umstaende">
             Weitere Umstände zu Todesschüssen {data[data.length - 1].year}–
             {data[0].year} (sofern bekannt)
-          </Title>
+          </AnchorHeading>
         </MiddleContent>
         <HorizontalBarChart
           data={boolData}
@@ -527,10 +528,10 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <Space h="xl" />
       <MiddleContent>
-        <Title order={3} align="center">
+        <AnchorHeading order={3} align="center" id="umstaende-bundeslaender">
           Verteilung der Umstände von Todesschüssen {data[data.length - 1].year}
           –{data[0].year} auf Bundesländer (Angaben in Prozent)
-        </Title>
+        </AnchorHeading>
         <HeatMapChart data={data} />
         <HeatMapChart data={data} mobile />
       </MiddleContent>

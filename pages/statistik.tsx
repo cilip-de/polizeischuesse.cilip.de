@@ -1,9 +1,10 @@
-import { Col, Grid, Space, Title } from "@mantine/core";
+import { Col, Grid, Space } from "@mantine/core";
 import { csv } from "d3-fetch";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
+import AnchorHeading from "../components/AnchorHeading";
 import { ShortsPerYear, SimpleChart } from "../components/charts/official";
 import Layout from "../components/Layout";
 import { combineThree } from "../lib/util";
@@ -62,7 +63,9 @@ const Statistiken: NextPage<StatistikenProps> = ({
         komplett.
       </div>
       <Space h="xl" />
-      <Title order={3}>Fälle von polizeilichem Schusswaffengebrauch</Title>
+      <AnchorHeading order={3} id="faelle-von-polizeilichem-schusswaffengebrauch">
+        Fälle von polizeilichem Schusswaffengebrauch
+      </AnchorHeading>
       <Space h="xl" />
       <Grid>
         {_.orderBy(pdfs.documents, "title", "desc").map((x) => (

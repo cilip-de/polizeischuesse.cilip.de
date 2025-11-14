@@ -1,9 +1,10 @@
-import { Center, Col, Grid, Pagination, Text, Title } from "@mantine/core";
+import { Center, Col, Grid, Pagination, Text } from "@mantine/core";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { PAGE_SIZE, SELECTABLE, setupOptions } from "../lib/data";
 import { constructUrl, constructUrlWithQ, paginate } from "../lib/util";
+import AnchorHeading from "./AnchorHeading";
 import Case from "./Case";
 import CategoryInput from "./CategoryInput";
 import { OverviewChart } from "./charts/charts";
@@ -134,9 +135,9 @@ const CaseList = ({
         </Col>
         <Col span={2} className="only-mobile"></Col>
         <Col span={12} sm={8}>
-          <Title order={2} id="chronik">
+          <AnchorHeading order={2} id="chronik">
             Chronik
-          </Title>
+          </AnchorHeading>
           <Grid style={{ marginBottom: "1rem", marginTop: "0.5rem" }}>
             {[
               ["year", "Jahr"],

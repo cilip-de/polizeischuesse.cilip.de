@@ -1,5 +1,6 @@
-import { Space, Title } from "@mantine/core";
+import { Space } from "@mantine/core";
 import _ from "lodash";
+import AnchorHeading from "../AnchorHeading";
 import { VerticalBarChart } from "./charts";
 
 const ShortsPerYear = ({ wData }) => {
@@ -13,9 +14,9 @@ const ShortsPerYear = ({ wData }) => {
 
   return (
     <div>
-      <Title order={3} align="center">
+      <AnchorHeading order={3} align="center" id="polizeischuesse-gesamt">
         Polizeischüsse {wData[wData.length - 1].value}–{wData[0].value}
-      </Title>
+      </AnchorHeading>
       <Space h="lg" />
 
       <VerticalBarChart
@@ -66,14 +67,22 @@ const SimpleChart = ({
   const realMax = Math.ceil(maxValues / maxValuesRounded) * maxValuesRounded;
 
   const tickValues = [0, realMax / 2, realMax];
+
+  // Generate ID from title
+  const id = title
+    .toLowerCase()
+    .replace(/[äöü]/g, (m) => ({ ä: "ae", ö: "oe", ü: "ue" }[m] || m))
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
   return (
     <div style={style}>
-      <Title order={3} align="center">
+      <AnchorHeading order={3} align="center" id={id}>
         {title}{" "}
         <span style={{ whiteSpace: "nowrap" }}>
           {data[data.length - 1].value}–{data[0].value}
         </span>
-      </Title>
+      </AnchorHeading>
       <Space h="lg" />
 
       <VerticalBarChart
