@@ -241,31 +241,6 @@ test.describe('Visualizations Page', () => {
   });
 
   test.describe('Line Charts (Weapon Chart)', () => {
-    // SKIPPED: WeaponChart is currently commented out in visualisierungen.tsx line 394
-    test.skip('should render line chart for weapon data', async ({ page }) => {
-      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-      await page.waitForTimeout(500);
-
-      // Line charts use path elements
-      const lines = page.locator('svg path[stroke]');
-      const lineCount = await lines.count();
-
-      expect(lineCount).toBeGreaterThan(0);
-    });
-
-    // SKIPPED: WeaponChart is currently commented out in visualisierungen.tsx line 394
-    test.skip('should show multiple lines for different weapon types', async ({ page }) => {
-      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-      await page.waitForTimeout(500);
-
-      // Look for multiple lines (paths)
-      const paths = page.locator('svg path[stroke][fill="none"], svg path[stroke-width]');
-      const pathCount = await paths.count();
-
-      // Should have multiple lines for different categories
-      expect(pathCount).toBeGreaterThan(0);
-    });
-
     test('should display legend for line chart', async ({ page }) => {
       await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
       await page.waitForTimeout(500);

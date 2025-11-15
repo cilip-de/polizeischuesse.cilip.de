@@ -39,16 +39,29 @@ button a {
 .skip-link {
   position: absolute;
   left: -9999px;
-  top: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
   background: #000;
-  color: #fff;
+  color: #fff !important;
   padding: 8px;
   text-decoration: none;
   z-index: 100;
 }
 
 .skip-link:focus {
-  left: 0;
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  padding: 10px 20px;
+  border-radius: 4px;
 }
 
 /* Enhanced focus indicators */

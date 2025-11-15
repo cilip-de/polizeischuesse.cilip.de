@@ -84,7 +84,7 @@ export default function Layout({
           <Grid.Col span={{ base: 12, md: 8 }}>
             <Title order={1}>{title}</Title>
             <Space h="sm" />
-            <Title order={4}>{description}</Title>
+            <Title order={2} size="h4">{description}</Title>
             {otherContent}
           </Grid.Col>
         </Grid>

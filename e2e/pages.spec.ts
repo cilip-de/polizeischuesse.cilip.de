@@ -59,14 +59,13 @@ test.describe("Page Navigation", () => {
     await page.goto("http://localhost:3000/");
     await helpers.waitForPageReady(page);
 
-    // Test pagination through multiple pages
+    // Test pagination through all pages
     for (const i of _.range(2, 25)) {
-      // Click pagination button with exact text match (use first() to handle duplicate pagination on mobile/desktop)
-      // Use getByRole to be more specific and avoid matching year filters
+      // Click pagination button with aria-label (use first() to handle duplicate pagination on mobile/desktop)
       await page
-        .getByRole('button', { name: String(i), exact: true })
+        .getByRole('button', { name: `Seite ${i}` })
         .first()
-        .click({ force: true, timeout: 5000 });
+        .click({ timeout: 5000 });
 
       // Wait for URL to contain the page parameter
       await page.waitForURL(`**/*p=${i}*`, { timeout: 5000 });

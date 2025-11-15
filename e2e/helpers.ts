@@ -145,9 +145,17 @@ export async function checkBasicAccessibility(page: Page) {
  * Wait for table or list to be populated
  */
 export async function waitForDataLoad(page: Page, minItems: number = 1) {
-  // Wait for either table rows or list items
-  const selector = 'tbody tr, ul li, [data-testid="case-item"]';
-  await page.waitForSelector(selector, { timeout: 10000 });
+  // Wait for either table rows, list items, or card components (used for cases)
+  // First wait for page to be ready
+  await page.waitForLoadState('networkidle');
+
+  // Scroll down to where cases are displayed (below filters and chart)
+  await page.evaluate(() => window.scrollTo(0, 1200));
+  await page.waitForTimeout(500);
+
+  // Look for case cards - they have specific structure with Name and datePrint
+  const selector = '.mantine-Card-root';
+  await page.waitForSelector(selector, { timeout: 15000 });
   const count = await countElements(page, selector);
   expect(count).toBeGreaterThanOrEqual(minItems);
 }

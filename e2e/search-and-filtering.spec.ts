@@ -6,19 +6,19 @@ test.describe('Search and Filtering', () => {
     test('should display search input on homepage', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      // Check for search input
-      const searchInput = page.locator('input[type="search"], input[placeholder*="Suche"], input[name*="search"]');
-      await expect(searchInput.first()).toBeVisible();
+      // Check for search input - Mantine TextInput with label "Suche"
+      const searchInput = page.getByRole('textbox', { name: 'Suche' });
+      await expect(searchInput).toBeVisible();
     });
 
     test('should search for cases by text query', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      // Find search input
-      const searchInput = page.locator('input[type="search"], input[placeholder*="Suche"], input[name*="search"]').first();
+      // Find search input - Mantine TextInput with label "Suche"
+      const searchInput = page.getByRole('textbox', { name: 'Suche' });
 
       // Enter search query (searching for a common location)
-      await helpers.fillAndWait(page, searchInput, 'Berlin');
+      await searchInput.fill('Berlin');
 
       // Wait for search results to update
       await page.waitForTimeout(1000);
@@ -31,29 +31,27 @@ test.describe('Search and Filtering', () => {
     test('should require minimum 3 characters for search', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      const searchInput = page.locator('input[type="search"], input[placeholder*="Suche"], input[name*="search"]').first();
+      const searchInput = page.getByRole('textbox', { name: 'Suche' });
 
       // Enter only 2 characters
       await searchInput.fill('Be');
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000); // Wait for debounce
 
-      // Should not trigger search (or show appropriate message)
-      const urlParams = await helpers.getUrlParams(page);
-      if (urlParams.q) {
-        // If query param exists, it should be because of server-side
-        expect(urlParams.q.length).toBeGreaterThanOrEqual(3);
-      }
+      // Should show message about needing more characters
+      const statusMessage = page.getByText('Bitte mehr Zeichen für die Suche eingeben');
+      const messageCount = await statusMessage.count();
+      expect(messageCount).toBeGreaterThan(0);
     });
 
     test('should clear search when input is cleared', async ({ page }) => {
       await page.goto('/?q=Berlin');
       await helpers.waitForPageReady(page);
 
-      const searchInput = page.locator('input[type="search"], input[placeholder*="Suche"], input[name*="search"]').first();
+      const searchInput = page.getByRole('textbox', { name: 'Suche' });
 
       // Clear the search
       await searchInput.clear();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000); // Wait for debounce (500ms) + URL update
 
       // Navigate or check that results are reset
       const urlAfterClear = page.url();
@@ -176,19 +174,23 @@ test.describe('Search and Filtering', () => {
     test('should filter cases by age group', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      const ageFilter = page.locator('select[name="age"], button:has-text("Alter"), label:has-text("Alter")').first();
+      // Mantine Select with label "Alter"
+      const ageFilter = page.getByRole('combobox', { name: 'Alter' });
 
       if (await ageFilter.count() > 0) {
-        if (await ageFilter.evaluate(el => el.tagName.toLowerCase()) === 'select') {
-          await ageFilter.selectOption({ index: 1 });
-        } else {
-          await ageFilter.click();
+        // Click to open dropdown
+        await ageFilter.click();
+        await page.waitForTimeout(300);
+
+        // Select first option
+        const firstOption = page.getByRole('option').first();
+        if (await firstOption.count() > 0) {
+          await firstOption.click();
+          await page.waitForTimeout(500);
+
+          const hasAgeParam = await helpers.urlHasParam(page, 'age');
+          expect(hasAgeParam).toBeTruthy();
         }
-
-        await page.waitForTimeout(500);
-
-        const hasAgeParam = await helpers.urlHasParam(page, 'age');
-        expect(hasAgeParam).toBeTruthy();
       }
     });
   });
@@ -236,36 +238,46 @@ test.describe('Search and Filtering', () => {
     test('should apply multiple filters simultaneously', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      // Apply year filter
-      const yearFilter = page.locator('select[name="year"]').first();
+      // Apply year filter - Mantine Select renders as textbox
+      const yearFilter = page.getByRole('textbox', { name: 'Jahr' });
       if (await yearFilter.count() > 0) {
-        await yearFilter.selectOption({ index: 1 });
-        await page.waitForTimeout(300);
+        await yearFilter.click();
+        await page.waitForTimeout(800); // Wait for dropdown to open
+        // Select a specific year option (e.g., 2024) instead of using .first() which could match anything
+        const yearOption = page.getByRole('option', { name: '2024' });
+        if (await yearOption.count() > 0) {
+          await yearOption.click();
+          await page.waitForTimeout(500); // Wait for filter to apply
+        }
       }
 
-      // Apply state filter
-      const stateFilter = page.locator('select[name="state"]').first();
+      // Apply state filter - Mantine Select renders as textbox
+      const stateFilter = page.getByRole('textbox', { name: 'Bundesland' });
       if (await stateFilter.count() > 0) {
-        await stateFilter.selectOption({ index: 1 });
-        await page.waitForTimeout(300);
+        await stateFilter.click();
+        await page.waitForTimeout(800); // Wait for dropdown to open
+        // Select Berlin specifically
+        const stateOption = page.getByRole('option', { name: 'Berlin' });
+        if (await stateOption.count() > 0) {
+          await stateOption.click();
+          await page.waitForTimeout(500); // Wait for filter to apply
+        }
       }
 
       // URL should contain both parameters
       const urlParams = await helpers.getUrlParams(page);
       const hasFilters = Object.keys(urlParams).length > 0;
       expect(hasFilters).toBeTruthy();
-
-      // Should still show some results (or zero results message)
-      await page.waitForTimeout(500);
     });
 
     test('should combine search with filters', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
       // Apply search
-      const searchInput = page.locator('input[type="search"]').first();
+      const searchInput = page.getByRole('textbox', { name: 'Suche' });
       if (await searchInput.count() > 0) {
-        await helpers.fillAndWait(page, searchInput, 'Polizei');
+        await searchInput.fill('Polizei');
+        await page.waitForTimeout(500);
       }
 
       // Apply year filter

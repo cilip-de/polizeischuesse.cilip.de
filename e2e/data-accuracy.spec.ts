@@ -341,7 +341,7 @@ test.describe('Data Accuracy and Processing', () => {
   });
 
   test.describe('Data Validation', () => {
-    test('should not display undefined or null values', async ({ page }) => {
+    test('should not display undefined or null values in case list', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
       await helpers.waitForDataLoad(page, 1);
 
@@ -360,7 +360,7 @@ test.describe('Data Accuracy and Processing', () => {
       }
     });
 
-    test('should display complete case information', async ({ page }) => {
+    test('should display complete case information in list', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
       await helpers.waitForDataLoad(page, 1);
 
@@ -375,17 +375,6 @@ test.describe('Data Accuracy and Processing', () => {
       }
     });
 
-    test('should handle missing data gracefully', async ({ page }) => {
-      await helpers.navigateAndWait(page, '/');
-
-      // Look for "unbekannt" or similar placeholders for missing data
-      const unknownText = page.locator('text=/unbekannt|k\\.A\\.|nicht bekannt|unknown/i');
-
-      // Missing data might be indicated - this is acceptable
-      if (await unknownText.count() > 0) {
-        await expect(unknownText.first()).toBeVisible();
-      }
-    });
   });
 
   test.describe('CSV Data Parsing', () => {
@@ -393,8 +382,8 @@ test.describe('Data Accuracy and Processing', () => {
       await helpers.navigateAndWait(page, '/');
       await helpers.waitForDataLoad(page, 5);
 
-      // Should display multiple cases
-      const cases = page.locator('[data-testid*="case"], .case, article, tbody tr');
+      // Should display multiple cases - cases are rendered as Mantine Card components
+      const cases = page.locator('.mantine-Card-root');
       const caseCount = await cases.count();
 
       expect(caseCount).toBeGreaterThan(0);

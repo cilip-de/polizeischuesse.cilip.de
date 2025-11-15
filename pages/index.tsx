@@ -169,7 +169,7 @@ const Home = ({
                 <Title order={1}>Polizeiliche Todesschüsse</Title>
                 {/* <Space h="sm" /> */}
                 <Space h="sm" />
-                <Title order={3}>
+                <Title order={2} size="h3">
                   Seit der Wiedervereinigung wurden mindestens {afterReuni}{" "}
                   Personen durch Kugeln der deutschen Polizei getötet.
                 </Title>
@@ -204,7 +204,6 @@ const Home = ({
                     <Button
                       component={Link}
                       href="/visualisierungen"
-                      tt="uppercase"
                       c="dark"
                       variant="outline"
                       style={{ width: "13rem" }}
@@ -216,7 +215,6 @@ const Home = ({
                     <Button
                       component={Link}
                       href="/methodik"
-                      tt="uppercase"
                       c="dark"
                       variant="outline"
                       style={{ width: "13rem" }}
@@ -228,7 +226,6 @@ const Home = ({
                     <Button
                       component={Link}
                       href="/statistik"
-                      tt="uppercase"
                       c="dark"
                       variant="outline"
                       style={{ width: "13rem" }}
@@ -240,7 +237,6 @@ const Home = ({
                     <Button
                       component={Link}
                       href="/taser"
-                      tt="uppercase"
                       c="dark"
                       variant="outline"
                       style={{ width: "13rem" }}

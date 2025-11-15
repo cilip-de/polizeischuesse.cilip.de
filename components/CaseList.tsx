@@ -325,6 +325,16 @@ const CaseList = ({
                   { scroll: false }
                 )
               }
+              getControlProps={(control) => {
+                if (control === 'previous') return { 'aria-label': 'Vorherige Seite' };
+                if (control === 'next') return { 'aria-label': 'Nächste Seite' };
+                if (control === 'first') return { 'aria-label': 'Erste Seite' };
+                if (control === 'last') return { 'aria-label': 'Letzte Seite' };
+                return {};
+              }}
+              getItemProps={(page) => ({
+                'aria-label': `Seite ${page}`,
+              })}
             />
             <Pagination
               className="only-mobile"
@@ -341,6 +351,16 @@ const CaseList = ({
                   { scroll: false }
                 )
               }
+              getControlProps={(control) => {
+                if (control === 'previous') return { 'aria-label': 'Vorherige Seite' };
+                if (control === 'next') return { 'aria-label': 'Nächste Seite' };
+                if (control === 'first') return { 'aria-label': 'Erste Seite' };
+                if (control === 'last') return { 'aria-label': 'Letzte Seite' };
+                return {};
+              }}
+              getItemProps={(page) => ({
+                'aria-label': `Seite ${page}`,
+              })}
             />
           </Center>
         )}

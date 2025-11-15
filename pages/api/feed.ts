@@ -88,6 +88,8 @@ export default async function handler(
     )}" rel="self" type="application/rss+xml" />
     <description>${escapeXml(feedDescription)}</description>
     <language>de-de</language>
+    <managingEditor>info@cilip.de (Bürgerrechte &amp; Polizei/CILIP)</managingEditor>
+    <copyright>© Bürgerrechte &amp; Polizei/CILIP - CC BY 4.0</copyright>
     ${items
       .map(
         (post) => `

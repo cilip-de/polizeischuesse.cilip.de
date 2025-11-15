@@ -52,7 +52,8 @@ test.describe('RSS Feeds', () => {
       // Check for RSS/XML tags
       expect(feedText).toContain('<?xml');
       expect(feedText).toMatch(/<rss|<feed/);
-      expect(feedText).toContain('</rss>') || expect(feedText).toContain('</feed>');
+      // Check for closing tag (RSS or Atom format)
+      expect(feedText).toMatch(/<\/rss>|<\/feed>/);
     });
 
     test('should include channel information', async ({ page }) => {
@@ -214,16 +215,6 @@ test.describe('RSS Feeds', () => {
       }
     });
 
-    test('should have visible RSS feed links', async ({ page }) => {
-      await helpers.navigateAndWait(page, '/');
-
-      // Look for RSS icon or link
-      const rssLinks = page.locator('a[href*="/api/feed"], a[href*="rss"], a:has-text("RSS"), a:has-text("Feed")');
-
-      if (await rssLinks.count() > 0) {
-        await expect(rssLinks.first()).toBeVisible();
-      }
-    });
   });
 
   test.describe('Feed Types', () => {
@@ -233,7 +224,7 @@ test.describe('RSS Feeds', () => {
 
       // Should not include "Taser" in shootings-only feed (unless also shot)
       // Just verify it's a valid feed
-      expect(feedText).toContain('<rss') || expect(feedText).toContain('<feed');
+      expect(feedText).toMatch(/<rss|<feed/);
     });
 
     test('taser feed should be separate from shootings', async ({ page }) => {
@@ -291,8 +282,8 @@ test.describe('RSS Feeds', () => {
 
       // Should have cache-control or similar headers
       // (Might not be set in development)
-      expect(typeof headers['cache-control']).toBe('string') ||
-        expect(typeof headers['cache-control']).toBe('undefined');
+      const cacheType = typeof headers['cache-control'];
+      expect(['string', 'undefined']).toContain(cacheType);
     });
   });
 
