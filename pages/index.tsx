@@ -88,54 +88,54 @@ const Home: NextPage = ({
         </Group>
         <Container>
           <Space h="xl" />
-          <div className="only-mobile" style={{ marginBottom: "2rem" }}>
+          <nav aria-label="Hauptnavigation" className="only-mobile" style={{ marginBottom: "2rem" }}>
             <Group position="center">
               <div style={{ width: "45%" }}>
-                <Link href="/visualisierungen" passHref>
-                  <Button
-                    color="gray"
-                    variant="outline"
-                    style={{ width: "100%" }}
-                  >
-                    Visualisierungen
-                  </Button>
-                </Link>
+                <Button
+                  component={Link}
+                  href="/visualisierungen"
+                  color="gray"
+                  variant="outline"
+                  style={{ width: "100%" }}
+                >
+                  Visualisierungen
+                </Button>
               </div>
               <div style={{ width: "45%" }}>
-                <Link href="/methodik" passHref>
-                  <Button
-                    color="gray"
-                    variant="outline"
-                    style={{ width: "100%" }}
-                  >
-                    Methodik
-                  </Button>
-                </Link>
+                <Button
+                  component={Link}
+                  href="/methodik"
+                  color="gray"
+                  variant="outline"
+                  style={{ width: "100%" }}
+                >
+                  Methodik
+                </Button>
               </div>
               <div style={{ width: "45%" }}>
-                <Link href="/statistik" passHref>
-                  <Button
-                    color="gray"
-                    variant="outline"
-                    style={{ width: "100%" }}
-                  >
-                    Offizielle Statistik
-                  </Button>
-                </Link>
+                <Button
+                  component={Link}
+                  href="/statistik"
+                  color="gray"
+                  variant="outline"
+                  style={{ width: "100%" }}
+                >
+                  Offizielle Statistik
+                </Button>
               </div>
               <div style={{ width: "45%" }}>
-                <Link href="/taser" passHref>
-                  <Button
-                    color="gray"
-                    variant="outline"
-                    style={{ width: "100%" }}
-                  >
-                    Tod mit Taser
-                  </Button>
-                </Link>
+                <Button
+                  component={Link}
+                  href="/taser"
+                  color="gray"
+                  variant="outline"
+                  style={{ width: "100%" }}
+                >
+                  Tod mit Taser
+                </Button>
               </div>
             </Group>
-          </div>
+          </nav>
 
           <Grid>
             <Col span={12} sm={4} style={{ padding: "1rem", paddingTop: "0" }}>
@@ -227,10 +227,12 @@ const Home: NextPage = ({
               </Group>
               <Space h="xl" />
               <Space h="xl" />
-              <Group position="right" direction="column">
-                <div>
-                  <Link href="/visualisierungen" passHref>
+              <nav aria-label="Hauptnavigation">
+                <Group position="right" direction="column">
+                  <div>
                     <Button
+                      component={Link}
+                      href="/visualisierungen"
                       uppercase
                       color="gray"
                       variant="outline"
@@ -238,11 +240,11 @@ const Home: NextPage = ({
                     >
                       Visualisierungen
                     </Button>
-                  </Link>
-                </div>
-                <div>
-                  <Link href="/methodik" passHref>
+                  </div>
+                  <div>
                     <Button
+                      component={Link}
+                      href="/methodik"
                       uppercase
                       color="gray"
                       variant="outline"
@@ -250,11 +252,11 @@ const Home: NextPage = ({
                     >
                       Methodik
                     </Button>
-                  </Link>
-                </div>
-                <div>
-                  <Link href="/statistik" passHref>
+                  </div>
+                  <div>
                     <Button
+                      component={Link}
+                      href="/statistik"
                       uppercase
                       color="gray"
                       variant="outline"
@@ -262,11 +264,11 @@ const Home: NextPage = ({
                     >
                       Offizielle Statistik
                     </Button>
-                  </Link>
-                </div>
-                <div>
-                  <Link href="/taser" passHref>
+                  </div>
+                  <div>
                     <Button
+                      component={Link}
+                      href="/taser"
                       uppercase
                       color="gray"
                       variant="outline"
@@ -274,9 +276,9 @@ const Home: NextPage = ({
                     >
                       Tod mit Taser
                     </Button>
-                  </Link>
-                </div>
-              </Group>
+                  </div>
+                </Group>
+              </nav>
             </Col>
           </Grid>
           <Space h="xl" />
