@@ -6,6 +6,7 @@ import _ from "lodash";
 import { countItems } from "../../lib/data";
 import { addMissingYears, combineArray } from "../../lib/util";
 import { makeDowData } from "../../pages/visualisierungen";
+import { ChartTooltip } from "./ChartTooltip";
 
 
 interface DataItem extends BarDatum {

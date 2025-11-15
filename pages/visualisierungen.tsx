@@ -13,6 +13,7 @@ import HeatMapChart from "../components/charts/HeatMapChart";
 import Layout from "../components/Layout";
 import { countItems, setupData } from "../lib/data";
 import { addMissingYears, combineArray, isNumber } from "../lib/util";
+import { barChartTooltip, simpleBarChartTooltip, percentageTooltip, ChartTooltip } from "../components/charts/ChartTooltip";
 
 import dayjs from "dayjs";
 import visCover from "../public/vis_cover.png";
@@ -116,43 +117,17 @@ const CasesPerYear = ({ data }: { data: any }) => {
       <VerticalBarChart
         data={_.orderBy(procData, "value")}
         numTicks={5}
-        tooltip={({ value, data, id }: { value: number; data: any; id: string }) => (
-          <div>
-            <Text
-              size="sm"
-              style={{
-                background: "white",
-                padding: "0.3rem 0.5rem",
-                opacity: 0.95,
-              }}
-            >
-              <strong>Jahr:</strong> {data.value}
-              <br />
-              <strong>{data.tooltipLabel?.[id]}:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-            </Text>
-          </div>
-        )}
+        tooltip={({ value, data, id }: { value: number; data: any; id: string }) =>
+          barChartTooltip({ value, data, id })
+        }
       />
       <VerticalBarChart
         data={_.orderBy(procData, "value")}
         numTicks={5}
         mobile
-        tooltip={({ value, data, id }: { value: number; data: any; id: string }) => (
-          <div>
-            <Text
-              size="sm"
-              style={{
-                background: "white",
-                padding: "0.3rem 0.5rem",
-                opacity: 0.95,
-              }}
-            >
-              <strong>Jahr:</strong> {data.value}
-              <br />
-              <strong>{data.tooltipLabel?.[id]}:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-            </Text>
-          </div>
-        )}
+        tooltip={({ value, data, id }: { value: number; data: any; id: string }) =>
+          barChartTooltip({ value, data, id })
+        }
       />
       <Space h="lg" />
     </div>
@@ -187,43 +162,17 @@ const CasesPerYearWeapon = ({ data }) => {
       <VerticalBarChart
         data={_.orderBy(procData, "value")}
         numTicks={5}
-        tooltip={({ value, data, id }: { value: number; data: any; id: string }) => (
-          <div>
-            <Text
-              size="sm"
-              style={{
-                background: "white",
-                padding: "0.3rem 0.5rem",
-                opacity: 0.95,
-              }}
-            >
-              <strong>Jahr:</strong> {data.value}
-              <br />
-              <strong>{data.tooltipLabel?.[id]}:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-            </Text>
-          </div>
-        )}
+        tooltip={({ value, data, id }: { value: number; data: any; id: string }) =>
+          barChartTooltip({ value, data, id })
+        }
       />
       <VerticalBarChart
         data={_.orderBy(procData, "value")}
         numTicks={5}
         mobile
-        tooltip={({ value, data, id }: { value: number; data: any; id: string }) => (
-          <div>
-            <Text
-              size="sm"
-              style={{
-                background: "white",
-                padding: "0.3rem 0.5rem",
-                opacity: 0.95,
-              }}
-            >
-              <strong>Jahr:</strong> {data.value}
-              <br />
-              <strong>{data.tooltipLabel?.[id]}:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-            </Text>
-          </div>
-        )}
+        tooltip={({ value, data, id }: { value: number; data: any; id: string }) =>
+          barChartTooltip({ value, data, id })
+        }
       />
       <Space h="lg" />
     </div>
@@ -254,43 +203,17 @@ const CasesPerYearPsych = ({ data }) => {
       <VerticalBarChart
         data={_.orderBy(procData, "value")}
         numTicks={5}
-        tooltip={({ value, data, id }: { value: number; data: any; id: string }) => (
-          <div>
-            <Text
-              size="sm"
-              style={{
-                background: "white",
-                padding: "0.3rem 0.5rem",
-                opacity: 0.95,
-              }}
-            >
-              <strong>Jahr:</strong> {data.value}
-              <br />
-              <strong>{data.tooltipLabel?.[id]}:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-            </Text>
-          </div>
-        )}
+        tooltip={({ value, data, id }: { value: number; data: any; id: string }) =>
+          barChartTooltip({ value, data, id })
+        }
       />
       <VerticalBarChart
         data={_.orderBy(procData, "value")}
         numTicks={5}
         mobile
-        tooltip={({ value, data, id }: { value: number; data: any; id: string }) => (
-          <div>
-            <Text
-              size="sm"
-              style={{
-                background: "white",
-                padding: "0.3rem 0.5rem",
-                opacity: 0.95,
-              }}
-            >
-              <strong>Jahr:</strong> {data.value}
-              <br />
-              <strong>{data.tooltipLabel?.[id]}:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-            </Text>
-          </div>
-        )}
+        tooltip={({ value, data, id }: { value: number; data: any; id: string }) =>
+          barChartTooltip({ value, data, id })
+        }
       />
       <Space h="lg" />
     </div>
@@ -495,42 +418,30 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
             </Title>
             <HorizontalBarChart
               data={perInhabWestSorted}
-              tooltip={({ value, data }: { value: number; data: any }) => (
-                <div>
-                  <Text
-                    size="sm"
-                    style={{
-                      background: "white",
-                      padding: "0.3rem 0.5rem",
-                      opacity: 0.95,
-                    }}
-                  >
-                    <strong>Bundesland:</strong> {data.value}
-                    <br />
-                    <strong>Anzahl je Mio. Einw.:</strong> {value}
-                  </Text>
-                </div>
-              )}
+              tooltip={({ value, data }: { value: number; data: any }) =>
+                simpleBarChartTooltip({
+                  value,
+                  data,
+                  primaryLabelKey: "Bundesland",
+                  secondaryLabelKey: "Anzahl je Mio. Einw.",
+                  singularUnit: "",
+                  pluralUnit: "",
+                })
+              }
             />
             <HorizontalBarChart
               data={perInhabWestSorted}
               mobile
-              tooltip={({ value, data }: { value: number; data: any }) => (
-                <div>
-                  <Text
-                    size="sm"
-                    style={{
-                      background: "white",
-                      padding: "0.3rem 0.5rem",
-                      opacity: 0.95,
-                    }}
-                  >
-                    <strong>Bundesland:</strong> {data.value}
-                    <br />
-                    <strong>Anzahl je Mio. Einw.:</strong> {value}
-                  </Text>
-                </div>
-              )}
+              tooltip={({ value, data }: { value: number; data: any }) =>
+                simpleBarChartTooltip({
+                  value,
+                  data,
+                  primaryLabelKey: "Bundesland",
+                  secondaryLabelKey: "Anzahl je Mio. Einw.",
+                  singularUnit: "",
+                  pluralUnit: "",
+                })
+              }
             />
           </Col>
           <Col span={12} md={6}>
@@ -539,42 +450,30 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
             </Title>
             <HorizontalBarChart
               data={inhabDataAfterSorted}
-              tooltip={({ value, data }: { value: number; data: any }) => (
-                <div>
-                  <Text
-                    size="sm"
-                    style={{
-                      background: "white",
-                      padding: "0.3rem 0.5rem",
-                      opacity: 0.95,
-                    }}
-                  >
-                    <strong>Bundesland:</strong> {data.value}
-                    <br />
-                    <strong>Anzahl je Mio. Einw.:</strong> {value}
-                  </Text>
-                </div>
-              )}
+              tooltip={({ value, data }: { value: number; data: any }) =>
+                simpleBarChartTooltip({
+                  value,
+                  data,
+                  primaryLabelKey: "Bundesland",
+                  secondaryLabelKey: "Anzahl je Mio. Einw.",
+                  singularUnit: "",
+                  pluralUnit: "",
+                })
+              }
             />
             <HorizontalBarChart
               data={inhabDataAfterSorted}
               mobile
-              tooltip={({ value, data }: { value: number; data: any }) => (
-                <div>
-                  <Text
-                    size="sm"
-                    style={{
-                      background: "white",
-                      padding: "0.3rem 0.5rem",
-                      opacity: 0.95,
-                    }}
-                  >
-                    <strong>Bundesland:</strong> {data.value}
-                    <br />
-                    <strong>Anzahl je Mio. Einw.:</strong> {value}
-                  </Text>
-                </div>
-              )}
+              tooltip={({ value, data }: { value: number; data: any }) =>
+                simpleBarChartTooltip({
+                  value,
+                  data,
+                  primaryLabelKey: "Bundesland",
+                  secondaryLabelKey: "Anzahl je Mio. Einw.",
+                  singularUnit: "",
+                  pluralUnit: "",
+                })
+              }
             />
           </Col>
         </Grid>
@@ -594,42 +493,24 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
             </Title>
             <HorizontalBarChart
               data={cityDataWest}
-              tooltip={({ value, data }: { value: number; data: any }) => (
-                <div>
-                  <Text
-                    size="sm"
-                    style={{
-                      background: "white",
-                      padding: "0.3rem 0.5rem",
-                      opacity: 0.95,
-                    }}
-                  >
-                    <strong>Stadt:</strong> {data.value}
-                    <br />
-                    <strong>Anzahl:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-                  </Text>
-                </div>
-              )}
+              tooltip={({ value, data }: { value: number; data: any }) =>
+                simpleBarChartTooltip({
+                  value,
+                  data,
+                  primaryLabelKey: "Stadt",
+                })
+              }
             />
             <HorizontalBarChart
               mobile
               data={cityDataWest}
-              tooltip={({ value, data }: { value: number; data: any }) => (
-                <div>
-                  <Text
-                    size="sm"
-                    style={{
-                      background: "white",
-                      padding: "0.3rem 0.5rem",
-                      opacity: 0.95,
-                    }}
-                  >
-                    <strong>Stadt:</strong> {data.value}
-                    <br />
-                    <strong>Anzahl:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-                  </Text>
-                </div>
-              )}
+              tooltip={({ value, data }: { value: number; data: any }) =>
+                simpleBarChartTooltip({
+                  value,
+                  data,
+                  primaryLabelKey: "Stadt",
+                })
+              }
             />
           </Col>
           <Col span={12} md={6}>
@@ -638,42 +519,24 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
             </Title>
             <HorizontalBarChart
               data={cityDataAfter}
-              tooltip={({ value, data }: { value: number; data: any }) => (
-                <div>
-                  <Text
-                    size="sm"
-                    style={{
-                      background: "white",
-                      padding: "0.3rem 0.5rem",
-                      opacity: 0.95,
-                    }}
-                  >
-                    <strong>Stadt:</strong> {data.value}
-                    <br />
-                    <strong>Anzahl:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-                  </Text>
-                </div>
-              )}
+              tooltip={({ value, data }: { value: number; data: any }) =>
+                simpleBarChartTooltip({
+                  value,
+                  data,
+                  primaryLabelKey: "Stadt",
+                })
+              }
             />
             <HorizontalBarChart
               mobile
               data={cityDataAfter}
-              tooltip={({ value, data }: { value: number; data: any }) => (
-                <div>
-                  <Text
-                    size="sm"
-                    style={{
-                      background: "white",
-                      padding: "0.3rem 0.5rem",
-                      opacity: 0.95,
-                    }}
-                  >
-                    <strong>Stadt:</strong> {data.value}
-                    <br />
-                    <strong>Anzahl:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-                  </Text>
-                </div>
-              )}
+              tooltip={({ value, data }: { value: number; data: any }) =>
+                simpleBarChartTooltip({
+                  value,
+                  data,
+                  primaryLabelKey: "Stadt",
+                })
+              }
             />
           </Col>
         </Grid>
@@ -688,44 +551,26 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
           data={countItems(
             _.orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
           )}
-          tooltip={({ value, data }: { value: number; data: any }) => (
-            <div>
-              <Text
-                size="sm"
-                style={{
-                  background: "white",
-                  padding: "0.3rem 0.5rem",
-                  opacity: 0.95,
-                }}
-              >
-                <strong>Monat:</strong> {data.value}
-                <br />
-                <strong>Anzahl:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-              </Text>
-            </div>
-          )}
+          tooltip={({ value, data }: { value: number; data: any }) =>
+            simpleBarChartTooltip({
+              value,
+              data,
+              primaryLabelKey: "Monat",
+            })
+          }
         />
         <HorizontalBarChart
           mobile
           data={countItems(
             _.orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
           )}
-          tooltip={({ value, data }: { value: number; data: any }) => (
-            <div>
-              <Text
-                size="sm"
-                style={{
-                  background: "white",
-                  padding: "0.3rem 0.5rem",
-                  opacity: 0.95,
-                }}
-              >
-                <strong>Monat:</strong> {data.value}
-                <br />
-                <strong>Anzahl:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-              </Text>
-            </div>
-          )}
+          tooltip={({ value, data }: { value: number; data: any }) =>
+            simpleBarChartTooltip({
+              value,
+              data,
+              primaryLabelKey: "Monat",
+            })
+          }
         />
       </div>
       <Space h="xl" />
@@ -739,42 +584,26 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
         </MiddleContent>
         <HorizontalBarChart
           data={dataSekNo2}
-          tooltip={({ value, data, id }: { value: number; data: any; id: string }) => (
-            <div>
-              <Text
-                size="sm"
-                style={{
-                  background: "white",
-                  padding: "0.3rem 0.5rem",
-                  opacity: 0.95,
-                }}
-              >
-                <strong>Wochentag:</strong> {data.value}
-                <br />
-                <strong>{data.tooltipLabel?.[id]}:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-              </Text>
-            </div>
-          )}
+          tooltip={({ value, data, id }: { value: number; data: any; id: string }) =>
+            barChartTooltip({
+              value,
+              data,
+              id,
+              primaryLabelKey: "Wochentag",
+            })
+          }
         />
         <HorizontalBarChart
           data={dataSekNo2}
           mobile
-          tooltip={({ value, data, id }: { value: number; data: any; id: string }) => (
-            <div>
-              <Text
-                size="sm"
-                style={{
-                  background: "white",
-                  padding: "0.3rem 0.5rem",
-                  opacity: 0.95,
-                }}
-              >
-                <strong>Wochentag:</strong> {data.value}
-                <br />
-                <strong>{data.tooltipLabel?.[id]}:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-              </Text>
-            </div>
-          )}
+          tooltip={({ value, data, id }: { value: number; data: any; id: string }) =>
+            barChartTooltip({
+              value,
+              data,
+              id,
+              primaryLabelKey: "Wochentag",
+            })
+          }
         />
       </div>
       <Space h="xl" />
@@ -786,42 +615,24 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
         </AnchorHeading>
         <VerticalBarChart
           data={countItems(data.map(({ dom }) => dom))}
-          tooltip={({ value, data }: { value: number; data: any }) => (
-            <div>
-              <Text
-                size="sm"
-                style={{
-                  background: "white",
-                  padding: "0.3rem 0.5rem",
-                  opacity: 0.95,
-                }}
-              >
-                <strong>Tag im Monat:</strong> {data.value}
-                <br />
-                <strong>Anzahl:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-              </Text>
-            </div>
-          )}
+          tooltip={({ value, data }: { value: number; data: any }) =>
+            simpleBarChartTooltip({
+              value,
+              data,
+              primaryLabelKey: "Tag im Monat",
+            })
+          }
         />
         <VerticalBarChart
           data={countItems(data.map(({ dom }) => dom))}
           mobile
-          tooltip={({ value, data }: { value: number; data: any }) => (
-            <div>
-              <Text
-                size="sm"
-                style={{
-                  background: "white",
-                  padding: "0.3rem 0.5rem",
-                  opacity: 0.95,
-                }}
-              >
-                <strong>Tag im Monat:</strong> {data.value}
-                <br />
-                <strong>Anzahl:</strong> {value} {value === 1 ? "Fall" : "Fälle"}
-              </Text>
-            </div>
-          )}
+          tooltip={({ value, data }: { value: number; data: any }) =>
+            simpleBarChartTooltip({
+              value,
+              data,
+              primaryLabelKey: "Tag im Monat",
+            })
+          }
         />
       </div>
       <Space h="xl" />
@@ -834,40 +645,28 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
         <VerticalBarChart
           data={countItems(data.map(({ Alter }) => Alter).filter(isNumber))}
           tooltip={({ value, data }) => (
-            <div>
-              <Text
-                size="sm"
-                style={{
-                  background: "white",
-                  padding: "0.3rem 0.5rem",
-                  opacity: 0.95,
-                }}
-              >
-                <strong>Alter:</strong> {data.value} Jahre
-                <br />
-                <strong>Anzahl:</strong> {value} {value === 1 ? "Opfer" : "Opfer"}
-              </Text>
-            </div>
+            <ChartTooltip
+              primaryLabel="Alter"
+              primaryValue={`${data.value} Jahre`}
+              secondaryLabel="Anzahl"
+              secondaryValue={value}
+              singularUnit="Opfer"
+              pluralUnit="Opfer"
+            />
           )}
         />
         <VerticalBarChart
           data={countItems(data.map(({ age }) => age).filter(isNumber))}
           mobile
           tooltip={({ value, data }) => (
-            <div>
-              <Text
-                size="sm"
-                style={{
-                  background: "white",
-                  padding: "0.3rem 0.5rem",
-                  opacity: 0.95,
-                }}
-              >
-                <strong>Altersgruppe:</strong> {data.value}-{parseInt(data.value) + 4} Jahre
-                <br />
-                <strong>Anzahl:</strong> {value} {value === 1 ? "Opfer" : "Opfer"}
-              </Text>
-            </div>
+            <ChartTooltip
+              primaryLabel="Altersgruppe"
+              primaryValue={`${data.value}-${parseInt(data.value) + 4} Jahre`}
+              secondaryLabel="Anzahl"
+              secondaryValue={value}
+              singularUnit="Opfer"
+              pluralUnit="Opfer"
+            />
           )}
         />
       </div>
@@ -885,22 +684,9 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
           formatPerc
           maxValue={1}
           margin={{ top: 10, right: 10, bottom: 30, left: 300 }}
-          tooltip={({ value, data }: { value: number; data: any }) => (
-            <div>
-              <Text
-                size="sm"
-                style={{
-                  background: "white",
-                  padding: "0.3rem 0.5rem",
-                  opacity: 0.95,
-                }}
-              >
-                <strong>{data.value}</strong>
-                <br />
-                Anteil: {_.round(value * 100, 1)} % der Fälle
-              </Text>
-            </div>
-          )}
+          tooltip={({ value, data }: { value: number; data: any }) =>
+            percentageTooltip({ value, data })
+          }
         />
         <HorizontalBarChart
           mobile
@@ -908,22 +694,9 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
           formatPerc
           maxValue={1}
           margin={{ top: 10, right: 0, bottom: 30, left: 200 }}
-          tooltip={({ value, data }: { value: number; data: any }) => (
-            <div>
-              <Text
-                size="sm"
-                style={{
-                  background: "white",
-                  padding: "0.3rem 0.5rem",
-                  opacity: 0.95,
-                }}
-              >
-                <strong>{data.value}</strong>
-                <br />
-                Anteil: {_.round(value * 100, 1)} % der Fälle
-              </Text>
-            </div>
-          )}
+          tooltip={({ value, data }: { value: number; data: any }) =>
+            percentageTooltip({ value, data })
+          }
         />
       </div>
       <Space h="xl" />

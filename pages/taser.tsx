@@ -1,14 +1,16 @@
-import { Center, Col, Grid, Space, Text } from "@mantine/core";
+import { Center, Col, Grid, Space, Text, Collapse, Anchor } from "@mantine/core";
 import { ResponsiveLine } from "@nivo/line";
 import { csv } from "d3-fetch";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
+import { useState } from "react";
 import AnchorHeading from "../components/AnchorHeading";
 import Case from "../components/Case";
 import Layout from "../components/Layout";
 import { setupTaserData } from "../lib/data";
 import taserCover from "../public/taser_cover.jpg";
+import { lineChartTooltip } from "../components/charts/ChartTooltip";
 
 const links = [
   [
@@ -94,6 +96,7 @@ const MyResponsiveLine = ({ data }) => (
     pointBorderColor={{ from: "seriesColor" }}
     pointLabelYOffset={-12}
     useMesh={true}
+    tooltip={({ point }) => lineChartTooltip({ point })}
     legends={[
       {
         anchor: "bottom-right",
@@ -126,6 +129,8 @@ const MyResponsiveLine = ({ data }) => (
 );
 
 const Taser: NextPage = ({ data, stats }) => {
+  const [opened, setOpened] = useState(false);
+
   return (
     <Layout
       fullWidth
@@ -173,28 +178,38 @@ const Taser: NextPage = ({ data, stats }) => {
       <div style={{ height: "40vh", width: "90%", margin: "0 auto" }}>
         <MyResponsiveLine data={stats} />
       </div>
-      <div>
-        <Text size="sm" color="gray" align="left">
-          Seit 2020 führt das Polizeitechnische Institut der Deutschen
-          Hochschule der Polizei nach einem Beschluss der IMK Informationen zu
-          Taser-Einsätzen aus Ländern und Bund zusammen. Diese konnten wir durch
-          eine IFG-Anfrage befreien. Unsere Gesamtzahlen stammen aus
-          Einzelangaben zu: <b>Spezialeinheiten</b> (alle Bundesländer,
-          Bundespolizei und Zoll), <b>Streifendienst</b> (Stand Mai 2025:
-          Bayern, Brandenburg, Bremen, Nordrhein-Westfalen, Rheinland-Pfalz,
-          Saarland, Schleswig-Holstein), <b>Pilotprojekte</b> (Stand Mai 2025:
-          Berlin, Hamburg, Hessen, Schleswig-Holstein, Bundespolizei).
-          Dokumentiert wird darin aber <b>nur das Ziehen der Waffe</b> - die
-          Zahl von Androhungen des Tasereinsatzes ohne anschließendes Auslösen
-          lag etwa in NRW im Jahr 2023 um den Faktor 3 höher. In den Statistiken
-          werden (anders als zum Schusswaffengebrauch) auch Alter, Geschlecht
-          und Alkohol- oder Drogenkonsum der betroffenen Person genannt,
-          außerdem Verletzungen und eine anschließend notwendige medizinische
-          Versorgung. Dass Menschen auch nach PsychKG eingewiesen werden,
-          verweist darauf, dass sie nicht zwingend wegen des Taser-Einsatzes
-          behandelt werden mussten. Siehe auch die{" "}
-          <a href="#dokumente">Dokumente weiter unten</a>.
-        </Text>
+      <div style={{ marginTop: "1rem", textAlign: "right" }}>
+        <Anchor
+          component="button"
+          type="button"
+          onClick={() => setOpened((o) => !o)}
+          size="sm"
+        >
+          {opened ? "▼" : "▶"} Informationen zur Datenquelle
+        </Anchor>
+        <Collapse in={opened}>
+          <Text size="sm" color="gray" align="right" style={{ marginTop: "0.5rem" }}>
+            Seit 2020 führt das Polizeitechnische Institut der Deutschen
+            Hochschule der Polizei nach einem Beschluss der IMK Informationen zu
+            Taser-Einsätzen aus Ländern und Bund zusammen. Diese konnten wir durch
+            eine IFG-Anfrage befreien. Unsere Gesamtzahlen stammen aus
+            Einzelangaben zu: <b>Spezialeinheiten</b> (alle Bundesländer,
+            Bundespolizei und Zoll), <b>Streifendienst</b> (Stand Mai 2025:
+            Bayern, Brandenburg, Bremen, Nordrhein-Westfalen, Rheinland-Pfalz,
+            Saarland, Schleswig-Holstein), <b>Pilotprojekte</b> (Stand Mai 2025:
+            Berlin, Hamburg, Hessen, Schleswig-Holstein, Bundespolizei).
+            Dokumentiert wird darin aber <b>nur das Ziehen der Waffe</b> - die
+            Zahl von Androhungen des Tasereinsatzes ohne anschließendes Auslösen
+            lag etwa in NRW im Jahr 2023 um den Faktor 3 höher. In den Statistiken
+            werden (anders als zum Schusswaffengebrauch) auch Alter, Geschlecht
+            und Alkohol- oder Drogenkonsum der betroffenen Person genannt,
+            außerdem Verletzungen und eine anschließend notwendige medizinische
+            Versorgung. Dass Menschen auch nach PsychKG eingewiesen werden,
+            verweist darauf, dass sie nicht zwingend wegen des Taser-Einsatzes
+            behandelt werden mussten. Siehe auch die{" "}
+            <a href="#dokumente">Dokumente weiter unten</a>.
+          </Text>
+        </Collapse>
       </div>
       <Space />
       <AnchorHeading style={{ marginTop: "2rem" }} order={2} id="chronik">

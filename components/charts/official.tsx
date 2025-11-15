@@ -1,7 +1,8 @@
-import { Space, Text } from "@mantine/core";
+import { Space } from "@mantine/core";
 import _ from "lodash";
 import AnchorHeading from "../AnchorHeading";
 import { VerticalBarChart } from "./charts";
+import { barChartTooltip } from "./ChartTooltip";
 
 const ShortsPerYear = ({ wData }) => {
   const sums = wData.map((x) => x.count + x.count2 + x.count3);
@@ -33,25 +34,15 @@ const ShortsPerYear = ({ wData }) => {
           bottom: 100,
           left: 50,
         }}
-        tooltip={({ value, data, id }) => (
-          <div>
-            <Text
-              size="sm"
-              style={{
-                background: "white",
-                padding: "0.3rem 0.5rem",
-                opacity: 0.95,
-              }}
-            >
-              <strong>Jahr:</strong> {data.value}
-              <br />
-              <strong>
-                {data.tooltipLabel ? data.tooltipLabel[id] : "Anzahl"}:
-              </strong>{" "}
-              {value} {value === 1 ? "Schuss" : "Schüsse"}
-            </Text>
-          </div>
-        )}
+        tooltip={({ value, data, id }) =>
+          barChartTooltip({
+            value,
+            data,
+            id,
+            singularUnit: "Schuss",
+            pluralUnit: "Schüsse",
+          })
+        }
       />
       <VerticalBarChart
         data={_.orderBy(wData, "value")}
@@ -59,25 +50,15 @@ const ShortsPerYear = ({ wData }) => {
         labelSkipHeight={20}
         numTicks={5}
         mobile
-        tooltip={({ value, data, id }) => (
-          <div>
-            <Text
-              size="sm"
-              style={{
-                background: "white",
-                padding: "0.3rem 0.5rem",
-                opacity: 0.95,
-              }}
-            >
-              <strong>Jahr:</strong> {data.value}
-              <br />
-              <strong>
-                {data.tooltipLabel ? data.tooltipLabel[id] : "Anzahl"}:
-              </strong>{" "}
-              {value} {value === 1 ? "Schuss" : "Schüsse"}
-            </Text>
-          </div>
-        )}
+        tooltip={({ value, data, id }) =>
+          barChartTooltip({
+            value,
+            data,
+            id,
+            singularUnit: "Schuss",
+            pluralUnit: "Schüsse",
+          })
+        }
       />
       <Space h="lg" />
       <Space h="lg" />
@@ -136,23 +117,13 @@ const SimpleChart = ({
           bottom: 100,
           left: 50,
         }}
-        tooltip={({ value, data }) => (
-          <div>
-            <Text
-              size="sm"
-              style={{
-                background: "white",
-                padding: "0.3rem 0.5rem",
-                opacity: 0.95,
-              }}
-            >
-              <strong>Jahr:</strong> {data.value}
-              <br />
-              <strong>Anzahl:</strong> {value.toLocaleString("de-DE")}{" "}
-              {value === 1 ? "Fall" : "Fälle"}
-            </Text>
-          </div>
-        )}
+        tooltip={({ value, data, id }) =>
+          barChartTooltip({
+            value,
+            data,
+            id,
+          })
+        }
       />
       <VerticalBarChart
         data={_.orderBy(data, "value")}
@@ -160,23 +131,13 @@ const SimpleChart = ({
         labelSkipHeight={20}
         numTicks={5}
         mobile
-        tooltip={({ value, data }) => (
-          <div>
-            <Text
-              size="sm"
-              style={{
-                background: "white",
-                padding: "0.3rem 0.5rem",
-                opacity: 0.95,
-              }}
-            >
-              <strong>Jahr:</strong> {data.value}
-              <br />
-              <strong>Anzahl:</strong> {value.toLocaleString("de-DE")}{" "}
-              {value === 1 ? "Fall" : "Fälle"}
-            </Text>
-          </div>
-        )}
+        tooltip={({ value, data, id }) =>
+          barChartTooltip({
+            value,
+            data,
+            id,
+          })
+        }
       />
       <Space h="lg" />
       <Space h="lg" />

@@ -1,6 +1,7 @@
 import { Center, Text, useMantineTheme } from "@mantine/core";
 import { ResponsiveHeatMap } from "@nivo/heatmap";
 import _ from "lodash";
+import { ChartTooltip } from "./ChartTooltip";
 
 const HeatMapChart = ({ data, mobile = false }) => {
   const boolAtr = [
@@ -126,29 +127,15 @@ const HeatMapChart = ({ data, mobile = false }) => {
         motionConfig="gentle"
         hoverTarget="cell"
         tooltip={(data) => (
-          <div>
-            <Text
-              size="sm"
-              style={{
-                background: "white",
-                padding: "0.3rem 0.5rem",
-                opacity: 0.95,
-              }}
-            >
-              <strong>{data.cell.serieId}</strong>
-              <br />
-              <strong>{data.cell.data.x}:</strong> {data.cell.value}% der{" "}
-              {
-                perStateCounts[
-                  data.cell.serieId.replace(
-                    "Mecklenburg-Vorp.",
-                    "Mecklenburg-Vorpommern"
-                  )
-                ]
-              }{" "}
-              Fälle
-            </Text>
-          </div>
+          <ChartTooltip
+            primaryLabel=""
+            primaryValue={data.cell.serieId}
+            secondaryLabel={data.cell.data.x}
+            secondaryValue={data.cell.value}
+            valueFormatter={(val) => `${val}% der ${perStateCounts[data.cell.serieId.replace("Mecklenburg-Vorp.", "Mecklenburg-Vorpommern")]}`}
+            singularUnit="Fälle"
+            pluralUnit="Fälle"
+          />
         )}
       />
       <Center>
