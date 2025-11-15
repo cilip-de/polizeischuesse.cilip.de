@@ -56,9 +56,9 @@ const Statistiken: NextPage = () => {
                 setError(true);
               }
             }}
-            uppercase
+            tt="uppercase"
             style={{ width: "45%" }}
-            color="gray"
+            c="gray"
             variant="outline"
           >
             Absenden

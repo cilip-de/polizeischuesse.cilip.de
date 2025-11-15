@@ -1,4 +1,4 @@
-import { Col, Grid, Space } from "@mantine/core";
+import { Grid, Space } from "@mantine/core";
 import { csv } from "d3-fetch";
 import _ from "lodash";
 import type { NextPage } from "next";
@@ -78,7 +78,7 @@ const Statistiken: NextPage<StatistikenProps> = ({
       <Space h="xl" />
       <Grid>
         {_.orderBy(pdfs.documents, "title", "desc").map((x) => (
-          <Col span={4} md={2} lg={1} key={x.title}>
+          <Grid.Col span={{ base: 4, md: 2, lg: 1 }} key={x.title}>
             <a
               target="_blank"
               href={x.site_url}
@@ -87,7 +87,7 @@ const Statistiken: NextPage<StatistikenProps> = ({
             >
               {x.title.replace(/[^0-9]/g, "")}
             </a>
-          </Col>
+          </Grid.Col>
         ))}
       </Grid>
       <Space h="xl" />

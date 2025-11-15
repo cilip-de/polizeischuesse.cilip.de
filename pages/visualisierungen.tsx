@@ -1,4 +1,4 @@
-import { Col, Grid, Space, Text, Title } from "@mantine/core";
+import { Grid, Space, Text, Title } from "@mantine/core";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
@@ -111,7 +111,7 @@ const CasesPerYear = ({ data }: { data: any }) => {
 
   return (
     <div>
-      <AnchorHeading order={3} align="center" id="todesschuesse-pro-jahr">
+      <AnchorHeading order={3} ta="center" id="todesschuesse-pro-jahr">
         Polizeiliche Todesschüsse {data[data.length - 1].year}–{data[0].year}
       </AnchorHeading>
       <VerticalBarChart
@@ -155,7 +155,7 @@ const CasesPerYearWeapon = ({ data }) => {
 
   return (
     <div>
-      <AnchorHeading order={3} align="center" id="bewaffnung">
+      <AnchorHeading order={3} ta="center" id="bewaffnung">
         Todesschüsse {data[data.length - 1].year}–{data[0].year}, Opfer mit
         Schusswaffe vs Stichwaffe
       </AnchorHeading>
@@ -196,7 +196,7 @@ const CasesPerYearPsych = ({ data }) => {
 
   return (
     <div>
-      <AnchorHeading order={3} align="center" id="psychische-ausnahmesituation">
+      <AnchorHeading order={3} ta="center" id="psychische-ausnahmesituation">
         Todesschüsse {data[data.length - 1].year}–{data[0].year}, Hinweise auf
         psychische Ausnahmesituation
       </AnchorHeading>
@@ -233,10 +233,10 @@ export { makeDowData };
 
 const MiddleContent = ({ children }) => (
   <Grid>
-    <Col span={2}></Col>
-    <Col span={12} sm={8}>
+    <Grid.Col span={2}></Grid.Col>
+    <Grid.Col span={{ base: 12, sm: 8 }}>
       {children}
-    </Col>
+    </Grid.Col>
   </Grid>
 );
 
@@ -407,13 +407,13 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <Space h="xl" />
       <div>
-        <AnchorHeading order={3} align="center" id="pro-bundesland">
+        <AnchorHeading order={3} ta="center" id="pro-bundesland">
           Todesschüsse pro Bundesland, je eine Mio. Einwohner
         </AnchorHeading>
         <Space h="xl" />
         <Grid>
-          <Col span={12} md={6}>
-            <Title order={4} align="center">
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <Title order={4} ta="center">
               Westdeutschland 1976–1990
             </Title>
             <HorizontalBarChart
@@ -443,9 +443,9 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
                 })
               }
             />
-          </Col>
-          <Col span={12} md={6}>
-            <Title order={4} align="center">
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <Title order={4} ta="center">
               Bundesrepublik 1990–{data[0].year}
             </Title>
             <HorizontalBarChart
@@ -475,20 +475,20 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
                 })
               }
             />
-          </Col>
+          </Grid.Col>
         </Grid>
       </div>
       <Space h="xl" />
       <Space h="xl" />
       <Space h="xl" />
       <div>
-        <AnchorHeading order={3} align="center" id="pro-stadt">
+        <AnchorHeading order={3} ta="center" id="pro-stadt">
           Todesschüsse pro Stadt
         </AnchorHeading>
         <Space h="xl" />
         <Grid>
-          <Col span={12} md={6}>
-            <Title order={4} align="center">
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <Title order={4} ta="center">
               Westdeutschland 1976–1990
             </Title>
             <HorizontalBarChart
@@ -512,9 +512,9 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
                 })
               }
             />
-          </Col>
-          <Col span={12} md={6}>
-            <Title order={4} align="center">
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <Title order={4} ta="center">
               Bundesrepublik 1990–{data[0].year}
             </Title>
             <HorizontalBarChart
@@ -538,13 +538,13 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
                 })
               }
             />
-          </Col>
+          </Grid.Col>
         </Grid>
       </div>
       <Space h="xl" />
       <Space h="xl" />
       <div>
-        <AnchorHeading order={3} align="center" id="pro-monat">
+        <AnchorHeading order={3} ta="center" id="pro-monat">
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Monat
         </AnchorHeading>
         <HorizontalBarChart
@@ -577,7 +577,7 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <div>
         <MiddleContent>
-          <AnchorHeading order={3} align="center" id="pro-wochentag">
+          <AnchorHeading order={3} ta="center" id="pro-wochentag">
             Todesschüsse {data[data.length - 1].year}–{data[0].year} pro
             Wochentag, unterteilt nach SEK-Beteiligung
           </AnchorHeading>
@@ -609,7 +609,7 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <Space h="xl" />
       <div>
-        <AnchorHeading order={3} align="center" id="pro-tag-im-monat">
+        <AnchorHeading order={3} ta="center" id="pro-tag-im-monat">
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Tag im
           Monat
         </AnchorHeading>
@@ -638,7 +638,7 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <Space h="xl" />
       <div>
-        <AnchorHeading order={3} align="center" id="alter">
+        <AnchorHeading order={3} ta="center" id="alter">
           Alter der Opfer von Todesschüssen {data[data.length - 1].year}–
           {data[0].year}
         </AnchorHeading>
@@ -674,7 +674,7 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <div>
         <MiddleContent>
-          <AnchorHeading order={3} align="center" id="weitere-umstaende">
+          <AnchorHeading order={3} ta="center" id="weitere-umstaende">
             Weitere Umstände zu Todesschüssen {data[data.length - 1].year}–
             {data[0].year} (sofern bekannt)
           </AnchorHeading>
@@ -702,7 +702,7 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
       <Space h="xl" />
       <Space h="xl" />
       <MiddleContent>
-        <AnchorHeading order={3} align="center" id="umstaende-bundeslaender">
+        <AnchorHeading order={3} ta="center" id="umstaende-bundeslaender">
           Verteilung der Umstände von Todesschüssen {data[data.length - 1].year}
           –{data[0].year} auf Bundesländer (Angaben in Prozent)
         </AnchorHeading>

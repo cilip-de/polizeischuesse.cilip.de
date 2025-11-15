@@ -40,25 +40,24 @@ export const ChartTooltip: React.FC<ChartTooltipProps> = ({
   };
 
   return (
-    <div>
-      <Text
-        size="sm"
-        style={{
-          background: "white",
-          padding: "0.3rem 0.5rem",
-          opacity: 0.95,
-        }}
-      >
-        {primaryLabel && primaryValue !== undefined && (
-          <>
-            <strong>{primaryLabel}:</strong> {primaryValue}
-            <br />
-          </>
-        )}
+    <div
+      style={{
+        background: "white",
+        padding: "0.3rem 0.5rem",
+        opacity: 0.95,
+        whiteSpace: "nowrap",
+      }}
+    >
+      {primaryLabel && primaryValue !== undefined && (
+        <div>
+          <strong>{primaryLabel}:</strong> {primaryValue}
+        </div>
+      )}
+      <div>
         <strong>{secondaryLabel}:</strong> {formatValue(secondaryValue)}{" "}
         {!showPercentage && getUnit(secondaryValue)}
         {customContent}
-      </Text>
+      </div>
     </div>
   );
 };

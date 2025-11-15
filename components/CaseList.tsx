@@ -1,4 +1,4 @@
-import { Center, Col, Grid, Pagination, Text } from "@mantine/core";
+import { Center, Grid, Pagination, Text } from "@mantine/core";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -112,14 +112,15 @@ const CaseList = ({
   // console.log(displayLocations);
   // console.log(displayMarkers);
 
-  options = setupOptions(resultList);
+  const recalculatedOptions = setupOptions(resultList);
+  options = recalculatedOptions || options; // Use recalculated or fallback to original
   resultList = paginate(resultList, PAGE_SIZE, p);
 
   return (
     <div style={{ paddingBottom: "2rem" }}>
       <Grid>
-        <Col span={2} className="only-mobile"></Col>
-        <Col span={12} xs={8} className="only-mobile">
+        <Grid.Col span={2} className="only-mobile"></Grid.Col>
+        <Grid.Col span={{ base: 12, xs: 8 }} className="only-mobile">
           <Map
             makersData={displayMarkers}
             setInputPlace={(x) =>
@@ -132,9 +133,9 @@ const CaseList = ({
               )
             }
           />{" "}
-        </Col>
-        <Col span={2} className="only-mobile"></Col>
-        <Col span={12} sm={8}>
+        </Grid.Col>
+        <Grid.Col span={2} className="only-mobile"></Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 8 }}>
           <AnchorHeading order={2} id="chronik">
             Chronik
           </AnchorHeading>
@@ -145,51 +146,51 @@ const CaseList = ({
               ["state", "Bundesland"],
               ["place", "Ort"],
             ].map(([key, label]) => (
-              <Col span={4} key={key}>
+              <Grid.Col span={4} key={key}>
                 <SelectInput
                   skey={key}
                   label={label}
                   selection={selection}
                   data={options[key]}
                 />
-              </Col>
+              </Grid.Col>
             ))}
           </Grid>
           <Grid style={{ marginBottom: "1rem" }}>
-            <Col span={8}>
+            <Grid.Col span={8}>
               <SearchInput
                 q={q}
                 selection={selection}
                 setSearchedData={setSearchedData}
                 setSearchedQ={setSearchedQ}
               />
-            </Col>
-            <Col span={4}>
+            </Grid.Col>
+            <Grid.Col span={4}>
               <SelectInput
                 skey={"weapon"}
                 label={"Bewaffnung"}
                 selection={selection}
                 data={options.weapon}
               />
-            </Col>
+            </Grid.Col>
           </Grid>
           <Grid style={{ marginBottom: "1rem" }}>
-            <Col span={8}>
+            <Grid.Col span={{ base: 12, sm: 8 }}>
               <CategoryInput q={q} selection={selection} />
-            </Col>
-            <Col span={4}>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 4 }}>
               <SelectInput
                 skey={"age"}
                 label={"Alter"}
                 selection={selection}
                 data={options.age}
               />
-            </Col>
+            </Grid.Col>
           </Grid>
           {overChart}
           </div>
-        </Col>
-        <Col span={4} className="only-non-mobile">
+        </Grid.Col>
+        <Grid.Col span={4} className="only-non-mobile">
           <Map
             makersData={displayMarkers}
             setInputPlace={(x) =>
@@ -202,7 +203,7 @@ const CaseList = ({
               )
             }
           />
-        </Col>
+        </Grid.Col>
       </Grid>
 
       <div style={{ minHeight: "100rem" }}>
@@ -235,7 +236,7 @@ const CaseList = ({
           </Center>
         </div>
         <Grid className="only-non-mobile">
-          <Col span={8}>
+          <Grid.Col span={8}>
             <Center
               style={{
                 marginLeft: ".5rem",
@@ -247,31 +248,31 @@ const CaseList = ({
               aria-atomic="true"
             >
               {enoughChars && numHits > 1 && numHits !== maxCases && (
-                <Text color="gray">
+                <Text c="gray">
                   zeige {numHits} von {maxCases} polizeilichen Todesschüsse
                 </Text>
               )}
               {enoughChars && numHits > 1 && numHits === maxCases && (
-                <Text color="gray">{numHits} polizeiliche Todesschüsse</Text>
+                <Text c="gray">{numHits} polizeiliche Todesschüsse</Text>
               )}
               {enoughChars && numHits === 1 && (
-                <Text color="gray">ein polizeilicher Todesschuss</Text>
+                <Text c="gray">ein polizeilicher Todesschuss</Text>
               )}
               {enoughChars && numHits === 0 && (
-                <Text color="gray">
+                <Text c="gray">
                   kein polizeilicher Todesschuss entfält auf die Auswahl
                 </Text>
               )}
               {!enoughChars && (
-                <Text color="gray">
+                <Text c="gray">
                   Bitte mehr Zeichen für die Suche eingeben
                 </Text>
               )}
             </Center>
-          </Col>
-          <Col span={4}>
+          </Grid.Col>
+          <Grid.Col span={4}>
             <div style={{ marginBottom: "2rem", marginTop: "0rem" }}>
-              <Text align="center" color="gray">
+              <Text ta="center" c="gray">
                 {displayMarkers.length !== geoData.length &&
                   displayMarkers.length > 1 &&
                   `an ${displayMarkers.length} von ${geoData.length} Orten`}
@@ -280,7 +281,7 @@ const CaseList = ({
                 {displayMarkers.length === 1 && `an einem Ort`}
               </Text>
             </div>
-          </Col>
+          </Grid.Col>
         </Grid>
         {enoughChars && maxCases !== numHits && (
           <Center style={{ marginBottom: "2rem" }}>
@@ -307,7 +308,7 @@ const CaseList = ({
           </Center>
         )}
 
-        {enoughChars && resultList.map((x) => <Case item={x} key={x.key} />)}
+        {enoughChars && resultList.map((x, index) => <Case item={x} key={`${x.key}-${index}`} />)}
         {enoughChars && numHits > PAGE_SIZE && (
           <Center>
             <Pagination

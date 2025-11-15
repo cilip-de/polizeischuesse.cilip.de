@@ -1,4 +1,4 @@
-import { Badge, Card, Col, Grid, Group, Space, Text } from "@mantine/core";
+import { Badge, Card, Grid, Group, Space, Text } from "@mantine/core";
 import { SEARCH_KEYES } from "../lib/data";
 import { isNumber } from "../lib/util";
 
@@ -137,21 +137,21 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
       </Group>
       <Space h="sm" />
       <Grid>
-        <Col span={12} md={4} lg={4}>
+        <Grid.Col span={{ base: 12, md: 4 }} lg={4}>
           <Text weight={500}>{item["Name"]}</Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             {isNumber(item.Alter) ? `${item.Alter} Jahre` : `Alter: unbekannt`}
             {item.sex.length > 0 && `, ${item.sex}`}
           </Text>
           <Space />
-          <Text size="sm" color="gray" style={{ lineHeight: 1.5 }}>
+          <Text size="sm" c="gray" style={{ lineHeight: 1.5 }}>
             {isTaser ? "Getasert" : "Erschossen"} am {item.datePrint}
           </Text>
-          <Text size="sm" color="gray" style={{ lineHeight: 1.5 }}>
+          <Text size="sm" c="gray" style={{ lineHeight: 1.5 }}>
             In {item.place}
             {item.state !== item.place && `, ${item.state}`}
           </Text>
-          <Text hidden size="sm" color="gray" style={{ lineHeight: 1.5 }}>
+          <Text hidden size="sm" c="gray" style={{ lineHeight: 1.5 }}>
             {item.numShots.length > 0 &&
               item.numShots !== "0" &&
               item.numShots !== "1" &&
@@ -160,22 +160,22 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
               item.numShots === "1" &&
               `Mit einem Schuss`}
           </Text>
-          <Text size="sm" color="gray" style={{ lineHeight: 1.5 }}>
+          <Text size="sm" c="gray" style={{ lineHeight: 1.5 }}>
             {item.weapon && `Bewaffnet mit ${item.weapon}`}
           </Text>
           <Space />
-          <Text size="sm" color="gray">
+          <Text size="sm" c="gray">
             Quellen: {textToLinks(item["Quellen"])}
           </Text>
           <div></div>
-        </Col>
-        <Col span={12} md={8} lg={8}>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 8 }} lg={8}>
           <Text style={{ lineHeight: 1.5, marginBottom: "0.5rem" }}>
             {item["Szenarium"]}
           </Text>
           {!hideLink && (
             <div style={{ position: "absolute", bottom: 0, right: 10 }}>
-              <Text align="right" color="dimmed">
+              <Text ta="right" c="dimmed">
                 <a
                   href={`/fall/${item["Fall"]}`}
                   target="_blank"
@@ -199,7 +199,7 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
               </Text>
             </div>
           )}
-        </Col>
+        </Grid.Col>
       </Grid>
     </Card>
   );

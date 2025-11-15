@@ -17,7 +17,7 @@ function VisualizationCard({ data }) {
       </Card.Section>
 
       <Group
-        position="apart"
+        justify="space-between"
         style={{ marginBottom: 5, marginTop: theme.spacing.sm }}
       >
         <Text size="sm">Anzahl der Todesschüsse 2010–2020</Text>

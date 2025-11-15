@@ -112,6 +112,11 @@ interface SetupOptions {
 }
 
 const setupOptions = (data: ProcessedDataItem[]): SetupOptions => {
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    console.warn('setupOptions called with invalid data:', data);
+    return { year: [], state: [], place: [], weapon: [], age: [] };
+  }
+
   const year = _.orderBy(
     countItems(data.map((x) => x.year.toString())),
     "value",
@@ -219,6 +224,13 @@ const preprocessData = (data: RawDataItem[]): ProcessedDataItem[] => {
 
     for (const [t, label] of TAGS) {
       x[t] = x[label].includes("Ja");
+    }
+
+    // Deduplicate source URLs in "Quellen" field
+    if (x["Quellen"]) {
+      const urls = x["Quellen"].trim().split(" ").filter((url: string) => url !== "");
+      const uniqueUrls = Array.from(new Set(urls));
+      x["Quellen"] = uniqueUrls.join(" ");
     }
   });
 

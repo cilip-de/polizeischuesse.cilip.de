@@ -1,7 +1,6 @@
 import {
   Button,
   Center,
-  Col,
   Container,
   Grid,
   Group,
@@ -9,7 +8,6 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -21,7 +19,7 @@ import cover from "../public/cover_12.jpg";
 import cilipLogo from "../public/images/cilip_new.svg";
 import goa2025 from "../public/images/grimme-online-2025.jpg";
 
-const Home: NextPage = ({
+const Home = ({
   data,
   geoData,
   initialSearchedData,
@@ -31,7 +29,20 @@ const Home: NextPage = ({
   afterReuni,
   beforeReuni,
   averages,
-}) => {
+}: any) => {
+  console.log("Home component props:", {
+    data: data ? `array of ${data.length}` : "undefined",
+    geoData: geoData ? `array of ${geoData.length}` : "undefined",
+    initialSearchedData: initialSearchedData
+      ? `array of ${initialSearchedData.length}`
+      : "undefined",
+    selection,
+    options: options ? Object.keys(options) : "undefined",
+    maxCases,
+    afterReuni,
+    beforeReuni,
+  });
+
   return (
     <div>
       <a href="#main-content" className="skip-link">
@@ -55,7 +66,7 @@ const Home: NextPage = ({
       </Head>
 
       <main id="main-content">
-        <Group position="center" className="only-non-mobile">
+        <Group justify="center" className="only-non-mobile">
           <a href="https://www.grimme-online-award.de/2025/nominierte/nominierte-detail/d/chronik-polizeilicher-todesschuesse-1976-2025">
             <Image
               src={goa2025}
@@ -72,7 +83,7 @@ const Home: NextPage = ({
             />
           </a>
         </Group>
-        <Group position="center" className="only-mobile">
+        <Group justify="center" className="only-mobile">
           <a href="https://www.grimme-online-award.de/2025/nominierte/nominierte-detail/d/chronik-polizeilicher-todesschuesse-1976-2025">
             <Image
               src={goa2025}
@@ -88,13 +99,17 @@ const Home: NextPage = ({
         </Group>
         <Container>
           <Space h="xl" />
-          <nav aria-label="Hauptnavigation" className="only-mobile" style={{ marginBottom: "2rem" }}>
-            <Group position="center">
+          <nav
+            aria-label="Hauptnavigation"
+            className="only-mobile"
+            style={{ marginBottom: "2rem" }}
+          >
+            <Group justify="center">
               <div style={{ width: "45%" }}>
                 <Button
                   component={Link}
                   href="/visualisierungen"
-                  color="gray"
+                  c="gray"
                   variant="outline"
                   style={{ width: "100%" }}
                 >
@@ -105,7 +120,7 @@ const Home: NextPage = ({
                 <Button
                   component={Link}
                   href="/methodik"
-                  color="gray"
+                  c="gray"
                   variant="outline"
                   style={{ width: "100%" }}
                 >
@@ -116,7 +131,7 @@ const Home: NextPage = ({
                 <Button
                   component={Link}
                   href="/statistik"
-                  color="gray"
+                  c="gray"
                   variant="outline"
                   style={{ width: "100%" }}
                 >
@@ -127,7 +142,7 @@ const Home: NextPage = ({
                 <Button
                   component={Link}
                   href="/taser"
-                  color="gray"
+                  c="gray"
                   variant="outline"
                   style={{ width: "100%" }}
                 >
@@ -138,14 +153,17 @@ const Home: NextPage = ({
           </nav>
 
           <Grid>
-            <Col span={12} sm={4} style={{ padding: "1rem", paddingTop: "0" }}>
+            <Grid.Col
+              span={{ base: 12, sm: 4 }}
+              style={{ padding: "1rem", paddingTop: "0" }}
+            >
               <Image
                 style={{ width: "100%", height: "auto" }}
                 src={cover}
                 alt="Cover image"
               />
-            </Col>
-            <Col span={12} sm={8}>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 8 }}>
               <div>
                 <Space h="sm" />
                 <Title order={1}>Polizeiliche Todesschüsse</Title>
@@ -161,11 +179,79 @@ const Home: NextPage = ({
                   Schüsse allein in Westdeutschland.
                 </Text>
               </div>
-            </Col>
+            </Grid.Col>
           </Grid>
 
           <Grid>
-            <Col span={12} sm={8}>
+            <Grid.Col span={{ base: 12, sm: 4 }} order={{ base: 2, sm: 2 }} className="only-non-mobile">
+              <Space h="xl" />
+              <Group justify="flex-end">
+                <div>
+                  <a href="https://cilip.de">
+                    <Image
+                      src={cilipLogo}
+                      alt="CILIP logo"
+                      style={{ height: "80px", width: "auto" }}
+                    />
+                  </a>
+                </div>
+              </Group>
+              <Space h="xl" />
+              <Space h="xl" />
+              <nav aria-label="Hauptnavigation">
+                <Group justify="flex-end" align="flex-end" style={{ flexDirection: "column" }}>
+                  <div>
+                    <Button
+                      component={Link}
+                      href="/visualisierungen"
+                      tt="uppercase"
+                      c="dark"
+                      variant="outline"
+                      style={{ width: "13rem" }}
+                    >
+                      Visualisierungen
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      component={Link}
+                      href="/methodik"
+                      tt="uppercase"
+                      c="dark"
+                      variant="outline"
+                      style={{ width: "13rem" }}
+                    >
+                      Methodik
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      component={Link}
+                      href="/statistik"
+                      tt="uppercase"
+                      c="dark"
+                      variant="outline"
+                      style={{ width: "13rem" }}
+                    >
+                      Offizielle Statistik
+                    </Button>
+                  </div>
+                  <div>
+                    <Button
+                      component={Link}
+                      href="/taser"
+                      tt="uppercase"
+                      c="dark"
+                      variant="outline"
+                      style={{ width: "13rem" }}
+                    >
+                      Tod mit Taser
+                    </Button>
+                  </div>
+                </Group>
+              </nav>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, sm: 8 }} order={{ base: 1, sm: 1 }}>
               <Space h="lg" />
               <Text>
                 Jedes Jahr veröffentlicht die Konferenz der Innenminister*innen
@@ -177,7 +263,7 @@ const Home: NextPage = ({
               </Text>
               <div className="only-mobile">
                 <Space h="lg" />
-                <Group position="center">
+                <Group justify="center">
                   <a href="https://cilip.de">
                     <Image
                       src={cilipLogo}
@@ -211,75 +297,7 @@ const Home: NextPage = ({
                 erschossen wurden.
               </Text>
               <Space h="sm" />
-            </Col>
-            <Col span={12} sm={4} className="only-non-mobile">
-              <Space h="xl" />
-              <Group position="right">
-                <div>
-                  <a href="https://cilip.de">
-                    <Image
-                      src={cilipLogo}
-                      alt="CILIP logo"
-                      style={{ height: "80px", width: "auto" }}
-                    />
-                  </a>
-                </div>
-              </Group>
-              <Space h="xl" />
-              <Space h="xl" />
-              <nav aria-label="Hauptnavigation">
-                <Group position="right" direction="column">
-                  <div>
-                    <Button
-                      component={Link}
-                      href="/visualisierungen"
-                      uppercase
-                      color="gray"
-                      variant="outline"
-                      style={{ width: "13rem" }}
-                    >
-                      Visualisierungen
-                    </Button>
-                  </div>
-                  <div>
-                    <Button
-                      component={Link}
-                      href="/methodik"
-                      uppercase
-                      color="gray"
-                      variant="outline"
-                      style={{ width: "13rem" }}
-                    >
-                      Methodik
-                    </Button>
-                  </div>
-                  <div>
-                    <Button
-                      component={Link}
-                      href="/statistik"
-                      uppercase
-                      color="gray"
-                      variant="outline"
-                      style={{ width: "13rem" }}
-                    >
-                      Offizielle Statistik
-                    </Button>
-                  </div>
-                  <div>
-                    <Button
-                      component={Link}
-                      href="/taser"
-                      uppercase
-                      color="gray"
-                      variant="outline"
-                      style={{ width: "13rem" }}
-                    >
-                      Tod mit Taser
-                    </Button>
-                  </div>
-                </Group>
-              </nav>
-            </Col>
+            </Grid.Col>
           </Grid>
           <Space h="xl" />
           <Space h="xl" />
@@ -301,7 +319,7 @@ const Home: NextPage = ({
         <Space h="xl" />
         <Space h="xl" />
         <Center>
-          <Text style={{ maxWidth: "25rem", padding: "0.5rem" }} align="center">
+          <Text style={{ maxWidth: "25rem", padding: "0.5rem" }} ta="center">
             Die Zeitschrift Bürgerrechte & Polizei/CILIP liefert seit 1978
             kritische Analysen zur Politik und Praxis Innerer Sicherheit in
             Deutschland und Europa.
@@ -316,8 +334,8 @@ const Home: NextPage = ({
         <Center>
           <Text
             size="sm"
-            color="gray"
-            align="center"
+            c="gray"
+            ta="center"
             style={{ maxWidth: "25rem", padding: "0.5rem" }}
           >
             Alle Daten auf dieser Webseite sind unter der{" "}
@@ -337,35 +355,20 @@ const Home: NextPage = ({
         <Center>
           <Text
             size="sm"
-            color="gray"
-            align="center"
+            c="gray"
+            ta="center"
             style={{ maxWidth: "25rem", padding: "0.5rem" }}
           >
-            Umgesetzt von{" "}
-            <a
-              style={{ textDecoration: "inherit" }}
-              href="//johannesfilter.com"
-            >
-              Johannes Filter
-            </a>{" "}
-            und{" "}
-            <a style={{ textDecoration: "inherit" }} href="//digit.so36.net/">
-              Matthias Monroy
-            </a>
+            Umgesetzt von <a href="//johannesfilter.com">Johannes Filter</a> und{" "}
+            <a href="//digit.so36.net/">Matthias Monroy</a>
             <br />
             basierend auf{" "}
-            <a
-              style={{ textDecoration: "inherit" }}
-              href="https://www.cilip.de/category/polizeiliche-todesschuesse/"
-            >
+            <a href="https://www.cilip.de/category/polizeiliche-todesschuesse/">
               jahrzehntelangen Recherchen
             </a>{" "}
             von
             <br /> Otto Diederichs und der{" "}
-            <a style={{ textDecoration: "inherit" }} href="//cilip.de">
-              Bürgerrechte & Polizei/CILIP-Redaktion
-            </a>
-            .
+            <a href="//cilip.de">Bürgerrechte & Polizei/CILIP-Redaktion</a>.
           </Text>
         </Center>
         <Space h="xl" />
@@ -382,6 +385,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { data, geoData, options, fuse, beforeReuni, afterReuni, averages } =
     await setupData();
 
+  console.log("getServerSideProps - setupData returned:", {
+    dataLength: data?.length,
+    geoDataLength: geoData?.length,
+    optionsKeys: options ? Object.keys(options) : undefined,
+    fuseExists: !!fuse,
+    beforeReuni,
+    afterReuni,
+  });
+
   if (selection.p !== null) selection.p = parseInt(selection.p);
   if (selection.tags && selection.tags !== null)
     selection.tags = selection.tags.split(",");
@@ -389,10 +401,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   let initialSearchedData = null;
   if (q && q.length > 2) {
+    console.log("Searching with fuse for:", q);
     // use only excact matches with Fuse advanced search options
-    initialSearchedData = fuse
-      .search("'" + q)
-      .map(({ item, matches }) => ({ ...item, matches: matches }));
+    const searchResults = fuse?.search("'" + q);
+    console.log(
+      "Fuse search results:",
+      searchResults ? `array of ${searchResults.length}` : "undefined",
+    );
+    initialSearchedData =
+      searchResults?.map(({ item, matches }) => ({
+        ...item,
+        matches: matches,
+      })) || null;
   }
 
   return {

@@ -15,7 +15,7 @@ const ShortsPerYear = ({ wData }) => {
 
   return (
     <div>
-      <AnchorHeading order={3} align="center" id="polizeischuesse-gesamt">
+      <AnchorHeading order={3} ta="center" id="polizeischuesse-gesamt">
         Polizeischüsse {wData[wData.length - 1].value}–{wData[0].value}
       </AnchorHeading>
       <Space h="lg" />
@@ -94,7 +94,7 @@ const SimpleChart = ({
 
   return (
     <div style={style}>
-      <AnchorHeading order={3} align="center" id={id}>
+      <AnchorHeading order={3} ta="center" id={id}>
         {title}{" "}
         <span style={{ whiteSpace: "nowrap" }}>
           {data[data.length - 1].value}–{data[0].value}

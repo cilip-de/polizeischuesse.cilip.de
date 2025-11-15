@@ -1,4 +1,4 @@
-import { Col, Container, Grid, Space, Title } from "@mantine/core";
+import { Container, Grid, Space, Title } from "@mantine/core";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -78,23 +78,23 @@ export default function Layout({
         <Space />
 
         <Grid>
-          <Col span={12} md={4}>
+          <Grid.Col span={{ base: 12, md: 4 }}>
             {cover && cover}
-          </Col>
-          <Col span={12} md={8}>
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 8 }}>
             <Title order={1}>{title}</Title>
             <Space h="sm" />
             <Title order={4}>{description}</Title>
             {otherContent}
-          </Col>
+          </Grid.Col>
         </Grid>
 
         <Space h="lg" />
         <Grid>
-          <Col span={4} md={4}></Col>
-          <Col span={12} md={fullWidth ? 12 : 8}>
+          <Grid.Col span={{ base: 4, md: 4 }}></Grid.Col>
+          <Grid.Col span={{ base: 12, md: fullWidth ? 12 : 8 }}>
             <main id="main-content">{children}</main>
-          </Col>
+          </Grid.Col>
         </Grid>
         <Space h="lg" />
         {/* Verification */}

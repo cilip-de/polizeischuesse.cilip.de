@@ -1,8 +1,9 @@
-import { Text, useMantineTheme } from "@mantine/core";
+import { useMantineTheme } from "@mantine/core";
 import { BarDatum, BarTooltipProps, ResponsiveBar } from "@nivo/bar";
 import { ticks } from "d3-array";
 import dayjs from "dayjs";
 import _ from "lodash";
+import { useState } from "react";
 import { countItems } from "../../lib/data";
 import { addMissingYears, combineArray } from "../../lib/util";
 import { makeDowData } from "../../pages/visualisierungen";
@@ -39,17 +40,18 @@ const selectNiceTicks = (
   ),
 ];
 
-const tooltip: React.FC<BarTooltipProps<DataItem>> = ({ value, data, id }) => (
-  <div>
-    <Text
-      size="sm"
-      style={{ background: "white", padding: "0.3rem 0.5rem", opacity: 0.95 }}
-    >
-      {data.value}: {value}
-      {data.tooltipLabel != null && `, ${data.tooltipLabel[id]}`}
-    </Text>
-  </div>
-);
+const tooltip: React.FC<BarTooltipProps<DataItem>> = ({ value, data, id }) => {
+  const label = data.tooltipLabel?.[id] || "Anzahl";
+  return (
+    <ChartTooltip
+      secondaryLabel={`${data.value}${data.tooltipLabel != null ? `, ${label}` : ""}`}
+      secondaryValue={value}
+      singularUnit=""
+      pluralUnit=""
+      valueFormatter={(val) => val.toString()}
+    />
+  );
+};
 
 const tooltipOverview = ({
   value,
@@ -59,27 +61,20 @@ const tooltipOverview = ({
   value: number;
   data: DataItem;
   id: string;
-}) => (
-  <div>
-    <Text
-      size="sm"
-      style={{ background: "white", padding: "0.3rem 0.5rem", opacity: 0.95 }}
-    >
-      {data.value}:{" "}
-      {data.tooltipLabel &&
-        data.tooltipLabel[id] === "hit" &&
-        value !== 1 &&
-        `${value} Fälle`}
-      {data.tooltipLabel &&
-        data.tooltipLabel[id] === "hit" &&
-        value === 1 &&
-        `1 Fall`}
-      {data.tooltipLabel &&
-        data.tooltipLabel[id] !== "hit" &&
-        `${value} Fälle, auf die die Auswahl nicht zutrifft`}
-    </Text>
-  </div>
-);
+}) => {
+  const isHit = data.tooltipLabel && data.tooltipLabel[id] === "hit";
+  const customContent = !isHit ? ", auf die die Auswahl nicht zutrifft" : undefined;
+
+  return (
+    <ChartTooltip
+      secondaryLabel={data.value}
+      secondaryValue={value}
+      singularUnit="Fall"
+      pluralUnit="Fälle"
+      customContent={customContent}
+    />
+  );
+};
 
 const commonProps = {
   indexBy: "value",
@@ -101,6 +96,7 @@ const VerticalBarChart = ({
   [key: string]: any;
 }) => {
   const theme = useMantineTheme();
+  const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
 
   let legend = undefined;
 
@@ -187,11 +183,19 @@ const VerticalBarChart = ({
           left: mobile ? 0 : rest.axisLeft ? 50 : 10,
         }}
         axisLeft={null}
-        colors={[
-          theme.colors.indigo[2],
-          theme.colors.indigo[1],
-          theme.colors.indigo[3],
-        ]}
+        colors={(bar) => {
+          const isHovered =
+            hoveredBar?.indexValue === bar.indexValue &&
+            hoveredBar?.id === bar.id;
+          const colorMap = {
+            count: isHovered ? theme.colors.indigo[4] : theme.colors.indigo[2],
+            count2: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
+            count3: isHovered ? theme.colors.indigo[5] : theme.colors.indigo[3],
+          };
+          return colorMap[bar.id as keyof typeof colorMap] || theme.colors.indigo[2];
+        }}
+        onMouseEnter={(datum) => setHoveredBar({ indexValue: datum.indexValue as string, id: datum.id as string })}
+        onMouseLeave={() => setHoveredBar(null)}
         axisBottom={{
           tickValues: selectNiceTicks(data, numTicks),
         }}
@@ -211,6 +215,7 @@ const HorizontalBarChart = ({
   ...rest
 }) => {
   const theme = useMantineTheme();
+  const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
 
   let legend = undefined;
 
@@ -307,7 +312,19 @@ const HorizontalBarChart = ({
         axisRight={null}
         enableGridY={false}
         axisBottom={null}
-        colors={[theme.colors.indigo[2], theme.colors.indigo[1]]}
+        colors={(bar) => {
+          const isHovered =
+            hoveredBar?.indexValue === bar.indexValue &&
+            hoveredBar?.id === bar.id;
+          const colorMap = {
+            count: isHovered ? theme.colors.indigo[4] : theme.colors.indigo[2],
+            count2: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
+            count3: isHovered ? theme.colors.indigo[5] : theme.colors.indigo[3],
+          };
+          return colorMap[bar.id as keyof typeof colorMap] || theme.colors.indigo[2];
+        }}
+        onMouseEnter={(datum) => setHoveredBar({ indexValue: datum.indexValue as string, id: datum.id as string })}
+        onMouseLeave={() => setHoveredBar(null)}
         data={data}
         {...commonProps}
         {...rest}
@@ -318,6 +335,24 @@ const HorizontalBarChart = ({
 
 const OverviewChart = ({ data, hits, onClick }) => {
   const theme = useMantineTheme();
+  const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
+
+  console.log('OverviewChart rendering:', {
+    data: data ? `array of ${data.length}` : 'undefined',
+    hits: hits ? `array of ${hits.length}` : 'undefined',
+    theme: !!theme,
+    themeColors: theme?.colors ? Object.keys(theme.colors) : 'undefined',
+  });
+
+  if (!hits || !data) {
+    console.log('OverviewChart: hits or data is null, returning null');
+    return null;
+  }
+
+  if (!Array.isArray(hits) || !Array.isArray(data)) {
+    console.error('OverviewChart: hits or data is not an array', { hits, data });
+    return null;
+  }
 
   const hitsId = new Set(hits.map(({ key }) => key));
 
@@ -350,19 +385,25 @@ const OverviewChart = ({ data, hits, onClick }) => {
         margin={{ top: 0, right: 0, bottom: 25, left: 0 }}
         axisLeft={null}
         colors={(x) => {
+          const isHovered =
+            hoveredBar?.indexValue === x.indexValue &&
+            hoveredBar?.id === x.id;
+
           if (x.indexValue === dayjs().year().toString()) {
-            return (
-              {
-                count: theme.colors.indigo[2],
-                count2: theme.colors.indigo[1],
-                count3: theme.colors.indigo[1],
-              }[x.id] || theme.colors.indigo[2]
-            );
+            const colorMap = {
+              count: isHovered ? theme.colors.indigo[4] : theme.colors.indigo[2],
+              count2: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
+              count3: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
+            };
+            return colorMap[x.id] || theme.colors.indigo[2];
           }
-          return (
-            { count: "#BFBFC1", count2: "#EAEAEC", count3: "#EAEAEC" }[x.id] ||
-            "#BFBFC1" // Default color
-          );
+
+          const colorMap = {
+            count: isHovered ? "#9FA0A2" : "#BFBFC1",
+            count2: isHovered ? "#D0D0D2" : "#EAEAEC",
+            count3: isHovered ? "#D0D0D2" : "#EAEAEC",
+          };
+          return colorMap[x.id] || "#BFBFC1";
         }}
         axisBottom={{
           tickValues: selectNiceTicks(procData, 5, 1, 1),
@@ -373,9 +414,11 @@ const OverviewChart = ({ data, hits, onClick }) => {
         // padding={-0.01}
         tooltip={tooltipOverview}
         onClick={onClick}
-        onMouseEnter={(_datum, event) => {
+        onMouseEnter={(datum, event) => {
           event.currentTarget.style.cursor = "pointer";
+          setHoveredBar({ indexValue: datum.indexValue as string, id: datum.id as string });
         }}
+        onMouseLeave={() => setHoveredBar(null)}
       />
     </div>
   );
@@ -385,6 +428,7 @@ const DowChart = ({ data }) => {
   const dataDow = makeDowData(data);
 
   const theme = useMantineTheme();
+  const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
   const margin = { top: 10, right: 10, bottom: 10, left: 70 };
 
   return (
@@ -399,11 +443,19 @@ const DowChart = ({ data }) => {
         axisRight={null}
         enableGridY={false}
         axisBottom={null}
-        colors={[
-          theme.colors.indigo[2],
-          theme.colors.indigo[1],
-          theme.colors.indigo[3],
-        ]}
+        colors={(bar) => {
+          const isHovered =
+            hoveredBar?.indexValue === bar.indexValue &&
+            hoveredBar?.id === bar.id;
+          const colorMap = {
+            count: isHovered ? theme.colors.indigo[4] : theme.colors.indigo[2],
+            count2: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
+            count3: isHovered ? theme.colors.indigo[5] : theme.colors.indigo[3],
+          };
+          return colorMap[bar.id as keyof typeof colorMap] || theme.colors.indigo[2];
+        }}
+        onMouseEnter={(datum) => setHoveredBar({ indexValue: datum.indexValue as string, id: datum.id as string })}
+        onMouseLeave={() => setHoveredBar(null)}
         data={dataDow}
         {...commonProps}
       />

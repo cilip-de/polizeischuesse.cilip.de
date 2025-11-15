@@ -1,4 +1,4 @@
-import { Center, Col, Grid, Space, Text, Collapse, Anchor } from "@mantine/core";
+import { Center, Grid, Space, Text, Collapse, Anchor } from "@mantine/core";
 import { ResponsiveLine } from "@nivo/line";
 import { csv } from "d3-fetch";
 import type { NextPage } from "next";
@@ -153,8 +153,8 @@ const Taser: NextPage = ({ data, stats }) => {
       }
     >
       <Grid>
-        <Col span={4}></Col>
-        <Col span={12} md={8}>
+        <Grid.Col span={4}></Grid.Col>
+        <Grid.Col span={{ base: 12, md: 8 }}>
           <div>
             Die Taser-Statistik stellen wir gesondert dar, denn die
             Elektroschocks führen zu deutlich anderen Todesursachen als Munition
@@ -169,7 +169,7 @@ const Taser: NextPage = ({ data, stats }) => {
             getasert wurden; die Bericht dazu lassen auch oft auf eine
             psychische Ausnahmesituation bzw. Drogenkonsum schließen.
           </div>
-        </Col>
+        </Grid.Col>
       </Grid>
       <Space />
       <AnchorHeading style={{ marginTop: "1rem" }} order={2} id="statistik">
@@ -188,7 +188,7 @@ const Taser: NextPage = ({ data, stats }) => {
           {opened ? "▼" : "▶"} Informationen zur Datenquelle
         </Anchor>
         <Collapse in={opened}>
-          <Text size="sm" color="gray" align="right" style={{ marginTop: "0.5rem" }}>
+          <Text size="sm" c="gray" ta="right" style={{ marginTop: "0.5rem" }}>
             Seit 2020 führt das Polizeitechnische Institut der Deutschen
             Hochschule der Polizei nach einem Beschluss der IMK Informationen zu
             Taser-Einsätzen aus Ländern und Bund zusammen. Diese konnten wir durch
@@ -227,7 +227,7 @@ const Taser: NextPage = ({ data, stats }) => {
       <div style={{ textAlign: "center", marginTop: "2rem" }}>
         <Grid>
           {links.map((x) => (
-            <Col span={4} key={x[1]}>
+            <Grid.Col span={4} key={x[1]}>
               <a
                 target="_blank"
                 href={x[0]}
@@ -236,7 +236,7 @@ const Taser: NextPage = ({ data, stats }) => {
               >
                 {x[1]}
               </a>
-            </Col>
+            </Grid.Col>
           ))}
         </Grid>
       </div>
@@ -246,8 +246,8 @@ const Taser: NextPage = ({ data, stats }) => {
       <Center>
         <Text
           size="sm"
-          color="gray"
-          align="center"
+          c="gray"
+          ta="center"
           style={{ maxWidth: "25rem" }}
         >
           Alle Daten auf dieser Webseite sind unter der{" "}

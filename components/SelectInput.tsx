@@ -10,6 +10,9 @@ interface SelectInputProps {
 }
 
 const SelectInput = ({ skey, label, selection, data }: SelectInputProps) => {
+  // Mantine v8 Select requires clean data with only value and label properties
+  const cleanData = (data || []).map(({ value, label }) => ({ value, label }));
+
   return (
     <Select
       value={selection[skey] || ""}
@@ -26,8 +29,7 @@ const SelectInput = ({ skey, label, selection, data }: SelectInputProps) => {
       placeholder="auswählen"
       searchable
       clearable
-      nothingFound="keine Ergebnis"
-      data={data}
+      data={cleanData}
     />
   );
 };
