@@ -3,7 +3,7 @@ import { BarDatum, BarTooltipProps, ResponsiveBar } from "@nivo/bar";
 import { ticks } from "d3-array";
 import dayjs from "dayjs";
 import _ from "lodash";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { countItems } from "../../lib/data";
 import { addMissingYears, combineArray } from "../../lib/util";
 import { makeDowData } from "../../pages/visualisierungen";
@@ -87,6 +87,7 @@ const VerticalBarChart = ({
   data,
   numTicks = 3,
   mobile = false,
+  tooltip: customTooltip,
   ...rest
 }: {
   data: DataItem[];
@@ -97,6 +98,23 @@ const VerticalBarChart = ({
 }) => {
   const theme = useMantineTheme();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
+  const [activeBar, setActiveBar] = useState<{ indexValue: string; id: string; value: number; data: any } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!mobile) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setActiveBar(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [mobile]);
 
   let legend = undefined;
 
@@ -162,13 +180,46 @@ const VerticalBarChart = ({
 
   return (
     <div
+      ref={containerRef}
       className={mobile ? "only-mobile" : "only-non-mobile"}
       style={{
         height: mobile ? 300 : 200,
+        position: "relative",
       }}
       role="img"
       aria-label="Balkendiagramm der Datenverteilung"
+      onClick={mobile ? () => setActiveBar(null) : undefined}
     >
+      {mobile && activeBar && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "10px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "white",
+            padding: "0.5rem 0.75rem",
+            borderRadius: "4px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+            zIndex: 1000,
+            fontSize: "0.85rem",
+            maxWidth: "90%",
+            textAlign: "center",
+          }}
+        >
+          {customTooltip ? (
+            customTooltip({ value: activeBar.value, data: activeBar.data, id: activeBar.id })
+          ) : (
+            <>
+              <div><strong>{activeBar.indexValue}</strong></div>
+              <div>
+                {data[0]?.tooltipLabel?.[activeBar.id] || "Anzahl"}: {activeBar.value}{" "}
+                {activeBar.value === 1 ? "Fall" : "Fälle"}
+              </div>
+            </>
+          )}
+        </div>
+      )}
       <ResponsiveBar
         theme={{
           fontSize: mobile ? 8 : 12,
@@ -178,9 +229,9 @@ const VerticalBarChart = ({
         label={labelFormatter}
         margin={{
           top: 10,
-          right: mobile ? 0 : 220,
+          right: mobile ? 15 : 220,
           bottom: mobile && data && data.length > 0 && data[0].tooltipLabel ? 100 : 30,
-          left: mobile ? 0 : rest.axisLeft ? 50 : 10,
+          left: mobile ? 15 : rest.axisLeft ? 50 : 10,
         }}
         axisLeft={null}
         colors={(bar) => {
@@ -196,13 +247,21 @@ const VerticalBarChart = ({
         }}
         onMouseEnter={(datum) => setHoveredBar({ indexValue: datum.indexValue as string, id: datum.id as string })}
         onMouseLeave={() => setHoveredBar(null)}
+        onClick={mobile ? (datum, event) => {
+          event.stopPropagation();
+          if (activeBar?.indexValue === datum.indexValue && activeBar?.id === datum.id) {
+            setActiveBar(null);
+          } else {
+            setActiveBar({ indexValue: datum.indexValue as string, id: datum.id as string, value: datum.value as number, data: datum.data });
+          }
+        } : undefined}
         axisBottom={{
           tickValues: selectNiceTicks(data, numTicks),
         }}
         data={data}
         {...commonProps}
-        {...(mobile ? { padding: 0.1 } : {})}
         {...rest}
+        {...(mobile ? { padding: 0.1, tooltip: () => null } : {})}
       />
     </div>
   );
@@ -216,6 +275,23 @@ const HorizontalBarChart = ({
 }) => {
   const theme = useMantineTheme();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
+  const [activeBar, setActiveBar] = useState<{ indexValue: string; id: string; value: number } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!mobile) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setActiveBar(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [mobile]);
 
   let legend = undefined;
 
@@ -292,17 +368,43 @@ const HorizontalBarChart = ({
 
   const margin = {
     top: 10,
-    right: mobile ? 0 : (data && data.length > 0 && data[0].tooltipLabel ? 160 : 120),
+    right: mobile ? 10 : (data && data.length > 0 && data[0].tooltipLabel ? 160 : 120),
     bottom: mobile && data && data.length > 0 && data[0].tooltipLabel ? 100 : 30,
-    left: mobile ? 140 : 150,
+    left: mobile ? 130 : 150,
   };
   return (
     <div
+      ref={containerRef}
       className={mobile ? "only-mobile" : "only-non-mobile"}
-      style={{ height: 20 * data.length + margin.top + margin.bottom }}
+      style={{ height: 20 * data.length + margin.top + margin.bottom, position: "relative" }}
       role="img"
       aria-label="Horizontales Balkendiagramm der Datenverteilung"
+      onClick={mobile ? () => setActiveBar(null) : undefined}
     >
+      {mobile && activeBar && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "10px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "white",
+            padding: "0.5rem 0.75rem",
+            borderRadius: "4px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+            zIndex: 1000,
+            fontSize: "0.85rem",
+            maxWidth: "90%",
+            textAlign: "center",
+          }}
+        >
+          <div><strong>{activeBar.indexValue}</strong></div>
+          <div>
+            {data[0]?.tooltipLabel?.[activeBar.id] || "Anzahl"}: {formatPerc ? `${Math.round(activeBar.value * 100)}%` : activeBar.value}
+            {!formatPerc && ` ${activeBar.value === 1 ? "Fall" : "Fälle"}`}
+          </div>
+        </div>
+      )}
       <ResponsiveBar
         legends={legend}
         labelSkipWidth={15}
@@ -325,9 +427,18 @@ const HorizontalBarChart = ({
         }}
         onMouseEnter={(datum) => setHoveredBar({ indexValue: datum.indexValue as string, id: datum.id as string })}
         onMouseLeave={() => setHoveredBar(null)}
+        onClick={mobile ? (datum, event) => {
+          event.stopPropagation();
+          if (activeBar?.indexValue === datum.indexValue && activeBar?.id === datum.id) {
+            setActiveBar(null);
+          } else {
+            setActiveBar({ indexValue: datum.indexValue as string, id: datum.id as string, value: datum.value as number });
+          }
+        } : undefined}
         data={data}
         {...commonProps}
         {...rest}
+        {...(mobile ? { tooltip: () => null } : {})}
       />
     </div>
   );

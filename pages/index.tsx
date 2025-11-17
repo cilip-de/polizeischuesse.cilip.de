@@ -105,44 +105,44 @@ const Home = ({
             style={{ marginBottom: "2rem" }}
           >
             <Group justify="center">
-              <div style={{ width: "45%" }}>
+              <div style={{ width: "47%" }}>
                 <Button
                   component={Link}
                   href="/visualisierungen"
-                  c="gray"
+                  c="dark"
                   variant="outline"
                   style={{ width: "100%" }}
                 >
                   Visualisierungen
                 </Button>
               </div>
-              <div style={{ width: "45%" }}>
+              <div style={{ width: "47%" }}>
                 <Button
                   component={Link}
                   href="/methodik"
-                  c="gray"
+                  c="dark"
                   variant="outline"
                   style={{ width: "100%" }}
                 >
                   Methodik
                 </Button>
               </div>
-              <div style={{ width: "45%" }}>
+              <div style={{ width: "47%" }}>
                 <Button
                   component={Link}
                   href="/statistik"
-                  c="gray"
+                  c="dark"
                   variant="outline"
                   style={{ width: "100%" }}
                 >
                   Offizielle Statistik
                 </Button>
               </div>
-              <div style={{ width: "45%" }}>
+              <div style={{ width: "47%" }}>
                 <Button
                   component={Link}
                   href="/taser"
-                  c="gray"
+                  c="dark"
                   variant="outline"
                   style={{ width: "100%" }}
                 >

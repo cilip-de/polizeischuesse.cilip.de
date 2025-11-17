@@ -4,7 +4,7 @@ import { csv } from "d3-fetch";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import AnchorHeading from "../components/AnchorHeading";
 import Case from "../components/Case";
 import Layout from "../components/Layout";
@@ -56,77 +56,134 @@ const links = [
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const MyResponsiveLine = ({ data }) => (
-  <ResponsiveLine
-    data={data}
-    lineWidth={3}
-    colors={{ scheme: "set1" }}
-    margin={{ top: 20, right: 20, bottom: 50, left: 60 }}
-    xScale={{ type: "point" }}
-    yScale={{
-      type: "linear",
-    }}
-    // yFormat=" >-.2f"
-    axisTop={null}
-    axisRight={null}
-    axisBottom={{
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: "Jahr",
-      legendOffset: 36,
-      legendPosition: "middle",
-      // truncateTickAt: 0,
-    }}
-    axisLeft={{
-      tickValues: 5,
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: "Anzahl",
-      legendOffset: -40,
-      legendPosition: "middle",
-      // truncateTickAt: 0,
-    }}
-    gridXValues={5}
-    gridYValues={5}
-    pointSize={10}
-    pointColor={{ theme: "background" }}
-    pointBorderWidth={2}
-    pointBorderColor={{ from: "seriesColor" }}
-    pointLabelYOffset={-12}
-    useMesh={true}
-    tooltip={({ point }) => lineChartTooltip({ point })}
-    legends={[
-      {
-        anchor: "bottom-right",
-        direction: "column",
-        justify: false,
-        itemBackground: "white",
-        // translateX: 100,
-        // translateY: 0,
-        itemsSpacing: 0,
-        itemDirection: "left-to-right",
-        itemWidth: 150,
-        itemHeight: 20,
-        itemOpacity: 0.75,
-        symbolSize: 12,
-        symbolShape: "circle",
-        symbolBorderColor: "rgba(0, 0, 0, .5)",
-        effects: [
+const MyResponsiveLine = ({ data, mobile = false }) => {
+  const [activePoint, setActivePoint] = useState<{ serieId: string; x: string | number; y: number } | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!mobile) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setActivePoint(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [mobile]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{ height: "100%", width: "100%", position: "relative" }}
+      onClick={mobile ? () => setActivePoint(null) : undefined}
+    >
+      {mobile && activePoint && (
+        <div
+          style={{
+            position: "absolute",
+            bottom: "10px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "white",
+            padding: "0.5rem 0.75rem",
+            borderRadius: "4px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+            zIndex: 1000,
+            fontSize: "0.85rem",
+            maxWidth: "90%",
+            textAlign: "center",
+          }}
+        >
+          <div><strong>{activePoint.x}</strong></div>
+          <div>
+            {activePoint.serieId}: {activePoint.y} {activePoint.y === 1 ? "Fall" : "Fälle"}
+          </div>
+        </div>
+      )}
+      <ResponsiveLine
+        data={data}
+        lineWidth={3}
+        colors={{ scheme: "set1" }}
+        margin={mobile ? { top: 20, right: 15, bottom: 50, left: 50 } : { top: 20, right: 20, bottom: 50, left: 60 }}
+        xScale={{ type: "point" }}
+        yScale={{
+          type: "linear",
+        }}
+        // yFormat=" >-.2f"
+        axisTop={null}
+        axisRight={null}
+        axisBottom={{
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "Jahr",
+          legendOffset: 36,
+          legendPosition: "middle",
+          // truncateTickAt: 0,
+        }}
+        axisLeft={{
+          tickValues: 5,
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          legend: "Anzahl",
+          legendOffset: -40,
+          legendPosition: "middle",
+          // truncateTickAt: 0,
+        }}
+        gridXValues={5}
+        gridYValues={5}
+        pointSize={10}
+        pointColor={{ theme: "background" }}
+        pointBorderWidth={2}
+        pointBorderColor={{ from: "seriesColor" }}
+        pointLabelYOffset={-12}
+        useMesh={true}
+        onClick={mobile ? (point, event) => {
+          event.stopPropagation();
+          if (activePoint?.serieId === point.serieId && activePoint?.x === point.data.x) {
+            setActivePoint(null);
+          } else {
+            setActivePoint({ serieId: point.serieId as string, x: point.data.x, y: point.data.y as number });
+          }
+        } : undefined}
+        tooltip={mobile ? () => null : ({ point }) => lineChartTooltip({ point })}
+        legends={mobile ? [] : [
           {
-            on: "hover",
-            style: {
-              itemBackground: "rgba(0, 0, 0, .03)",
-              itemOpacity: 1,
-            },
+            anchor: "bottom-right",
+            direction: "column",
+            justify: false,
+            itemBackground: "white",
+            // translateX: 100,
+            // translateY: 0,
+            itemsSpacing: 0,
+            itemDirection: "left-to-right",
+            itemWidth: 150,
+            itemHeight: 20,
+            itemOpacity: 0.75,
+            symbolSize: 12,
+            symbolShape: "circle",
+            symbolBorderColor: "rgba(0, 0, 0, .5)",
+            effects: [
+              {
+                on: "hover",
+                style: {
+                  itemBackground: "rgba(0, 0, 0, .03)",
+                  itemOpacity: 1,
+                },
+              },
+            ],
           },
-        ],
-      },
-    ]}
-    role="application"
-  />
-);
+        ]}
+        role="application"
+      />
+    </div>
+  );
+};
 
 const Taser: NextPage = ({ data, stats }) => {
   const [opened, setOpened] = useState(false);
@@ -175,8 +232,30 @@ const Taser: NextPage = ({ data, stats }) => {
       <AnchorHeading style={{ marginTop: "1rem" }} order={2} id="statistik">
         Taser-Statistik
       </AnchorHeading>
-      <div style={{ height: "40vh", width: "90%", margin: "0 auto" }}>
+      <div className="only-non-mobile" style={{ height: "40vh", width: "90%", margin: "0 auto" }}>
         <MyResponsiveLine data={stats} />
+      </div>
+      <div className="only-mobile" style={{ width: "100%" }}>
+        <div style={{ height: "40vh", width: "100%", margin: "0 auto" }}>
+          <MyResponsiveLine data={stats} mobile />
+        </div>
+        <div style={{ marginTop: "1rem", padding: "0 1rem" }}>
+          {stats.map((serie, index) => (
+            <div key={serie.id} style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
+              <div
+                style={{
+                  width: "12px",
+                  height: "12px",
+                  borderRadius: "50%",
+                  backgroundColor: ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"][index % 9],
+                  marginRight: "0.5rem",
+                  flexShrink: 0,
+                }}
+              />
+              <Text size="sm">{serie.id}</Text>
+            </div>
+          ))}
+        </div>
       </div>
       <div style={{ marginTop: "1rem", textAlign: "right" }}>
         <Anchor
@@ -188,7 +267,7 @@ const Taser: NextPage = ({ data, stats }) => {
           {opened ? "▼" : "▶"} Informationen zur Datenquelle
         </Anchor>
         <Collapse in={opened}>
-          <Text size="sm" c="gray" ta="right" style={{ marginTop: "0.5rem" }}>
+          <Text size="sm" c="gray" ta="left" style={{ marginTop: "0.5rem" }}>
             Seit 2020 führt das Polizeitechnische Institut der Deutschen
             Hochschule der Polizei nach einem Beschluss der IMK Informationen zu
             Taser-Einsätzen aus Ländern und Bund zusammen. Diese konnten wir durch

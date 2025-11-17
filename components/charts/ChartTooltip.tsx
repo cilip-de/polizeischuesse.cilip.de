@@ -16,6 +16,7 @@ interface ChartTooltipProps {
   singularUnit?: string; // e.g., "Fall", "Schuss", "Opfer"
   pluralUnit?: string; // e.g., "Fälle", "Schüsse", "Opfer"
   customContent?: React.ReactNode; // For special cases
+  mobileFixed?: boolean; // If true, position fixed at bottom on mobile
 }
 
 export const ChartTooltip: React.FC<ChartTooltipProps> = ({
@@ -28,6 +29,7 @@ export const ChartTooltip: React.FC<ChartTooltipProps> = ({
   singularUnit = "Fall",
   pluralUnit = "Fälle",
   customContent,
+  mobileFixed = false,
 }) => {
   const formatValue = (val: number) => {
     if (valueFormatter) return valueFormatter(val);
@@ -46,6 +48,16 @@ export const ChartTooltip: React.FC<ChartTooltipProps> = ({
         padding: "0.3rem 0.5rem",
         opacity: 0.95,
         whiteSpace: "nowrap",
+        maxWidth: "300px",
+        fontSize: "0.85rem",
+        ...(mobileFixed ? {
+          position: "fixed",
+          bottom: "20px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 1000,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+        } : {}),
       }}
     >
       {primaryLabel && primaryValue !== undefined && (

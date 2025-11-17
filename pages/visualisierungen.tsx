@@ -693,7 +693,7 @@ const Visualisierungen: NextPage = ({ data, options, averages }) => {
           data={boolData}
           formatPerc
           maxValue={1}
-          margin={{ top: 10, right: 0, bottom: 30, left: 200 }}
+          margin={{ top: 10, right: 10, bottom: 30, left: 190 }}
           tooltip={({ value, data }: { value: number; data: any }) =>
             percentageTooltip({ value, data })
           }
