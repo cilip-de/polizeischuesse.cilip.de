@@ -40,10 +40,12 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
-        <script
-          type="text/javascript"
-          dangerouslySetInnerHTML={{ __html: tracking }}
-        />
+        {process.env.NODE_ENV === "production" && (
+          <script
+            type="text/javascript"
+            dangerouslySetInnerHTML={{ __html: tracking }}
+          />
+        )}
       </body>
     </Html>
   );
