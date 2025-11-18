@@ -60,6 +60,10 @@ const Home = ({
           content={`Seit der Wiedervereinigung wurden mindestens ${afterReuni} Personen durch Kugeln der deutschen Polizei getötet. Wir zählen von 1976 bis 1990 außerdem ${beforeReuni} tödliche Schüsse allein in Westdeutschland.`}
         />
         <meta property="og:title" content="Polizeiliche Todesschüsse ab 1976" />
+        <meta
+          property="og:description"
+          content={`Seit der Wiedervereinigung wurden mindestens ${afterReuni} Personen durch Kugeln der deutschen Polizei getötet. Wir zählen von 1976 bis 1990 außerdem ${beforeReuni} tödliche Schüsse allein in Westdeutschland.`}
+        />
         <meta property="og:type" content="article" />
         <meta
           property="og:image"
