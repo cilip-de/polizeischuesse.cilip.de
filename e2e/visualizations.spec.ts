@@ -92,13 +92,28 @@ test.describe('Visualizations Page', () => {
         // Hover over a bar in the middle of the collection (more reliable than first)
         const middleBar = bars.nth(Math.floor(barCount / 2));
         await middleBar.scrollIntoViewIfNeeded();
-        await middleBar.hover({ force: true });
-        await page.waitForTimeout(500);
 
-        // Look for ChartTooltip component (same selector as heatmap test)
-        const tooltip = page.locator('div:has(> [style*="background: white"][style*="padding: 0.3rem 0.5rem"])');
+        // Check if we're on mobile viewport (≤768px matches the CSS media query)
+        const viewport = page.viewportSize();
+        const isMobile = viewport && viewport.width <= 768;
 
-        await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
+        if (isMobile) {
+          // On mobile, tooltips appear on click
+          await middleBar.click({ force: true });
+          await page.waitForTimeout(500);
+
+          // Mobile tooltips are absolutely positioned divs with inline styles
+          const tooltip = page.locator('div[style*="position: absolute"]').filter({ hasText: /Fall|Fälle/ });
+          await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
+        } else {
+          // On desktop, tooltips appear on hover
+          await middleBar.hover({ force: true });
+          await page.waitForTimeout(500);
+
+          // Look for ChartTooltip component (same selector as heatmap test)
+          const tooltip = page.locator('div:has(> [style*="background: white"][style*="padding: 0.3rem 0.5rem"])');
+          await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
+        }
       }
     });
 
@@ -207,13 +222,30 @@ test.describe('Visualizations Page', () => {
         // Hover over a cell in the middle of the collection
         const middleCell = cells.nth(Math.floor(await cells.count() / 2));
         await middleCell.scrollIntoViewIfNeeded();
-        await middleCell.hover({ force: true });
-        await page.waitForTimeout(500);
 
-        // Look for ChartTooltip component (renders with specific background styling)
-        const tooltip = page.locator('div:has(> [style*="background: white"][style*="padding: 0.3rem 0.5rem"])');
+        // Check if we're on mobile viewport (≤768px matches the CSS media query)
+        const viewport = page.viewportSize();
+        const isMobile = viewport && viewport.width <= 768;
 
-        await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
+        if (isMobile) {
+          // On mobile, tooltips appear on click
+          await middleCell.click({ force: true });
+          await page.waitForTimeout(500);
+
+          // Mobile tooltips are absolutely positioned divs with inline styles containing state names or data
+          const tooltip = page.locator('div[style*="position: absolute"]').filter({
+            hasText: /Fall|Fälle|Bayern|Berlin|Hamburg|Hessen|NRW|Sachsen/
+          });
+          await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
+        } else {
+          // On desktop, tooltips appear on hover
+          await middleCell.hover({ force: true });
+          await page.waitForTimeout(500);
+
+          // Look for ChartTooltip component (renders with specific background styling)
+          const tooltip = page.locator('div:has(> [style*="background: white"][style*="padding: 0.3rem 0.5rem"])');
+          await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
+        }
       }
     });
 
