@@ -210,7 +210,7 @@ const HeatMapChart = ({ data, mobile = false }: HeatMapChartProps) => {
           const count = perStateCounts[data.cell.serieId.replace("Mecklenburg-Vorp.", "Mecklenburg-Vorpommern")];
           return (
             <ChartTooltip
-              primaryLabel=""
+              primaryLabel="Land"
               primaryValue={data.cell.serieId}
               secondaryLabel={data.cell.data.x}
               secondaryValue={data.cell.value ?? 0}

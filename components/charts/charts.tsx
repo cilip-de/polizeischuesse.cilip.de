@@ -50,11 +50,12 @@ const tooltip: React.FC<BarTooltipProps<ChartDataItem>> = ({ value, data, id }) 
   const label = dataWithTooltip.tooltipLabel?.[String(id)] || "Anzahl";
   return (
     <ChartTooltip
-      secondaryLabel={`${data.value}${dataWithTooltip.tooltipLabel != null ? `, ${label}` : ""}`}
+      primaryLabel="Jahr"
+      primaryValue={data.value}
+      secondaryLabel={label}
       secondaryValue={value}
-      singularUnit=""
-      pluralUnit=""
-      valueFormatter={(val) => val.toString()}
+      singularUnit="Fall"
+      pluralUnit="Fälle"
     />
   );
 };
@@ -70,7 +71,9 @@ const tooltipOverview: React.FC<BarTooltipProps<ChartDataItem>> = ({
 
   return (
     <ChartTooltip
-      secondaryLabel={data.value}
+      primaryLabel="Jahr"
+      primaryValue={data.value}
+      secondaryLabel="Anzahl"
       secondaryValue={value}
       singularUnit="Fall"
       pluralUnit="Fälle"
@@ -296,6 +299,7 @@ const VerticalBarChart = ({
         data={data}
         {...commonProps}
         {...rest}
+        {...(customTooltip && !mobile ? { tooltip: customTooltip } : {})}
         {...(mobile ? { padding: 0.1, tooltip: () => null } : {})}
       />
     </div>

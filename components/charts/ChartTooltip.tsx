@@ -86,9 +86,10 @@ export const ChartTooltip: React.FC<ChartTooltipProps> = ({
         } : {}),
       }}
     >
-      {primaryLabel && primaryValue !== undefined && (
+      {primaryValue !== undefined && (
         <div>
-          <strong>{primaryLabel}:</strong> {primaryValue}
+          {primaryLabel && <strong>{primaryLabel}: </strong>}
+          {primaryValue}
         </div>
       )}
       <div>
@@ -207,7 +208,7 @@ export const percentageTooltip = (options: {
 
   const PercentageTooltipComponent = ({ value, data }: { value: number; data: TooltipData }) => (
     <ChartTooltip
-      primaryLabel=""
+      primaryLabel="Merkmal"
       primaryValue={data.value}
       secondaryLabel={label}
       secondaryValue={value * 100}

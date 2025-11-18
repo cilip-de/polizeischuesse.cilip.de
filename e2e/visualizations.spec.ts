@@ -113,6 +113,23 @@ test.describe('Visualizations Page', () => {
           // Look for ChartTooltip component (same selector as heatmap test)
           const tooltip = page.locator('div:has(> [style*="background: white"][style*="padding: 0.3rem 0.5rem"])');
           await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
+
+          // Verify tooltip has two lines - check for strong tags (one per line)
+          const strongTags = tooltip.first().locator('strong');
+          const strongCount = await strongTags.count();
+          expect(strongCount).toBe(2); // Should have exactly 2 strong tags (one per line)
+
+          // Get all text content and verify it contains two lines with labels
+          const tooltipText = await tooltip.first().textContent();
+
+          // Should contain two labels (with colons) followed by values
+          expect(tooltipText).toMatch(/.*:\s*.+/); // At least one label-value pair
+
+          // Verify first strong tag is visible (first line label)
+          await expect(strongTags.first()).toBeVisible();
+
+          // Verify second strong tag is visible (second line label)
+          await expect(strongTags.last()).toBeVisible();
         }
       }
     });
@@ -211,12 +228,14 @@ test.describe('Visualizations Page', () => {
     });
 
     test('should show tooltip on heatmap cell hover', async ({ page }) => {
-      await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight / 2));
+      // Scroll to the heatmap section specifically
+      await page.locator('#umstaende-bundeslaender').scrollIntoViewIfNeeded();
       await helpers.waitForCharts(page, 2);
       await page.waitForTimeout(1000); // Wait for heatmap to fully render
 
-      // Find visible heatmap cells
-      const cells = page.locator('svg rect[fill]:visible');
+      // Find visible heatmap cells - use aria-label to be more specific
+      const heatmapContainer = page.locator('[aria-label*="Heatmap"]');
+      const cells = heatmapContainer.locator('rect[fill]:visible');
 
       if (await cells.count() > 5) {
         // Hover over a cell in the middle of the collection
@@ -245,6 +264,21 @@ test.describe('Visualizations Page', () => {
           // Look for ChartTooltip component (renders with specific background styling)
           const tooltip = page.locator('div:has(> [style*="background: white"][style*="padding: 0.3rem 0.5rem"])');
           await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
+
+          // Verify tooltip has two lines - check for strong tags (one per line)
+          const strongTags = tooltip.first().locator('strong');
+          const strongCount = await strongTags.count();
+          expect(strongCount).toBe(2); // Should have exactly 2 strong tags (one per line)
+
+          // Verify first strong tag contains "Land:" label
+          await expect(strongTags.first()).toContainText('Land:');
+
+          // Get all text content and verify second line pattern
+          const tooltipText = await tooltip.first().textContent();
+          expect(tooltipText).toMatch(/Land:.*\d+%/); // Pattern: "Land: ... XX%"
+
+          // Verify second strong tag is visible (second line label)
+          await expect(strongTags.last()).toBeVisible();
         }
       }
     });
