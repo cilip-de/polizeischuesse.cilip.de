@@ -15,8 +15,8 @@ export default defineConfig({
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
 
-  /* Opt out of parallel tests on CI. */
-  workers: process.env.CI ? 1 : undefined,
+  /* Use 4 workers on CI to match GitHub Actions runner cores */
+  workers: process.env.CI ? 4 : undefined,
 
   /* Stop after first 5 failures */
   maxFailures: process.env.CI ? undefined : 5,
