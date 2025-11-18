@@ -25,11 +25,6 @@ jobs:
           node-version: "22"
       - run: npx playwright install-deps
       - run: npm ci
-      - run: npx playwright install chromium
-      - run: npm run build  
-      - run: |
-          npm run dev &
-          echo "Waiting for server to start..."
-          sleep 15
-          echo "Server should be ready now"
+      - run: npx playwright install chromium firefox webkit
+      - run: npm run build
       - run: npm test
