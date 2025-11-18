@@ -102,8 +102,9 @@ const Statistiken: NextPage<StatistikenProps> = ({
         und in den folgenden Visualisierungen aufbereitet. Die Diagramme zeigen
         die zeitliche Entwicklung verschiedener Kategorien des polizeilichen
         Schusswaffengebrauchs: Warnschüsse, Schüsse gegen Personen und Sachen,
-        Verletzte, Schusswaffengebrauch gegen Tiere sowie Selbsttötungen und
-        unbeabsichtigte Schussauslösungen von Polizistinnen und Polizisten.
+        Verletzte, Schusswaffengebrauch gegen Tiere sowie Selbsttötungen durch
+        Schusswaffengebrauch und unbeabsichtigte Schussauslösungen von
+        Polizistinnen und Polizisten.
       </div>
       <Space h="xl" />
       <Space h="xl" />
@@ -112,7 +113,9 @@ const Statistiken: NextPage<StatistikenProps> = ({
       <SimpleChart data={s2} title={"Schüsse gegen Tiere"} />
       <SimpleChart
         data={s3}
-        title={"Selbsttötungen und Selbsttötungsversuche von Polizistinnen und Polizisten"}
+        title={
+          "Selbsttötungen und Selbsttötungsversuche durch Schusswaffengebrauch von Polizistinnen und Polizisten"
+        }
         style={{ maxWidth: "30rem", margin: "0 auto" }}
       />
       <SimpleChart
@@ -127,7 +130,7 @@ const Statistiken: NextPage<StatistikenProps> = ({
 export const getServerSideProps: GetServerSideProps = async () => {
   let pdfs = [];
   const res = await fetch(
-    "https://fragdenstaat.de/api/v1/documentcollection/82/"
+    "https://fragdenstaat.de/api/v1/documentcollection/82/",
   );
   if (res.ok) {
     pdfs = await res.json();
@@ -190,7 +193,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
     wData1,
     "Gegen Sachen",
     "Gegen Personen",
-    "Warnschüsse"
+    "Warnschüsse",
   );
 
   return {
