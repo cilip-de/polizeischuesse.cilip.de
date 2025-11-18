@@ -1,14 +1,14 @@
 import { Title, TitleProps } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
 import { IconLink } from "@tabler/icons-react";
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 
 interface AnchorHeadingProps extends TitleProps {
   id: string;
   children: React.ReactNode;
 }
 
-const AnchorHeading = ({ id, children, style, ...titleProps }: AnchorHeadingProps) => {
+const AnchorHeading = ({ id, children, style, ta, ...titleProps }: AnchorHeadingProps) => {
   const clipboard = useClipboard({ timeout: 2000 });
   const [isHovered, setIsHovered] = useState(false);
 
@@ -17,20 +17,22 @@ const AnchorHeading = ({ id, children, style, ...titleProps }: AnchorHeadingProp
     clipboard.copy(url);
   };
 
+  const containerStyle: CSSProperties = {
+    display: "flex",
+    justifyContent: ta === "center" ? "center" : "flex-start",
+    alignItems: "center",
+    width: "100%",
+    gap: "0.5rem",
+    ...(typeof style === 'object' && !Array.isArray(style) ? style : {}),
+  };
+
   return (
     <div
-      style={{
-        display: "flex",
-        justifyContent: titleProps.align === "center" ? "center" : "flex-start",
-        alignItems: "center",
-        width: "100%",
-        gap: "0.5rem",
-        ...style,
-      }}
+      style={containerStyle}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Title id={id} {...titleProps} style={{ margin: 0 }}>
+      <Title id={id} ta={ta} {...titleProps} style={{ margin: 0 }}>
         {children}
       </Title>
       <button

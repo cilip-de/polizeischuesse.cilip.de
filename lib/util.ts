@@ -1,6 +1,17 @@
 import _ from "lodash";
 
-const paginate = (array: [], pageSize: number, pageNumber: number) => {
+export type Selection = {
+  year?: string;
+  place?: string;
+  state?: string;
+  q?: string;
+  p?: number;
+  tags?: string[];
+  weapon?: string;
+  age?: string;
+};
+
+const paginate = (array: any[], pageSize: number, pageNumber: number) => {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
   return array.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 };

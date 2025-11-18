@@ -43,3 +43,4 @@ data-wrangling/.ipynb_checkpoints
 playwright-report
 test-results
 .playwright-mcp
+tsconfig.tsbuildinfo

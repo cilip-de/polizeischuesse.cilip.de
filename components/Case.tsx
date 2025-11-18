@@ -1,4 +1,5 @@
 import { Badge, Card, Grid, Group, Space, Text } from "@mantine/core";
+import type { ProcessedDataItem } from "../lib/data";
 import { SEARCH_KEYES } from "../lib/data";
 import { isNumber } from "../lib/util";
 
@@ -26,8 +27,7 @@ interface Match {
   indices: number[][];
 }
 
-interface Item {
-  [key: string]: any;
+type Item = ProcessedDataItem & {
   matches?: Match[];
 }
 
@@ -35,7 +35,7 @@ const constructHighlights = (
   item: Item,
   attr: string
 ): JSX.Element | string => {
-  let text: JSX.Element | string = item[attr];
+  let text: JSX.Element | string = item[attr] as string;
 
   const descMatches: Match[] = (item.matches || []).filter(
     (x) => x.key === attr
@@ -79,7 +79,7 @@ interface CaseProps {
 
 const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
   for (const term of SEARCH_KEYES) {
-    item[term] = constructHighlights(item, term);
+    item[term] = constructHighlights(item, term) as string;
   }
 
   return (
@@ -104,7 +104,7 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
             Verletzte/getötete Beamte
           </Badge>
         )}
-        {item.vorbaktion && (
+        {item.vbaktion && (
           <Badge size="sm" color="indigo" variant="light">
             Vorbereitete Polizeiaktion
           </Badge>
@@ -137,8 +137,8 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
       </Group>
       <Space h="sm" />
       <Grid>
-        <Grid.Col span={{ base: 12, md: 4 }} lg={4}>
-          <Text weight={500}>{item["Name"]}</Text>
+        <Grid.Col span={{ base: 12, md: 4 }}>
+          <Text fw={500}>{item["Name"]}</Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             {isNumber(item.Alter) ? `${item.Alter} Jahre` : `Alter: unbekannt`}
             {item.sex.length > 0 && `, ${item.sex}`}
@@ -169,7 +169,7 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
           </Text>
           <div></div>
         </Grid.Col>
-        <Grid.Col span={{ base: 12, md: 8 }} lg={8}>
+        <Grid.Col span={{ base: 12, md: 8 }}>
           <Text style={{ lineHeight: 1.5, marginBottom: "0.5rem" }}>
             {item["Szenarium"]}
           </Text>

@@ -2,7 +2,17 @@ import { Button, Card, Group, Text, useMantineTheme } from "@mantine/core";
 import Link from "next/link";
 import { VerticalBarChart } from "./charts/charts";
 
-function VisualizationCard({ data }) {
+interface ChartDataItem {
+  value: string;
+  count: number;
+  [key: string]: string | number;
+}
+
+interface VisualizationCardProps {
+  data: ChartDataItem[];
+}
+
+function VisualizationCard({ data }: VisualizationCardProps) {
   const theme = useMantineTheme();
 
   return (
@@ -12,7 +22,7 @@ function VisualizationCard({ data }) {
           data={data
             .slice(0, 11)
             .reverse()
-            .map((x) => ({ ...x, value: parseInt(x.value) }))}
+            .map((x) => ({ ...x, value: x.value, count: parseInt(x.value) }))}
         />
       </Card.Section>
 

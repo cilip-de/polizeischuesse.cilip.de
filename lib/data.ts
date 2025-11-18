@@ -17,8 +17,10 @@ let HOST = "http://localhost:3000";
 if (process.env.NODE_ENV === "production")
   HOST = "https://polizeischuesse.cilip.de";
 
-// value, column, positive label, negative label
-const TAGS = [
+// Tuple: [value, column, positive label, negative label]
+type TagTuple = [string, string, string, string];
+
+const TAGS: TagTuple[] = [
   ["schusswechsel", "Schusswechsel", "Schusswechsel", "Kein Schusswechsel"],
   ["sek", "Sondereinsatzbeamte", "SEK-Beteiligung", "Ohne SEK-Beteiligung"],
   [
@@ -109,6 +111,7 @@ interface SetupOptions {
   place: OptionItem[];
   weapon: OptionItem[];
   age: OptionItem[];
+  [key: string]: OptionItem[];
 }
 
 const setupOptions = (data: ProcessedDataItem[]): SetupOptions => {
@@ -152,18 +155,86 @@ const setupOptions = (data: ProcessedDataItem[]): SetupOptions => {
 };
 
 interface RawDataItem {
-  Datum: string;
-  Bundesland: string;
-  Ort: string;
-  Waffen: string;
+  Fall: string;
+  Name: string;
   Geschlecht: string;
-  "Anzahl im Einsatz abgegebener polizeilicher Schüsse": string;
-  Schussort: string;
   Alter: string;
-  [key: string]: any;
+  Datum: string;
+  Ort: string;
+  Bundesland: string;
+  Schussort: string;
+  Szenarium: string;
+  Quellen: string;
+  "Hinweise auf psychische Ausnahmesituation": string;
+  "Hinweise auf Alkohol- und/ oder Drogenkonsum": string;
+  Waffen: string;
+  "Hinweise auf familiäre oder häusliche Gewalt": string;
+  "Unbeabsichtigte Schussabgabe": string;
+  "Anzahl im Einsatz abgegebener polizeilicher Schüsse": string;
+  "Opfer mit Schusswaffe": string;
+  Schusswechsel: string;
+  Sondereinsatzbeamte: string;
+  "Verletzte/getötete Beamte": string;
+  "Vorbereitete Polizeiaktion": string;
+  key?: number;
+  year?: number;
+  dow?: number;
+  dowPrint?: string;
+  dom?: number;
+  month?: number;
+  monthPrint?: string;
+  datePrint?: string;
+  beforeReunification?: boolean;
+  state?: string;
+  east?: boolean;
+  place?: string;
+  weapon?: string;
+  sex?: string;
+  numShots?: string;
+  age?: number | string;
+  schusswechsel?: boolean;
+  sek?: boolean;
+  vgbeamte?: boolean;
+  vbaktion?: boolean;
+  psych?: boolean;
+  alkdrog?: boolean;
+  famgew?: boolean;
+  unschuss?: boolean;
+  indoor?: boolean;
+  men?: boolean;
+  weiblich?: string;
+  männlich?: string;
+  "Schussort Innenraum"?: string;
+  "Schussort Außen"?: string;
+  // Index signature for dynamic property access from TAGS
+  [key: string]: string | number | boolean | undefined;
 }
 
-interface ProcessedDataItem extends RawDataItem {
+interface ProcessedDataItem {
+  // Original CSV fields
+  Fall: string;
+  Name: string;
+  Geschlecht: string;
+  Alter: string;
+  Datum: string;
+  Ort: string;
+  Bundesland: string;
+  Schussort: string;
+  Szenarium: string;
+  Quellen: string;
+  "Hinweise auf psychische Ausnahmesituation": string;
+  "Hinweise auf Alkohol- und/ oder Drogenkonsum": string;
+  Waffen: string;
+  "Hinweise auf familiäre oder häusliche Gewalt": string;
+  "Unbeabsichtigte Schussabgabe": string;
+  "Anzahl im Einsatz abgegebener polizeilicher Schüsse": string;
+  "Opfer mit Schusswaffe": string;
+  Schusswechsel: string;
+  Sondereinsatzbeamte: string;
+  "Verletzte/getötete Beamte": string;
+  "Vorbereitete Polizeiaktion": string;
+
+  // Processed fields
   key: number;
   year: number;
   dow: number;
@@ -184,6 +255,21 @@ interface ProcessedDataItem extends RawDataItem {
   weiblich: string;
   männlich: string;
   age: number | string;
+
+  // Boolean tag fields
+  schusswechsel: boolean;
+  sek: boolean;
+  vgbeamte: boolean;
+  vbaktion: boolean;
+  psych: boolean;
+  alkdrog: boolean;
+  famgew: boolean;
+  unschuss: boolean;
+  indoor: boolean;
+  men: boolean;
+
+  // Index signature for dynamic property access
+  [key: string]: string | number | boolean;
 }
 
 const preprocessData = (data: RawDataItem[]): ProcessedDataItem[] => {
@@ -223,7 +309,7 @@ const preprocessData = (data: RawDataItem[]): ProcessedDataItem[] => {
     }
 
     for (const [t, label] of TAGS) {
-      x[t] = x[label].includes("Ja");
+      x[t] = (x[label] as string)?.includes("Ja") ?? false;
     }
 
     // Deduplicate source URLs in "Quellen" field
@@ -237,27 +323,26 @@ const preprocessData = (data: RawDataItem[]): ProcessedDataItem[] => {
   return data as ProcessedDataItem[];
 };
 
-let fuse = null;
-interface DataItem {
-  Datum: string;
-  Bundesland: string;
-  Ort: string;
-  Waffen: string;
-  Geschlecht: string;
-  "Anzahl im Einsatz abgegebener polizeilicher Schüsse": string;
-  Alter: string;
-  [key: string]: any;
+interface GeoDataItem {
+  city: string | null;
+  state: string | null;
+  county: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  count?: number;
 }
 
 interface SetupProps {
-  data: DataItem[];
-  geoData: any;
-  options: ReturnType<typeof setupOptions>;
-  fuse: Fuse<DataItem>;
+  data: ProcessedDataItem[];
+  geoData: GeoDataItem[];
+  options: SetupOptions;
+  fuse: Fuse<ProcessedDataItem>;
   beforeReuni: number;
   afterReuni: number;
   averages: number[];
 }
+
+let fuse: Fuse<ProcessedDataItem> | null = null;
 
 let setupProps: SetupProps | null = null;
 
@@ -266,9 +351,9 @@ const setupData = async () => {
 
   const data = (await csv(`${HOST}/data.csv`)).filter(
     (x) => x["Fall"]
-  ) as DataItem[];
+  ) as unknown as RawDataItem[];
 
-  const processedData = preprocessData(data as RawDataItem[]);
+  const processedData = preprocessData(data);
 
   const geoData = await getGeo(processedData);
 
@@ -324,9 +409,21 @@ const setupData = async () => {
 
 const setupTaserData = async () => {
   const data = (await csv(`${HOST}/taser.csv`)).filter((x) => x["Fall"]);
-  return preprocessData(data as RawDataItem[]);
+  return preprocessData(data as unknown as RawDataItem[]);
 };
 
+// Export types
+export type {
+  RawDataItem,
+  ProcessedDataItem,
+  OptionItem,
+  SetupOptions,
+  GeoDataItem,
+  SetupProps,
+  TagTuple,
+};
+
+// Export functions and constants
 export {
   countItems,
   PAGE_SIZE,

@@ -10,9 +10,13 @@ const client = new SMTPClient({
   port: 587,
 });
 
-function runMiddleware(req, res, fn) {
+function runMiddleware(
+  req: NextApiRequest,
+  res: NextApiResponse,
+  fn: any
+) {
   return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
+    fn(req, res, (result?: any) => {
       if (result instanceof Error) {
         return reject(result);
       }
@@ -30,7 +34,7 @@ const limiter = rateLimit({
   keyGenerator: (req) => {
     const forwarded = req.headers["x-real-ip"];
     const ip = forwarded ? forwarded : req.socket.remoteAddress;
-    return ip;
+    return (Array.isArray(ip) ? ip[0] : ip) || "";
   },
 });
 
@@ -50,8 +54,8 @@ export default async function handler(
   try {
     await client.sendAsync({
       text: body.text,
-      from: process.env.EMAIL_SENDER,
-      to: process.env.EMAIL_RECIPIENTS,
+      from: process.env.EMAIL_SENDER || "",
+      to: process.env.EMAIL_RECIPIENTS || "",
       subject: "Nachricht von polizeischuesse.cilip.de",
     });
     res.status(200).json({});

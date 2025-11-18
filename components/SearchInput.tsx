@@ -1,7 +1,7 @@
 import { TextInput } from "@mantine/core";
 import _ from "lodash";
 import router from "next/router";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { constructUrlWithQ } from "../lib/util";
 
 interface SearchInputProps {
@@ -17,7 +17,7 @@ const SearchInput = ({
   setSearchedData,
   setSearchedQ,
 }: SearchInputProps) => {
-  const doStuff = async (newQ: string) => {
+  const doStuff = useCallback(async (newQ: string) => {
     if (selection.p > 1) {
       router.replace(
         constructUrlWithQ(newQ, {
@@ -45,9 +45,9 @@ const SearchInput = ({
       if (newQ.length > 2)
         setSearchedData(await (await fetch("/api/suche?q=" + newQ)).json());
     }
-  };
+  }, [selection, setSearchedData]);
 
-  const fetchSearch = useMemo(() => _.debounce(doStuff, 500), []);
+  const fetchSearch = useMemo(() => _.debounce(doStuff, 500), [doStuff]);
 
   const searchFunc = async (event: { currentTarget: { value: any } }) => {
     const newQ = event.currentTarget.value;

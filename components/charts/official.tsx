@@ -1,11 +1,11 @@
 import { Space } from "@mantine/core";
 import _ from "lodash";
 import AnchorHeading from "../AnchorHeading";
-import { VerticalBarChart } from "./charts";
-import { barChartTooltip } from "./ChartTooltip";
+import { VerticalBarChart, ChartDataItem } from "./charts";
+import { barChartTooltip, TooltipData } from "./ChartTooltip";
 
-const ShortsPerYear = ({ wData }) => {
-  const sums = wData.map((x) => x.count + x.count2 + x.count3);
+const ShortsPerYear = ({ wData }: { wData: ChartDataItem[] }) => {
+  const sums = wData.map((x: ChartDataItem) => x.count + (typeof x.count2 === 'number' ? x.count2 : 0) + (typeof x.count3 === 'number' ? x.count3 : 0));
 
   const maxValues = Math.max(...sums);
 
@@ -34,15 +34,10 @@ const ShortsPerYear = ({ wData }) => {
           bottom: 100,
           left: 50,
         }}
-        tooltip={({ value, data, id }) =>
-          barChartTooltip({
-            value,
-            data,
-            id,
-            singularUnit: "Schuss",
-            pluralUnit: "Schüsse",
-          })
-        }
+        tooltip={barChartTooltip({
+          singularUnit: "Schuss",
+          pluralUnit: "Schüsse",
+        })}
       />
       <VerticalBarChart
         data={_.orderBy(wData, "value")}
@@ -50,15 +45,10 @@ const ShortsPerYear = ({ wData }) => {
         labelSkipHeight={20}
         numTicks={5}
         mobile
-        tooltip={({ value, data, id }) =>
-          barChartTooltip({
-            value,
-            data,
-            id,
-            singularUnit: "Schuss",
-            pluralUnit: "Schüsse",
-          })
-        }
+        tooltip={barChartTooltip({
+          singularUnit: "Schuss",
+          pluralUnit: "Schüsse",
+        })}
       />
       <Space h="lg" />
       <Space h="lg" />
@@ -71,11 +61,11 @@ const SimpleChart = ({
   title,
   style,
 }: {
-  data: any[];
+  data: ChartDataItem[];
   title: string;
   style?: React.CSSProperties;
 }) => {
-  const sums = data.map((x) => x.count);
+  const sums = data.map((x: ChartDataItem) => x.count);
   const maxValues = Math.max(...sums);
 
   const digits = maxValues.toString().length;
@@ -117,13 +107,7 @@ const SimpleChart = ({
           bottom: 100,
           left: 50,
         }}
-        tooltip={({ value, data, id }) =>
-          barChartTooltip({
-            value,
-            data,
-            id,
-          })
-        }
+        tooltip={barChartTooltip()}
       />
       <VerticalBarChart
         data={_.orderBy(data, "value")}
@@ -131,13 +115,7 @@ const SimpleChart = ({
         labelSkipHeight={20}
         numTicks={5}
         mobile
-        tooltip={({ value, data, id }) =>
-          barChartTooltip({
-            value,
-            data,
-            id,
-          })
-        }
+        tooltip={barChartTooltip()}
       />
       <Space h="lg" />
       <Space h="lg" />

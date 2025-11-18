@@ -14,10 +14,28 @@ import Image from "next/image";
 import Link from "next/link";
 import CaseList from "../components/CaseList";
 import { setupData } from "../lib/data";
+import type { ProcessedDataItem, SetupOptions, GeoDataItem } from "../lib/data";
+import type { Selection } from "../lib/util";
 
 import cover from "../public/cover_12.jpg";
 import cilipLogo from "../public/images/cilip_new.svg";
 import goa2025 from "../public/images/grimme-online-2025.jpg";
+
+interface HomeProps {
+  data: ProcessedDataItem[];
+  geoData: GeoDataItem[];
+  initialSearchedData: ProcessedDataItem[] | null;
+  selection: {
+    q: string;
+    p: string | number;
+    tags?: string | string[];
+  };
+  options: SetupOptions;
+  maxCases: number;
+  afterReuni: number;
+  beforeReuni: number;
+  averages: number[];
+}
 
 const Home = ({
   data,
@@ -29,7 +47,7 @@ const Home = ({
   afterReuni,
   beforeReuni,
   averages,
-}: any) => {
+}: HomeProps) => {
   console.log("Home component props:", {
     data: data ? `array of ${data.length}` : "undefined",
     geoData: geoData ? `array of ${geoData.length}` : "undefined",
@@ -298,10 +316,10 @@ const Home = ({
           <Space h="xl" />
           <Space h="xl" />
           <CaseList
-            initialSearchedData={initialSearchedData}
+            initialSearchedData={initialSearchedData || undefined}
             data={data}
             geoData={geoData}
-            selection={selection}
+            selection={selection as Required<Selection>}
             options={options}
             maxCases={maxCases}
           />
@@ -343,7 +361,7 @@ const Home = ({
               CC BY 4.0
             </a>{" "}
             Lizenz veröffentlicht. Veröffentlichungen müssen als Quelle
-            "Bürgerrechte & Polizei/CILIP" angeben und auf
+            &quot;Bürgerrechte & Polizei/CILIP&quot; angeben und auf
             polizeischuesse.cilip.de verlinken.
           </Text>
         </Center>
@@ -375,7 +393,11 @@ const Home = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const selection = { q: "", p: "1", ...context.query };
+  const selection: {
+    q: string;
+    p: string | number;
+    tags?: string | string[];
+  } = { q: "", p: "1", ...context.query };
 
   const { q } = selection;
   const { data, geoData, options, fuse, beforeReuni, afterReuni, averages } =
@@ -390,9 +412,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     afterReuni,
   });
 
-  if (selection.p !== null) selection.p = parseInt(selection.p);
+  if (selection.p !== null) selection.p = parseInt(selection.p as string);
   if (selection.tags && selection.tags !== null)
-    selection.tags = selection.tags.split(",");
+    selection.tags = (selection.tags as string).split(",");
   else selection.tags = [];
 
   let initialSearchedData = null;
@@ -415,7 +437,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       data,
       geoData,
-      initialSearchedData,
+      initialSearchedData: initialSearchedData || null,
       options,
       selection,
       maxCases: data.length,

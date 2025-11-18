@@ -2,8 +2,8 @@ import { Center, Grid, Pagination, Text } from "@mantine/core";
 import _ from "lodash";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { PAGE_SIZE, SELECTABLE, setupOptions } from "../lib/data";
-import { constructUrl, constructUrlWithQ, paginate } from "../lib/util";
+import { PAGE_SIZE, SELECTABLE, setupOptions, type SetupOptions, type ProcessedDataItem, type GeoDataItem } from "../lib/data";
+import { constructUrl, constructUrlWithQ, paginate, Selection } from "../lib/util";
 import AnchorHeading from "./AnchorHeading";
 import Case from "./Case";
 import CategoryInput from "./CategoryInput";
@@ -11,17 +11,7 @@ import { OverviewChart } from "./charts/charts";
 import Map from "./Map";
 import SearchInput from "./SearchInput";
 import SelectInput from "./SelectInput";
-
-type Selection = {
-  year: string;
-  place: string;
-  state: string;
-  q: string;
-  p: number;
-  tags: string[];
-  weapon: string;
-  age: string;
-};
+import { BarDatum } from "@nivo/bar";
 
 const CaseList = ({
   data,
@@ -31,23 +21,23 @@ const CaseList = ({
   options,
   maxCases,
 }: {
-  data: any[];
-  geoData: any[];
-  initialSearchedData: any[];
-  selection: Selection;
-  options: any;
+  data: ProcessedDataItem[];
+  geoData: GeoDataItem[];
+  initialSearchedData?: ProcessedDataItem[];
+  selection: Required<Selection>;
+  options: SetupOptions;
   maxCases: number;
 }) => {
   const router = useRouter();
 
-  const [searchedData, setSearchedData] = useState(null);
+  const [searchedData, setSearchedData] = useState<ProcessedDataItem[] | null>(null);
   const [searchedQ, setSearchedQ] = useState<null | string>(null);
   const [firstRender, setFirstRender] = useState(true);
 
   useEffect(() => {
-    setSearchedData(initialSearchedData);
+    setSearchedData(initialSearchedData ?? null);
     setFirstRender(false);
-  }, []);
+  }, [initialSearchedData]);
 
   let { q, p } = selection;
 
@@ -81,21 +71,34 @@ const CaseList = ({
     (x) => x["place"] + x["state"]
   );
 
-  const displayMarkers = geoData.filter((x) =>
-    displayLocations.hasOwnProperty(x.city + x.state)
-  );
+  // Filter and transform GeoDataItem to match MarkerData shape
+  interface MarkerData {
+    city: string;
+    state: string;
+    longitude: number;
+    latitude: number;
+    count: number;
+  }
 
-  displayMarkers.forEach((x) => {
-    x.count = displayLocations[x.city + x.state];
-  });
+  const displayMarkers: MarkerData[] = geoData
+    .filter((x): x is GeoDataItem & { city: string; state: string; latitude: number; longitude: number } =>
+      x.city !== null && x.state !== null && x.latitude !== null && x.longitude !== null && displayLocations.hasOwnProperty(x.city + x.state)
+    )
+    .map((x) => ({
+      city: x.city,
+      state: x.state,
+      longitude: x.longitude,
+      latitude: x.latitude,
+      count: displayLocations[x.city + x.state],
+    }));
 
   const overChart = (
     <OverviewChart
       data={data}
       hits={resultList}
-      onClick={(x) =>
+      onClick={(x: BarDatum) =>
         router.push(
-          constructUrl({ ...selection, year: x.indexValue, p: 1 }),
+          constructUrl({ ...selection, year: String(x.indexValue), p: 1 }),
           undefined,
           {
             scroll: false,
@@ -123,7 +126,7 @@ const CaseList = ({
         <Grid.Col span={{ base: 12, xs: 8 }} className="only-mobile">
           <Map
             makersData={displayMarkers}
-            setInputPlace={(x) =>
+            setInputPlace={(x: string) =>
               router.push(
                 constructUrl({ ...selection, place: x, p: 1 }),
                 undefined,
@@ -193,7 +196,7 @@ const CaseList = ({
         <Grid.Col span={4} className="only-non-mobile">
           <Map
             makersData={displayMarkers}
-            setInputPlace={(x) =>
+            setInputPlace={(x: string) =>
               router.push(
                 constructUrl({ ...selection, place: x, p: 1 }),
                 undefined,
@@ -314,7 +317,7 @@ const CaseList = ({
             <Pagination
               className="only-non-mobile"
               total={totalPages}
-              page={p}
+              value={p}
               onChange={(newPage) =>
                 router.push(
                   constructUrlWithQ(q, {
@@ -340,7 +343,7 @@ const CaseList = ({
               className="only-mobile"
               size={"sm"}
               total={totalPages}
-              page={p}
+              value={p}
               onChange={(newPage) =>
                 router.push(
                   constructUrlWithQ(q, {

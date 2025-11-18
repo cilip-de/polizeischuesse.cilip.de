@@ -1,31 +1,36 @@
 import { useMantineTheme } from "@mantine/core";
-import { BarDatum, BarTooltipProps, ResponsiveBar } from "@nivo/bar";
+import { BarDatum, BarTooltipProps, BarLegendProps, ResponsiveBar } from "@nivo/bar";
 import { ticks } from "d3-array";
 import dayjs from "dayjs";
 import _ from "lodash";
-import { useState, useEffect, useRef } from "react";
-import { countItems } from "../../lib/data";
+import React, { useState, useEffect, useRef } from "react";
+import { countItems, ProcessedDataItem } from "../../lib/data";
 import { addMissingYears, combineArray } from "../../lib/util";
 import { makeDowData } from "../../pages/visualisierungen";
 import { ChartTooltip } from "./ChartTooltip";
 
 
-interface DataItem extends BarDatum {
-  value: string;
-  count: number;
-  count2?: number;
-  count3?: number;
-  tooltipLabel?: {
-    count: string;
-    count2: string;
-    count3: string;
-    [key: string]: string;
-  };
-  [key: string]: any;
+interface TooltipLabelConfig {
+  count: string;
+  count2: string;
+  count3: string;
+  [key: string]: string;
 }
 
+// ChartDataItem must be compatible with BarDatum which is Record<string, string | number>
+// We use type intersection to add optional properties without breaking the index signature
+type ChartDataItem = {
+  value: string;
+  count: number;
+} & Record<string, string | number>;
+
+// For data with tooltip labels, we extend with additional properties
+type ChartDataItemWithTooltip = ChartDataItem & {
+  tooltipLabel?: TooltipLabelConfig;
+};
+
 const selectNiceTicks = (
-  data: DataItem[],
+  data: ChartDataItem[],
   numTicks: number,
   startOffset = 0,
   endOffset = 0
@@ -40,11 +45,12 @@ const selectNiceTicks = (
   ),
 ];
 
-const tooltip: React.FC<BarTooltipProps<DataItem>> = ({ value, data, id }) => {
-  const label = data.tooltipLabel?.[id] || "Anzahl";
+const tooltip: React.FC<BarTooltipProps<ChartDataItem>> = ({ value, data, id }) => {
+  const dataWithTooltip = data as unknown as ChartDataItemWithTooltip;
+  const label = dataWithTooltip.tooltipLabel?.[String(id)] || "Anzahl";
   return (
     <ChartTooltip
-      secondaryLabel={`${data.value}${data.tooltipLabel != null ? `, ${label}` : ""}`}
+      secondaryLabel={`${data.value}${dataWithTooltip.tooltipLabel != null ? `, ${label}` : ""}`}
       secondaryValue={value}
       singularUnit=""
       pluralUnit=""
@@ -53,16 +59,13 @@ const tooltip: React.FC<BarTooltipProps<DataItem>> = ({ value, data, id }) => {
   );
 };
 
-const tooltipOverview = ({
+const tooltipOverview: React.FC<BarTooltipProps<ChartDataItem>> = ({
   value,
   data,
   id,
-}: {
-  value: number;
-  data: DataItem;
-  id: string;
 }) => {
-  const isHit = data.tooltipLabel && data.tooltipLabel[id] === "hit";
+  const dataWithTooltip = data as unknown as ChartDataItemWithTooltip;
+  const isHit = dataWithTooltip.tooltipLabel && dataWithTooltip.tooltipLabel[String(id)] === "hit";
   const customContent = !isHit ? ", auf die die Auswahl nicht zutrifft" : undefined;
 
   return (
@@ -83,22 +86,36 @@ const commonProps = {
   tooltip,
 };
 
+interface VerticalBarChartProps {
+  data: ChartDataItem[];
+  numTicks?: number;
+  mobile?: boolean;
+  tooltip?: React.FC<BarTooltipProps<ChartDataItem>>;
+  gridYValues?: number[];
+  axisLeft?: {
+    tickValues?: number[];
+  };
+  labelSkipWidth?: number;
+  labelSkipHeight?: number;
+  margin?: {
+    top?: number;
+    right?: number;
+    bottom?: number;
+    left?: number;
+  };
+  padding?: number;
+}
+
 const VerticalBarChart = ({
   data,
   numTicks = 3,
   mobile = false,
   tooltip: customTooltip,
   ...rest
-}: {
-  data: DataItem[];
-  numTicks?: number;
-  mobile?: boolean;
-  tooltip?: any;
-  [key: string]: any;
-}) => {
+}: VerticalBarChartProps) => {
   const theme = useMantineTheme();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
-  const [activeBar, setActiveBar] = useState<{ indexValue: string; id: string; value: number; data: any } | null>(null);
+  const [activeBar, setActiveBar] = useState<{ indexValue: string; id: string; value: number; data: ChartDataItem } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -117,63 +134,64 @@ const VerticalBarChart = ({
   }, [mobile]);
 
   let legend = undefined;
+  const firstDataWithTooltip = data as unknown as ChartDataItemWithTooltip[];
 
-  if (data && data.length > 0 && data[0].tooltipLabel) {
+  if (data && data.length > 0 && firstDataWithTooltip[0].tooltipLabel) {
     legend = [
       {
-        dataFrom: "keys",
+        dataFrom: "keys" as const,
         data: [
           {
             id: "count",
-            label: data[0].tooltipLabel.count,
+            label: firstDataWithTooltip[0].tooltipLabel.count,
             color: theme.colors.indigo[2],
           },
           {
             id: "count2",
-            label: data[0].tooltipLabel.count2,
+            label: firstDataWithTooltip[0].tooltipLabel.count2,
             color: theme.colors.indigo[1],
           },
           {
             id: "count3",
-            label: data[0].tooltipLabel.count3,
+            label: firstDataWithTooltip[0].tooltipLabel.count3,
             color: theme.colors.indigo[3],
           },
         ].filter((x) => x.label),
-        anchor: "bottom-right",
-        direction: "column",
+        anchor: "bottom-right" as const,
+        direction: "column" as const,
         justify: false,
         translateX: mobile ? -30 : 120,
         translateY: mobile ? 90 : 0,
         itemsSpacing: 2,
         itemWidth: mobile ? 170 : 100,
         itemHeight: 20,
-        itemDirection: "left-to-right",
+        itemDirection: "left-to-right" as const,
         itemOpacity: 0.85,
         symbolSize: 20,
         effects: [
           {
-            on: "hover",
+            on: "hover" as const,
             style: {
               itemOpacity: 1,
             },
           },
         ],
       },
-    ];
+    ] as BarLegendProps[];
   }
 
   // Get the visible tick values from the x-axis
   const visibleTicks = new Set(selectNiceTicks(data, numTicks));
 
   // Custom label function: only show labels where x-axis label is also shown
-  const labelFormatter = (d: any) => {
+  const labelFormatter = (d: { value: number | null; indexValue: string | number }): string => {
     const value = d.value;
     // Don't show label for zero values
-    if (value == 0) return "";
+    if (value == 0 || value == null) return "";
 
     // Only show label if this bar's x-axis label is visible
-    if (visibleTicks.has(d.indexValue)) {
-      return value;
+    if (visibleTicks.has(String(d.indexValue))) {
+      return String(value);
     }
     return "";
   };
@@ -208,12 +226,22 @@ const VerticalBarChart = ({
           }}
         >
           {customTooltip ? (
-            customTooltip({ value: activeBar.value, data: activeBar.data, id: activeBar.id })
+            React.createElement(customTooltip as React.FC<BarTooltipProps<ChartDataItem>>, {
+              value: activeBar.value,
+              data: activeBar.data,
+              id: String(activeBar.id),
+              color: '',
+              label: '',
+              formattedValue: String(activeBar.value),
+              hidden: false,
+              index: 0,
+              indexValue: activeBar.indexValue,
+            })
           ) : (
             <>
               <div><strong>{activeBar.indexValue}</strong></div>
               <div>
-                {data[0]?.tooltipLabel?.[activeBar.id] || "Anzahl"}: {activeBar.value}{" "}
+                {firstDataWithTooltip[0]?.tooltipLabel?.[activeBar.id] || "Anzahl"}: {activeBar.value}{" "}
                 {activeBar.value === 1 ? "Fall" : "Fälle"}
               </div>
             </>
@@ -222,7 +250,9 @@ const VerticalBarChart = ({
       )}
       <ResponsiveBar
         theme={{
-          fontSize: mobile ? 8 : 12,
+          text: {
+            fontSize: mobile ? 8 : 12,
+          },
         }}
         legends={legend}
         enableGridY={rest.gridYValues != null}
@@ -230,7 +260,7 @@ const VerticalBarChart = ({
         margin={{
           top: 10,
           right: mobile ? 15 : 220,
-          bottom: mobile && data && data.length > 0 && data[0].tooltipLabel ? 100 : 30,
+          bottom: mobile && data && data.length > 0 && firstDataWithTooltip[0].tooltipLabel ? 100 : 30,
           left: mobile ? 15 : rest.axisLeft ? 50 : 10,
         }}
         axisLeft={null}
@@ -252,7 +282,12 @@ const VerticalBarChart = ({
           if (activeBar?.indexValue === datum.indexValue && activeBar?.id === datum.id) {
             setActiveBar(null);
           } else {
-            setActiveBar({ indexValue: datum.indexValue as string, id: datum.id as string, value: datum.value as number, data: datum.data });
+            setActiveBar({
+              indexValue: String(datum.indexValue),
+              id: String(datum.id),
+              value: typeof datum.value === 'number' ? datum.value : 0,
+              data: datum.data as ChartDataItem
+            });
           }
         } : undefined}
         axisBottom={{
@@ -267,12 +302,28 @@ const VerticalBarChart = ({
   );
 };
 
+interface HorizontalBarChartProps {
+  data: ChartDataItem[];
+  formatPerc?: boolean;
+  mobile?: boolean;
+  tooltip?: React.FC<BarTooltipProps<ChartDataItem>>;
+  maxValue?: number;
+  margin?: {
+    top?: number;
+    right?: number;
+    bottom?: number;
+    left?: number;
+  };
+}
+
 const HorizontalBarChart = ({
   data,
   formatPerc = false,
   mobile = false,
+  maxValue,
+  margin: customMargin,
   ...rest
-}) => {
+}: HorizontalBarChartProps) => {
   const theme = useMantineTheme();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
   const [activeBar, setActiveBar] = useState<{ indexValue: string; id: string; value: number } | null>(null);
@@ -294,59 +345,61 @@ const HorizontalBarChart = ({
   }, [mobile]);
 
   let legend = undefined;
+  const dataWithTooltip = data as unknown as ChartDataItemWithTooltip[];
 
-  if (data && data.length > 0 && data[0].tooltipLabel) {
+  if (data && data.length > 0 && dataWithTooltip[0].tooltipLabel) {
     legend = [
       {
+        dataFrom: "keys" as const,
         data: [
           {
             id: "count",
-            label: data[0].tooltipLabel.count,
+            label: dataWithTooltip[0].tooltipLabel.count,
             color: theme.colors.indigo[2],
           },
           {
             id: "count2",
-            label: data[0].tooltipLabel.count2,
+            label: dataWithTooltip[0].tooltipLabel.count2,
             color: theme.colors.indigo[1],
           },
           {
             id: "count3",
-            label: data[0].tooltipLabel.count3,
+            label: dataWithTooltip[0].tooltipLabel.count3,
             color: theme.colors.indigo[3],
           },
         ].filter((x) => x.label),
 
-        anchor: "bottom-right",
-        direction: "column",
+        anchor: "bottom-right" as const,
+        direction: "column" as const,
         justify: false,
         translateX: mobile ? -30 : 120,
         translateY: mobile ? 80 : 0,
         itemsSpacing: 2,
         itemWidth: mobile ? 170 : 100,
         itemHeight: 20,
-        itemDirection: "left-to-right",
+        itemDirection: "left-to-right" as const,
         itemOpacity: 0.85,
         symbolSize: 20,
         effects: [
           {
-            on: "hover",
+            on: "hover" as const,
             style: {
               itemOpacity: 1,
             },
           },
         ],
       },
-    ];
+    ] as BarLegendProps[];
   }
 
   // Smart label filtering: show ~50% of labels for charts with many bars
-  const labelFormatter = (d: any) => {
+  const labelFormatter = (d: { value: number | null; indexValue: string | number }) => {
     const value = d.value;
     const dataLength = data.length;
-    const index = data.findIndex((item) => item.value === d.indexValue);
+    const index = data.findIndex((item: ChartDataItem) => item.value === d.indexValue);
 
     // Don't show label for zero values
-    if (value == 0) return "";
+    if (value == 0 || value == null) return "";
 
     // Always show first and last labels
     if (index === 0 || index === dataLength - 1) {
@@ -366,17 +419,17 @@ const HorizontalBarChart = ({
     return formatPerc ? _.round(value * 100, 0) + " %" : value.toString();
   };
 
-  const margin = {
+  const margin = customMargin || {
     top: 10,
-    right: mobile ? 10 : (data && data.length > 0 && data[0].tooltipLabel ? 160 : 120),
-    bottom: mobile && data && data.length > 0 && data[0].tooltipLabel ? 100 : 30,
+    right: mobile ? 10 : (data && data.length > 0 && dataWithTooltip[0].tooltipLabel ? 160 : 120),
+    bottom: mobile && data && data.length > 0 && dataWithTooltip[0].tooltipLabel ? 100 : 30,
     left: mobile ? 130 : 150,
   };
   return (
     <div
       ref={containerRef}
       className={mobile ? "only-mobile" : "only-non-mobile"}
-      style={{ height: 20 * data.length + margin.top + margin.bottom, position: "relative" }}
+      style={{ height: 20 * data.length + (margin.top || 0) + (margin.bottom || 0), position: "relative" }}
       role="img"
       aria-label="Horizontales Balkendiagramm der Datenverteilung"
       onClick={mobile ? () => setActiveBar(null) : undefined}
@@ -400,7 +453,7 @@ const HorizontalBarChart = ({
         >
           <div><strong>{activeBar.indexValue}</strong></div>
           <div>
-            {data[0]?.tooltipLabel?.[activeBar.id] || "Anzahl"}: {formatPerc ? `${Math.round(activeBar.value * 100)}%` : activeBar.value}
+            {dataWithTooltip[0]?.tooltipLabel?.[activeBar.id] || "Anzahl"}: {formatPerc ? `${Math.round(activeBar.value * 100)}%` : activeBar.value}
             {!formatPerc && ` ${activeBar.value === 1 ? "Fall" : "Fälle"}`}
           </div>
         </div>
@@ -432,19 +485,30 @@ const HorizontalBarChart = ({
           if (activeBar?.indexValue === datum.indexValue && activeBar?.id === datum.id) {
             setActiveBar(null);
           } else {
-            setActiveBar({ indexValue: datum.indexValue as string, id: datum.id as string, value: datum.value as number });
+            setActiveBar({
+              indexValue: String(datum.indexValue),
+              id: String(datum.id),
+              value: typeof datum.value === 'number' ? datum.value : 0
+            });
           }
         } : undefined}
         data={data}
         {...commonProps}
         {...rest}
         {...(mobile ? { tooltip: () => null } : {})}
+        {...(maxValue !== undefined ? { maxValue } : {})}
       />
     </div>
   );
 };
 
-const OverviewChart = ({ data, hits, onClick }) => {
+interface OverviewChartProps {
+  data: ProcessedDataItem[];
+  hits: ProcessedDataItem[];
+  onClick: (datum: { indexValue: string | number; id: string | number }) => void;
+}
+
+const OverviewChart = ({ data, hits, onClick }: OverviewChartProps) => {
   const theme = useMantineTheme();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
 
@@ -467,9 +531,9 @@ const OverviewChart = ({ data, hits, onClick }) => {
 
   const hitsId = new Set(hits.map(({ key }) => key));
 
-  const hitsData = countItems(hits.map(({ year }) => year));
+  const hitsData = countItems(hits.map(({ year }) => year.toString()));
   const noHitsData = countItems(
-    data.filter(({ key }) => !hitsId.has(key)).map(({ year }) => year)
+    data.filter(({ key }) => !hitsId.has(key)).map(({ year }) => year.toString())
   );
 
   const procData = _.orderBy(
@@ -501,25 +565,25 @@ const OverviewChart = ({ data, hits, onClick }) => {
             hoveredBar?.id === x.id;
 
           if (x.indexValue === dayjs().year().toString()) {
-            const colorMap = {
+            const colorMap: Record<string, string> = {
               count: isHovered ? theme.colors.indigo[4] : theme.colors.indigo[2],
               count2: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
               count3: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
             };
-            return colorMap[x.id] || theme.colors.indigo[2];
+            return colorMap[x.id as string] || theme.colors.indigo[2];
           }
 
-          const colorMap = {
+          const colorMap: Record<string, string> = {
             count: isHovered ? "#9FA0A2" : "#BFBFC1",
             count2: isHovered ? "#D0D0D2" : "#EAEAEC",
             count3: isHovered ? "#D0D0D2" : "#EAEAEC",
           };
-          return colorMap[x.id] || "#BFBFC1";
+          return colorMap[x.id as string] || "#BFBFC1";
         }}
         axisBottom={{
-          tickValues: selectNiceTicks(procData, 5, 1, 1),
+          tickValues: selectNiceTicks(procData as ChartDataItem[], 5, 1, 1),
         }}
-        data={procData}
+        data={procData as ChartDataItem[]}
         indexBy={"value"}
         keys={["count", "count2", "count3"]}
         // padding={-0.01}
@@ -535,7 +599,11 @@ const OverviewChart = ({ data, hits, onClick }) => {
   );
 };
 
-const DowChart = ({ data }) => {
+interface DowChartProps {
+  data: ProcessedDataItem[];
+}
+
+const DowChart = ({ data }: DowChartProps) => {
   const dataDow = makeDowData(data);
 
   const theme = useMantineTheme();
@@ -567,7 +635,7 @@ const DowChart = ({ data }) => {
         }}
         onMouseEnter={(datum) => setHoveredBar({ indexValue: datum.indexValue as string, id: datum.id as string })}
         onMouseLeave={() => setHoveredBar(null)}
-        data={dataDow}
+        data={dataDow as ChartDataItem[]}
         {...commonProps}
       />
     </div>
@@ -581,3 +649,5 @@ export {
   selectNiceTicks,
   VerticalBarChart,
 };
+
+export type { ChartDataItem };

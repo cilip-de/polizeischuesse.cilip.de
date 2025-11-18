@@ -2,9 +2,25 @@ import { Center, Text, useMantineTheme } from "@mantine/core";
 import { ResponsiveHeatMap } from "@nivo/heatmap";
 import _ from "lodash";
 import { useState, useEffect, useRef } from "react";
+import { ProcessedDataItem } from "../../lib/data";
 import { ChartTooltip } from "./ChartTooltip";
 
-const HeatMapChart = ({ data, mobile = false }) => {
+interface HeatMapChartProps {
+  data: ProcessedDataItem[];
+  mobile?: boolean;
+}
+
+interface HeatMapCellData {
+  x: string;
+  y: number;
+}
+
+interface HeatMapSerieData {
+  id: string;
+  data: HeatMapCellData[];
+}
+
+const HeatMapChart = ({ data, mobile = false }: HeatMapChartProps) => {
   const [activeCell, setActiveCell] = useState<{ serieId: string; x: string } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -36,7 +52,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
     "Schussort Außen",
   ];
 
-  const boolData = (data: [any, ...any[]]) =>
+  const boolData = (data: ProcessedDataItem[]) =>
     boolAtr
       .map((x) => ({
         [x
@@ -52,7 +68,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
             "Hinweise auf psychische Ausnahmesituation",
             "Mutm. psych. Ausnahmesituation"
           )]: _.round(
-          (data.filter((d) => d[x].includes("Ja")).length / data.length) * 100,
+          (data.filter((d) => (d[x] as string).includes("Ja")).length / data.length) * 100,
           0
         ),
       }))
@@ -68,7 +84,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
     .groupBy("state")
     .map((state, id) => ({
       state: id.replace("Mecklenburg-Vorpommern", "Mecklenburg-Vorp."),
-      ...Object.assign(...boolData(state)),
+      ...Object.assign({}, ...boolData(state)),
     }))
     .orderBy("state")
     .value();
@@ -96,10 +112,10 @@ const HeatMapChart = ({ data, mobile = false }) => {
     .concat("unbewaffnet");
   // console.log(ans);
 
-  const ansFixed = ans.map((x: any) => {
+  const ansFixed: HeatMapSerieData[] = ans.map((x) => {
     return {
       id: x.state,
-      data: keys.map((key) => ({ x: key, y: x[key] })),
+      data: keys.map((key) => ({ x: key, y: (x as Record<string, number>)[key] || 0 })),
     };
   });
 
@@ -158,10 +174,10 @@ const HeatMapChart = ({ data, mobile = false }) => {
         forceSquare={true}
         colors={{
           type: "quantize",
-          colors: theme.colors.indigo,
+          colors: theme.colors.indigo as any,
           minValue: 0,
           maxValue: 100,
-        }}
+        } as any}
         axisTop={{
           tickSize: 5,
           tickPadding: 5,
@@ -174,7 +190,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
         inactiveOpacity={0.5}
         labelTextColor={(x) => {
           // console.log(x);
-          return x.value > 50 ? "whitesmoke" : "black";
+          return (x.value ?? 0) > 50 ? "whitesmoke" : "black";
         }}
         animate={true}
         motionConfig="gentle"
@@ -188,18 +204,8 @@ const HeatMapChart = ({ data, mobile = false }) => {
             setActiveCell({ serieId: cell.serieId, x: cell.data.x });
           }
         } : undefined}
-        cellBorderWidth={(cell) => {
-          if (mobile && activeCell?.serieId === cell.serieId && activeCell?.x === cell.data.x) {
-            return 3;
-          }
-          return 0;
-        }}
-        cellBorderColor={(cell) => {
-          if (mobile && activeCell?.serieId === cell.serieId && activeCell?.x === cell.data.x) {
-            return "#000";
-          }
-          return "transparent";
-        }}
+        borderWidth={mobile ? 3 : 0}
+        borderColor={mobile ? "#000" : "transparent"}
         tooltip={mobile ? () => null : (data) => {
           const count = perStateCounts[data.cell.serieId.replace("Mecklenburg-Vorp.", "Mecklenburg-Vorpommern")];
           return (
@@ -207,7 +213,7 @@ const HeatMapChart = ({ data, mobile = false }) => {
               primaryLabel=""
               primaryValue={data.cell.serieId}
               secondaryLabel={data.cell.data.x}
-              secondaryValue={data.cell.value}
+              secondaryValue={data.cell.value ?? 0}
               valueFormatter={(val) => `${val}% der ${count}`}
               singularUnit="Fälle"
               pluralUnit="Fälle"

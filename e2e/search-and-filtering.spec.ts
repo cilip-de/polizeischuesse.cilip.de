@@ -209,7 +209,8 @@ test.describe('Search and Filtering', () => {
 
         // URL might contain tags parameter
         const url = page.url();
-        expect(url).toContain('tags=') || expect(url).not.toBe('http://localhost:3000/');
+        const hasTagsOrChanged = url.includes('tags=') || url !== 'http://localhost:3000/';
+        expect(hasTagsOrChanged).toBeTruthy();
       }
     });
 
@@ -379,7 +380,7 @@ test.describe('Search and Filtering', () => {
 
         // Extract number
         const text = await resultsText.textContent();
-        const number = helpers.extractNumber(text);
+        const number = helpers.extractNumber(text ?? '');
         expect(number).toBeGreaterThan(0);
       }
     });
@@ -393,7 +394,7 @@ test.describe('Search and Filtering', () => {
 
       if (await countElement.count() > 0) {
         const text = await countElement.textContent();
-        initialCount = helpers.extractNumber(text);
+        initialCount = helpers.extractNumber(text ?? '');
       }
 
       // Apply filter
@@ -405,7 +406,7 @@ test.describe('Search and Filtering', () => {
         // Count should change (or at least be displayed)
         if (initialCount !== null && await countElement.count() > 0) {
           const newText = await countElement.textContent();
-          const newCount = helpers.extractNumber(newText);
+          const newCount = helpers.extractNumber(newText ?? '');
 
           // Count might be same or different, but should exist
           expect(newCount).toBeGreaterThanOrEqual(0);

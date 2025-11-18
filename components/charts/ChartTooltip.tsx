@@ -1,6 +1,32 @@
 import { Text } from "@mantine/core";
 import React from "react";
 
+export interface TooltipData {
+  value: string | number;
+  tooltipLabel?: {
+    [key: string]: string;
+  };
+}
+
+interface PointData {
+  x: string | number;
+  y: number;
+}
+
+interface Point {
+  serieId: string;
+  data: PointData;
+}
+
+interface HeatMapCell {
+  serieId: string;
+  value?: number;
+  data: {
+    x: string;
+    y: number;
+  };
+}
+
 interface ChartTooltipProps {
   // Primary label (e.g., "Jahr", "Stadt", "Bundesland")
   primaryLabel?: string;
@@ -75,30 +101,32 @@ export const ChartTooltip: React.FC<ChartTooltipProps> = ({
 };
 
 // Adapter for Bar Charts (Nivo ResponsiveBar)
-export const barChartTooltip = ({
-  value,
-  data,
-  id,
-  primaryLabelKey = "Jahr",
-  singularUnit = "Fall",
-  pluralUnit = "Fälle",
-}: {
-  value: number;
-  data: any;
-  id: string;
+// This is a factory function that returns a React component
+export const barChartTooltip = (options: {
   primaryLabelKey?: string;
   singularUnit?: string;
   pluralUnit?: string;
-}) => (
-  <ChartTooltip
-    primaryLabel={primaryLabelKey}
-    primaryValue={data.value}
-    secondaryLabel={data.tooltipLabel?.[id] || "Anzahl"}
-    secondaryValue={value}
-    singularUnit={singularUnit}
-    pluralUnit={pluralUnit}
-  />
-);
+} = {}) => {
+  const {
+    primaryLabelKey = "Jahr",
+    singularUnit = "Fall",
+    pluralUnit = "Fälle",
+  } = options;
+
+  const BarChartTooltipComponent = ({ value, data, id }: { value: number; data: TooltipData; id: string | number }) => (
+    <ChartTooltip
+      primaryLabel={primaryLabelKey}
+      primaryValue={data.value}
+      secondaryLabel={data.tooltipLabel?.[String(id)] || "Anzahl"}
+      secondaryValue={value}
+      singularUnit={singularUnit}
+      pluralUnit={pluralUnit}
+    />
+  );
+  BarChartTooltipComponent.displayName = 'BarChartTooltipComponent';
+
+  return BarChartTooltipComponent;
+};
 
 // Adapter for Line Charts (Nivo ResponsiveLine)
 export const lineChartTooltip = ({
@@ -107,7 +135,7 @@ export const lineChartTooltip = ({
   singularUnit = "Fall",
   pluralUnit = "Fälle",
 }: {
-  point: any;
+  point: Point;
   primaryLabelKey?: string;
   singularUnit?: string;
   pluralUnit?: string;
@@ -115,7 +143,7 @@ export const lineChartTooltip = ({
   <ChartTooltip
     primaryLabel={primaryLabelKey}
     primaryValue={point.data.x}
-    secondaryLabel={point.seriesId.replace(/"/g, "")}
+    secondaryLabel={point.serieId.replace(/"/g, "")}
     secondaryValue={point.data.y}
     singularUnit={singularUnit}
     pluralUnit={pluralUnit}
@@ -127,62 +155,68 @@ export const heatMapTooltip = ({
   data,
   customContent,
 }: {
-  data: any;
+  data: { cell: HeatMapCell };
   customContent?: React.ReactNode;
 }) => (
   <ChartTooltip
     primaryLabel={data.cell.serieId}
     primaryValue=""
     secondaryLabel={data.cell.data.x}
-    secondaryValue={data.cell.value}
+    secondaryValue={data.cell.value || 0}
     showPercentage={true}
     customContent={customContent}
   />
 );
 
 // Adapter for simple bar charts without id parameter
-export const simpleBarChartTooltip = ({
-  value,
-  data,
-  primaryLabelKey = "Jahr",
-  secondaryLabelKey = "Anzahl",
-  singularUnit = "Fall",
-  pluralUnit = "Fälle",
-}: {
-  value: number;
-  data: any;
+// This is a factory function that returns a React component
+export const simpleBarChartTooltip = (options: {
   primaryLabelKey?: string;
   secondaryLabelKey?: string;
   singularUnit?: string;
   pluralUnit?: string;
-}) => (
-  <ChartTooltip
-    primaryLabel={primaryLabelKey}
-    primaryValue={data.value}
-    secondaryLabel={secondaryLabelKey}
-    secondaryValue={value}
-    singularUnit={singularUnit}
-    pluralUnit={pluralUnit}
-  />
-);
+} = {}) => {
+  const {
+    primaryLabelKey = "Jahr",
+    secondaryLabelKey = "Anzahl",
+    singularUnit = "Fall",
+    pluralUnit = "Fälle",
+  } = options;
+
+  const SimpleBarChartTooltipComponent = ({ value, data }: { value: number; data: TooltipData }) => (
+    <ChartTooltip
+      primaryLabel={primaryLabelKey}
+      primaryValue={data.value}
+      secondaryLabel={secondaryLabelKey}
+      secondaryValue={value}
+      singularUnit={singularUnit}
+      pluralUnit={pluralUnit}
+    />
+  );
+  SimpleBarChartTooltipComponent.displayName = 'SimpleBarChartTooltipComponent';
+
+  return SimpleBarChartTooltipComponent;
+};
 
 // Adapter for Percentage Charts
-export const percentageTooltip = ({
-  value,
-  data,
-  label = "Anteil",
-}: {
-  value: number;
-  data: any;
+// This is a factory function that returns a React component
+export const percentageTooltip = (options: {
   label?: string;
-}) => (
-  <ChartTooltip
-    primaryLabel=""
-    primaryValue={data.value}
-    secondaryLabel={label}
-    secondaryValue={value * 100}
-    valueFormatter={(val) => `${Math.round(val * 10) / 10} %`}
-    singularUnit="der Fälle"
-    pluralUnit="der Fälle"
-  />
-);
+} = {}) => {
+  const { label = "Anteil" } = options;
+
+  const PercentageTooltipComponent = ({ value, data }: { value: number; data: TooltipData }) => (
+    <ChartTooltip
+      primaryLabel=""
+      primaryValue={data.value}
+      secondaryLabel={label}
+      secondaryValue={value * 100}
+      valueFormatter={(val) => `${Math.round(val * 10) / 10} %`}
+      singularUnit="der Fälle"
+      pluralUnit="der Fälle"
+    />
+  );
+  PercentageTooltipComponent.displayName = 'PercentageTooltipComponent';
+
+  return PercentageTooltipComponent;
+};

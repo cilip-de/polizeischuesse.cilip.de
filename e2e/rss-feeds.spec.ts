@@ -293,7 +293,7 @@ test.describe('RSS Feeds', () => {
       const feedText = await response.text();
 
       // Extract first description
-      const descMatch = feedText.match(/<description>(.+?)<\/description>|<content>(.+?)<\/content>/s);
+      const descMatch = feedText.match(/<description>([\s\S]+?)<\/description>|<content>([\s\S]+?)<\/content>/);
 
       if (descMatch) {
         const description = descMatch[1] || descMatch[2];

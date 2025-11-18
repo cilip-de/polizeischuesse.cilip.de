@@ -1,5 +1,5 @@
 import { Center, Grid, Space, Text, Collapse, Anchor } from "@mantine/core";
-import { ResponsiveLine } from "@nivo/line";
+import { ResponsiveLine, LineSeries, Point } from "@nivo/line";
 import { csv } from "d3-fetch";
 import type { NextPage } from "next";
 import { GetServerSideProps } from "next";
@@ -9,6 +9,7 @@ import AnchorHeading from "../components/AnchorHeading";
 import Case from "../components/Case";
 import Layout from "../components/Layout";
 import { setupTaserData } from "../lib/data";
+import type { ProcessedDataItem } from "../lib/data";
 import taserCover from "../public/taser_cover.jpg";
 import { lineChartTooltip } from "../components/charts/ChartTooltip";
 
@@ -56,8 +57,8 @@ const links = [
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const MyResponsiveLine = ({ data, mobile = false }) => {
-  const [activePoint, setActivePoint] = useState<{ serieId: string; x: string | number; y: number } | null>(null);
+const MyResponsiveLine = ({ data, mobile = false }: { data: LineSeries[]; mobile?: boolean }) => {
+  const [activePoint, setActivePoint] = useState<{ seriesId: string | number; x: string | number | Date | null; y: string | number | Date | null } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -98,9 +99,9 @@ const MyResponsiveLine = ({ data, mobile = false }) => {
             textAlign: "center",
           }}
         >
-          <div><strong>{activePoint.x}</strong></div>
+          <div><strong>{String(activePoint.x)}</strong></div>
           <div>
-            {activePoint.serieId}: {activePoint.y} {activePoint.y === 1 ? "Fall" : "Fälle"}
+            {activePoint.seriesId}: {String(activePoint.y)} {activePoint.y === 1 ? "Fall" : "Fälle"}
           </div>
         </div>
       )}
@@ -143,15 +144,19 @@ const MyResponsiveLine = ({ data, mobile = false }) => {
         pointBorderColor={{ from: "seriesColor" }}
         pointLabelYOffset={-12}
         useMesh={true}
-        onClick={mobile ? (point, event) => {
+        onClick={mobile ? (datum, event) => {
           event.stopPropagation();
-          if (activePoint?.serieId === point.serieId && activePoint?.x === point.data.x) {
-            setActivePoint(null);
-          } else {
-            setActivePoint({ serieId: point.serieId as string, x: point.data.x, y: point.data.y as number });
+          // Type guard to check if datum is a Point
+          if ('seriesId' in datum && 'data' in datum) {
+            const point = datum as Point<LineSeries>;
+            if (activePoint?.seriesId === point.seriesId && activePoint?.x === point.data.x) {
+              setActivePoint(null);
+            } else {
+              setActivePoint({ seriesId: point.seriesId, x: point.data.x, y: point.data.y });
+            }
           }
         } : undefined}
-        tooltip={mobile ? () => null : ({ point }) => lineChartTooltip({ point })}
+        tooltip={mobile ? () => null : ({ point }) => lineChartTooltip({ point: { serieId: String(point.seriesId), data: { x: point.data.x as string | number, y: Number(point.data.y) } } })}
         legends={mobile ? [] : [
           {
             anchor: "bottom-right",
@@ -185,7 +190,12 @@ const MyResponsiveLine = ({ data, mobile = false }) => {
   );
 };
 
-const Taser: NextPage = ({ data, stats }) => {
+interface TaserProps {
+  data: ProcessedDataItem[];
+  stats: LineSeries[];
+}
+
+const Taser: NextPage<TaserProps> = ({ data, stats }) => {
   const [opened, setOpened] = useState(false);
 
   return (
@@ -240,7 +250,7 @@ const Taser: NextPage = ({ data, stats }) => {
           <MyResponsiveLine data={stats} mobile />
         </div>
         <div style={{ marginTop: "1rem", padding: "0 1rem" }}>
-          {stats.map((serie, index) => (
+          {stats.map((serie: LineSeries, index: number) => (
             <div key={serie.id} style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
               <div
                 style={{
@@ -296,7 +306,7 @@ const Taser: NextPage = ({ data, stats }) => {
       </AnchorHeading>
       <Space />
       <div>
-        {data.map((x) => (
+        {data.map((x: ProcessedDataItem) => (
           <Case item={x} key={x.key} isTaser />
         ))}
       </div>
@@ -338,7 +348,7 @@ const Taser: NextPage = ({ data, stats }) => {
             CC BY 4.0
           </a>{" "}
           Lizenz veröffentlicht. Veröffentlichungen müssen als Quelle
-          "Bürgerrechte & Polizei/CILIP" angeben und auf
+          &quot;Bürgerrechte & Polizei/CILIP&quot; angeben und auf
           polizeischuesse.cilip.de verlinken.
         </Text>
       </Center>

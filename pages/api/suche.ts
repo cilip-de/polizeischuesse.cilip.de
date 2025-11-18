@@ -1,26 +1,27 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { setupData } from "../../lib/data";
+import type { ProcessedDataItem } from "../../lib/data";
+import type { FuseResultMatch } from "fuse.js";
 
-type Data = {
-  name: string;
+type SearchResult = ProcessedDataItem & {
+  matches?: FuseResultMatch[];
 };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<SearchResult[] | { error: string }>
 ) {
   const { data, options, fuse } = await setupData();
 
   const { q } = req.query;
 
-  let searchedData = null;
-  if (q && q.length > 2) {
-    searchedData = fuse
-      .search("'" + q)
-      .map(({ item, matches }) => ({ ...item, matches: matches }));
-
-    res.status(200).json(searchedData);
+  if (typeof q !== "string" || q.length <= 2) {
+    return res.status(400).json({ error: "Query must be a string with more than 2 characters" });
   }
 
-  res.status(400);
+  const searchedData = fuse
+    .search("'" + q)
+    .map(({ item, matches }) => ({ ...item, matches: matches ? [...matches] : undefined })) as SearchResult[];
+
+  return res.status(200).json(searchedData);
 }

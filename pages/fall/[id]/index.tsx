@@ -16,8 +16,15 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import Case from "../../../components/Case";
 import { setupData, setupTaserData } from "../../../lib/data";
+import type { ProcessedDataItem } from "../../../lib/data";
 
-const CaseDetail: NextPage = (props) => {
+interface CaseDetailProps {
+  case: ProcessedDataItem;
+  taser: boolean;
+  id: string;
+}
+
+const CaseDetail: NextPage<CaseDetailProps> = (props) => {
   const clipboard = useClipboard({ timeout: 99999999999999 });
   const [shareSupported, setShareSupported] = useState(false);
 
@@ -92,7 +99,7 @@ const CaseDetail: NextPage = (props) => {
                 <Button
                   size="sm"
                   color="blue"
-                  leftIcon={<IconShare size={16} />}
+                  leftSection={<IconShare size={16} />}
                   onClick={handleShare}
                 >
                   Teilen
@@ -101,7 +108,7 @@ const CaseDetail: NextPage = (props) => {
               <Button
                 size="sm"
                 color={"gray"}
-                leftIcon={<IconCopy size={16} />}
+                leftSection={<IconCopy size={16} />}
                 onClick={() => clipboard.copy(pageUrl)}
               >
                 {clipboard.copied ? "Link kopiert" : "Link kopieren"}

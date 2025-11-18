@@ -1,16 +1,25 @@
 import { ResponsiveLine } from "@nivo/line";
 import _ from "lodash";
-import { countItems } from "../../lib/data";
+import { countItems, ProcessedDataItem } from "../../lib/data";
 import { addMissingYears } from "../../lib/util";
 
-const WeaponChart = ({ data }) => {
-  const doData = (tag) => {
+interface WeaponChartProps {
+  data: ProcessedDataItem[];
+}
+
+interface LineDataPoint {
+  x: number;
+  y: number;
+}
+
+const WeaponChart = ({ data }: WeaponChartProps) => {
+  const doData = (tag: string): LineDataPoint[] => {
     const step1 = addMissingYears(
       data,
       countItems(
         data
           .filter(({ weapon }) => weapon.includes(tag))
-          .map(({ year }) => year)
+          .map(({ year }) => year.toString())
       )
     ).map((x) => ({ x: parseInt(x.value), y: x.count }));
 

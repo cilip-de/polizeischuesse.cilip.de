@@ -30,7 +30,7 @@ async function createSitemap(data: any[]) {
 
 const Sitemap = () => {};
 
-Sitemap.getInitialProps = async ({ res, req }) => {
+Sitemap.getInitialProps = async ({ res, req }: { res: any; req: any }) => {
   const { data } = await setupData();
   const taserData = await setupTaserData();
 

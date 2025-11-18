@@ -126,3 +126,4 @@ const getGeo = async (data: LocationData[]): Promise<GeoResponseLocation[]> => {
 };
 
 export { getGeo };
+export type { GeoResponseLocation };

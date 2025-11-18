@@ -11,10 +11,30 @@ const geoUrl = "/de_topo.json";
 
 const CENTER_GERMANY = [10.4515, 51.1657];
 
-const Map = ({ makersData, setInputPlace }) => {
-  const markers = _.sortBy(
+interface MarkerData {
+  city: string;
+  state: string;
+  longitude: number;
+  latitude: number;
+  count: number;
+}
+
+interface MapProps {
+  makersData: MarkerData[];
+  setInputPlace: (place: string) => void;
+}
+
+interface ProcessedMarker {
+  key: string;
+  name: string;
+  coordinates: [number, number];
+  count: number;
+}
+
+const Map = ({ makersData, setInputPlace }: MapProps) => {
+  const markers: ProcessedMarker[] = _.sortBy(
     _.uniqBy(
-      makersData.map((x) => ({
+      makersData.map((x: MarkerData): ProcessedMarker => ({
         key: x.city + x.state,
         name: x.city,
         coordinates: [x["longitude"], x["latitude"]],
@@ -25,7 +45,7 @@ const Map = ({ makersData, setInputPlace }) => {
     "count"
   );
 
-  const [showMarker, setShowMarker] = useState([]);
+  const [showMarker, setShowMarker] = useState<string[]>([]);
   const debounceClear = _.debounce(() => setShowMarker([]), 10000);
 
   // only render on client

@@ -1,15 +1,12 @@
-import { test as base } from '@playwright/test';
+import { test as base, Page, expect as baseExpect } from '@playwright/test';
 import * as helpers from './helpers';
 
 /**
  * Extended test fixture with common helpers and utilities
  */
-export const test = base.extend({
-  // Add common helpers to the test context
-  helpers: async ({}, use) => {
-    await use(helpers);
-  },
-
+export const test = base.extend<{
+  pageWithoutErrors: Page;
+}>({
   // Fixture for pages that should load without console errors
   pageWithoutErrors: async ({ page }, use) => {
     const errors = helpers.setupConsoleErrorTracking(page);
@@ -21,7 +18,7 @@ export const test = base.extend({
   },
 });
 
-export { expect } from '@playwright/test';
+export const expect = baseExpect;
 
 /**
  * Common test data
@@ -126,33 +123,34 @@ export const assertions = {
   /**
    * Assert that a URL matches expected pattern
    */
-  async expectUrlToMatch(page: any, pattern: RegExp | string) {
+  async expectUrlToMatch(page: Page, pattern: RegExp | string, expectFn: typeof expect) {
     const url = page.url();
     if (typeof pattern === 'string') {
-      expect(url).toContain(pattern);
+      expectFn(url).toContain(pattern);
     } else {
-      expect(url).toMatch(pattern);
+      expectFn(url).toMatch(pattern);
     }
   },
 
   /**
    * Assert that page has no console errors
    */
-  expectNoConsoleErrors(errors: string[]) {
-    expect(errors).toHaveLength(0);
+  expectNoConsoleErrors(errors: string[], expectFn: typeof expect) {
+    expectFn(errors).toHaveLength(0);
   },
 
   /**
    * Assert that element count is within range
    */
   async expectElementCountInRange(
-    page: any,
+    page: Page,
     selector: string,
     min: number,
-    max: number
+    max: number,
+    expectFn: typeof expect
   ) {
     const count = await helpers.countElements(page, selector);
-    expect(count).toBeGreaterThanOrEqual(min);
-    expect(count).toBeLessThanOrEqual(max);
+    expectFn(count).toBeGreaterThanOrEqual(min);
+    expectFn(count).toBeLessThanOrEqual(max);
   },
 };
