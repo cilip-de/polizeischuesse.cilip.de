@@ -61,7 +61,7 @@ const CaseDetail: NextPage<CaseDetailProps> = (props) => {
     .locale("de")
     .format("DD. MMMM YYYY");
 
-  const ogImage = `https://polizeischuesse.cilip.de/api/og?line1=am ${longPrintDate}&line2=in ${
+  const ogImage = `https://polizeischuesse.cilip.de/api/og-case.png?line1=am ${longPrintDate}&line2=in ${
     props.case.place
   }${
     props.case.state !== props.case.place ? ", " + props.case.state : ""

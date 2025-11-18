@@ -366,7 +366,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
           </Text>
         </>
       }
-      metaImg="api/og-viz"
+      metaImg="api/og-viz.png"
       metaPath="visualisierungen"
       title="Visualisierungen der Todesschüsse"
       description="Wir haben unsere gesammelten Polizeischüsse umfangreich analysiert und zeigen u. a. wie sich polizeiliche Todesschüsse auf Wochtentage verteilen und das Opfer häufiger Stichwaffen, früher hingegen Schusswaffen besaßen."

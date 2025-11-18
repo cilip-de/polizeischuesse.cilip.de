@@ -43,6 +43,18 @@ const moduleExports = {
       },
     ];
   },
+  async rewrites() {
+    return [
+      {
+        source: "/api/og-viz.png",
+        destination: "/api/og-viz",
+      },
+      {
+        source: "/api/og-case.png",
+        destination: "/api/og-case",
+      },
+    ];
+  },
 };
 
 const sentryWebpackPluginOptions = {

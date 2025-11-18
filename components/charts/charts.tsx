@@ -512,15 +512,7 @@ const OverviewChart = ({ data, hits, onClick }: OverviewChartProps) => {
   const theme = useMantineTheme();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
 
-  console.log('OverviewChart rendering:', {
-    data: data ? `array of ${data.length}` : 'undefined',
-    hits: hits ? `array of ${hits.length}` : 'undefined',
-    theme: !!theme,
-    themeColors: theme?.colors ? Object.keys(theme.colors) : 'undefined',
-  });
-
   if (!hits || !data) {
-    console.log('OverviewChart: hits or data is null, returning null');
     return null;
   }
 

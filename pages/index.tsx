@@ -48,19 +48,6 @@ const Home = ({
   beforeReuni,
   averages,
 }: HomeProps) => {
-  console.log("Home component props:", {
-    data: data ? `array of ${data.length}` : "undefined",
-    geoData: geoData ? `array of ${geoData.length}` : "undefined",
-    initialSearchedData: initialSearchedData
-      ? `array of ${initialSearchedData.length}`
-      : "undefined",
-    selection,
-    options: options ? Object.keys(options) : "undefined",
-    maxCases,
-    afterReuni,
-    beforeReuni,
-  });
-
   return (
     <div>
       <a href="#main-content" className="skip-link">
@@ -403,15 +390,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { data, geoData, options, fuse, beforeReuni, afterReuni, averages } =
     await setupData();
 
-  console.log("getServerSideProps - setupData returned:", {
-    dataLength: data?.length,
-    geoDataLength: geoData?.length,
-    optionsKeys: options ? Object.keys(options) : undefined,
-    fuseExists: !!fuse,
-    beforeReuni,
-    afterReuni,
-  });
-
   if (selection.p !== null) selection.p = parseInt(selection.p as string);
   if (selection.tags && selection.tags !== null)
     selection.tags = (selection.tags as string).split(",");
@@ -419,13 +397,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   let initialSearchedData = null;
   if (q && q.length > 2) {
-    console.log("Searching with fuse for:", q);
     // use only excact matches with Fuse advanced search options
     const searchResults = fuse?.search("'" + q);
-    console.log(
-      "Fuse search results:",
-      searchResults ? `array of ${searchResults.length}` : "undefined",
-    );
     initialSearchedData =
       searchResults?.map(({ item, matches }) => ({
         ...item,

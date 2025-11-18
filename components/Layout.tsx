@@ -28,6 +28,20 @@ export default function Layout({
   const hostname = "https://polizeischuesse.cilip.de";
   const router = useRouter();
 
+  // Detect if this is an API-generated image or a static file
+  const isApiImage = metaImg.startsWith("api/");
+  const imageUrl = `${hostname}/${metaImg}`;
+
+  // Determine image type based on file extension or API route
+  let imageType = "image/png"; // default for API routes
+  if (!isApiImage) {
+    if (metaImg.endsWith(".jpg") || metaImg.endsWith(".jpeg") || metaImg.endsWith(".jepg")) {
+      imageType = "image/jpeg";
+    } else if (metaImg.endsWith(".png")) {
+      imageType = "image/png";
+    }
+  }
+
   return (
     <>
       <Head>
@@ -35,9 +49,13 @@ export default function Layout({
         <meta name="description" content={description} />
         <meta property="og:title" content={title} />
         <meta property="og:type" content="article" />
-        <meta property="og:image" content={`${hostname}/${metaImg}`} />
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:type" content={imageType} />
         <meta property="og:url" content={`${hostname}/${metaPath}`} />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={imageUrl} />
       </Head>
 
       <a href="#main-content" className="skip-link">

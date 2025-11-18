@@ -151,6 +151,7 @@ const setupOptions = (data: ProcessedDataItem[]): SetupOptions => {
       x.label =
         x.label.slice(0, 2) + `-${parseInt(x.value) + 4} ` + x.label.slice(3);
   });
+
   return { year, state, place, weapon, age };
 };
 

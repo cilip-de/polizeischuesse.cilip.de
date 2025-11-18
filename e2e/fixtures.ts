@@ -72,7 +72,7 @@ export const testData = {
     search: '/api/suche',
     contact: '/api/contact',
     feed: '/api/feed',
-    og: '/api/og',
+    og: '/api/og-case',
   },
 
   // Contact form test data
