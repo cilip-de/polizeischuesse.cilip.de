@@ -6,25 +6,120 @@ env:
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1 # Skip downloading during yarn install
   PLAYWRIGHT_BROWSERS_PATH: 0 # Places binaries to node_modules/@playwright/test
   CI: true # Skip geo API calls in CI environment
+  NODE_OPTIONS: --max-old-space-size=8192 # Increase heap size to 8GB for Next.js server
 
 jobs:
-  tests:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - run: >
+      - uses: actions/checkout@v4
+
+      - name: Setup environment
+        run: >
           echo "[auth]" > .sentryclirc &&
           echo "token=${{ secrets.SENTRY_TOKEN }}" >> .sentryclirc &&
           echo "GEO_USER=${{ secrets.GEO_USER }}" >> .env.local &&
           echo "GEO_PW=${{ secrets.GEO_PW }}" >> .env.local &&
           echo "GEO_HOST=${{ secrets.GEO_HOST }}" >> .env.local &&
           echo "NEXT_PUBLIC_BASE_URL='http://localhost:3000'" >> .env.local
-      - uses: actions/setup-node@v2
+
+      - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - run: npx playwright install-deps
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
       - run: npm ci
-      - run: npx playwright install chromium firefox webkit
+
       - run: npm run build
-      - run: npm test
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-build
+          path: .next
+          include-hidden-files: true
+          retention-days: 1
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit, "Mobile Chrome", "Mobile Safari"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup environment
+        run: >
+          echo "[auth]" > .sentryclirc &&
+          echo "token=${{ secrets.SENTRY_TOKEN }}" >> .sentryclirc &&
+          echo "GEO_USER=${{ secrets.GEO_USER }}" >> .env.local &&
+          echo "GEO_PW=${{ secrets.GEO_PW }}" >> .env.local &&
+          echo "GEO_HOST=${{ secrets.GEO_HOST }}" >> .env.local &&
+          echo "NEXT_PUBLIC_BASE_URL='http://localhost:3000'" >> .env.local
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      - run: npm ci
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: next-build
+          path: .next
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ matrix.browser }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-${{ matrix.browser }}-
+
+      - name: Install Playwright system dependencies
+        run: npx playwright install-deps
+
+      - name: Install Playwright browser
+        run: |
+          if [ "${{ matrix.browser }}" = "Mobile Chrome" ]; then
+            npx playwright install chromium
+          elif [ "${{ matrix.browser }}" = "Mobile Safari" ]; then
+            npx playwright install webkit
+          else
+            npx playwright install ${{ matrix.browser }}
+          fi
+
+      - name: Run tests
+        run: npx playwright test --project="${{ matrix.browser }}"
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 7
