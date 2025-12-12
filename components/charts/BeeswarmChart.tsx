@@ -10,12 +10,13 @@ interface BeeswarmChartProps {
   mobile?: boolean;
 }
 
-interface BeeswarmNode extends d3Force.SimulationNodeDatum {
+// Data item with Date field for beeswarm chart (separate from ProcessedDataItem's index signature)
+interface BeeswarmDataItem {
   datum: Date;
+  dayOfYear: number;
   Name: string;
   Fall: string;
   datePrint: string;
-  dayOfYear: number;
   year: number;
   Ort: string;
   Bundesland: string;
@@ -33,6 +34,8 @@ interface BeeswarmNode extends d3Force.SimulationNodeDatum {
   indoor: boolean;
   men: boolean;
 }
+
+interface BeeswarmNode extends d3Force.SimulationNodeDatum, BeeswarmDataItem {}
 
 interface TooltipState {
   show: boolean;
@@ -86,17 +89,35 @@ const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data, mobile = false }) =
 
   // Process data: group by year
   const groupedData = useMemo(() => {
-    const parsed = data.map((item) => {
+    const parsed: BeeswarmDataItem[] = data.map((item) => {
       const datum = new Date(item.Datum);
       return {
-        ...item,
         datum,
         dayOfYear: getDayOfYear(datum),
+        Name: item.Name,
+        Fall: item.Fall,
+        datePrint: item.datePrint,
+        year: item.year,
+        Ort: item.Ort,
+        Bundesland: item.Bundesland,
+        Szenarium: item.Szenarium,
+        age: item.age,
+        sex: item.sex,
+        schusswechsel: item.schusswechsel,
+        sek: item.sek,
+        vgbeamte: item.vgbeamte,
+        vbaktion: item.vbaktion,
+        psych: item.psych,
+        alkdrog: item.alkdrog,
+        famgew: item.famgew,
+        unschuss: item.unschuss,
+        indoor: item.indoor,
+        men: item.men,
       };
     });
 
     // Group by year
-    const groups: { [key: number]: typeof parsed } = {};
+    const groups: { [key: number]: BeeswarmDataItem[] } = {};
     parsed.forEach((d) => {
       if (!groups[d.year]) groups[d.year] = [];
       groups[d.year].push(d);
@@ -323,7 +344,7 @@ const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data, mobile = false }) =
 
 interface BeeswarmRowProps {
   year: number;
-  data: (ProcessedDataItem & { datum: Date; dayOfYear: number })[];
+  data: BeeswarmDataItem[];
   width: number;
   height: number;
   margin: { top: number; right: number; bottom: number; left: number };
@@ -400,7 +421,7 @@ const BeeswarmRow: React.FC<BeeswarmRowProps> = ({
     for (let i = 0; i < 100; i++) simulation.tick();
 
     return simulation.nodes() as BeeswarmNode[];
-  }, [data, xScale, height, margin, radius]);
+  }, [data, xScale, height, radius]);
 
   const getTooltipData = (d: BeeswarmNode) => {
     // Extract active tags with colors
