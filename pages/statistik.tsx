@@ -1,9 +1,11 @@
 import { Grid, Space } from "@mantine/core";
-import { csv } from "d3-fetch";
+import { csvParse } from "d3-dsv";
+import fs from "fs";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { GetStaticProps } from "next";
 import Image from "next/image";
+import path from "path";
 import AnchorHeading from "../components/AnchorHeading";
 import { ShortsPerYear, SimpleChart } from "../components/charts/official";
 import Layout from "../components/Layout";
@@ -128,17 +130,22 @@ const Statistiken: NextPage<StatistikenProps> = ({
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  let pdfs = [];
-  const res = await fetch(
-    "https://fragdenstaat.de/api/v1/documentcollection/82/",
-  );
-  if (res.ok) {
-    pdfs = await res.json();
+  let pdfs = { documents: [] };
+  try {
+    const res = await fetch(
+      "https://fragdenstaat.de/api/v1/documentcollection/82/",
+    );
+    if (res.ok) {
+      pdfs = await res.json();
+    }
+  } catch {
+    // Fetch may fail during build, use empty default
   }
 
-  const stats = (
-    await csv(`${process.env.NEXT_PUBLIC_BASE_URL}/official_statistics.csv`)
-  ).filter((x) => x["Jurisdiktion"] === "Bund");
+  // Read CSV directly from filesystem during build
+  const csvPath = path.join(process.cwd(), "public", "official_statistics.csv");
+  const csvContent = fs.readFileSync(csvPath, "utf-8");
+  const stats = csvParse(csvContent).filter((x) => x["Jurisdiktion"] === "Bund");
 
   const wData1 = stats.map((x) => ({
     count: Number(x["Warnschüsse"]),

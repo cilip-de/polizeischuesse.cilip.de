@@ -1,9 +1,11 @@
 import { Center, Grid, Space, Text, Collapse, Anchor } from "@mantine/core";
 import { ResponsiveLine, LineSeries, Point } from "@nivo/line";
-import { csv } from "d3-fetch";
+import { csvParse } from "d3-dsv";
+import fs from "fs";
 import type { NextPage } from "next";
 import { GetStaticProps } from "next";
 import Image from "next/image";
+import path from "path";
 import { useState, useEffect, useRef } from "react";
 import AnchorHeading from "../components/AnchorHeading";
 import Case from "../components/Case";
@@ -359,9 +361,10 @@ const Taser: NextPage<TaserProps> = ({ data, stats }) => {
 export const getStaticProps: GetStaticProps = async () => {
   const data = await setupTaserData();
 
-  const rawStats = await csv(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/official_taser_statistics.csv`
-  );
+  // Read CSV directly from filesystem during build
+  const csvPath = path.join(process.cwd(), "public", "official_taser_statistics.csv");
+  const csvContent = fs.readFileSync(csvPath, "utf-8");
+  const rawStats = csvParse(csvContent);
 
   const keys = Object.keys(rawStats[0]);
 
