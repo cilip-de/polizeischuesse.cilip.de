@@ -10,6 +10,7 @@ import {
   VerticalBarChart,
 } from "../components/charts/charts";
 import HeatMapChart from "../components/charts/HeatMapChart";
+import BeeswarmChart from "../components/charts/BeeswarmChart";
 import Layout from "../components/Layout";
 import { countItems, setupData } from "../lib/data";
 import { addMissingYears, combineArray, isNumber } from "../lib/util";
@@ -380,6 +381,27 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
           {_.round(averages[0], 1)} Personen pro Monat. Im Jahr {dayjs().year()}{" "}
           sind es bis jetzt {_.round(averages[2], 1)} Personen, im Jahr zuvor
           waren es {_.round(averages[1], 1)}.
+        </Text>
+      </MiddleContent>
+
+      <Space h="xl" />
+      <Space h="xl" />
+
+      <div>
+        <AnchorHeading order={3} ta="center" id="zeitlicher-verlauf">
+          Polizeiliche Todesschüsse im Jahresverlauf
+        </AnchorHeading>
+        <Space h="sm" />
+        <BeeswarmChart data={data} />
+        <BeeswarmChart data={data} mobile />
+      </div>
+
+      <MiddleContent>
+        <Text>
+          Jeder Punkt repräsentiert einen Fall. Die horizontale Position zeigt
+          das Datum im Jahr (1. Januar bis 31. Dezember). Die Visualisierung
+          ermöglicht es, zeitliche Muster und Häufungen innerhalb einzelner
+          Jahre zu erkennen.
         </Text>
       </MiddleContent>
 
