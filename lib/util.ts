@@ -25,9 +25,9 @@ const constructUrl = (params: Partial<Selection>) => {
     .filter((x) => !!x[1] && (!Array.isArray(x[1]) || x[1].length))
     .map((x) => `${x[0]}=${x[1]}`);
 
-  if (paramsString.length === 0) return "/#chronik";
+  if (paramsString.length === 0) return "/";
 
-  return `/?${paramsString.join("&")}#chronik`;
+  return `/?${paramsString.join("&")}`;
 };
 
 interface ConstructUrlWithQParams {

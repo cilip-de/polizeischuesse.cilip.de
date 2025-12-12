@@ -1,3 +1,4 @@
+import React from "react";
 import { Badge, Card, Grid, Group, Space, Text } from "@mantine/core";
 import type { ProcessedDataItem } from "../lib/data";
 import { SEARCH_KEYES } from "../lib/data";
@@ -8,7 +9,7 @@ const highlight = (
   value: string,
   indices: number[][] = [],
   i: number = 1
-): JSX.Element | string => {
+): React.ReactNode => {
   const pair = indices[indices.length - i];
   return !pair ? (
     value
@@ -34,8 +35,8 @@ type Item = ProcessedDataItem & {
 const constructHighlights = (
   item: Item,
   attr: string
-): JSX.Element | string => {
-  let text: JSX.Element | string = item[attr] as string;
+): React.ReactNode => {
+  let text: React.ReactNode = item[attr] as string;
 
   const descMatches: Match[] = (item.matches || []).filter(
     (x) => x.key === attr
@@ -46,7 +47,7 @@ const constructHighlights = (
   return text;
 };
 
-const textToLinks = (text: string): JSX.Element => {
+const textToLinks = (text: string): React.ReactNode => {
   const links = text
     .trim()
     .split(" ")

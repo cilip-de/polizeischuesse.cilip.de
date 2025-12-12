@@ -35,12 +35,11 @@ test.describe('Search and Filtering', () => {
 
       // Enter only 2 characters
       await searchInput.fill('Be');
-      await page.waitForTimeout(1000); // Wait for debounce
+      await page.waitForTimeout(2500); // Wait for 2s delay + buffer
 
-      // Should show message about needing more characters
-      const statusMessage = page.getByText('Bitte mehr Zeichen für die Suche eingeben');
-      const messageCount = await statusMessage.count();
-      expect(messageCount).toBeGreaterThan(0);
+      // Should show message about needing more characters (inline with label)
+      const statusMessage = page.getByText('bitte mindestens 3 Zeichen eingeben');
+      await expect(statusMessage).toBeVisible();
     });
 
     test('should clear search when input is cleared', async ({ page }) => {

@@ -1,7 +1,7 @@
 import { TextInput } from "@mantine/core";
 import _ from "lodash";
 import router from "next/router";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { constructUrlWithQ } from "../lib/util";
 
 interface SearchInputProps {
@@ -55,10 +55,32 @@ const SearchInput = ({
     fetchSearch(newQ);
   };
 
+  const [showHint, setShowHint] = useState(false);
+
+  useEffect(() => {
+    if (q.length > 0 && q.length < 3) {
+      const timer = setTimeout(() => setShowHint(true), 2000);
+      return () => clearTimeout(timer);
+    } else {
+      setShowHint(false);
+    }
+  }, [q]);
+
   return (
     <TextInput
       value={q}
-      label="Suche"
+      label={
+        showHint ? (
+          <>
+            Suche{" "}
+            <span style={{ fontWeight: "normal", color: "var(--mantine-color-dimmed)" }}>
+              – bitte mindestens 3 Zeichen eingeben
+            </span>
+          </>
+        ) : (
+          "Suche"
+        )
+      }
       placeholder="z. B. Wohnung, Flucht, Rücken, Kopf"
       onChange={searchFunc}
     />

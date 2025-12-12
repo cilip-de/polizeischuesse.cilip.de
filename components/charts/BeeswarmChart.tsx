@@ -353,7 +353,7 @@ interface BeeswarmRowProps {
   mobile: boolean;
   tooltip: TooltipState;
   setTooltip: (state: TooltipState) => void;
-  svgRef: React.RefObject<SVGSVGElement>;
+  svgRef: React.RefObject<SVGSVGElement | null>;
   isPinned: boolean;
   setIsPinned: (pinned: boolean) => void;
 }

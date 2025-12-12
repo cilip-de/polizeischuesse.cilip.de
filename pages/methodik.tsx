@@ -84,7 +84,7 @@ const Daten: NextPage = () => {
         Fälle auch nach Schussabgaben innerhalb und außerhalb von Gebäuden
         sortiert. Nicht immer ließ sich dies jedoch exakt rekonstruieren. Für
         einen Überblick dazu hilft die Suche in den Meldungen mit dem Stichwort{" "}
-        <Link href="/?q=Wohnun&p=1#chronik">„Wohnung“</Link>
+        <Link href="/?q=Wohnun&p=1">„Wohnung“</Link>
         .
         <br />
         <br />

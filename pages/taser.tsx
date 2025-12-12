@@ -2,7 +2,7 @@ import { Center, Grid, Space, Text, Collapse, Anchor } from "@mantine/core";
 import { ResponsiveLine, LineSeries, Point } from "@nivo/line";
 import { csv } from "d3-fetch";
 import type { NextPage } from "next";
-import { GetServerSideProps } from "next";
+import { GetStaticProps } from "next";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import AnchorHeading from "../components/AnchorHeading";
@@ -356,7 +356,7 @@ const Taser: NextPage<TaserProps> = ({ data, stats }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const data = await setupTaserData();
 
   const rawStats = await csv(
@@ -364,7 +364,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   );
 
   const keys = Object.keys(rawStats[0]);
-  // console.log("keys", keys);
 
   const stats = keys
     .slice(1)
@@ -384,15 +383,12 @@ export const getServerSideProps: GetServerSideProps = async () => {
       };
     });
 
-  // console.log("rawStats", rawStats);
-
-  // console.log("stats", JSON.stringify(stats));
-
   return {
     props: {
       data,
       stats,
     },
+    revalidate: 3600, // Revalidate every hour
   };
 };
 

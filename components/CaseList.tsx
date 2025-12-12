@@ -1,141 +1,119 @@
-import { Center, Grid, Pagination, Text } from "@mantine/core";
-import _ from "lodash";
+import { Center, Grid, Pagination, Skeleton, Text } from "@mantine/core";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { PAGE_SIZE, SELECTABLE, setupOptions, type SetupOptions, type ProcessedDataItem, type GeoDataItem } from "../lib/data";
-import { constructUrl, constructUrlWithQ, paginate, Selection } from "../lib/util";
+import { useMemo, useState, useCallback } from "react";
+import { PAGE_SIZE, type ProcessedDataItem } from "../lib/data";
+import { constructUrl, constructUrlWithQ, type Selection } from "../lib/util";
+import { useCases, type CasesFilters } from "../lib/hooks/useCases";
+import { useGeoData } from "../lib/hooks/useGeoData";
+import { useStats } from "../lib/hooks/useStats";
 import AnchorHeading from "./AnchorHeading";
 import Case from "./Case";
 import CategoryInput from "./CategoryInput";
-import { OverviewChart } from "./charts/charts";
+import { OverviewChartFromStats } from "./charts/OverviewChartFromStats";
 import Map from "./Map";
 import SearchInput from "./SearchInput";
 import SelectInput from "./SelectInput";
-import { BarDatum } from "@nivo/bar";
 
-const CaseList = ({
-  data,
-  geoData,
-  initialSearchedData,
-  selection,
-  options,
-  maxCases,
-}: {
-  data: ProcessedDataItem[];
-  geoData: GeoDataItem[];
-  initialSearchedData?: ProcessedDataItem[];
-  selection: Required<Selection>;
-  options: SetupOptions;
+interface CaseListProps {
   maxCases: number;
-}) => {
+}
+
+function parseSelectionFromQuery(query: Record<string, string | string[] | undefined>): Required<Selection> {
+  return {
+    q: (query.q as string) || "",
+    p: parseInt(query.p as string) || 1,
+    year: (query.year as string) || "",
+    state: (query.state as string) || "",
+    place: (query.place as string) || "",
+    weapon: (query.weapon as string) || "",
+    age: (query.age as string) || "",
+    tags: query.tags ? (query.tags as string).split(",") : [],
+  };
+}
+
+function selectionToFilters(selection: Required<Selection>, searchQ: string | null): CasesFilters {
+  const q = searchQ ?? selection.q;
+  return {
+    page: selection.p,
+    limit: PAGE_SIZE,
+    q: q || undefined,
+    year: selection.year || undefined,
+    state: selection.state || undefined,
+    place: selection.place || undefined,
+    weapon: selection.weapon || undefined,
+    age: selection.age || undefined,
+    tags: selection.tags.length > 0 ? selection.tags : undefined,
+  };
+}
+
+const CaseList = ({ maxCases }: CaseListProps) => {
   const router = useRouter();
 
-  const [searchedData, setSearchedData] = useState<ProcessedDataItem[] | null>(null);
-  const [searchedQ, setSearchedQ] = useState<null | string>(null);
-  const [firstRender, setFirstRender] = useState(true);
+  // Parse selection from URL query params
+  const selection = useMemo(() => parseSelectionFromQuery(router.query), [router.query]);
 
-  useEffect(() => {
-    setSearchedData(initialSearchedData ?? null);
-    setFirstRender(false);
-  }, [initialSearchedData]);
+  // Local state for search input (for debounced search)
+  const [searchQ, setSearchQ] = useState<string | null>(null);
 
-  let { q, p } = selection;
+  // Build filters for API calls
+  const filters = useMemo(() => selectionToFilters(selection, searchQ), [selection, searchQ]);
 
-  q = searchedQ ?? q;
+  // Stats filters (same as cases but without pagination)
+  const statsFilters = useMemo(() => {
+    const { page, limit, ...rest } = filters;
+    return rest;
+  }, [filters]);
+
+  // Fetch cases, geo data, and stats
+  const { data: casesData, isLoading: casesLoading } = useCases(filters);
+  const { data: geoData, isLoading: geoLoading } = useGeoData(statsFilters);
+  const { data: statsData, isLoading: statsLoading } = useStats(statsFilters);
+
+  const q = searchQ ?? selection.q;
   const enoughChars = !q || q.length > 2;
 
-  let resultList =
-    firstRender && initialSearchedData != null
-      ? initialSearchedData
-      : searchedData || data;
+  // Get data from API response
+  const cases = casesData?.cases || [];
+  const total = casesData?.total || 0;
+  const totalPages = casesData?.totalPages || 0;
+  const options = casesData?.filters || { year: [], state: [], place: [], weapon: [], age: [] };
 
-  for (const [k, v] of Object.entries(selection)) {
-    if (!v || !SELECTABLE.includes(k)) continue;
-    resultList = resultList.filter((x) => x[k] == v);
-  }
+  // Marker data from geo API
+  const displayMarkers = geoData?.markers || [];
+  const totalLocations = geoData?.totalLocations || 0;
 
-  for (const tag of selection.tags || []) {
-    resultList = resultList.filter((x) =>
-      tag.startsWith("no__") ? !x[tag.replace("no__", "")] : x[tag]
-    );
-  }
+  // Handler for search input
+  const handleSearchData = useCallback((_data: ProcessedDataItem[] | null) => {
+    // With React Query, we don't need to store search results in state
+    // The useCases hook handles it. This is kept for compatibility.
+  }, []);
 
-  if (selection.weapon)
-    resultList = resultList.filter((x) => x.weapon.includes(selection.weapon));
+  const handleSearchQ = useCallback((newQ: string) => {
+    setSearchQ(newQ === "" ? null : newQ);
+  }, []);
 
-  const numHits = resultList.length;
-  const totalPages = Math.ceil(resultList.length / PAGE_SIZE);
-
-  const displayLocations = _.countBy(
-    resultList,
-    (x) => x["place"] + x["state"]
-  );
-
-  // Filter and transform GeoDataItem to match MarkerData shape
-  interface MarkerData {
-    city: string;
-    state: string;
-    longitude: number;
-    latitude: number;
-    count: number;
-  }
-
-  const displayMarkers: MarkerData[] = geoData
-    .filter((x): x is GeoDataItem & { city: string; state: string; latitude: number; longitude: number } =>
-      x.city !== null && x.state !== null && x.latitude !== null && x.longitude !== null && displayLocations.hasOwnProperty(x.city + x.state)
-    )
-    .map((x) => ({
-      city: x.city,
-      state: x.state,
-      longitude: x.longitude,
-      latitude: x.latitude,
-      count: displayLocations[x.city + x.state],
-    }));
-
-  const overChart = (
-    <OverviewChart
-      data={data}
-      hits={resultList}
-      onClick={(x: BarDatum) =>
-        router.push(
-          constructUrl({ ...selection, year: String(x.indexValue), p: 1 }),
-          undefined,
-          {
-            scroll: false,
-          }
-        )
-      }
-    />
-  );
-
-  // for (const x of displayMarkers) {
-  //   if (x["city"] == "Frankfurt am Main") console.log(x);
-  // }
-
-  // console.log(displayLocations);
-  // console.log(displayMarkers);
-
-  const recalculatedOptions = setupOptions(resultList);
-  options = recalculatedOptions || options; // Use recalculated or fallback to original
-  resultList = paginate(resultList, PAGE_SIZE, p);
+  const isFiltered = selection.year || selection.state || selection.place ||
+                     selection.weapon || selection.age || selection.tags.length > 0 || q;
 
   return (
     <div style={{ paddingBottom: "2rem" }}>
       <Grid>
         <Grid.Col span={2} className="only-mobile"></Grid.Col>
         <Grid.Col span={{ base: 12, xs: 8 }} className="only-mobile">
-          <Map
-            makersData={displayMarkers}
-            setInputPlace={(x: string) =>
-              router.push(
-                constructUrl({ ...selection, place: x, p: 1 }),
-                undefined,
-                {
-                  scroll: false,
-                }
-              )
-            }
-          />{" "}
+          {geoLoading ? (
+            <Skeleton height={200} />
+          ) : (
+            <Map
+              makersData={displayMarkers}
+              setInputPlace={(x: string) =>
+                router.push(
+                  constructUrl({ ...selection, place: x, p: 1 }),
+                  undefined,
+                  { scroll: false }
+                )
+              }
+            />
+          )}
         </Grid.Col>
         <Grid.Col span={2} className="only-mobile"></Grid.Col>
         <Grid.Col span={{ base: 12, sm: 8 }}>
@@ -143,69 +121,84 @@ const CaseList = ({
             Chronik
           </AnchorHeading>
           <div role="search" aria-label="Suche und Filter für polizeiliche Todesschüsse">
-          <Grid style={{ marginBottom: "1rem", marginTop: "0.5rem" }}>
-            {[
-              ["year", "Jahr"],
-              ["state", "Bundesland"],
-              ["place", "Ort"],
-            ].map(([key, label]) => (
-              <Grid.Col span={4} key={key}>
-                <SelectInput
-                  skey={key}
-                  label={label}
+            <Grid style={{ marginBottom: "1rem", marginTop: "0.5rem" }}>
+              {[
+                ["year", "Jahr"],
+                ["state", "Bundesland"],
+                ["place", "Ort"],
+              ].map(([key, label]) => (
+                <Grid.Col span={4} key={key}>
+                  <SelectInput
+                    skey={key}
+                    label={label}
+                    selection={selection}
+                    data={options[key as keyof typeof options] || []}
+                  />
+                </Grid.Col>
+              ))}
+            </Grid>
+            <Grid style={{ marginBottom: "1rem" }}>
+              <Grid.Col span={8}>
+                <SearchInput
+                  q={q}
                   selection={selection}
-                  data={options[key]}
+                  setSearchedData={handleSearchData}
+                  setSearchedQ={handleSearchQ}
                 />
               </Grid.Col>
-            ))}
-          </Grid>
-          <Grid style={{ marginBottom: "1rem" }}>
-            <Grid.Col span={8}>
-              <SearchInput
-                q={q}
-                selection={selection}
-                setSearchedData={setSearchedData}
-                setSearchedQ={setSearchedQ}
+              <Grid.Col span={4}>
+                <SelectInput
+                  skey={"weapon"}
+                  label={"Bewaffnung"}
+                  selection={selection}
+                  data={options.weapon || []}
+                />
+              </Grid.Col>
+            </Grid>
+            <Grid style={{ marginBottom: "1rem" }}>
+              <Grid.Col span={{ base: 12, sm: 8 }}>
+                <CategoryInput q={q} selection={selection} />
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, sm: 4 }}>
+                <SelectInput
+                  skey={"age"}
+                  label={"Alter"}
+                  selection={selection}
+                  data={options.age || []}
+                />
+              </Grid.Col>
+            </Grid>
+            {statsLoading ? (
+              <Skeleton height={120} />
+            ) : statsData ? (
+              <OverviewChartFromStats
+                yearCounts={statsData.yearCounts}
+                onClick={(year) =>
+                  router.push(
+                    constructUrl({ ...selection, year: String(year), p: 1 }),
+                    undefined,
+                    { scroll: false }
+                  )
+                }
               />
-            </Grid.Col>
-            <Grid.Col span={4}>
-              <SelectInput
-                skey={"weapon"}
-                label={"Bewaffnung"}
-                selection={selection}
-                data={options.weapon}
-              />
-            </Grid.Col>
-          </Grid>
-          <Grid style={{ marginBottom: "1rem" }}>
-            <Grid.Col span={{ base: 12, sm: 8 }}>
-              <CategoryInput q={q} selection={selection} />
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, sm: 4 }}>
-              <SelectInput
-                skey={"age"}
-                label={"Alter"}
-                selection={selection}
-                data={options.age}
-              />
-            </Grid.Col>
-          </Grid>
-          {overChart}
+            ) : null}
           </div>
         </Grid.Col>
         <Grid.Col span={4} className="only-non-mobile">
-          <Map
-            makersData={displayMarkers}
-            setInputPlace={(x: string) =>
-              router.push(
-                constructUrl({ ...selection, place: x, p: 1 }),
-                undefined,
-                {
-                  scroll: false,
-                }
-              )
-            }
-          />
+          {geoLoading ? (
+            <Skeleton height={300} />
+          ) : (
+            <Map
+              makersData={displayMarkers}
+              setInputPlace={(x: string) =>
+                router.push(
+                  constructUrl({ ...selection, place: x, p: 1 }),
+                  undefined,
+                  { scroll: false }
+                )
+              }
+            />
+          )}
         </Grid.Col>
       </Grid>
 
@@ -217,24 +210,30 @@ const CaseList = ({
           aria-atomic="true"
         >
           <Center style={{ marginBottom: "1rem", marginTop: "1rem" }}>
-            {enoughChars && numHits > 1 && numHits !== maxCases && (
-              <Text>
-                zeige {numHits} von {maxCases} polizeilichen Todesschüsse
-              </Text>
-            )}
-            {enoughChars && numHits > 1 && numHits === maxCases && (
-              <Text>{numHits} polizeiliche Todesschüsse</Text>
-            )}
-            {enoughChars && numHits === 1 && (
-              <Text>ein polizeilicher Todesschuss</Text>
-            )}
-            {enoughChars && numHits === 0 && (
-              <Text>
-                kein polizeilicher Todesschuss entfällt auf die Auswahl
-              </Text>
-            )}
-            {!enoughChars && (
-              <Text>Bitte mehr Zeichen für die Suche eingeben</Text>
+            {casesLoading ? (
+              <Skeleton height={20} width={200} />
+            ) : (
+              <>
+                {enoughChars && total > 1 && total !== maxCases && (
+                  <Text>
+                    zeige {total} von {maxCases} polizeilichen Todesschüsse
+                  </Text>
+                )}
+                {enoughChars && total > 1 && total === maxCases && (
+                  <Text>{total} polizeiliche Todesschüsse</Text>
+                )}
+                {enoughChars && total === 1 && (
+                  <Text>ein polizeilicher Todesschuss</Text>
+                )}
+                {enoughChars && total === 0 && (
+                  <Text>
+                    kein polizeilicher Todesschuss entfällt auf die Auswahl
+                  </Text>
+                )}
+                {!enoughChars && (
+                  <Text>Bitte mehr Zeichen für die Suche eingeben</Text>
+                )}
+              </>
             )}
           </Center>
         </div>
@@ -250,49 +249,58 @@ const CaseList = ({
               aria-live="polite"
               aria-atomic="true"
             >
-              {enoughChars && numHits > 1 && numHits !== maxCases && (
-                <Text c="gray">
-                  zeige {numHits} von {maxCases} polizeilichen Todesschüsse
-                </Text>
-              )}
-              {enoughChars && numHits > 1 && numHits === maxCases && (
-                <Text c="gray">{numHits} polizeiliche Todesschüsse</Text>
-              )}
-              {enoughChars && numHits === 1 && (
-                <Text c="gray">ein polizeilicher Todesschuss</Text>
-              )}
-              {enoughChars && numHits === 0 && (
-                <Text c="gray">
-                  kein polizeilicher Todesschuss entfält auf die Auswahl
-                </Text>
-              )}
-              {!enoughChars && (
-                <Text c="gray">
-                  Bitte mehr Zeichen für die Suche eingeben
-                </Text>
+              {casesLoading ? (
+                <Skeleton height={20} width={250} />
+              ) : (
+                <>
+                  {enoughChars && total > 1 && total !== maxCases && (
+                    <Text c="gray">
+                      zeige {total} von {maxCases} polizeilichen Todesschüsse
+                    </Text>
+                  )}
+                  {enoughChars && total > 1 && total === maxCases && (
+                    <Text c="gray">{total} polizeiliche Todesschüsse</Text>
+                  )}
+                  {enoughChars && total === 1 && (
+                    <Text c="gray">ein polizeilicher Todesschuss</Text>
+                  )}
+                  {enoughChars && total === 0 && (
+                    <Text c="gray">
+                      kein polizeilicher Todesschuss entfält auf die Auswahl
+                    </Text>
+                  )}
+                  {!enoughChars && (
+                    <Text c="gray">
+                      Bitte mehr Zeichen für die Suche eingeben
+                    </Text>
+                  )}
+                </>
               )}
             </Center>
           </Grid.Col>
           <Grid.Col span={4}>
             <div style={{ marginBottom: "2rem", marginTop: "0rem" }}>
-              <Text ta="center" c="gray">
-                {displayMarkers.length !== geoData.length &&
-                  displayMarkers.length > 1 &&
-                  `an ${displayMarkers.length} von ${geoData.length} Orten`}
-                {displayMarkers.length === geoData.length &&
-                  `an ${geoData.length} Orten`}
-                {displayMarkers.length === 1 && `an einem Ort`}
-              </Text>
+              {geoLoading ? (
+                <Skeleton height={20} width={150} style={{ margin: "0 auto" }} />
+              ) : (
+                <Text ta="center" c="gray">
+                  {displayMarkers.length !== totalLocations &&
+                    displayMarkers.length > 1 &&
+                    `an ${displayMarkers.length} von ${totalLocations} Orten`}
+                  {displayMarkers.length === totalLocations &&
+                    `an ${totalLocations} Orten`}
+                  {displayMarkers.length === 1 && `an einem Ort`}
+                </Text>
+              )}
             </div>
           </Grid.Col>
         </Grid>
-        {enoughChars && maxCases !== numHits && (
+        {enoughChars && isFiltered && (
           <Center style={{ marginBottom: "2rem" }}>
             <button
               onClick={() => {
-                router.push("/#chronik", undefined, { scroll: false });
-                setSearchedData(null);
-                setSearchedQ("");
+                router.push("/", undefined, { scroll: false });
+                setSearchQ(null);
               }}
               style={{
                 background: "none",
@@ -311,13 +319,23 @@ const CaseList = ({
           </Center>
         )}
 
-        {enoughChars && resultList.map((x, index) => <Case item={x} key={`${x.key}-${index}`} />)}
-        {enoughChars && numHits > PAGE_SIZE && (
+        {casesLoading ? (
+          // Loading skeleton
+          Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} height={150} mb="md" />
+          ))
+        ) : (
+          <>
+            {enoughChars && cases.map((x, index) => <Case item={x} key={`${x.key}-${index}`} />)}
+          </>
+        )}
+
+        {enoughChars && total > PAGE_SIZE && !casesLoading && (
           <Center>
             <Pagination
               className="only-non-mobile"
               total={totalPages}
-              value={p}
+              value={selection.p}
               onChange={(newPage) =>
                 router.push(
                   constructUrlWithQ(q, {
@@ -343,7 +361,7 @@ const CaseList = ({
               className="only-mobile"
               size={"sm"}
               total={totalPages}
-              value={p}
+              value={selection.p}
               onChange={(newPage) =>
                 router.push(
                   constructUrlWithQ(q, {

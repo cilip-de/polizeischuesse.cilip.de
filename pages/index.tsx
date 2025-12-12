@@ -8,45 +8,27 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { GetServerSideProps } from "next";
+import { GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import CaseList from "../components/CaseList";
 import { setupData } from "../lib/data";
-import type { ProcessedDataItem, SetupOptions, GeoDataItem } from "../lib/data";
-import type { Selection } from "../lib/util";
 
 import cover from "../public/cover_12.jpg";
 import cilipLogo from "../public/images/cilip_new.svg";
 import goa2025 from "../public/images/grimme-online-2025.jpg";
 
 interface HomeProps {
-  data: ProcessedDataItem[];
-  geoData: GeoDataItem[];
-  initialSearchedData: ProcessedDataItem[] | null;
-  selection: {
-    q: string;
-    p: string | number;
-    tags?: string | string[];
-  };
-  options: SetupOptions;
   maxCases: number;
   afterReuni: number;
   beforeReuni: number;
-  averages: number[];
 }
 
 const Home = ({
-  data,
-  geoData,
-  initialSearchedData,
-  selection,
-  options,
   maxCases,
   afterReuni,
   beforeReuni,
-  averages,
 }: HomeProps) => {
   return (
     <div>
@@ -307,11 +289,6 @@ const Home = ({
           <Space h="xl" />
           <Space h="xl" />
           <CaseList
-            initialSearchedData={initialSearchedData || undefined}
-            data={data}
-            geoData={geoData}
-            selection={selection as Required<Selection>}
-            options={options}
             maxCases={maxCases}
           />
         </Container>
@@ -383,45 +360,17 @@ const Home = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const selection: {
-    q: string;
-    p: string | number;
-    tags?: string | string[];
-  } = { q: "", p: "1", ...context.query };
-
-  const { q } = selection;
-  const { data, geoData, options, fuse, beforeReuni, afterReuni, averages } =
-    await setupData();
-
-  if (selection.p !== null) selection.p = parseInt(selection.p as string);
-  if (selection.tags && selection.tags !== null)
-    selection.tags = (selection.tags as string).split(",");
-  else selection.tags = [];
-
-  let initialSearchedData = null;
-  if (q && q.length > 2) {
-    // use only excact matches with Fuse advanced search options
-    const searchResults = fuse?.search("'" + q);
-    initialSearchedData =
-      searchResults?.map(({ item, matches }) => ({
-        ...item,
-        matches: matches,
-      })) || null;
-  }
+export const getStaticProps: GetStaticProps = async () => {
+  const { data, beforeReuni, afterReuni } = await setupData();
 
   return {
     props: {
-      data,
-      geoData,
-      initialSearchedData: initialSearchedData || null,
-      options,
-      selection,
       maxCases: data.length,
       beforeReuni,
       afterReuni,
-      averages,
     },
+    // Revalidate every hour
+    revalidate: 3600,
   };
 };
 

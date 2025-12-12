@@ -1,15 +1,31 @@
 import "@mantine/core/styles.css";
 import { MantineProvider } from "@mantine/core";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import { useState } from "react";
 import { theme } from "../theme";
 import "../styles/globals.css";
 
 export default function App(props: AppProps) {
   const { Component, pageProps } = props;
 
+  // Create QueryClient once per app instance
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 60 * 1000, // 1 minute
+            refetchOnWindowFocus: false,
+          },
+        },
+      })
+  );
+
   return (
-    <MantineProvider theme={theme}>
+    <QueryClientProvider client={queryClient}>
+      <MantineProvider theme={theme}>
       <Head>
         <title>Polizeiliche Todesschüsse</title>
         <link
@@ -42,5 +58,6 @@ export default function App(props: AppProps) {
 
       <Component {...pageProps} />
     </MantineProvider>
+    </QueryClientProvider>
   );
 }

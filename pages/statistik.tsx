@@ -2,7 +2,7 @@ import { Grid, Space } from "@mantine/core";
 import { csv } from "d3-fetch";
 import _ from "lodash";
 import type { NextPage } from "next";
-import { GetServerSideProps } from "next";
+import { GetStaticProps } from "next";
 import Image from "next/image";
 import AnchorHeading from "../components/AnchorHeading";
 import { ShortsPerYear, SimpleChart } from "../components/charts/official";
@@ -127,7 +127,7 @@ const Statistiken: NextPage<StatistikenProps> = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   let pdfs = [];
   const res = await fetch(
     "https://fragdenstaat.de/api/v1/documentcollection/82/",
@@ -139,8 +139,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const stats = (
     await csv(`${process.env.NEXT_PUBLIC_BASE_URL}/official_statistics.csv`)
   ).filter((x) => x["Jurisdiktion"] === "Bund");
-
-  // console.log(stats);
 
   const wData1 = stats.map((x) => ({
     count: Number(x["Warnschüsse"]),
@@ -206,6 +204,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       s3,
       s4,
     },
+    revalidate: 3600, // Revalidate every hour
   };
 };
 

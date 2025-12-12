@@ -1,7 +1,7 @@
 import { Grid, Space, Text, Title } from "@mantine/core";
 import _ from "lodash";
 import type { NextPage } from "next";
-import { GetServerSideProps } from "next";
+import { GetStaticProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import AnchorHeading from "../components/AnchorHeading";
@@ -689,7 +689,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const { data, options, averages } = await setupData();
 
   return {
@@ -698,6 +698,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       options,
       averages,
     },
+    revalidate: 3600, // Revalidate every hour
   };
 };
 
