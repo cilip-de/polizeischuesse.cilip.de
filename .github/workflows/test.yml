@@ -114,7 +114,12 @@ jobs:
           fi
 
       - name: Run tests
-        run: npx playwright test --project="${{ matrix.browser }}"
+        run: |
+          if [ "${{ matrix.browser }}" = "webkit" ] || [ "${{ matrix.browser }}" = "Mobile Safari" ]; then
+            npx playwright test --project="${{ matrix.browser }}" --workers=2
+          else
+            npx playwright test --project="${{ matrix.browser }}"
+          fi
 
       - name: Upload test results
         if: failure()

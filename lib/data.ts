@@ -408,9 +408,14 @@ const setupData = async () => {
   return setupProps;
 };
 
+let taserDataCache: ProcessedDataItem[] | null = null;
+
 const setupTaserData = async () => {
+  if (taserDataCache !== null) return taserDataCache;
+
   const data = (await csv(`${HOST}/taser.csv`)).filter((x) => x["Fall"]);
-  return preprocessData(data as unknown as RawDataItem[]);
+  taserDataCache = preprocessData(data as unknown as RawDataItem[]);
+  return taserDataCache;
 };
 
 // Export types
