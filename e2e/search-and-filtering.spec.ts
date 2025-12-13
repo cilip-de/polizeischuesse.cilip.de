@@ -275,22 +275,24 @@ test.describe('Search and Filtering', () => {
 
       // Apply search
       const searchInput = page.getByRole('textbox', { name: 'Suche' });
-      if (await searchInput.count() > 0) {
-        await searchInput.fill('Polizei');
+      await searchInput.fill('Berlin');
+
+      // Wait for URL to update with search param
+      await page.waitForURL(/q=Berlin/, { timeout: 5000 });
+
+      // Apply year filter via Mantine combobox
+      const yearInput = page.getByRole('textbox', { name: 'Jahr' });
+      await yearInput.click();
+      await page.waitForTimeout(300);
+      const yearOption = page.getByRole('option').first();
+      if (await yearOption.count() > 0) {
+        await yearOption.click();
         await page.waitForTimeout(500);
       }
 
-      // Apply year filter
-      const yearFilter = page.locator('select[name="year"]').first();
-      if (await yearFilter.count() > 0) {
-        await yearFilter.selectOption({ index: 1 });
-        await page.waitForTimeout(500);
-      }
-
-      // Both should be in URL
+      // Search should be in URL
       const urlParams = await helpers.getUrlParams(page);
-      const hasMultipleParams = Object.keys(urlParams).length >= 1;
-      expect(hasMultipleParams).toBeTruthy();
+      expect(urlParams.q).toBe('Berlin');
     });
   });
 
