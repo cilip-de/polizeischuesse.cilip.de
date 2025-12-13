@@ -1,4 +1,5 @@
 import { csv } from "d3-fetch";
+import { csvParse } from "d3-dsv";
 import dayjs from "dayjs";
 import "dayjs/locale/de";
 import localeData from "dayjs/plugin/localeData";
@@ -13,9 +14,19 @@ dayjs.extend(localeData);
 const PAGE_SIZE = 20;
 const SELECTABLE = ["year", "state", "place", "age"];
 
-let HOST = "http://localhost:3000";
-if (process.env.NODE_ENV === "production")
-  HOST = "https://polizeischuesse.cilip.de";
+// Helper to read CSV - from filesystem on server, via fetch on client
+const readCsvFile = async (filename: string) => {
+  // Server-side: read from filesystem
+  if (typeof window === "undefined") {
+    const fs = await import("fs");
+    const path = await import("path");
+    const csvPath = path.join(process.cwd(), "public", filename);
+    const csvContent = fs.readFileSync(csvPath, "utf-8");
+    return csvParse(csvContent);
+  }
+  // Client-side: fetch via HTTP (fallback, shouldn't normally be used)
+  return csv(`/${filename}`);
+};
 
 // Tuple: [value, column, positive label, negative label]
 type TagTuple = [string, string, string, string];
@@ -350,7 +361,8 @@ let setupProps: SetupProps | null = null;
 const setupData = async () => {
   if (setupProps !== null) return setupProps;
 
-  const data = (await csv(`${HOST}/data.csv`)).filter(
+  // Read CSV directly from filesystem
+  const data = (await readCsvFile("data.csv")).filter(
     (x) => x["Fall"]
   ) as unknown as RawDataItem[];
 
@@ -413,7 +425,8 @@ let taserDataCache: ProcessedDataItem[] | null = null;
 const setupTaserData = async () => {
   if (taserDataCache !== null) return taserDataCache;
 
-  const data = (await csv(`${HOST}/taser.csv`)).filter((x) => x["Fall"]);
+  // Read CSV directly from filesystem
+  const data = (await readCsvFile("taser.csv")).filter((x) => x["Fall"]);
   taserDataCache = preprocessData(data as unknown as RawDataItem[]);
   return taserDataCache;
 };
