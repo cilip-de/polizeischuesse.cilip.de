@@ -141,19 +141,12 @@ const CaseList = ({ maxCases }: CaseListProps) => {
               ))}
             </Grid>
             <Grid style={{ marginBottom: "1rem" }}>
-              <Grid.Col span={6}>
+              <Grid.Col span={8}>
                 <SearchInput
                   q={q}
                   selection={selection}
                   setSearchedData={handleSearchData}
                   setSearchedQ={handleSearchQ}
-                />
-              </Grid.Col>
-              <Grid.Col span={2}>
-                <SortToggle
-                  q={q}
-                  sort={selection.sort || "relevance"}
-                  selection={selection}
                 />
               </Grid.Col>
               <Grid.Col span={4}>
@@ -306,27 +299,72 @@ const CaseList = ({ maxCases }: CaseListProps) => {
           </Grid.Col>
         </Grid>
         {enoughChars && isFiltered && (
-          <Center style={{ marginBottom: "2rem" }}>
-            <button
-              onClick={() => {
-                router.push("/", undefined, { scroll: false });
-                setSearchQ(null);
-              }}
-              style={{
-                background: "none",
-                border: "none",
-                padding: "0.25rem 0.5rem",
-                cursor: "pointer",
-                textDecoration: "underline",
-                color: "#868e96",
-                fontSize: "0.875rem",
-                font: "inherit",
-              }}
-              aria-label="Auswahl zurücksetzen und alle Fälle anzeigen"
-            >
-              Auswahl zurücksetzen
-            </button>
-          </Center>
+          <>
+            {/* Desktop: button centered, toggle absolutely positioned right */}
+            <div className="only-non-mobile" style={{ position: "relative", marginBottom: "2rem", width: "100%" }}>
+              <Center>
+                <button
+                  onClick={() => {
+                    router.push("/", undefined, { scroll: false });
+                    setSearchQ(null);
+                  }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    padding: "0.25rem 0.5rem",
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                    color: "#868e96",
+                    fontSize: "0.875rem",
+                    font: "inherit",
+                  }}
+                  aria-label="Auswahl zurücksetzen und alle Fälle anzeigen"
+                >
+                  Auswahl zurücksetzen
+                </button>
+              </Center>
+              {q && q.length >= 3 && (
+                <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}>
+                  <SortToggle
+                    q={q}
+                    sort={selection.sort || "relevance"}
+                    selection={selection}
+                  />
+                </div>
+              )}
+            </div>
+            {/* Mobile: button left, toggle right */}
+            <div className="only-mobile">
+              <div style={{ display: "flex", justifyContent: q && q.length >= 3 ? "space-between" : "center", alignItems: "center", marginBottom: "2rem" }}>
+                <button
+                  onClick={() => {
+                    router.push("/", undefined, { scroll: false });
+                    setSearchQ(null);
+                  }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    padding: "0.25rem 0.5rem",
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                    color: "#868e96",
+                    fontSize: "0.875rem",
+                    font: "inherit",
+                  }}
+                  aria-label="Auswahl zurücksetzen und alle Fälle anzeigen"
+                >
+                  Auswahl zurücksetzen
+                </button>
+                {q && q.length >= 3 && (
+                  <SortToggle
+                    q={q}
+                    sort={selection.sort || "relevance"}
+                    selection={selection}
+                  />
+                )}
+              </div>
+            </div>
+          </>
         )}
 
         {casesLoading ? (
