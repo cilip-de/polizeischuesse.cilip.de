@@ -50,11 +50,12 @@ test.describe('Search and Filtering', () => {
 
       // Clear the search
       await searchInput.clear();
-      await page.waitForTimeout(1000); // Wait for debounce (500ms) + URL update
 
-      // Navigate or check that results are reset
-      const urlAfterClear = page.url();
-      expect(urlAfterClear).not.toContain('q=Berlin');
+      // Wait for URL to update (debounce is 500ms, then router.replace is async)
+      await page.waitForURL((url) => !url.search.includes('q=Berlin'), { timeout: 5000 });
+
+      // Verify URL no longer contains the search param
+      expect(page.url()).not.toContain('q=Berlin');
     });
   });
 
