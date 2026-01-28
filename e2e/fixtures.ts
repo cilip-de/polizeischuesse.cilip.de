@@ -8,9 +8,9 @@ export const test = base.extend<{
   pageWithoutErrors: Page;
 }>({
   // Fixture for pages that should load without console errors
-  pageWithoutErrors: async ({ page }, use) => {
+  pageWithoutErrors: async ({ page }, runTest) => {
     const errors = helpers.setupConsoleErrorTracking(page);
-    await use(page);
+    await runTest(page);
     // Check for errors after test
     if (errors.length > 0) {
       console.warn('Console errors detected:', errors);

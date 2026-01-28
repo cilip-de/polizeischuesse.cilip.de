@@ -48,10 +48,10 @@ const Map = ({ makersData, setInputPlace }: MapProps) => {
   const [showMarker, setShowMarker] = useState<string[]>([]);
   const debounceClear = _.debounce(() => setShowMarker([]), 10000);
 
-  // only render on client
+  // only render on client - this pattern is intentional for SSR hydration
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
-    setIsClient(true);
+    setIsClient(true); // eslint-disable-line react-hooks/set-state-in-effect
   }, []);
   if (!isClient) return null;
 

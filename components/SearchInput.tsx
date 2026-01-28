@@ -62,7 +62,7 @@ const SearchInput = ({
       const timer = setTimeout(() => setShowHint(true), 2000);
       return () => clearTimeout(timer);
     } else {
-      setShowHint(false);
+      setShowHint(false); // eslint-disable-line react-hooks/set-state-in-effect
     }
   }, [q]);
 

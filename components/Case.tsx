@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Badge, Card, Grid, Group, Space, Text } from "@mantine/core";
 import type { ProcessedDataItem } from "../lib/data";
 import { SEARCH_KEYES } from "../lib/data";
@@ -79,9 +79,14 @@ interface CaseProps {
 }
 
 const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
-  for (const term of SEARCH_KEYES) {
-    item[term] = constructHighlights(item, term) as string;
-  }
+  // Create highlighted versions without mutating the prop
+  const highlights = useMemo(() => {
+    const result: Record<string, React.ReactNode> = {};
+    for (const term of SEARCH_KEYES) {
+      result[term] = constructHighlights(item, term);
+    }
+    return result;
+  }, [item]);
 
   return (
     <Card
@@ -139,7 +144,7 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
       <Space h="sm" />
       <Grid>
         <Grid.Col span={{ base: 12, md: 4 }}>
-          <Text fw={500}>{item["Name"]}</Text>
+          <Text fw={500}>{highlights["Name"]}</Text>
           <Text size="sm" style={{ lineHeight: 1.5 }}>
             {isNumber(item.Alter) ? `${item.Alter} Jahre` : `Alter: unbekannt`}
             {item.sex.length > 0 && `, ${item.sex}`}
@@ -172,7 +177,7 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 8 }}>
           <Text style={{ lineHeight: 1.5, marginBottom: "0.5rem" }}>
-            {item["Szenarium"]}
+            {highlights["Szenarium"]}
           </Text>
           {!hideLink && (
             <div style={{ position: "absolute", bottom: 0, right: 10 }}>

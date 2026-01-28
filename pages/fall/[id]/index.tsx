@@ -29,8 +29,8 @@ const CaseDetail: NextPage<CaseDetailProps> = (props) => {
   const [shareSupported, setShareSupported] = useState(false);
 
   useEffect(() => {
-    // Check if Web Share API is supported
-    setShareSupported(typeof navigator !== "undefined" && !!navigator.share);
+    // Check if Web Share API is supported - intentional for SSR hydration
+    setShareSupported(typeof navigator !== "undefined" && !!navigator.share); // eslint-disable-line react-hooks/set-state-in-effect
   }, []);
 
   const isTaser = props.taser;
