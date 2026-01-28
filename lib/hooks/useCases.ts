@@ -11,6 +11,7 @@ export interface CasesFilters {
   weapon?: string;
   age?: string;
   tags?: string[];
+  sort?: "relevance" | "date";
 }
 
 export interface CasesResponse {
@@ -35,6 +36,7 @@ async function fetchCases(filters: CasesFilters): Promise<CasesResponse> {
   if (filters.tags && filters.tags.length > 0) {
     params.set("tags", filters.tags.join(","));
   }
+  if (filters.sort) params.set("sort", filters.sort);
 
   const response = await fetch(`/api/cases?${params.toString()}`);
 

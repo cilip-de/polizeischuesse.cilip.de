@@ -13,6 +13,7 @@ import { OverviewChartFromStats } from "./charts/OverviewChartFromStats";
 import Map from "./Map";
 import SearchInput from "./SearchInput";
 import SelectInput from "./SelectInput";
+import SortToggle from "./SortToggle";
 
 interface CaseListProps {
   maxCases: number;
@@ -28,6 +29,7 @@ function parseSelectionFromQuery(query: Record<string, string | string[] | undef
     weapon: (query.weapon as string) || "",
     age: (query.age as string) || "",
     tags: query.tags ? (query.tags as string).split(",") : [],
+    sort: (query.sort as "relevance" | "date") || undefined,
   };
 }
 
@@ -43,6 +45,7 @@ function selectionToFilters(selection: Required<Selection>, searchQ: string | nu
     weapon: selection.weapon || undefined,
     age: selection.age || undefined,
     tags: selection.tags.length > 0 ? selection.tags : undefined,
+    sort: q ? (selection.sort || "relevance") : undefined,
   };
 }
 
@@ -138,12 +141,19 @@ const CaseList = ({ maxCases }: CaseListProps) => {
               ))}
             </Grid>
             <Grid style={{ marginBottom: "1rem" }}>
-              <Grid.Col span={8}>
+              <Grid.Col span={6}>
                 <SearchInput
                   q={q}
                   selection={selection}
                   setSearchedData={handleSearchData}
                   setSearchedQ={handleSearchQ}
+                />
+              </Grid.Col>
+              <Grid.Col span={2}>
+                <SortToggle
+                  q={q}
+                  sort={selection.sort || "relevance"}
+                  selection={selection}
                 />
               </Grid.Col>
               <Grid.Col span={4}>

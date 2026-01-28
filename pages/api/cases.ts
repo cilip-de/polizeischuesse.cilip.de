@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import _ from "lodash";
 import { setupData, PAGE_SIZE, setupOptions, SELECTABLE } from "../../lib/data";
 import type { ProcessedDataItem, SetupOptions } from "../../lib/data";
 
@@ -34,6 +35,7 @@ export default async function handler(
   const weapon = req.query.weapon as string | undefined;
   const age = req.query.age as string | undefined;
   const tags = req.query.tags ? (req.query.tags as string).split(",") : [];
+  const sort = req.query.sort as "relevance" | "date" | undefined;
 
   // Start with all data or search results
   let resultList: ProcessedDataItem[];
@@ -65,6 +67,12 @@ export default async function handler(
       tag.startsWith("no__") ? !x[tag.replace("no__", "")] : x[tag]
     );
   }
+
+  // Sort results: "date" = chronological, "relevance" = Fuse.js order (when searching)
+  if (sort === "date") {
+    resultList = _.orderBy(resultList, (x) => x.Datum, "desc");
+  }
+  // When sort === "relevance" or unset, keep current order (Fuse.js relevance or original)
 
   // Calculate totals and pagination
   const total = resultList.length;

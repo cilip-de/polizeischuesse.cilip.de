@@ -9,6 +9,7 @@ export type Selection = {
   tags?: string[];
   weapon?: string;
   age?: string;
+  sort?: "relevance" | "date";
 };
 
 const paginate = (array: any[], pageSize: number, pageNumber: number) => {

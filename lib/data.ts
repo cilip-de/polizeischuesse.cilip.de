@@ -78,6 +78,8 @@ const TAGS: TagTuple[] = [
     "Schussort nicht Innenraum",
   ],
   ["men", "männlich", "Männlich", "Weiblich"],
+  ["unbewaffnet", "Opfer unbewaffnet", "Unbewaffnet", "Bewaffnet"],
+  ["minderjaehrig", "Minderjährig", "Minderjährig", "Volljährig"],
 ];
 
 const SEARCH_KEYES = ["Name", "Szenarium"];
@@ -279,6 +281,8 @@ interface ProcessedDataItem {
   unschuss: boolean;
   indoor: boolean;
   men: boolean;
+  unbewaffnet: boolean;
+  minderjaehrig: boolean;
 
   // Index signature for dynamic property access
   [key: string]: string | number | boolean;
@@ -319,6 +323,13 @@ const preprocessData = (data: RawDataItem[]): ProcessedDataItem[] => {
     } else {
       x.age = "Unbekannt";
     }
+
+    // Compute "unbewaffnet" - victim was NOT armed with a firearm
+    x["Opfer unbewaffnet"] = x["Opfer mit Schusswaffe"] === "Nein" ? "Ja" : "";
+
+    // Compute "minderjährig" - age under 18
+    const originalAge = parseInt(x["Alter"] as string);
+    x["Minderjährig"] = !isNaN(originalAge) && originalAge < 18 ? "Ja" : "";
 
     for (const [t, label] of TAGS) {
       x[t] = (x[label] as string)?.includes("Ja") ?? false;

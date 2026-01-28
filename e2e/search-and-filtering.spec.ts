@@ -417,6 +417,213 @@ test.describe('Search and Filtering', () => {
     });
   });
 
+  test.describe('Sort Toggle (Issue #148)', () => {
+    test('should show sort toggle when searching', async ({ page }) => {
+      await helpers.navigateAndWait(page, '/');
+
+      // Enter search query
+      const searchInput = page.getByRole('textbox', { name: 'Suche' });
+      await searchInput.fill('Berlin');
+
+      // Wait for search to apply
+      await page.waitForTimeout(1000);
+
+      // Sort toggle should be visible (SegmentedControl) - look for the visible labels
+      const sortToggle = page.locator('.mantine-SegmentedControl-root');
+      await expect(sortToggle).toBeVisible();
+
+      // Should have Relevanz and Datum options (check for labels, not hidden radio inputs)
+      await expect(page.locator('.mantine-SegmentedControl-label:has-text("Relevanz")')).toBeVisible();
+      await expect(page.locator('.mantine-SegmentedControl-label:has-text("Datum")')).toBeVisible();
+    });
+
+    test('should be disabled when search is empty or too short', async ({ page }) => {
+      await helpers.navigateAndWait(page, '/');
+
+      // Sort toggle should have data-disabled attribute when no search
+      const sortToggle = page.locator('.mantine-SegmentedControl-root');
+      await expect(sortToggle).toHaveAttribute('data-disabled', 'true');
+
+      // Enter only 2 characters
+      const searchInput = page.getByRole('textbox', { name: 'Suche' });
+      await searchInput.fill('Be');
+      await page.waitForTimeout(500);
+
+      // Should still be disabled
+      await expect(sortToggle).toHaveAttribute('data-disabled', 'true');
+    });
+
+    test('should default to relevance when searching', async ({ page }) => {
+      await page.goto('/?q=Berlin');
+      await helpers.waitForPageReady(page);
+
+      // Relevanz should be selected by default (check the radio input)
+      const relevanzRadio = page.locator('input[type="radio"][value="relevance"]');
+      await expect(relevanzRadio).toBeChecked();
+    });
+
+    test('should switch to date sort and update URL', async ({ page }) => {
+      await page.goto('/?q=Berlin');
+      await helpers.waitForPageReady(page);
+
+      // Click Datum label (visible element)
+      const datumLabel = page.locator('.mantine-SegmentedControl-label:has-text("Datum")');
+      await datumLabel.click();
+
+      // Wait for URL to update
+      await page.waitForURL(/sort=date/, { timeout: 5000 });
+
+      // URL should contain sort=date
+      const hasSort = await helpers.urlHasParam(page, 'sort', 'date');
+      expect(hasSort).toBeTruthy();
+    });
+
+    test('should load sort preference from URL', async ({ page }) => {
+      await page.goto('/?q=Berlin&sort=date');
+      await helpers.waitForPageReady(page);
+
+      // Datum should be selected (check the radio input)
+      const datumRadio = page.locator('input[type="radio"][value="date"]');
+      await expect(datumRadio).toBeChecked();
+    });
+
+    test('should reset page to 1 when changing sort', async ({ page }) => {
+      // First load with search to make sure results exist
+      await page.goto('/?q=Berlin&sort=relevance');
+      await helpers.waitForPageReady(page);
+
+      // Get the current URL then manually construct with p=2 to simulate being on page 2
+      const currentUrl = new URL(page.url());
+      currentUrl.searchParams.set('p', '2');
+      await page.goto(currentUrl.toString());
+      await helpers.waitForPageReady(page);
+
+      // Click Datum label
+      const datumLabel = page.locator('.mantine-SegmentedControl-label:has-text("Datum")');
+      await datumLabel.click();
+
+      // Wait for URL to update with sort=date
+      await page.waitForURL(/sort=date/, { timeout: 5000 });
+
+      // Page should be reset to 1 (or p param removed entirely)
+      const urlParams = await helpers.getUrlParams(page);
+      expect(urlParams.p === '1' || urlParams.p === undefined).toBeTruthy();
+    });
+  });
+
+  test.describe('Unbewaffnet and Minderjährig Filters (Issue #8)', () => {
+    test('should show Unbewaffnet option in category filter', async ({ page }) => {
+      await helpers.navigateAndWait(page, '/');
+
+      // Open the category multi-select (Mantine MultiSelect with label "Kategorie")
+      const categoryInput = page.getByRole('textbox', { name: 'Kategorie' });
+      await categoryInput.click();
+      await page.waitForTimeout(500);
+
+      // Should show Unbewaffnet option
+      const unbewaffnetOption = page.getByRole('option', { name: 'Unbewaffnet', exact: true });
+      await expect(unbewaffnetOption).toBeVisible();
+
+      // Should also show Bewaffnet (the negative option) - use exact match
+      const bewaffnetOption = page.getByRole('option', { name: 'Bewaffnet', exact: true });
+      await expect(bewaffnetOption).toBeVisible();
+    });
+
+    test('should show Minderjährig option in category filter', async ({ page }) => {
+      await helpers.navigateAndWait(page, '/');
+
+      // Open the category multi-select
+      const categoryInput = page.getByRole('textbox', { name: 'Kategorie' });
+      await categoryInput.click();
+      await page.waitForTimeout(500);
+
+      // Should show Minderjährig option
+      const minderjaehrigOption = page.getByRole('option', { name: 'Minderjährig', exact: true });
+      await expect(minderjaehrigOption).toBeVisible();
+
+      // Should also show Volljährig (the negative option)
+      const volljaehrigOption = page.getByRole('option', { name: 'Volljährig', exact: true });
+      await expect(volljaehrigOption).toBeVisible();
+    });
+
+    test('should filter by Unbewaffnet tag', async ({ page }) => {
+      await helpers.navigateAndWait(page, '/');
+
+      // Open the category multi-select
+      const categoryInput = page.getByRole('textbox', { name: 'Kategorie' });
+      await categoryInput.click();
+      await page.waitForTimeout(500);
+
+      // Select Unbewaffnet option
+      const unbewaffnetOption = page.getByRole('option', { name: 'Unbewaffnet', exact: true });
+      await unbewaffnetOption.click();
+
+      // Wait for URL to update with tags parameter (increased timeout for reliability)
+      await page.waitForURL(/tags=.*unbewaffnet/, { timeout: 10000 });
+
+      // URL should contain tags parameter with unbewaffnet
+      const urlParams = await helpers.getUrlParams(page);
+      expect(urlParams.tags).toContain('unbewaffnet');
+    });
+
+    test('should filter by Minderjährig tag', async ({ page }) => {
+      await helpers.navigateAndWait(page, '/');
+
+      // Open the category multi-select
+      const categoryInput = page.getByRole('textbox', { name: 'Kategorie' });
+      await categoryInput.click();
+      await page.waitForTimeout(500);
+
+      // Select Minderjährig option
+      const minderjaehrigOption = page.getByRole('option', { name: 'Minderjährig', exact: true });
+      await minderjaehrigOption.click();
+
+      // Wait for URL to update with tags parameter (increased timeout for reliability)
+      await page.waitForURL(/tags=.*minderjaehrig/, { timeout: 10000 });
+
+      // URL should contain tags parameter with minderjaehrig
+      const urlParams = await helpers.getUrlParams(page);
+      expect(urlParams.tags).toContain('minderjaehrig');
+    });
+
+    test('should load Minderjährig filter from URL', async ({ page }) => {
+      await page.goto('/?tags=minderjaehrig');
+      await helpers.waitForPageReady(page);
+
+      // Wait for API response
+      await page.waitForLoadState('networkidle');
+
+      // Cases should be loaded (filtered to minors) - may have 0 results if no minors in data
+      // Just verify page loads without errors
+      const pageContent = await page.content();
+      expect(pageContent).toContain('Chronik');
+    });
+
+    test('should load Unbewaffnet filter from URL', async ({ page }) => {
+      await page.goto('/?tags=unbewaffnet');
+      await helpers.waitForPageReady(page);
+
+      // Wait for API response
+      await page.waitForLoadState('networkidle');
+
+      // Cases should be loaded (filtered to unarmed)
+      await helpers.waitForDataLoad(page, 1);
+    });
+
+    test('should combine multiple category filters', async ({ page }) => {
+      await page.goto('/?tags=minderjaehrig,unbewaffnet');
+      await helpers.waitForPageReady(page);
+
+      // Should show results matching both filters (or no results if none match)
+      // The page should load without error
+      await page.waitForLoadState('networkidle');
+
+      // Verify page loaded correctly
+      const pageContent = await page.content();
+      expect(pageContent).toContain('Chronik');
+    });
+  });
+
   test.describe('URL State Management', () => {
     test('should load filters from URL on page load', async ({ page }) => {
       await page.goto('/?year=2020&state=Berlin');
