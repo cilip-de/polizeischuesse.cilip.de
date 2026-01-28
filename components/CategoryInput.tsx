@@ -38,6 +38,7 @@ const CategoryInput = ({
   return (
     <MultiSelect
       clearable
+      searchable
       label="Kategorie"
       placeholder="auswählen (mehrfach)"
       value={selection.tags}
