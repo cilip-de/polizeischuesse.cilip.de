@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Badge, Card, Grid, Group, Space, Text } from "@mantine/core";
 import type { ProcessedDataItem } from "../lib/data";
 import { SEARCH_KEYES } from "../lib/data";
@@ -80,13 +80,11 @@ interface CaseProps {
 
 const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
   // Create highlighted versions without mutating the prop
-  const highlights = useMemo(() => {
-    const result: Record<string, React.ReactNode> = {};
-    for (const term of SEARCH_KEYES) {
-      result[term] = constructHighlights(item, term);
-    }
-    return result;
-  }, [item]);
+  // React Compiler will auto-memoize this
+  const highlights: Record<string, React.ReactNode> = {};
+  for (const term of SEARCH_KEYES) {
+    highlights[term] = constructHighlights(item, term);
+  }
 
   return (
     <Card

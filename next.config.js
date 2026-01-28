@@ -10,6 +10,8 @@ const { withSentryConfig } = require("@sentry/nextjs");
 const moduleExports = {
   poweredByHeader: false,
   reactStrictMode: true,
+  // Enable React Compiler for automatic memoization
+  reactCompiler: true,
   // Transpile react-simple-maps to ensure prop-types is bundled correctly
   transpilePackages: ["react-simple-maps"],
   headers() {

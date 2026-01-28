@@ -50,8 +50,10 @@
     "@types/lodash": "^4.17.23",
     "@types/react": "^19.2.10",
     "@types/react-simple-maps": "^3.0.6",
+    "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9.39.1",
     "eslint-config-next": "^16.1.6",
+    "eslint-plugin-react-compiler": "^19.1.0-rc.2",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3"
   },
