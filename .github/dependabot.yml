@@ -4,6 +4,14 @@ updates:
     registries: "*"
     directory: "/"
     schedule:
-      interval: "daily"
-    allow:
-      - dependency-type: "production"
+      interval: "weekly"
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      production-major:
+        dependency-type: "production"
+        update-types:
+          - "major"
