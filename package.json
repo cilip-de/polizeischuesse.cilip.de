@@ -30,7 +30,7 @@
     "d3-force": "^3.0.0",
     "d3-scale": "^4.0.2",
     "dayjs": "^1.11.19",
-    "emailjs": "^4.0.3",
+    "emailjs": "^5.0.0",
     "express-rate-limit": "^8.2.1",
     "fuse.js": "^7.1.0",
     "lodash": "^4.17.21",
