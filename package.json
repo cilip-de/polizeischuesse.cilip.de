@@ -47,7 +47,6 @@
     "@types/d3-fetch": "^3.0.7",
     "@types/d3-force": "^3.0.10",
     "@types/d3-scale": "^4.0.9",
-    "@types/express-rate-limit": "^6.0.2",
     "@types/lodash": "^4.17.23",
     "@types/react": "^19.2.10",
     "@types/react-simple-maps": "^3.0.6",

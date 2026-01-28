@@ -79,7 +79,9 @@ const sentryWebpackPluginOptions = {
   sourceMaps: { disable: true },
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
-  disableLogger: true,
+  bundleSizeOptimizations: {
+    excludeDebugStatements: true,
+  },
 };
 
 // Make sure adding Sentry options is the last code to run before exporting, to
