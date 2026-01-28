@@ -42,12 +42,14 @@ jobs:
 
       - run: npm run build
 
+      - name: Archive build artifact
+        run: tar -cf next-build.tar .next
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: next-build
-          path: .next
-          include-hidden-files: true
+          path: next-build.tar
           retention-days: 1
 
   test:
@@ -90,7 +92,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: next-build
-          path: .next
+
+      - name: Extract build artifact
+        run: tar -xf next-build.tar
 
       - name: Cache Playwright browsers
         uses: actions/cache@v4
