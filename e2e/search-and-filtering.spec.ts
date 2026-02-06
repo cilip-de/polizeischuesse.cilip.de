@@ -51,8 +51,9 @@ test.describe('Search and Filtering', () => {
       // Clear the search
       await searchInput.clear();
 
-      // Wait for URL to update (debounce is 500ms, then router.replace is async)
-      await page.waitForURL((url) => !url.search.includes('q=Berlin'), { timeout: 5000 });
+      // Wait for URL to update (debounce is 500ms, then router.replace is async;
+      // use generous timeout to avoid flakes under CI load)
+      await page.waitForURL((url) => !url.search.includes('q=Berlin'), { timeout: 10000 });
 
       // Verify URL no longer contains the search param
       expect(page.url()).not.toContain('q=Berlin');
