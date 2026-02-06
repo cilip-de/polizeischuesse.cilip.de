@@ -428,29 +428,30 @@ test.describe('Search and Filtering', () => {
       // Wait for search to apply
       await page.waitForTimeout(1000);
 
-      // Sort toggle should be visible (SegmentedControl) - look for the visible labels
-      const sortToggle = page.locator('.mantine-SegmentedControl-root');
+      // Sort toggle should be visible (SegmentedControl) - use :visible to pick the one
+      // for the current viewport (desktop and mobile each render their own instance)
+      const sortToggle = page.locator('.mantine-SegmentedControl-root:visible');
       await expect(sortToggle).toBeVisible();
 
       // Should have Relevanz and Datum options (check for labels, not hidden radio inputs)
-      await expect(page.locator('.mantine-SegmentedControl-label:has-text("Relevanz")')).toBeVisible();
-      await expect(page.locator('.mantine-SegmentedControl-label:has-text("Datum")')).toBeVisible();
+      await expect(page.locator('.mantine-SegmentedControl-label:has-text("Relevanz"):visible')).toBeVisible();
+      await expect(page.locator('.mantine-SegmentedControl-label:has-text("Datum"):visible')).toBeVisible();
     });
 
-    test('should be disabled when search is empty or too short', async ({ page }) => {
+    test('should not be visible when search is empty or too short', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      // Sort toggle should have data-disabled attribute when no search
+      // Sort toggle should not be present when no search query
       const sortToggle = page.locator('.mantine-SegmentedControl-root');
-      await expect(sortToggle).toHaveAttribute('data-disabled', 'true');
+      await expect(sortToggle).toHaveCount(0);
 
       // Enter only 2 characters
       const searchInput = page.getByRole('textbox', { name: 'Suche' });
       await searchInput.fill('Be');
       await page.waitForTimeout(500);
 
-      // Should still be disabled
-      await expect(sortToggle).toHaveAttribute('data-disabled', 'true');
+      // Should still not be present
+      await expect(sortToggle).toHaveCount(0);
     });
 
     test('should default to relevance when searching', async ({ page }) => {
@@ -458,7 +459,8 @@ test.describe('Search and Filtering', () => {
       await helpers.waitForPageReady(page);
 
       // Relevanz should be selected by default (check the radio input)
-      const relevanzRadio = page.locator('input[type="radio"][value="relevance"]');
+      // Use .first() because desktop and mobile each render their own SegmentedControl
+      const relevanzRadio = page.locator('input[type="radio"][value="relevance"]').first();
       await expect(relevanzRadio).toBeChecked();
     });
 
@@ -466,8 +468,8 @@ test.describe('Search and Filtering', () => {
       await page.goto('/?q=Berlin');
       await helpers.waitForPageReady(page);
 
-      // Click Datum label (visible element)
-      const datumLabel = page.locator('.mantine-SegmentedControl-label:has-text("Datum")');
+      // Click Datum label (use :visible to target the one for the current viewport)
+      const datumLabel = page.locator('.mantine-SegmentedControl-label:has-text("Datum"):visible');
       await datumLabel.click();
 
       // Wait for URL to update
@@ -483,7 +485,7 @@ test.describe('Search and Filtering', () => {
       await helpers.waitForPageReady(page);
 
       // Datum should be selected (check the radio input)
-      const datumRadio = page.locator('input[type="radio"][value="date"]');
+      const datumRadio = page.locator('input[type="radio"][value="date"]').first();
       await expect(datumRadio).toBeChecked();
     });
 
@@ -498,8 +500,8 @@ test.describe('Search and Filtering', () => {
       await page.goto(currentUrl.toString());
       await helpers.waitForPageReady(page);
 
-      // Click Datum label
-      const datumLabel = page.locator('.mantine-SegmentedControl-label:has-text("Datum")');
+      // Click Datum label (use :visible to target the one for the current viewport)
+      const datumLabel = page.locator('.mantine-SegmentedControl-label:has-text("Datum"):visible');
       await datumLabel.click();
 
       // Wait for URL to update with sort=date
