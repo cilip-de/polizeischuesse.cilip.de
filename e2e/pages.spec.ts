@@ -11,6 +11,7 @@ test.describe("Page Navigation", () => {
 
     // Visualizations page
     await page.click("text=Visualisierungen >> visible=true", { timeout: 15000, force: true });
+    await helpers.waitForPageReady(page);
     await expect(page).toHaveURL("http://localhost:3000/visualisierungen");
     await expect(page).toHaveTitle(/.*Visualisierungen.*/);
     await page.goBack();
@@ -18,6 +19,7 @@ test.describe("Page Navigation", () => {
 
     // Methodology page
     await page.click("text=Methodik >> visible=true", { timeout: 15000, force: true });
+    await helpers.waitForPageReady(page);
     await expect(page).toHaveURL("http://localhost:3000/methodik");
     await expect(page).toHaveTitle(/.*Methodik.*/);
     await page.goBack();
@@ -28,6 +30,7 @@ test.describe("Page Navigation", () => {
       timeout: 15000,
       force: true,
     });
+    await helpers.waitForPageReady(page);
     await expect(page).toHaveURL("http://localhost:3000/statistik");
     await expect(page).toHaveTitle(/.*Statistik.*/);
     await page.goBack();
@@ -38,6 +41,7 @@ test.describe("Page Navigation", () => {
       timeout: 15000,
       force: true,
     });
+    await helpers.waitForPageReady(page);
     await expect(page).toHaveURL("http://localhost:3000/taser");
     await expect(page).toHaveTitle(/.*Taser.*/);
     await page.goBack();
@@ -47,6 +51,7 @@ test.describe("Page Navigation", () => {
     await page.click("text=Kontakt, Impressum und Datenschutz >> visible=true", {
       timeout: 15000,
     });
+    await helpers.waitForPageReady(page);
     await expect(page).toHaveURL("http://localhost:3000/kontakt");
     await expect(page).toHaveTitle(/.*uns.*/);
     await page.goBack();
