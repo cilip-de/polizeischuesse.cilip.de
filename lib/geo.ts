@@ -4,8 +4,6 @@ interface LocationQuery {
   city: string;
   state: string;
   county: string | null;
-  address: string | null;
-  district: string | null;
   country: string;
 }
 
@@ -48,8 +46,6 @@ const getGeo = async (data: LocationData[]): Promise<GeoResponseLocation[]> => {
         city: x.place,
         state: x.state,
         county: null,
-        address: null,
-        district: null,
         country: "Deutschland",
       },
     };
