@@ -34,16 +34,19 @@ const selectNiceTicks = (
   numTicks: number,
   startOffset = 0,
   endOffset = 0
-): string[] => [
-  ...Array.from(
-    new Set(
-      ticks(startOffset, data.length, numTicks - endOffset)
-        .concat([startOffset, data.length - 1 - endOffset])
-        .filter((x) => x < data.length)
-        .map((x) => data[x].value)
-    )
-  ),
-];
+): string[] => {
+  const lastIndex = data.length - 1 - endOffset;
+  return [
+    ...Array.from(
+      new Set(
+        ticks(startOffset, lastIndex, numTicks)
+          .concat([startOffset, lastIndex])
+          .filter((x) => x >= 0 && x < data.length && x <= lastIndex)
+          .map((x) => data[x].value)
+      )
+    ),
+  ];
+};
 
 const tooltip: React.FC<BarTooltipProps<ChartDataItem>> = ({ value, data, id }) => {
   const dataWithTooltip = data as unknown as ChartDataItemWithTooltip;
