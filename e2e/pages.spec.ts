@@ -116,32 +116,19 @@ test.describe("Page Navigation", () => {
   });
 
   test("should have working internal links", async ({ page }) => {
-    await page.goto("http://localhost:3000/");
-    await helpers.waitForPageReady(page);
-
-    // Find navigation buttons/links with specific text
     const navButtons = [
       { text: 'Visualisierungen', expectedPath: '/visualisierungen' },
       { text: 'Methodik', expectedPath: '/methodik' },
       { text: 'Offizielle Statistik', expectedPath: '/statistik' },
     ];
 
-    // Test first 3 navigation buttons
     for (const { text, expectedPath } of navButtons) {
-      // Find visible link by text within nav (component={Link} renders as <a> tag)
-      // Filter for visible links only to handle mobile/desktop navigation
+      await page.goto("http://localhost:3000/");
+      await helpers.waitForPageReady(page);
+
       const link = page.locator(`nav a:has-text("${text}")`).locator('visible=true').first();
-
-      // Click link (force to bypass any overlays, and handles both mobile/desktop nav)
-      await link.click({ force: true });
-      await helpers.waitForPageReady(page);
-
-      // Should navigate to expected page
-      await expect(page).toHaveURL(new RegExp(expectedPath));
-
-      // Go back for next iteration
-      await page.goBack();
-      await helpers.waitForPageReady(page);
+      await link.click({ timeout: 15000 });
+      await expect(page).toHaveURL(new RegExp(expectedPath), { timeout: 10000 });
     }
   });
 
