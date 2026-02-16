@@ -74,10 +74,10 @@ export default async function handler(
   const markers: MarkerData[] = geoData
     .filter(
       (x): x is GeoDataItem & { city: string; state: string; latitude: number; longitude: number } =>
-        x.city !== null &&
-        x.state !== null &&
-        x.latitude !== null &&
-        x.longitude !== null &&
+        x.city != null &&
+        x.state != null &&
+        typeof x.latitude === 'number' && !isNaN(x.latitude) &&
+        typeof x.longitude === 'number' && !isNaN(x.longitude) &&
         locationCounts.hasOwnProperty(x.city + x.state)
     )
     .map((x) => ({
