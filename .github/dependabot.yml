@@ -15,3 +15,12 @@ updates:
         dependency-type: "production"
         update-types:
           - "major"
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+      dev-major:
+        dependency-type: "development"
+        update-types:
+          - "major"
