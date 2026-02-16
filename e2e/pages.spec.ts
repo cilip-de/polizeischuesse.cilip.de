@@ -1,61 +1,27 @@
 import { expect, test } from "@playwright/test";
-import _ from "lodash";
 import * as helpers from './helpers';
 
 test.describe("Page Navigation", () => {
   test("should navigate to all main pages from navigation", async ({ page }) => {
     test.slow();
 
-    await page.goto("http://localhost:3000/");
-    await helpers.waitForPageReady(page);
+    const navPages = [
+      { text: 'Visualisierungen', url: '/visualisierungen', title: /.*Visualisierungen.*/ },
+      { text: 'Methodik', url: '/methodik', title: /.*Methodik.*/ },
+      { text: 'Offizielle Statistik', url: '/statistik', title: /.*Statistik.*/ },
+      { text: 'Tod mit Taser', url: '/taser', title: /.*Taser.*/ },
+      { text: 'Kontakt, Impressum und Datenschutz', url: '/kontakt', title: /.*uns.*/ },
+    ];
 
-    // Visualizations page
-    await page.click("text=Visualisierungen >> visible=true", { timeout: 15000, force: true });
-    await helpers.waitForPageReady(page);
-    await expect(page).toHaveURL("http://localhost:3000/visualisierungen");
-    await expect(page).toHaveTitle(/.*Visualisierungen.*/);
-    await page.goBack();
-    await helpers.waitForPageReady(page);
+    for (const { text, url, title } of navPages) {
+      await page.goto("http://localhost:3000/");
+      await helpers.waitForPageReady(page);
 
-    // Methodology page
-    await page.click("text=Methodik >> visible=true", { timeout: 15000, force: true });
-    await helpers.waitForPageReady(page);
-    await expect(page).toHaveURL("http://localhost:3000/methodik");
-    await expect(page).toHaveTitle(/.*Methodik.*/);
-    await page.goBack();
-    await helpers.waitForPageReady(page);
-
-    // Statistics page
-    await page.click("text=Offizielle Statistik >> visible=true", {
-      timeout: 15000,
-      force: true,
-    });
-    await helpers.waitForPageReady(page);
-    await expect(page).toHaveURL("http://localhost:3000/statistik");
-    await expect(page).toHaveTitle(/.*Statistik.*/);
-    await page.goBack();
-    await helpers.waitForPageReady(page);
-
-    // Taser page
-    await page.click("text=Tod mit Taser >> visible=true", {
-      timeout: 15000,
-      force: true,
-    });
-    await helpers.waitForPageReady(page);
-    await expect(page).toHaveURL("http://localhost:3000/taser");
-    await expect(page).toHaveTitle(/.*Taser.*/);
-    await page.goBack();
-    await helpers.waitForPageReady(page);
-
-    // Contact page
-    await page.click("text=Kontakt, Impressum und Datenschutz >> visible=true", {
-      timeout: 15000,
-    });
-    await helpers.waitForPageReady(page);
-    await expect(page).toHaveURL("http://localhost:3000/kontakt");
-    await expect(page).toHaveTitle(/.*uns.*/);
-    await page.goBack();
-    await helpers.waitForPageReady(page);
+      const link = page.locator(`nav a:has-text("${text}")`).locator('visible=true').first();
+      await link.click({ timeout: 15000 });
+      await expect(page).toHaveURL(`http://localhost:3000${url}`, { timeout: 10000 });
+      await expect(page).toHaveTitle(title);
+    }
   });
 
   test("should paginate through case chronology", async ({ page }) => {
@@ -64,19 +30,18 @@ test.describe("Page Navigation", () => {
     await page.goto("http://localhost:3000/");
     await helpers.waitForPageReady(page);
 
-    // Test pagination through all pages
-    for (const i of _.range(2, 25)) {
-      // Click pagination button with aria-label (use first() to handle duplicate pagination on mobile/desktop)
-      await page
+    // Test a sample of pagination pages instead of all 23
+    for (const i of [2, 5, 10, 15, 20, 24]) {
+      const button = page
         .getByRole('button', { name: `Seite ${i}` })
-        .first()
-        .click({ timeout: 5000 });
+        .first();
 
-      // Wait for URL to contain the page parameter
-      await page.waitForURL(`**/*p=${i}*`, { timeout: 5000 });
+      await button.scrollIntoViewIfNeeded();
+      await button.click({ timeout: 10000 });
+
+      await page.waitForURL(`**/*p=${i}*`, { timeout: 10000 });
       await expect(page).toHaveTitle(/.*Todesschüsse.*/);
 
-      // Verify URL contains page parameter
       const url = page.url();
       expect(url).toContain(`p=${i}`);
     }

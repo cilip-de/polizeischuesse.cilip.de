@@ -20,8 +20,8 @@ test.describe('Search and Filtering', () => {
       // Enter search query (searching for a common location)
       await searchInput.fill('Berlin');
 
-      // Wait for search results to update
-      await page.waitForTimeout(1000);
+      // Wait for URL to contain the search query (debounce + router update)
+      await page.waitForURL(/q=Berlin/, { timeout: 10000 });
 
       // URL should contain the search query
       const hasParam = await helpers.urlHasParam(page, 'q');
