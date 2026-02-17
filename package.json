@@ -42,13 +42,13 @@
     "sharp": "^0.34.5"
   },
   "devDependencies": {
-    "@playwright/test": "^1.58.1",
+    "@playwright/test": "^1.58.2",
     "@types/d3-array": "^3.2.2",
     "@types/d3-fetch": "^3.0.7",
     "@types/d3-force": "^3.0.10",
     "@types/d3-scale": "^4.0.9",
     "@types/lodash": "^4.17.23",
-    "@types/react": "^19.2.13",
+    "@types/react": "^19.2.14",
     "@types/react-simple-maps": "^3.0.6",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9.39.1",
