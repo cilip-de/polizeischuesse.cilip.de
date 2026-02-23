@@ -132,3 +132,14 @@ jobs:
           name: test-results-${{ matrix.browser }}
           path: test-results/
           retention-days: 7
+
+  deploy:
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: |
+          output=$(curl --fail --show-error --max-time 300 -X POST "${{ secrets.DEPLOY_URL }}")
+          echo "$output"
+          echo "$output" | tail -1 | grep -q "Deploy successful"
