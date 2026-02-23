@@ -141,6 +141,6 @@ jobs:
     steps:
       - name: Deploy
         run: |
-          output=$(curl --fail --show-error --max-time 300 -X POST "${{ secrets.DEPLOY_URL }}")
+          output=$(curl --fail --show-error --max-time 600 -X POST "${{ secrets.DEPLOY_URL }}")
           echo "$output"
           echo "$output" | tail -1 | grep -q "Deploy successful"
