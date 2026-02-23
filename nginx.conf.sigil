@@ -96,6 +96,7 @@ server {
     proxy_cache_bypass $http_cache_control;
 
 	add_header X-Cache-Status $upstream_cache_status;
+    add_header Onion-Location http://bpjnqhttabw5u2crhjhjg4y4jacgzghvmvh2qjabsga4qgzynqncqdad.onion$request_uri always;
     # END CILIP
 
     gzip on;
