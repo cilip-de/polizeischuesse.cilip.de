@@ -104,20 +104,22 @@ const textToLinks = (text: string): React.ReactNode => {
 };
 
 const SOFT_LIMIT = 240;
-const HARD_LIMIT = 300;
+const HARD_LIMIT = 260;
 
 /**
  * Expandable wrapper that measures actual content height.
- * - Under SOFT_LIMIT: show fully, no button
- * - Over HARD_LIMIT: collapse to SOFT_LIMIT with expand button
+ * - Under HARD_LIMIT: show fully, no button
+ * - Over HARD_LIMIT: collapse to SOFT_LIMIT with animated expand/collapse
  */
 function Expandable({ children }: { children: React.ReactNode }) {
   const contentRef = React.useRef<HTMLDivElement>(null);
+  const [fullHeight, setFullHeight] = React.useState(0);
   const [state, setState] = React.useState<"measuring" | "full" | "collapsed" | "expanded">("measuring");
 
   React.useEffect(() => {
     if (contentRef.current) {
       const h = contentRef.current.scrollHeight;
+      setFullHeight(h);
       setState(h > HARD_LIMIT ? "collapsed" : "full");
     }
   }, []);
@@ -132,9 +134,11 @@ function Expandable({ children }: { children: React.ReactNode }) {
         style={{
           overflow: "hidden",
           position: "relative",
-          ...(isCollapsed ? { maxHeight: SOFT_LIMIT } : {}),
-          // While measuring, use visibility hidden to avoid flash
-          ...(state === "measuring" ? { maxHeight: HARD_LIMIT + 100, overflow: "hidden" } : {}),
+          maxHeight: state === "measuring" ? HARD_LIMIT + 200
+            : state === "collapsed" ? SOFT_LIMIT
+            : state === "expanded" ? fullHeight
+            : "none",
+          transition: state !== "measuring" && state !== "full" ? "max-height 0.3s ease-in-out" : "none",
         }}
       >
         {children}
