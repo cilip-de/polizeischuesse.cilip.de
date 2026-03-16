@@ -103,41 +103,60 @@ const textToLinks = (text: string): React.ReactNode => {
   );
 };
 
-/**
- * CSS-only expandable wrapper using checkbox + CSS :checked sibling selectors.
- * No useState needed — works with React Compiler and SSR.
- */
-function Expandable({ children, collapsedHeight = 240 }: { children: React.ReactNode; collapsedHeight?: number }) {
-  const id = React.useId();
-  return (
-    <div style={{ position: "relative" }}>
-      <style dangerouslySetInnerHTML={{ __html: `
-        [data-expand-id="${id}"]:checked ~ .expand-collapsed { display: none; }
-        [data-expand-id="${id}"]:not(:checked) ~ .expand-expanded { display: none; }
-      ` }} />
-      <input type="checkbox" id={id} data-expand-id={id} style={{ position: "absolute", opacity: 0, pointerEvents: "none" }} />
+const SOFT_LIMIT = 240;
+const HARD_LIMIT = 400;
 
-      {/* Collapsed view */}
-      <div className="expand-collapsed">
-        <div style={{ maxHeight: collapsedHeight, overflow: "hidden", position: "relative" }}>
-          {children}
+/**
+ * Expandable wrapper that measures actual content height.
+ * - Under SOFT_LIMIT: show fully, no button
+ * - Over HARD_LIMIT: collapse to SOFT_LIMIT with expand button
+ */
+function Expandable({ children }: { children: React.ReactNode }) {
+  const contentRef = React.useRef<HTMLDivElement>(null);
+  const [state, setState] = React.useState<"measuring" | "full" | "collapsed" | "expanded">("measuring");
+
+  React.useEffect(() => {
+    if (contentRef.current) {
+      const h = contentRef.current.scrollHeight;
+      setState(h > HARD_LIMIT ? "collapsed" : "full");
+    }
+  }, []);
+
+  const isCollapsed = state === "collapsed";
+  const showButton = state === "collapsed" || state === "expanded";
+
+  return (
+    <div>
+      <div
+        ref={contentRef}
+        style={{
+          overflow: "hidden",
+          position: "relative",
+          ...(isCollapsed ? { maxHeight: SOFT_LIMIT } : {}),
+          // While measuring, use visibility hidden to avoid flash
+          ...(state === "measuring" ? { maxHeight: HARD_LIMIT + 100, overflow: "hidden" } : {}),
+        }}
+      >
+        {children}
+        {isCollapsed && (
           <div style={{
             position: "absolute", bottom: 0, left: 0, right: 0, height: "4rem",
             background: "linear-gradient(transparent, white)", pointerEvents: "none",
           }} />
-        </div>
-        <label htmlFor={id} style={{ display: "block", textAlign: "center", color: "#228be6", fontSize: "0.875rem", margin: "0.25rem 0 0", cursor: "pointer" }}>
-          ▼ Mehr anzeigen
-        </label>
+        )}
       </div>
-
-      {/* Expanded view */}
-      <div className="expand-expanded">
-        {children}
-        <label htmlFor={id} style={{ display: "block", textAlign: "center", color: "#228be6", fontSize: "0.875rem", margin: "0.25rem 0 0", cursor: "pointer" }}>
-          ▲ Weniger anzeigen
-        </label>
-      </div>
+      {showButton && (
+        <button
+          onClick={() => setState(s => s === "collapsed" ? "expanded" : "collapsed")}
+          style={{
+            display: "block", width: "100%", textAlign: "center",
+            color: "#228be6", fontSize: "0.875rem", margin: "0.25rem 0 0",
+            cursor: "pointer", background: "none", border: "none", fontFamily: "inherit",
+          }}
+        >
+          {isCollapsed ? "▼ Mehr anzeigen" : "▲ Weniger anzeigen"}
+        </button>
+      )}
     </div>
   );
 }
@@ -153,9 +172,6 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
   for (const term of SEARCH_KEYES) {
     highlights[term] = constructHighlights(item, term);
   }
-
-  const scenarioText = (item["Szenarium"] as string) || "";
-  const isLong = scenarioText.length > 200;
 
   const detailLink = !hideLink && (
     <a
@@ -244,11 +260,7 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
       className="shadow-sm border-gray-200 p-4 mb-8 relative"
       data-testid="case-card"
     >
-      {isLong ? (
-        <Expandable>{cardInner}</Expandable>
-      ) : (
-        cardInner
-      )}
+      <Expandable>{cardInner}</Expandable>
     </Card>
   );
 };
