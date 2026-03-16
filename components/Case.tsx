@@ -70,7 +70,7 @@ const constructHighlights = (
 
 const getDomain = (url: string): string => {
   try {
-    return new URL(url).hostname.replace(/^www\./, "");
+    return new URL(url).hostname.replace(/^www\d?\./, "");
   } catch {
     return url;
   }
