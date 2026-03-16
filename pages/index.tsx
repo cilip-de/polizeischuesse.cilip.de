@@ -1,13 +1,4 @@
-import {
-  Button,
-  Center,
-  Container,
-  Grid,
-  Group,
-  Space,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Button } from "@/components/ui/button";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -57,7 +48,7 @@ const Home = ({
       </Head>
 
       <main id="main-content">
-        <Group justify="center" className="only-non-mobile">
+        <div className="flex items-center justify-center gap-2 only-non-mobile">
           <a href="https://www.grimme-online-award.de/2025/nominierte/nominierte-detail/d/chronik-polizeilicher-todesschuesse-1976-2025">
             <Image
               src={goa2025}
@@ -73,8 +64,8 @@ const Home = ({
               }}
             />
           </a>
-        </Group>
-        <Group justify="center" className="only-mobile">
+        </div>
+        <div className="flex items-center justify-center gap-2 only-mobile">
           <a href="https://www.grimme-online-award.de/2025/nominierte/nominierte-detail/d/chronik-polizeilicher-todesschuesse-1976-2025">
             <Image
               src={goa2025}
@@ -87,65 +78,41 @@ const Home = ({
               }}
             />
           </a>
-        </Group>
-        <Container>
-          <Space h="xl" />
+        </div>
+        <div className="mx-auto w-full max-w-[1140px] px-4">
+          <div className="h-6" />
           <nav
             aria-label="Hauptnavigation"
             className="only-mobile"
             style={{ marginBottom: "2rem" }}
           >
-            <Group justify="center">
+            <div className="flex items-center justify-center gap-2">
               <div style={{ width: "47%" }}>
-                <Button
-                  component={Link}
-                  href="/visualisierungen"
-                  c="dark"
-                  variant="outline"
-                  style={{ width: "100%" }}
-                >
-                  Visualisierungen
+                <Button variant="outline" className="w-full text-gray-800" asChild>
+                  <Link href="/visualisierungen">Visualisierungen</Link>
                 </Button>
               </div>
               <div style={{ width: "47%" }}>
-                <Button
-                  component={Link}
-                  href="/methodik"
-                  c="dark"
-                  variant="outline"
-                  style={{ width: "100%" }}
-                >
-                  Methodik
+                <Button variant="outline" className="w-full text-gray-800" asChild>
+                  <Link href="/methodik">Methodik</Link>
                 </Button>
               </div>
               <div style={{ width: "47%" }}>
-                <Button
-                  component={Link}
-                  href="/statistik"
-                  c="dark"
-                  variant="outline"
-                  style={{ width: "100%" }}
-                >
-                  Offizielle Statistik
+                <Button variant="outline" className="w-full text-gray-800" asChild>
+                  <Link href="/statistik">Offizielle Statistik</Link>
                 </Button>
               </div>
               <div style={{ width: "47%" }}>
-                <Button
-                  component={Link}
-                  href="/taser"
-                  c="dark"
-                  variant="outline"
-                  style={{ width: "100%" }}
-                >
-                  Tod mit Taser
+                <Button variant="outline" className="w-full text-gray-800" asChild>
+                  <Link href="/taser">Tod mit Taser</Link>
                 </Button>
               </div>
-            </Group>
+            </div>
           </nav>
 
-          <Grid>
-            <Grid.Col
-              span={{ base: 12, sm: 4 }}
+          <div className="grid grid-cols-12 gap-4">
+            <div
+              className="col-span-12 md:col-span-4"
               style={{ padding: "1rem", paddingTop: "0" }}
             >
               <Image
@@ -153,30 +120,30 @@ const Home = ({
                 src={cover}
                 alt="Cover image"
               />
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, sm: 8 }}>
+            </div>
+            <div className="col-span-12 md:col-span-8">
               <div>
-                <Space h="sm" />
-                <Title order={1}>Polizeiliche Todesschüsse</Title>
-                {/* <Space h="sm" /> */}
-                <Space h="sm" />
-                <Title order={2} size="h3">
+                <div className="h-3" />
+                <h1 className="text-3xl font-bold tracking-tight">Polizeiliche Todesschüsse</h1>
+                {/* <div className="h-3" /> */}
+                <div className="h-3" />
+                <h2 className="text-xl font-semibold">
                   Seit der Wiedervereinigung wurden mindestens {afterReuni}{" "}
                   Personen durch Kugeln der deutschen Polizei getötet.
-                </Title>
-                <Space h="sm" />
-                <Text size="lg">
+                </h2>
+                <div className="h-3" />
+                <p className="text-lg">
                   Wir zählen von 1976 bis 1990 außerdem {beforeReuni} tödliche
                   Schüsse allein in Westdeutschland.
-                </Text>
+                </p>
               </div>
-            </Grid.Col>
-          </Grid>
+            </div>
+          </div>
 
-          <Grid>
-            <Grid.Col span={{ base: 12, sm: 4 }} order={{ base: 2, sm: 2 }} className="only-non-mobile">
-              <Space h="xl" />
-              <Group justify="flex-end">
+          <div className="grid grid-cols-12 gap-4">
+            <div className="col-span-12 md:col-span-4 order-2 only-non-mobile">
+              <div className="h-6" />
+              <div className="flex items-center justify-end gap-2">
                 <div>
                   <a href="https://cilip.de">
                     <Image
@@ -186,71 +153,47 @@ const Home = ({
                     />
                   </a>
                 </div>
-              </Group>
-              <Space h="xl" />
-              <Space h="xl" />
+              </div>
+              <div className="h-6" />
+              <div className="h-6" />
               <nav aria-label="Hauptnavigation">
-                <Group justify="flex-end" align="flex-end" style={{ flexDirection: "column" }}>
+                <div className="flex items-end justify-end gap-2" style={{ flexDirection: "column" }}>
                   <div>
-                    <Button
-                      component={Link}
-                      href="/visualisierungen"
-                      c="dark"
-                      variant="outline"
-                      style={{ width: "13rem" }}
-                    >
-                      Visualisierungen
+                    <Button variant="outline" className="w-52 text-gray-800" asChild>
+                      <Link href="/visualisierungen">Visualisierungen</Link>
                     </Button>
                   </div>
                   <div>
-                    <Button
-                      component={Link}
-                      href="/methodik"
-                      c="dark"
-                      variant="outline"
-                      style={{ width: "13rem" }}
-                    >
-                      Methodik
+                    <Button variant="outline" className="w-52 text-gray-800" asChild>
+                      <Link href="/methodik">Methodik</Link>
                     </Button>
                   </div>
                   <div>
-                    <Button
-                      component={Link}
-                      href="/statistik"
-                      c="dark"
-                      variant="outline"
-                      style={{ width: "13rem" }}
-                    >
-                      Offizielle Statistik
+                    <Button variant="outline" className="w-52 text-gray-800" asChild>
+                      <Link href="/statistik">Offizielle Statistik</Link>
                     </Button>
                   </div>
                   <div>
-                    <Button
-                      component={Link}
-                      href="/taser"
-                      c="dark"
-                      variant="outline"
-                      style={{ width: "13rem" }}
-                    >
-                      Tod mit Taser
+                    <Button variant="outline" className="w-52 text-gray-800" asChild>
+                      <Link href="/taser">Tod mit Taser</Link>
                     </Button>
                   </div>
-                </Group>
+                </div>
               </nav>
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, sm: 8 }} order={{ base: 1, sm: 1 }}>
-              <Space h="lg" />
-              <Text>
+            </div>
+            <div className="col-span-12 md:col-span-8 order-1">
+              <div className="h-5" />
+              <p>
                 Jedes Jahr veröffentlicht die Konferenz der Innenminister*innen
                 der Bundesländer eine neue{" "}
                 <b>Statistik zum polizeilichen Schusswaffengebrauch</b> des
                 Vorjahres. Neben Warnschüssen oder Schüssen auf Tiere und Sachen
                 werden auch Polizeikugeln auf Personen und daraus resultierende
                 Todesfälle gezählt.
-              </Text>
+              </p>
               <div className="only-mobile">
-                <Space h="lg" />
-                <Group justify="center">
+                <div className="h-5" />
+                <div className="flex items-center justify-center gap-2">
                   <a href="https://cilip.de">
                     <Image
                       src={cilipLogo}
@@ -258,11 +201,11 @@ const Home = ({
                       style={{ maxWidth: "100%" }}
                     />
                   </a>
-                </Group>
-                <Space h="sm" />
+                </div>
+                <div className="h-3" />
               </div>
-              <Space h="sm" />
-              <Text>
+              <div className="h-3" />
+              <p>
                 Die ab 1984 von den <b>Behörden geführte Aufstellung</b> ist
                 jedoch <b>anonym</b>, es wird nicht auf die einzelnen Taten
                 eingegangen. Die Statistik gibt auch keine Auskunft über die
@@ -275,33 +218,33 @@ const Home = ({
                 Todesfällen. Dabei sammeln wir Informationen zur Beteiligung von
                 Sondereinheiten, der Zahl jeweils abgegebener Schüsse und der
                 Situation, in der sich die Schussabgabe zutrug.
-              </Text>
-              <Space h="sm" />
-              <Text>
+              </p>
+              <div className="h-3" />
+              <p>
                 So ist etwa von Bedeutung, ob die Getöteten selbst bewaffnet
                 waren, sich womöglich in einer psychischen Ausnahmesituation
                 befanden oder, wie es häufig geschieht, in ihrer eigenen Wohnung
                 erschossen wurden.
-              </Text>
-              <Space h="sm" />
-            </Grid.Col>
-          </Grid>
-          <Space h="xl" />
-          <Space h="xl" />
+              </p>
+              <div className="h-3" />
+            </div>
+          </div>
+          <div className="h-6" />
+          <div className="h-6" />
           <CaseList
             maxCases={maxCases}
           />
-        </Container>
-        <Space h="xl" />
-        <Center>
-          <Text size="lg">
+        </div>
+        <div className="h-6" />
+        <div className="flex items-center justify-center">
+          <p className="text-lg">
             <Link href="/kontakt">Kontakt, Impressum und Datenschutz</Link>
-          </Text>
-        </Center>
-        <Space h="xl" />
-        <Space h="xl" />
-        <Center>
-          <Text style={{ maxWidth: "25rem", padding: "0.5rem" }} ta="center">
+          </p>
+        </div>
+        <div className="h-6" />
+        <div className="h-6" />
+        <div className="flex items-center justify-center">
+          <p className="text-center" style={{ maxWidth: "25rem", padding: "0.5rem" }}>
             Die Zeitschrift Bürgerrechte & Polizei/CILIP liefert seit 1978
             kritische Analysen zur Politik und Praxis Innerer Sicherheit in
             Deutschland und Europa.
@@ -309,15 +252,13 @@ const Home = ({
             <a href="https://www.cilip.de/zeitschrift-bestellen/abonnement/">
               Jetzt ein Abo abschließen!
             </a>
-          </Text>
-        </Center>
-        <Space h="xl" />
-        <Space h="xl" />
-        <Center>
-          <Text
-            size="sm"
-            c="gray"
-            ta="center"
+          </p>
+        </div>
+        <div className="h-6" />
+        <div className="h-6" />
+        <div className="flex items-center justify-center">
+          <p
+            className="text-sm text-gray-500 text-center"
             style={{ maxWidth: "25rem", padding: "0.5rem" }}
           >
             Alle Daten auf dieser Webseite sind unter der{" "}
@@ -331,14 +272,12 @@ const Home = ({
             Lizenz veröffentlicht. Veröffentlichungen müssen als Quelle
             &quot;Bürgerrechte & Polizei/CILIP&quot; angeben und auf
             polizeischuesse.cilip.de verlinken.
-          </Text>
-        </Center>
-        <Space h="xl" />
-        <Center>
-          <Text
-            size="sm"
-            c="gray"
-            ta="center"
+          </p>
+        </div>
+        <div className="h-6" />
+        <div className="flex items-center justify-center">
+          <p
+            className="text-sm text-gray-500 text-center"
             style={{ maxWidth: "25rem", padding: "0.5rem" }}
           >
             Umgesetzt von <a href="//johannesfilter.com">Johannes Filter</a> und{" "}
@@ -351,9 +290,9 @@ const Home = ({
             von
             <br /> Otto Diederichs und der{" "}
             <a href="//cilip.de">Bürgerrechte & Polizei/CILIP-Redaktion</a>.
-          </Text>
-        </Center>
-        <Space h="xl" />
+          </p>
+        </div>
+        <div className="h-6" />
         <div style={{ height: "2rem" }}></div>
       </main>
     </div>

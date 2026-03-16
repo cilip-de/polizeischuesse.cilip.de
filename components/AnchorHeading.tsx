@@ -1,14 +1,25 @@
-import { Title, TitleProps } from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
+import { useClipboard } from "@/lib/hooks/useClipboard";
 import { IconLink } from "@tabler/icons-react";
 import { CSSProperties, useState } from "react";
 
-interface AnchorHeadingProps extends TitleProps {
+interface AnchorHeadingProps {
   id: string;
   children: React.ReactNode;
+  order?: 1 | 2 | 3 | 4 | 5 | 6;
+  ta?: "center" | "left" | "right";
+  style?: CSSProperties;
 }
 
-const AnchorHeading = ({ id, children, style, ta, ...titleProps }: AnchorHeadingProps) => {
+const headingClasses: Record<number, string> = {
+  1: "text-3xl font-bold tracking-tight",
+  2: "text-xl font-semibold",
+  3: "text-lg font-semibold",
+  4: "text-base font-semibold",
+  5: "text-sm font-semibold",
+  6: "text-xs font-semibold",
+};
+
+const AnchorHeading = ({ id, children, order = 2, ta, style }: AnchorHeadingProps) => {
   const clipboard = useClipboard({ timeout: 2000 });
   const [isHovered, setIsHovered] = useState(false);
 
@@ -26,15 +37,26 @@ const AnchorHeading = ({ id, children, style, ta, ...titleProps }: AnchorHeading
     ...(typeof style === 'object' && !Array.isArray(style) ? style : {}),
   };
 
+  const renderHeading = () => {
+    const className = headingClasses[order];
+    const props = { id, className, style: { margin: 0 } as CSSProperties };
+    switch (order) {
+      case 1: return <h1 {...props}>{children}</h1>;
+      case 3: return <h3 {...props}>{children}</h3>;
+      case 4: return <h4 {...props}>{children}</h4>;
+      case 5: return <h5 {...props}>{children}</h5>;
+      case 6: return <h6 {...props}>{children}</h6>;
+      default: return <h2 {...props}>{children}</h2>;
+    }
+  };
+
   return (
     <div
       style={containerStyle}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <Title id={id} ta={ta} {...titleProps} style={{ margin: 0 }}>
-        {children}
-      </Title>
+      {renderHeading()}
       <button
         onClick={handleClick}
         onKeyDown={(e) => {

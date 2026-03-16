@@ -1,4 +1,3 @@
-import { Grid, Space } from "@mantine/core";
 import { csvParse } from "d3-dsv";
 import fs from "fs";
 import _ from "lodash";
@@ -73,14 +72,14 @@ const Statistiken: NextPage<StatistikenProps> = ({
         </a>{" "}
         zur Verfügung.
       </div>
-      <Space h="xl" />
+      <div className="h-6" />
       <AnchorHeading order={3} id="offizielle-statistiken">
         Offizielle Statistiken (PDF-Dokumente)
       </AnchorHeading>
-      <Space h="xl" />
-      <Grid>
+      <div className="h-6" />
+      <div className="grid grid-cols-12 gap-4">
         {_.orderBy(pdfs.documents, "title", "desc").map((x) => (
-          <Grid.Col span={{ base: 4, md: 2, lg: 1 }} key={x.title}>
+          <div className="col-span-4 lg:col-span-2 xl:col-span-1" key={x.title}>
             <a
               target="_blank"
               href={x.site_url}
@@ -89,15 +88,15 @@ const Statistiken: NextPage<StatistikenProps> = ({
             >
               {x.title.replace(/[^0-9]/g, "")}
             </a>
-          </Grid.Col>
+          </div>
         ))}
-      </Grid>
-      <Space h="xl" />
-      <Space h="xl" />
+      </div>
+      <div className="h-6" />
+      <div className="h-6" />
       <AnchorHeading order={3} id="visualisierungen">
         Visualisierungen der offiziellen Statistiken
       </AnchorHeading>
-      <Space h="xl" />
+      <div className="h-6" />
       <div>
         Um die Daten aus den oben verlinkten PDF-Dokumenten zugänglicher und
         verständlicher zu machen, haben wir die statistischen Angaben extrahiert
@@ -108,8 +107,8 @@ const Statistiken: NextPage<StatistikenProps> = ({
         Schusswaffengebrauch und unbeabsichtigte Schussauslösungen von
         Polizistinnen und Polizisten.
       </div>
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
       <ShortsPerYear wData={wData} />
       <SimpleChart data={s1} title={"Verletzte durch Polizeischüsse"} />
       <SimpleChart data={s2} title={"Schüsse gegen Tiere"} />

@@ -184,7 +184,7 @@ test.describe('Search and Filtering', () => {
         await page.waitForTimeout(300);
 
         // Select first option
-        const firstOption = page.getByRole('option').first();
+        const firstOption = page.locator('[cmdk-item]').first();
         if (await firstOption.count() > 0) {
           await firstOption.click();
           await page.waitForTimeout(500);
@@ -240,26 +240,26 @@ test.describe('Search and Filtering', () => {
     test('should apply multiple filters simultaneously', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      // Apply year filter - Mantine Select renders as textbox
-      const yearFilter = page.getByRole('textbox', { name: 'Jahr' });
+      // Apply year filter - SearchableSelect uses combobox pattern
+      const yearFilter = page.getByRole('combobox', { name: 'Jahr' });
       if (await yearFilter.count() > 0) {
         await yearFilter.click();
         await page.waitForTimeout(800); // Wait for dropdown to open
-        // Select a specific year option (e.g., 2024) instead of using .first() which could match anything
-        const yearOption = page.getByRole('option', { name: '2024' });
+        // Select a specific year option
+        const yearOption = page.locator('[cmdk-item]:has-text("2024")');
         if (await yearOption.count() > 0) {
           await yearOption.click();
           await page.waitForTimeout(500); // Wait for filter to apply
         }
       }
 
-      // Apply state filter - Mantine Select renders as textbox
-      const stateFilter = page.getByRole('textbox', { name: 'Bundesland' });
+      // Apply state filter - SearchableSelect uses combobox pattern
+      const stateFilter = page.getByRole('combobox', { name: 'Bundesland' });
       if (await stateFilter.count() > 0) {
         await stateFilter.click();
         await page.waitForTimeout(800); // Wait for dropdown to open
         // Select Berlin specifically
-        const stateOption = page.getByRole('option', { name: 'Berlin' });
+        const stateOption = page.locator('[cmdk-item]:has-text("Berlin")');
         if (await stateOption.count() > 0) {
           await stateOption.click();
           await page.waitForTimeout(500); // Wait for filter to apply
@@ -283,10 +283,10 @@ test.describe('Search and Filtering', () => {
       await page.waitForURL(/q=Berlin/, { timeout: 5000 });
 
       // Apply year filter via Mantine combobox
-      const yearInput = page.getByRole('textbox', { name: 'Jahr' });
+      const yearInput = page.getByRole('combobox', { name: 'Jahr' });
       await yearInput.click();
       await page.waitForTimeout(300);
-      const yearOption = page.getByRole('option').first();
+      const yearOption = page.locator('[cmdk-item]').first();
       if (await yearOption.count() > 0) {
         await yearOption.click();
         await page.waitForTimeout(500);
@@ -431,19 +431,19 @@ test.describe('Search and Filtering', () => {
 
       // Sort toggle should be visible (SegmentedControl) - use :visible to pick the one
       // for the current viewport (desktop and mobile each render their own instance)
-      const sortToggle = page.locator('.mantine-SegmentedControl-root:visible');
+      const sortToggle = page.locator('[data-testid="sort-toggle"]:visible');
       await expect(sortToggle).toBeVisible();
 
       // Should have Relevanz and Datum options (check for labels, not hidden radio inputs)
-      await expect(page.locator('.mantine-SegmentedControl-label:has-text("Relevanz"):visible')).toBeVisible();
-      await expect(page.locator('.mantine-SegmentedControl-label:has-text("Datum"):visible')).toBeVisible();
+      await expect(page.locator('[data-testid="sort-toggle"] button:has-text("Relevanz"):visible')).toBeVisible();
+      await expect(page.locator('[data-testid="sort-toggle"] button:has-text("Datum"):visible')).toBeVisible();
     });
 
     test('should not be visible when search is empty or too short', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
       // Sort toggle should not be present when no search query
-      const sortToggle = page.locator('.mantine-SegmentedControl-root');
+      const sortToggle = page.locator('[data-testid="sort-toggle"]');
       await expect(sortToggle).toHaveCount(0);
 
       // Enter only 2 characters
@@ -459,10 +459,9 @@ test.describe('Search and Filtering', () => {
       await page.goto('/?q=Berlin');
       await helpers.waitForPageReady(page);
 
-      // Relevanz should be selected by default (check the radio input)
-      // Use .first() because desktop and mobile each render their own SegmentedControl
-      const relevanzRadio = page.locator('input[type="radio"][value="relevance"]').first();
-      await expect(relevanzRadio).toBeChecked();
+      // Relevanz should be selected by default (check the toggle button state)
+      const relevanzButton = page.locator('[data-testid="sort-toggle"] button:has-text("Relevanz"):visible').first();
+      await expect(relevanzButton).toHaveAttribute('data-state', 'on');
     });
 
     test('should switch to date sort and update URL', async ({ page }) => {
@@ -470,7 +469,7 @@ test.describe('Search and Filtering', () => {
       await helpers.waitForPageReady(page);
 
       // Click Datum label (use :visible to target the one for the current viewport)
-      const datumLabel = page.locator('.mantine-SegmentedControl-label:has-text("Datum"):visible');
+      const datumLabel = page.locator('[data-testid="sort-toggle"] button:has-text("Datum"):visible');
       await datumLabel.click();
 
       // Wait for URL to update
@@ -485,9 +484,9 @@ test.describe('Search and Filtering', () => {
       await page.goto('/?q=Berlin&sort=date');
       await helpers.waitForPageReady(page);
 
-      // Datum should be selected (check the radio input)
-      const datumRadio = page.locator('input[type="radio"][value="date"]').first();
-      await expect(datumRadio).toBeChecked();
+      // Datum should be selected (check the toggle button state)
+      const datumButton = page.locator('[data-testid="sort-toggle"] button:has-text("Datum"):visible').first();
+      await expect(datumButton).toHaveAttribute('data-state', 'on');
     });
 
     test('should reset page to 1 when changing sort', async ({ page }) => {
@@ -502,7 +501,7 @@ test.describe('Search and Filtering', () => {
       await helpers.waitForPageReady(page);
 
       // Click Datum label (use :visible to target the one for the current viewport)
-      const datumLabel = page.locator('.mantine-SegmentedControl-label:has-text("Datum"):visible');
+      const datumLabel = page.locator('[data-testid="sort-toggle"] button:has-text("Datum"):visible');
       await datumLabel.click();
 
       // Wait for URL to update with sort=date
@@ -519,16 +518,16 @@ test.describe('Search and Filtering', () => {
       await helpers.navigateAndWait(page, '/');
 
       // Open the category multi-select (Mantine MultiSelect with label "Kategorie")
-      const categoryInput = page.getByRole('textbox', { name: 'Kategorie' });
+      const categoryInput = page.getByRole('combobox', { name: 'Kategorie' });
       await categoryInput.click();
       await page.waitForTimeout(500);
 
       // Should show Unbewaffnet option
-      const unbewaffnetOption = page.getByRole('option', { name: 'Unbewaffnet', exact: true });
+      const unbewaffnetOption = page.locator('[cmdk-item]:has-text("Unbewaffnet")');
       await expect(unbewaffnetOption).toBeVisible();
 
       // Should also show Bewaffnet (the negative option) - use exact match
-      const bewaffnetOption = page.getByRole('option', { name: 'Bewaffnet', exact: true });
+      const bewaffnetOption = page.locator('[cmdk-item]').filter({ hasText: /^(?!.*Unbewaffnet).*Bewaffnet/ });
       await expect(bewaffnetOption).toBeVisible();
     });
 
@@ -536,16 +535,16 @@ test.describe('Search and Filtering', () => {
       await helpers.navigateAndWait(page, '/');
 
       // Open the category multi-select
-      const categoryInput = page.getByRole('textbox', { name: 'Kategorie' });
+      const categoryInput = page.getByRole('combobox', { name: 'Kategorie' });
       await categoryInput.click();
       await page.waitForTimeout(500);
 
       // Should show Minderjährig option
-      const minderjaehrigOption = page.getByRole('option', { name: 'Minderjährig', exact: true });
+      const minderjaehrigOption = page.locator('[cmdk-item]:has-text("Minderjährig")');
       await expect(minderjaehrigOption).toBeVisible();
 
       // Should also show Volljährig (the negative option)
-      const volljaehrigOption = page.getByRole('option', { name: 'Volljährig', exact: true });
+      const volljaehrigOption = page.locator('[cmdk-item]').filter({ hasText: /^(?!.*Minderjährig).*Volljährig/ });
       await expect(volljaehrigOption).toBeVisible();
     });
 
@@ -553,12 +552,12 @@ test.describe('Search and Filtering', () => {
       await helpers.navigateAndWait(page, '/');
 
       // Open the category multi-select
-      const categoryInput = page.getByRole('textbox', { name: 'Kategorie' });
+      const categoryInput = page.getByRole('combobox', { name: 'Kategorie' });
       await categoryInput.click();
       await page.waitForTimeout(500);
 
       // Select Unbewaffnet option
-      const unbewaffnetOption = page.getByRole('option', { name: 'Unbewaffnet', exact: true });
+      const unbewaffnetOption = page.locator('[cmdk-item]:has-text("Unbewaffnet")');
       await unbewaffnetOption.click();
 
       // Wait for URL to update with tags parameter (increased timeout for reliability)
@@ -573,12 +572,12 @@ test.describe('Search and Filtering', () => {
       await helpers.navigateAndWait(page, '/');
 
       // Open the category multi-select
-      const categoryInput = page.getByRole('textbox', { name: 'Kategorie' });
+      const categoryInput = page.getByRole('combobox', { name: 'Kategorie' });
       await categoryInput.click();
       await page.waitForTimeout(500);
 
       // Select Minderjährig option
-      const minderjaehrigOption = page.getByRole('option', { name: 'Minderjährig', exact: true });
+      const minderjaehrigOption = page.locator('[cmdk-item]:has-text("Minderjährig")');
       await minderjaehrigOption.click();
 
       // Wait for URL to update with tags parameter (increased timeout for reliability)

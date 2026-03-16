@@ -1,4 +1,6 @@
-import { Button, Card, Group, Text, useMantineTheme } from "@mantine/core";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { spacing } from "../lib/colors";
 import Link from "next/link";
 import { VerticalBarChart } from "./charts/charts";
 
@@ -13,36 +15,27 @@ interface VisualizationCardProps {
 }
 
 function VisualizationCard({ data }: VisualizationCardProps) {
-  const theme = useMantineTheme();
-
   return (
-    <Card shadow="sm" padding="lg">
-      <Card.Section>
+    <Card className="shadow-sm p-6">
+      <CardContent className="p-0">
         <VerticalBarChart
           data={data
             .slice(0, 11)
             .reverse()
             .map((x) => ({ ...x, value: x.value, count: parseInt(x.value) }))}
         />
-      </Card.Section>
+      </CardContent>
 
-      <Group
-        justify="space-between"
-        style={{ marginBottom: 5, marginTop: theme.spacing.sm }}
+      <div
+        className="flex items-center justify-between"
+        style={{ marginBottom: 5, marginTop: spacing.sm }}
       >
-        <Text size="sm">Anzahl der Todesschüsse 2010–2020</Text>
-      </Group>
+        <p className="text-sm">Anzahl der Todesschüsse 2010–2020</p>
+      </div>
 
-      <Link href="/visualisierungen" passHref>
-        <Button
-          variant="light"
-          // color="indigo"
-          fullWidth
-          style={{ marginTop: 14 }}
-        >
-          Visualisierungen
-        </Button>
-      </Link>
+      <Button variant="secondary" className="w-full mt-3.5" asChild>
+        <Link href="/visualisierungen">Visualisierungen</Link>
+      </Button>
     </Card>
   );
 }

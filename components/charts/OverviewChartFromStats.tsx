@@ -1,4 +1,4 @@
-import { useMantineTheme } from "@mantine/core";
+import { colors } from "../../lib/colors";
 import { ResponsiveBar } from "@nivo/bar";
 import dayjs from "dayjs";
 import { useState } from "react";
@@ -37,7 +37,6 @@ const selectNiceTicks = (
 };
 
 export const OverviewChartFromStats = ({ yearCounts, onClick }: OverviewChartFromStatsProps) => {
-  const theme = useMantineTheme();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
 
   if (!yearCounts || yearCounts.length === 0) {
@@ -99,10 +98,10 @@ export const OverviewChartFromStats = ({ yearCounts, onClick }: OverviewChartFro
 
           if (x.indexValue === dayjs().year().toString()) {
             const colorMap: Record<string, string> = {
-              count: isHovered ? theme.colors.indigo[4] : theme.colors.indigo[2],
-              count2: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
+              count: isHovered ? colors.indigo[4] : colors.indigo[2],
+              count2: isHovered ? colors.indigo[3] : colors.indigo[1],
             };
-            return colorMap[x.id as string] || theme.colors.indigo[2];
+            return colorMap[x.id as string] || colors.indigo[2];
           }
 
           const colorMap: Record<string, string> = {

@@ -154,7 +154,7 @@ export async function waitForDataLoad(page: Page, minItems: number = 1) {
   await page.waitForTimeout(500);
 
   // Look for case cards - they have specific structure with Name and datePrint
-  const selector = '.mantine-Card-root';
+  const selector = '[data-testid="case-card"]';
   await page.waitForSelector(selector, { timeout: 15000 });
   const count = await countElements(page, selector);
   expect(count).toBeGreaterThanOrEqual(minItems);

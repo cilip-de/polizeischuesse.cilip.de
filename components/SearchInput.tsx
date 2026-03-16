@@ -1,4 +1,5 @@
-import { TextInput } from "@mantine/core";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import _ from "lodash";
 import router from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -67,23 +68,26 @@ const SearchInput = ({
   }, [q]);
 
   return (
-    <TextInput
-      value={q}
-      label={
-        showHint ? (
+    <div>
+      <Label htmlFor="search">
+        {showHint ? (
           <>
             Suche{" "}
-            <span style={{ fontWeight: "normal", color: "var(--mantine-color-dimmed)" }}>
+            <span style={{ fontWeight: "normal", color: "#868e96" }}>
               – bitte mindestens 3 Zeichen eingeben
             </span>
           </>
         ) : (
           "Suche"
-        )
-      }
-      placeholder="z. B. Wohnung, Flucht, Rücken, Kopf"
-      onChange={searchFunc}
-    />
+        )}
+      </Label>
+      <Input
+        id="search"
+        value={q}
+        placeholder="z. B. Wohnung, Flucht, Rücken, Kopf"
+        onChange={searchFunc}
+      />
+    </div>
   );
 };
 

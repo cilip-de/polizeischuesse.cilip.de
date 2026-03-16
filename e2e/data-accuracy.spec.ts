@@ -383,7 +383,7 @@ test.describe('Data Accuracy and Processing', () => {
       await helpers.waitForDataLoad(page, 5);
 
       // Should display multiple cases - cases are rendered as Mantine Card components
-      const cases = page.locator('.mantine-Card-root');
+      const cases = page.locator('[data-testid="case-card"]');
       const caseCount = await cases.count();
 
       expect(caseCount).toBeGreaterThan(0);

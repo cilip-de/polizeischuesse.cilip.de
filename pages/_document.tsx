@@ -1,5 +1,4 @@
 import { Head, Html, Main, NextScript } from "next/document";
-import { ColorSchemeScript, mantineHtmlProps } from "@mantine/core";
 
 export default function Document() {
   const tracking = `var _paq = window._paq = window._paq || [];
@@ -15,9 +14,8 @@ export default function Document() {
     })()`;
 
   return (
-    <Html lang="de" {...mantineHtmlProps}>
+    <Html lang="de">
       <Head>
-        <ColorSchemeScript />
         <link
           rel="alternate"
           type="application/rss+xml"

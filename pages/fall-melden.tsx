@@ -1,4 +1,6 @@
-import { Button, Space, Textarea } from "@mantine/core";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import type { NextPage } from "next";
 import Image from "next/image";
 import React from "react";
@@ -32,13 +34,11 @@ const Statistiken: NextPage = () => {
       {wasSent && <div>Die Nachricht wurde erfolgreich übermittelt.</div>}
       {!wasSent && (
         <>
-          <Textarea
-            ref={inputEl}
-            placeholder="Deine Nachricht"
-            label="Deine Nachricht"
-            required
-          />
-          <Space h="xl" />
+          <div>
+            <Label htmlFor="message">Deine Nachricht</Label>
+            <Textarea ref={inputEl} id="message" placeholder="Deine Nachricht" required />
+          </div>
+          <div className="h-6" />
           <Button
             disabled={wasClicked}
             onClick={async () => {
@@ -56,10 +56,8 @@ const Statistiken: NextPage = () => {
                 setError(true);
               }
             }}
-            tt="uppercase"
-            style={{ width: "45%" }}
-            c="gray"
             variant="outline"
+            className="w-[45%] uppercase text-gray-500"
           >
             Absenden
           </Button>

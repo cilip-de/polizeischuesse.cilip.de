@@ -1,4 +1,4 @@
-import { Select } from "@mantine/core";
+import { SearchableSelect } from "@/components/ui/searchable-select";
 import router from "next/router";
 import { constructUrl } from "../lib/util";
 
@@ -13,7 +13,7 @@ const SelectInput = ({ skey, label, selection, data }: SelectInputProps) => {
   // Safety check: ensure data is an array
   if (!data || !Array.isArray(data)) {
     return (
-      <Select
+      <SearchableSelect
         value={selection[skey] || ""}
         onChange={(x) =>
           router.push(
@@ -26,7 +26,6 @@ const SelectInput = ({ skey, label, selection, data }: SelectInputProps) => {
         }
         label={label}
         placeholder="auswählen"
-        searchable
         clearable
         data={[]}
       />
@@ -36,7 +35,7 @@ const SelectInput = ({ skey, label, selection, data }: SelectInputProps) => {
   const processedData = data.map(({ value, label }) => ({ value, label }));
 
   return (
-    <Select
+    <SearchableSelect
       value={selection[skey] || ""}
       onChange={(x) =>
         router.push(
@@ -49,7 +48,6 @@ const SelectInput = ({ skey, label, selection, data }: SelectInputProps) => {
       }
       label={label}
       placeholder="auswählen"
-      searchable
       clearable
       data={processedData}
     />

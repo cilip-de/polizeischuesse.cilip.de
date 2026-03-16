@@ -1,4 +1,3 @@
-import { Container, Grid, Space, Title } from "@mantine/core";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -63,7 +62,7 @@ export default function Layout({
         Zum Hauptinhalt springen
       </a>
 
-      <Container>
+      <div className="mx-auto w-full max-w-[1140px] px-4">
         <a
           style={{ display: "none" }}
           rel="me"
@@ -71,15 +70,10 @@ export default function Layout({
         >
           Mastodon
         </a>
-        <Space />
+        <div className="h-2.5" />
         <button
           onClick={() => {
-            // hotfix
             router.push("/");
-
-            // if there is any page to go back to (otherwise this would close the page)
-            // if (window.history.state.idx === 0) router.push("/");
-            // else router.back();
           }}
           style={{
             background: "none",
@@ -94,30 +88,29 @@ export default function Layout({
         >
           {"« zurück"}
         </button>
-        <Space />
+        <div className="h-2.5" />
 
-        <Grid>
-          <Grid.Col span={{ base: 12, md: 4 }}>
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-12 md:col-span-4">
             {cover && cover}
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, md: 8 }}>
-            <Title order={1}>{title}</Title>
-            <Space h="sm" />
-            <Title order={2} size="h4">{description}</Title>
+          </div>
+          <div className="col-span-12 md:col-span-8">
+            <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+            <div className="h-3" />
+            <h2 className="text-lg font-semibold">{description}</h2>
             {otherContent}
-          </Grid.Col>
-        </Grid>
+          </div>
+        </div>
 
-        <Space h="lg" />
-        <Grid>
-          <Grid.Col span={{ base: 4, md: 4 }}></Grid.Col>
-          <Grid.Col span={{ base: 12, md: fullWidth ? 12 : 8 }}>
+        <div className="h-5" />
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-4 md:col-span-4"></div>
+          <div className={`col-span-12 ${fullWidth ? "md:col-span-12" : "md:col-span-8"}`}>
             <main id="main-content">{children}</main>
-          </Grid.Col>
-        </Grid>
-        <Space h="lg" />
-        {/* Verification */}
-      </Container>
+          </div>
+        </div>
+        <div className="h-5" />
+      </div>
     </>
   );
 }

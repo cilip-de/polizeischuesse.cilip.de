@@ -1,13 +1,5 @@
-import {
-  Button,
-  Center,
-  Code,
-  Container,
-  Group,
-  Space,
-  Text,
-} from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
+import { Button } from "@/components/ui/button";
+import { useClipboard } from "@/lib/hooks/useClipboard";
 import { IconCopy, IconShare } from "@tabler/icons-react"; // Import icons
 import dayjs from "dayjs";
 import { GetServerSideProps, NextPage } from "next";
@@ -81,48 +73,44 @@ const CaseDetail: NextPage<CaseDetailProps> = (props) => {
         />
         <meta name="twitter:card" content="summary" />
       </Head>
-      <Container>
+      <div className="mx-auto w-full max-w-[1140px] px-4">
         <div style={{ marginTop: "5rem" }}>
-          <Text ta="center">
+          <p className="text-center">
             <Link href={isTaser ? "/taser" : "/"}>
               Zurück zur Chronik mit allen Fällen
             </Link>
-          </Text>
+          </p>
           <div style={{ marginTop: "2rem" }}>
             <Case item={props.case} hideLink isTaser={props.taser} />
           </div>
-          <Center>
-            <Code className="only-non-mobile">{pageUrl}</Code>
-            <Space w={"xl"} />
-            <Group>
+          <div className="flex items-center justify-center" data-testid="case-detail">
+            <code className="rounded bg-gray-100 px-2 py-1 text-sm font-mono only-non-mobile">{pageUrl}</code>
+            <div className="w-6" />
+            <div className="flex items-center gap-2">
               {shareSupported ? (
-                <Button
-                  size="sm"
-                  color="blue"
-                  leftSection={<IconShare size={16} />}
-                  onClick={handleShare}
-                >
+                <Button size="sm" onClick={handleShare}>
+                  <IconShare size={16} className="mr-2" />
                   Teilen
                 </Button>
               ) : null}
               <Button
                 size="sm"
-                color={"gray"}
-                leftSection={<IconCopy size={16} />}
+                variant="secondary"
                 onClick={() => clipboard.copy(pageUrl)}
               >
+                <IconCopy size={16} className="mr-2" />
                 {clipboard.copied ? "Link kopiert" : "Link kopieren"}
               </Button>
-            </Group>
-          </Center>
-          <Space h="xl" />
+            </div>
+          </div>
+          <div className="h-6" />
         </div>
-        <Text ta="center" style={{ marginBottom: "5rem" }}>
+        <p className="text-center" style={{ marginBottom: "5rem" }}>
           <Link href={isTaser ? "/taser" : "/"}>
             Zurück zur Chronik mit allen Fällen
           </Link>
-        </Text>
-      </Container>
+        </p>
+      </div>
     </>
   );
 };

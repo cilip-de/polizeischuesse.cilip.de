@@ -1,4 +1,4 @@
-import { Center, Text, useMantineTheme } from "@mantine/core";
+import { colors } from "../../lib/colors";
 import { ResponsiveHeatMap } from "@nivo/heatmap";
 import _ from "lodash";
 import { useState, useEffect, useRef } from "react";
@@ -91,8 +91,6 @@ const HeatMapChart = ({ data, mobile = false }: HeatMapChartProps) => {
 
   const perStateCounts = _(data).countBy("state").value();
 
-  const theme = useMantineTheme();
-
   const keys = boolAtr
     .map((x) =>
       x
@@ -174,7 +172,7 @@ const HeatMapChart = ({ data, mobile = false }: HeatMapChartProps) => {
         forceSquare={true}
         colors={{
           type: "quantize",
-          colors: theme.colors.indigo as any,
+          colors: colors.indigo as any,
           minValue: 0,
           maxValue: 100,
         } as any}
@@ -221,13 +219,13 @@ const HeatMapChart = ({ data, mobile = false }: HeatMapChartProps) => {
           );
         }}
       />
-      <Center>
-        <Text>
+      <div className="flex items-center justify-center">
+        <p>
           {`Die Werte sind mit Vorsicht zu genießen, da es in einigen Ländern nur
           wenige Fälle gibt. So z. B. in Saarland (${perStateCounts["Saarland"]}), Mecklenburg-Vorpommern
           (${perStateCounts["Mecklenburg-Vorpommern"]}) und Bremen (${perStateCounts["Bremen"]}).`}
-        </Text>
-      </Center>
+        </p>
+      </div>
     </div>
   );
 };

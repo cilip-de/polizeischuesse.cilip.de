@@ -23,7 +23,7 @@ test.describe('Individual Case Pages', () => {
           expect(page.url()).toContain('/fall/');
 
           // Page should have content - case pages use Container, not main
-          const content = page.locator('.mantine-Container-root, .mantine-Card-root');
+          const content = page.locator('[data-testid="case-detail"], [data-testid="case-card"]');
           await expect(content.first()).toBeVisible();
         }
       }

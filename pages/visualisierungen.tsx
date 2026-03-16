@@ -1,4 +1,3 @@
-import { Grid, Space, Text, Title } from "@mantine/core";
 import _ from "lodash";
 import type { NextPage } from "next";
 import { GetStaticProps } from "next";
@@ -136,7 +135,7 @@ const CasesPerYear = ({ data }: { data: ProcessedDataItem[] }) => {
         mobile
         tooltip={barChartTooltip()}
       />
-      <Space h="lg" />
+      <div className="h-5" />
     </div>
   );
 };
@@ -177,7 +176,7 @@ const CasesPerYearWeapon = ({ data }: { data: ProcessedDataItem[] }) => {
         mobile
         tooltip={barChartTooltip()}
       />
-      <Space h="lg" />
+      <div className="h-5" />
     </div>
   );
 };
@@ -214,7 +213,7 @@ const CasesPerYearPsych = ({ data }: { data: ProcessedDataItem[] }) => {
         mobile
         tooltip={barChartTooltip()}
       />
-      <Space h="lg" />
+      <div className="h-5" />
     </div>
   );
 };
@@ -234,12 +233,12 @@ const makeDowData = (data: ProcessedDataItem[]) => {
 export { makeDowData };
 
 const MiddleContent = ({ children }: { children: React.ReactNode }) => (
-  <Grid>
-    <Grid.Col span={2}></Grid.Col>
-    <Grid.Col span={{ base: 12, sm: 8 }}>
+  <div className="grid grid-cols-12 gap-4">
+    <div className="col-span-2"></div>
+    <div className="col-span-12 md:col-span-8">
       {children}
-    </Grid.Col>
-  </Grid>
+    </div>
+  </div>
 );
 
 const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, averages }) => {
@@ -345,8 +344,8 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
       }
       otherContent={
         <>
-          <Space h="xl" />
-          <Text>
+          <div className="h-6" />
+          <p>
             Alle Daten stammen aus unserer <Link href="/">Chronik</Link>. In dem{" "}
             <Link href="/methodik">Abschnitt zu Methodik</Link> beschreiben wir
             die Datenerhebung. Wir bieten die{" "}
@@ -364,7 +363,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
             Lizenz veröffentlicht. Veröffentlichungen müssen als Quelle
             &quot;Bürgerrechte &amp; Polizei/CILIP&quot; angeben und auf
             polizeischuesse.cilip.de verlinken.
-          </Text>
+          </p>
         </>
       }
       metaImg="api/og-viz.png"
@@ -372,44 +371,44 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
       title="Visualisierungen der Todesschüsse"
       description="Wir haben unsere gesammelten Polizeischüsse umfangreich analysiert und zeigen u. a. wie sich polizeiliche Todesschüsse auf Wochtentage verteilen und das Opfer häufiger Stichwaffen, früher hingegen Schusswaffen besaßen."
     >
-      <Space h="xl" />
+      <div className="h-6" />
       <CasesPerYear data={data} />
 
       <MiddleContent>
-        <Text>
+        <p>
           Seit 1990 erschoss die Polizei im Durchschnitt{" "}
           {_.round(averages[0], 1)} Personen pro Monat. Im Jahr {dayjs().year()}{" "}
           sind es bis jetzt {_.round(averages[2], 1)} Personen, im Jahr zuvor
           waren es {_.round(averages[1], 1)}.
-        </Text>
+        </p>
       </MiddleContent>
 
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
 
       <div>
         <AnchorHeading order={3} ta="center" id="zeitlicher-verlauf">
           Polizeiliche Todesschüsse im Jahresverlauf
         </AnchorHeading>
-        <Space h="sm" />
+        <div className="h-3" />
         <BeeswarmChart data={data} />
         <BeeswarmChart data={data} mobile />
       </div>
 
       <MiddleContent>
-        <Text>
+        <p>
           Jeder Punkt repräsentiert einen Fall. Die horizontale Position zeigt
           das Datum im Jahr (1. Januar bis 31. Dezember). Die Visualisierung
           ermöglicht es, zeitliche Muster und Häufungen innerhalb einzelner
           Jahre zu erkennen.
-        </Text>
+        </p>
       </MiddleContent>
 
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
       <CasesPerYearWeapon data={data} />
       <MiddleContent>
-        <Text>
+        <p>
           Die Angabe zu der Bewaffnung der Täter:innen beruht oft nur auf den
           Angaben der beteiligten Polizist:innen. Die Aussagen sind manchmal
           umstritten, wie beim Tod von{" "}
@@ -421,33 +420,33 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
             Hussam Fadl
           </a>{" "}
           in einer Berliner Flüchtlingsunterkuft.
-        </Text>
+        </p>
       </MiddleContent>
       {/* <WeaponChart data={data} /> */}
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
       <CasesPerYearPsych data={data} />
       <MiddleContent>
-        <Text>
+        <p>
           In vielen Fällen befanden sich die Getöteten in einer psychischen
           Ausnahmesituation. Die Polizei wird häufig gerufen, wenn Menschen in
           einer Krise sind und professionelle Hilfe benötigen würden. Oft
           eskaliert die Situation tödlich.
-        </Text>
+        </p>
       </MiddleContent>
-      <Space h="xl" />
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
+      <div className="h-6" />
       <div>
         <AnchorHeading order={3} ta="center" id="pro-bundesland">
           Todesschüsse pro Bundesland, je eine Mio. Einwohner
         </AnchorHeading>
-        <Space h="xl" />
-        <Grid>
-          <Grid.Col span={{ base: 12, md: 6 }}>
-            <Title order={4} ta="center">
+        <div className="h-6" />
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-12 lg:col-span-6">
+            <h4 className="text-lg font-semibold text-center">
               Westdeutschland 1976–1990
-            </Title>
+            </h4>
             <HorizontalBarChart
               data={perInhabWestSorted}
               tooltip={simpleBarChartTooltip({
@@ -467,11 +466,11 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
                 pluralUnit: "",
               })}
             />
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, md: 6 }}>
-            <Title order={4} ta="center">
+          </div>
+          <div className="col-span-12 lg:col-span-6">
+            <h4 className="text-lg font-semibold text-center">
               Bundesrepublik 1990–{data[0].year}
-            </Title>
+            </h4>
             <HorizontalBarChart
               data={inhabDataAfterSorted}
               tooltip={simpleBarChartTooltip({
@@ -491,22 +490,22 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
                 pluralUnit: "",
               })}
             />
-          </Grid.Col>
-        </Grid>
+          </div>
+        </div>
       </div>
-      <Space h="xl" />
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
+      <div className="h-6" />
       <div>
         <AnchorHeading order={3} ta="center" id="pro-stadt">
           Todesschüsse pro Stadt
         </AnchorHeading>
-        <Space h="xl" />
-        <Grid>
-          <Grid.Col span={{ base: 12, md: 6 }}>
-            <Title order={4} ta="center">
+        <div className="h-6" />
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-12 lg:col-span-6">
+            <h4 className="text-lg font-semibold text-center">
               Westdeutschland 1976–1990
-            </Title>
+            </h4>
             <HorizontalBarChart
               data={cityDataWest}
               tooltip={simpleBarChartTooltip({
@@ -520,11 +519,11 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
                 primaryLabelKey: "Stadt",
               })}
             />
-          </Grid.Col>
-          <Grid.Col span={{ base: 12, md: 6 }}>
-            <Title order={4} ta="center">
+          </div>
+          <div className="col-span-12 lg:col-span-6">
+            <h4 className="text-lg font-semibold text-center">
               Bundesrepublik 1990–{data[0].year}
-            </Title>
+            </h4>
             <HorizontalBarChart
               data={cityDataAfter}
               tooltip={simpleBarChartTooltip({
@@ -538,11 +537,11 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
                 primaryLabelKey: "Stadt",
               })}
             />
-          </Grid.Col>
-        </Grid>
+          </div>
+        </div>
       </div>
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
       <div>
         <AnchorHeading order={3} ta="center" id="pro-monat">
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Monat
@@ -565,8 +564,8 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
           })}
         />
       </div>
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
       <div>
         <MiddleContent>
           <AnchorHeading order={3} ta="center" id="pro-wochentag">
@@ -588,8 +587,8 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
           })}
         />
       </div>
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
       <div>
         <AnchorHeading order={3} ta="center" id="pro-tag-im-monat">
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Tag im
@@ -609,8 +608,8 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
           })}
         />
       </div>
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
       <div>
         <AnchorHeading order={3} ta="center" id="alter">
           Alter der Opfer von Todesschüssen {data[data.length - 1].year}–
@@ -644,8 +643,8 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
           )}
         />
       </div>
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
       <div>
         <MiddleContent>
           <AnchorHeading order={3} ta="center" id="weitere-umstaende">
@@ -669,8 +668,8 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
           tooltip={percentageTooltip()}
         />
       </div>
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
       <MiddleContent>
         <AnchorHeading order={3} ta="center" id="umstaende-bundeslaender">
           Verteilung der Umstände von Todesschüssen {data[data.length - 1].year}
@@ -679,12 +678,12 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
         <HeatMapChart data={data} />
         <HeatMapChart data={data} mobile />
       </MiddleContent>
-      <Space h="xl" />
-      <Space h="xl" />
-      <Space h="xl" />
-      <Space h="xl" />
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
+      <div className="h-6" />
+      <div className="h-6" />
+      <div className="h-6" />
+      <div className="h-6" />
     </Layout>
   );
 };

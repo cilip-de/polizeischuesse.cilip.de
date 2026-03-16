@@ -1,4 +1,5 @@
-import { useMantineTheme, Badge } from "@mantine/core";
+import { Badge } from "@/components/ui/badge";
+import { colors } from "../../lib/colors";
 import * as d3Scale from "d3-scale";
 import * as d3Force from "d3-force";
 import { useMemo, useState, useRef, useEffect } from "react";
@@ -61,6 +62,18 @@ function getDayOfYear(date: Date): number {
   return Math.floor(diff / (1000 * 60 * 60 * 24));
 }
 
+const badgeColors: Record<string, string> = {
+  pink: "bg-pink-50 text-pink-700 border-pink-200",
+  grape: "bg-purple-50 text-purple-700 border-purple-200",
+  violet: "bg-violet-50 text-violet-700 border-violet-200",
+  indigo: "bg-indigo-50 text-indigo-700 border-indigo-200",
+  blue: "bg-blue-50 text-blue-700 border-blue-200",
+  cyan: "bg-cyan-50 text-cyan-700 border-cyan-200",
+  teal: "bg-teal-50 text-teal-700 border-teal-200",
+  green: "bg-green-50 text-green-700 border-green-200",
+  lime: "bg-lime-50 text-lime-700 border-lime-200",
+};
+
 // Tag configuration matching Case.tsx
 const TAG_CONFIG: { [key: string]: { label: string; color: string } } = {
   schusswechsel: { label: "Schusswechsel", color: "pink" },
@@ -75,7 +88,6 @@ const TAG_CONFIG: { [key: string]: { label: string; color: string } } = {
 };
 
 const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data, mobile = false }) => {
-  const theme = useMantineTheme();
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = useState<TooltipState>({
@@ -211,7 +223,6 @@ const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data, mobile = false }) =
               height={rowHeight}
               margin={margin}
               radius={radius}
-              theme={theme}
               mobile={mobile}
               tooltip={tooltip}
               setTooltip={setTooltip}
@@ -234,7 +245,7 @@ const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data, mobile = false }) =
               background: "white",
               border: "1px solid #dee2e6",
               borderRadius: "4px",
-              color: theme.colors.blue[6],
+              color: colors.blue[6],
               cursor: "pointer",
               fontWeight: 500,
             }}
@@ -278,16 +289,16 @@ const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data, mobile = false }) =
               <div style={{ fontWeight: 500, marginBottom: "0.35rem", fontSize: "0.9rem" }}>
                 {tooltip.data.Name && tooltip.data.Name !== "N.N." ? tooltip.data.Name : "N.N."}
               </div>
-              <div style={{ fontSize: "0.8rem", color: theme.colors.gray[7], marginBottom: "0.15rem" }}>
+              <div style={{ fontSize: "0.8rem", color: colors.gray[7], marginBottom: "0.15rem" }}>
                 {(tooltip.data.age && tooltip.data.age !== "N.N." && `${tooltip.data.age} Jahre`) || ""}
                 {tooltip.data.age && tooltip.data.age !== "N.N." && tooltip.data.sex && tooltip.data.sex !== "N.N." && ", "}
                 {(tooltip.data.sex && tooltip.data.sex !== "N.N." && tooltip.data.sex) || ""}
               </div>
-              <div style={{ fontSize: "0.8rem", color: theme.colors.gray[6], marginBottom: "0.15rem" }}>
+              <div style={{ fontSize: "0.8rem", color: colors.gray[6], marginBottom: "0.15rem" }}>
                 {tooltip.data.datePrint}
               </div>
               {tooltip.data.Ort && (
-                <div style={{ fontSize: "0.8rem", color: theme.colors.gray[6] }}>
+                <div style={{ fontSize: "0.8rem", color: colors.gray[6] }}>
                   {tooltip.data.Ort}
                   {tooltip.data.Bundesland && tooltip.data.Bundesland !== tooltip.data.Ort && `, ${tooltip.data.Bundesland}`}
                 </div>
@@ -298,7 +309,7 @@ const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data, mobile = false }) =
             {tooltip.data.tags && tooltip.data.tags.length > 0 && (
               <div style={{ display: "flex", flexDirection: "column", gap: "0.25rem", alignItems: "flex-end" }}>
                 {tooltip.data.tags.map((tag, i) => (
-                  <Badge key={i} size="xs" color={tag.color} variant="light">
+                  <Badge key={i} variant="outline" className={`text-[10px] ${badgeColors[tag.color] || ""}`}>
                     {tag.label}
                   </Badge>
                 ))}
@@ -310,9 +321,9 @@ const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data, mobile = false }) =
               style={{
                 marginTop: "0.5rem",
                 paddingTop: "0.5rem",
-                borderTop: `1px solid ${theme.colors.gray[3]}`,
+                borderTop: `1px solid ${colors.gray[3]}`,
                 fontSize: "0.85rem",
-                color: theme.colors.dark[9],
+                color: colors.dark[9],
                 lineHeight: "1.5",
               }}
             >
@@ -321,13 +332,13 @@ const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data, mobile = false }) =
                 : tooltip.data.Szenarium}
             </div>
           )}
-          <div style={{ marginTop: "0.5rem", paddingTop: "0.5rem", borderTop: `1px solid ${theme.colors.gray[3]}` }}>
+          <div style={{ marginTop: "0.5rem", paddingTop: "0.5rem", borderTop: `1px solid ${colors.gray[3]}` }}>
             <Link
               href={`/fall/${tooltip.data.Fall}`}
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                color: theme.colors.blue[6],
+                color: colors.blue[6],
                 textDecoration: "none",
                 fontSize: "0.85rem",
               }}
@@ -349,7 +360,6 @@ interface BeeswarmRowProps {
   height: number;
   margin: { top: number; right: number; bottom: number; left: number };
   radius: number;
-  theme: any;
   mobile: boolean;
   tooltip: TooltipState;
   setTooltip: (state: TooltipState) => void;
@@ -365,7 +375,6 @@ const BeeswarmRow: React.FC<BeeswarmRowProps> = ({
   height,
   margin,
   radius,
-  theme,
   mobile,
   tooltip,
   setTooltip,
@@ -538,7 +547,7 @@ const BeeswarmRow: React.FC<BeeswarmRowProps> = ({
             cx={d.x}
             cy={yPos}
             r={radius}
-            fill={theme.colors.indigo[2]}
+            fill={colors.indigo[2]}
             fillOpacity={0.8}
             stroke="#fff"
             strokeWidth={0.5}

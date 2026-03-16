@@ -1,4 +1,4 @@
-import { MultiSelect } from "@mantine/core";
+import { MultiSelect } from "@/components/ui/multi-select";
 import router from "next/router";
 import { TAGS } from "../lib/data";
 import { constructUrlWithQ } from "../lib/util";
@@ -38,7 +38,6 @@ const CategoryInput = ({
   return (
     <MultiSelect
       clearable
-      searchable
       label="Kategorie"
       placeholder="auswählen (mehrfach)"
       value={selection.tags}
@@ -50,7 +49,7 @@ const CategoryInput = ({
           { scroll: false }
         )
       }
-    ></MultiSelect>
+    />
   );
 };
 

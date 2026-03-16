@@ -435,7 +435,7 @@ test.describe('Accessibility', () => {
       } else {
         // If chart doesn't render, that's also acceptable for this test
         // as long as data is present in another form
-        const caseCards = page.locator('.mantine-Card-root');
+        const caseCards = page.locator('[data-testid="case-card"]');
         expect(await caseCards.count()).toBeGreaterThan(0);
       }
     });

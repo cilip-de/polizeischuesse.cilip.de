@@ -1,4 +1,3 @@
-import { Space } from "@mantine/core";
 import _ from "lodash";
 import AnchorHeading from "../AnchorHeading";
 import { VerticalBarChart, ChartDataItem } from "./charts";
@@ -18,7 +17,7 @@ const ShortsPerYear = ({ wData }: { wData: ChartDataItem[] }) => {
       <AnchorHeading order={3} ta="center" id="polizeischuesse-gesamt">
         Polizeischüsse {wData[wData.length - 1].value}–{wData[0].value}
       </AnchorHeading>
-      <Space h="lg" />
+      <div className="h-5" />
 
       <VerticalBarChart
         data={_.orderBy(wData, "value")}
@@ -50,8 +49,8 @@ const ShortsPerYear = ({ wData }: { wData: ChartDataItem[] }) => {
           pluralUnit: "Schüsse",
         })}
       />
-      <Space h="lg" />
-      <Space h="lg" />
+      <div className="h-5" />
+      <div className="h-5" />
     </div>
   );
 };
@@ -90,7 +89,7 @@ const SimpleChart = ({
           {data[data.length - 1].value}–{data[0].value}
         </span>
       </AnchorHeading>
-      <Space h="lg" />
+      <div className="h-5" />
 
       <VerticalBarChart
         data={_.orderBy(data, "value")}
@@ -117,8 +116,8 @@ const SimpleChart = ({
         mobile
         tooltip={barChartTooltip()}
       />
-      <Space h="lg" />
-      <Space h="lg" />
+      <div className="h-5" />
+      <div className="h-5" />
     </div>
   );
 };

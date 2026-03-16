@@ -1,4 +1,3 @@
-import { Space, Title } from "@mantine/core";
 import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -130,8 +129,8 @@ const Kontakt: NextPage = () => {
       }
       otherContent={
         <>
-          <Space h="xl" />
-          <Title order={2}>Kontakt</Title>
+          <div className="h-6" />
+          <h2 className="text-xl font-semibold">Kontakt</h2>
           <p>
             Schreibt uns bitte eine E-Mail an{" "}
             <a href="mailto:info@cilip">info@cilip.de</a> und folgt uns auf
@@ -154,8 +153,8 @@ const Kontakt: NextPage = () => {
             </a>
             .
           </p>
-          <Space />
-          <Title order={2}>RSS-Feeds</Title>
+          <div className="h-2.5" />
+          <h2 className="text-xl font-semibold">RSS-Feeds</h2>
           <Link href="/api/feed?type=shootings" passHref>
             RSS: Polizeiliche Todesschüsse
           </Link>
@@ -167,9 +166,9 @@ const Kontakt: NextPage = () => {
           <Link href="/api/feed?type=all" passHref>
             RSS: Alle Fälle
           </Link>
-          <Space h="xl" />
-          <Title order={3}>Impressum</Title>
-          <Space />
+          <div className="h-6" />
+          <h3 className="text-lg font-semibold">Impressum</h3>
+          <div className="h-2.5" />
         </>
       }
     >
@@ -207,8 +206,8 @@ const Kontakt: NextPage = () => {
         uns ausdrücklich das Recht vor, ohne Vorankündigung und ohne
         Rechtfertigung dieses Angebot zu verändern oder ganz einzustellen.
       </div>
-      <Space />
-      <Title order={2}>Datenschutzerklärung</Title>
+      <div className="h-2.5" />
+      <h2 className="text-xl font-semibold">Datenschutzerklärung</h2>
       <div dangerouslySetInnerHTML={{ __html: privacyHtml }} />
     </Layout>
   );

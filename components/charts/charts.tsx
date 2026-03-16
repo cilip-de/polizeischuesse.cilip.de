@@ -1,4 +1,4 @@
-import { useMantineTheme } from "@mantine/core";
+import { colors } from "../../lib/colors";
 import { BarDatum, BarTooltipProps, BarLegendProps, ResponsiveBar } from "@nivo/bar";
 import { ticks } from "d3-array";
 import dayjs from "dayjs";
@@ -119,7 +119,6 @@ const VerticalBarChart = ({
   tooltip: customTooltip,
   ...rest
 }: VerticalBarChartProps) => {
-  const theme = useMantineTheme();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
   const [activeBar, setActiveBar] = useState<{ indexValue: string; id: string; value: number; data: ChartDataItem } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -150,17 +149,17 @@ const VerticalBarChart = ({
           {
             id: "count",
             label: firstDataWithTooltip[0].tooltipLabel.count,
-            color: theme.colors.indigo[2],
+            color: colors.indigo[2],
           },
           {
             id: "count2",
             label: firstDataWithTooltip[0].tooltipLabel.count2,
-            color: theme.colors.indigo[1],
+            color: colors.indigo[1],
           },
           {
             id: "count3",
             label: firstDataWithTooltip[0].tooltipLabel.count3,
-            color: theme.colors.indigo[3],
+            color: colors.indigo[3],
           },
         ].filter((x) => x.label),
         anchor: "bottom-right" as const,
@@ -275,11 +274,11 @@ const VerticalBarChart = ({
             hoveredBar?.indexValue === bar.indexValue &&
             hoveredBar?.id === bar.id;
           const colorMap = {
-            count: isHovered ? theme.colors.indigo[4] : theme.colors.indigo[2],
-            count2: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
-            count3: isHovered ? theme.colors.indigo[5] : theme.colors.indigo[3],
+            count: isHovered ? colors.indigo[4] : colors.indigo[2],
+            count2: isHovered ? colors.indigo[3] : colors.indigo[1],
+            count3: isHovered ? colors.indigo[5] : colors.indigo[3],
           };
-          return colorMap[bar.id as keyof typeof colorMap] || theme.colors.indigo[2];
+          return colorMap[bar.id as keyof typeof colorMap] || colors.indigo[2];
         }}
         onMouseEnter={(datum) => setHoveredBar({ indexValue: datum.indexValue as string, id: datum.id as string })}
         onMouseLeave={() => setHoveredBar(null)}
@@ -331,7 +330,6 @@ const HorizontalBarChart = ({
   margin: customMargin,
   ...rest
 }: HorizontalBarChartProps) => {
-  const theme = useMantineTheme();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
   const [activeBar, setActiveBar] = useState<{ indexValue: string; id: string; value: number } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -362,17 +360,17 @@ const HorizontalBarChart = ({
           {
             id: "count",
             label: dataWithTooltip[0].tooltipLabel.count,
-            color: theme.colors.indigo[2],
+            color: colors.indigo[2],
           },
           {
             id: "count2",
             label: dataWithTooltip[0].tooltipLabel.count2,
-            color: theme.colors.indigo[1],
+            color: colors.indigo[1],
           },
           {
             id: "count3",
             label: dataWithTooltip[0].tooltipLabel.count3,
-            color: theme.colors.indigo[3],
+            color: colors.indigo[3],
           },
         ].filter((x) => x.label),
 
@@ -479,11 +477,11 @@ const HorizontalBarChart = ({
             hoveredBar?.indexValue === bar.indexValue &&
             hoveredBar?.id === bar.id;
           const colorMap = {
-            count: isHovered ? theme.colors.indigo[4] : theme.colors.indigo[2],
-            count2: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
-            count3: isHovered ? theme.colors.indigo[5] : theme.colors.indigo[3],
+            count: isHovered ? colors.indigo[4] : colors.indigo[2],
+            count2: isHovered ? colors.indigo[3] : colors.indigo[1],
+            count3: isHovered ? colors.indigo[5] : colors.indigo[3],
           };
-          return colorMap[bar.id as keyof typeof colorMap] || theme.colors.indigo[2];
+          return colorMap[bar.id as keyof typeof colorMap] || colors.indigo[2];
         }}
         onMouseEnter={(datum) => setHoveredBar({ indexValue: datum.indexValue as string, id: datum.id as string })}
         onMouseLeave={() => setHoveredBar(null)}
@@ -516,7 +514,6 @@ interface OverviewChartProps {
 }
 
 const OverviewChart = ({ data, hits, onClick }: OverviewChartProps) => {
-  const theme = useMantineTheme();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
 
   if (!hits || !data) {
@@ -565,11 +562,11 @@ const OverviewChart = ({ data, hits, onClick }: OverviewChartProps) => {
 
           if (x.indexValue === dayjs().year().toString()) {
             const colorMap: Record<string, string> = {
-              count: isHovered ? theme.colors.indigo[4] : theme.colors.indigo[2],
-              count2: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
-              count3: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
+              count: isHovered ? colors.indigo[4] : colors.indigo[2],
+              count2: isHovered ? colors.indigo[3] : colors.indigo[1],
+              count3: isHovered ? colors.indigo[3] : colors.indigo[1],
             };
-            return colorMap[x.id as string] || theme.colors.indigo[2];
+            return colorMap[x.id as string] || colors.indigo[2];
           }
 
           const colorMap: Record<string, string> = {
@@ -605,7 +602,6 @@ interface DowChartProps {
 const DowChart = ({ data }: DowChartProps) => {
   const dataDow = makeDowData(data);
 
-  const theme = useMantineTheme();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
   const margin = { top: 10, right: 10, bottom: 10, left: 70 };
 
@@ -626,11 +622,11 @@ const DowChart = ({ data }: DowChartProps) => {
             hoveredBar?.indexValue === bar.indexValue &&
             hoveredBar?.id === bar.id;
           const colorMap = {
-            count: isHovered ? theme.colors.indigo[4] : theme.colors.indigo[2],
-            count2: isHovered ? theme.colors.indigo[3] : theme.colors.indigo[1],
-            count3: isHovered ? theme.colors.indigo[5] : theme.colors.indigo[3],
+            count: isHovered ? colors.indigo[4] : colors.indigo[2],
+            count2: isHovered ? colors.indigo[3] : colors.indigo[1],
+            count3: isHovered ? colors.indigo[5] : colors.indigo[3],
           };
-          return colorMap[bar.id as keyof typeof colorMap] || theme.colors.indigo[2];
+          return colorMap[bar.id as keyof typeof colorMap] || colors.indigo[2];
         }}
         onMouseEnter={(datum) => setHoveredBar({ indexValue: datum.indexValue as string, id: datum.id as string })}
         onMouseLeave={() => setHoveredBar(null)}

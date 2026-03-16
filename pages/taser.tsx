@@ -1,4 +1,4 @@
-import { Center, Grid, Space, Text, Collapse, Anchor } from "@mantine/core";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { ResponsiveLine, LineSeries, Point } from "@nivo/line";
 import { csvParse } from "d3-dsv";
 import fs from "fs";
@@ -221,9 +221,9 @@ const Taser: NextPage<TaserProps> = ({ data, stats }) => {
         />
       }
     >
-      <Grid>
-        <Grid.Col span={4}></Grid.Col>
-        <Grid.Col span={{ base: 12, md: 8 }}>
+      <div className="grid grid-cols-12 gap-4">
+        <div className="col-span-4"></div>
+        <div className="col-span-12 lg:col-span-8">
           <div>
             Die Taser-Statistik stellen wir gesondert dar, denn die
             Elektroschocks führen zu deutlich anderen Todesursachen als Munition
@@ -238,9 +238,9 @@ const Taser: NextPage<TaserProps> = ({ data, stats }) => {
             getasert wurden; die Bericht dazu lassen auch oft auf eine
             psychische Ausnahmesituation bzw. Drogenkonsum schließen.
           </div>
-        </Grid.Col>
-      </Grid>
-      <Space />
+        </div>
+      </div>
+      <div className="h-2.5" />
       <AnchorHeading style={{ marginTop: "1rem" }} order={2} id="statistik">
         Taser-Statistik
       </AnchorHeading>
@@ -264,49 +264,48 @@ const Taser: NextPage<TaserProps> = ({ data, stats }) => {
                   flexShrink: 0,
                 }}
               />
-              <Text size="sm">{serie.id}</Text>
+              <p className="text-sm">{serie.id}</p>
             </div>
           ))}
         </div>
       </div>
-      <div style={{ marginTop: "1rem", textAlign: "right" }}>
-        <Anchor
-          component="button"
-          type="button"
-          onClick={() => setOpened((o) => !o)}
-          size="sm"
-        >
-          {opened ? "▼" : "▶"} Informationen zur Datenquelle
-        </Anchor>
-        <Collapse in={opened}>
-          <Text size="sm" c="gray" ta="left" style={{ marginTop: "0.5rem" }}>
-            Seit 2020 führt das Polizeitechnische Institut der Deutschen
-            Hochschule der Polizei nach einem Beschluss der IMK Informationen zu
-            Taser-Einsätzen aus Ländern und Bund zusammen. Diese konnten wir durch
-            eine IFG-Anfrage befreien. Unsere Gesamtzahlen stammen aus
-            Einzelangaben zu: <b>Spezialeinheiten</b> (alle Bundesländer,
-            Bundespolizei und Zoll), <b>Streifendienst</b> (Stand Mai 2025:
-            Bayern, Brandenburg, Bremen, Nordrhein-Westfalen, Rheinland-Pfalz,
-            Saarland, Schleswig-Holstein), <b>Pilotprojekte</b> (Stand Mai 2025:
-            Berlin, Hamburg, Hessen, Schleswig-Holstein, Bundespolizei).
-            Dokumentiert wird darin aber <b>nur das Ziehen der Waffe</b> - die
-            Zahl von Androhungen des Tasereinsatzes ohne anschließendes Auslösen
-            lag etwa in NRW im Jahr 2023 um den Faktor 3 höher. In den Statistiken
-            werden (anders als zum Schusswaffengebrauch) auch Alter, Geschlecht
-            und Alkohol- oder Drogenkonsum der betroffenen Person genannt,
-            außerdem Verletzungen und eine anschließend notwendige medizinische
-            Versorgung. Dass Menschen auch nach PsychKG eingewiesen werden,
-            verweist darauf, dass sie nicht zwingend wegen des Taser-Einsatzes
-            behandelt werden mussten. Siehe auch die{" "}
-            <a href="#dokumente">Dokumente weiter unten</a>.
-          </Text>
-        </Collapse>
-      </div>
-      <Space />
+      <Collapsible open={opened} onOpenChange={setOpened}>
+        <div style={{ marginTop: "1rem", textAlign: "right" }}>
+          <CollapsibleTrigger asChild>
+            <button type="button" className="text-sm underline cursor-pointer text-blue-600 bg-transparent border-none font-inherit p-0">
+              {opened ? "▼" : "▶"} Informationen zur Datenquelle
+            </button>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <p className="text-sm text-gray-500 text-left" style={{ marginTop: "0.5rem" }}>
+              Seit 2020 führt das Polizeitechnische Institut der Deutschen
+              Hochschule der Polizei nach einem Beschluss der IMK Informationen zu
+              Taser-Einsätzen aus Ländern und Bund zusammen. Diese konnten wir durch
+              eine IFG-Anfrage befreien. Unsere Gesamtzahlen stammen aus
+              Einzelangaben zu: <b>Spezialeinheiten</b> (alle Bundesländer,
+              Bundespolizei und Zoll), <b>Streifendienst</b> (Stand Mai 2025:
+              Bayern, Brandenburg, Bremen, Nordrhein-Westfalen, Rheinland-Pfalz,
+              Saarland, Schleswig-Holstein), <b>Pilotprojekte</b> (Stand Mai 2025:
+              Berlin, Hamburg, Hessen, Schleswig-Holstein, Bundespolizei).
+              Dokumentiert wird darin aber <b>nur das Ziehen der Waffe</b> - die
+              Zahl von Androhungen des Tasereinsatzes ohne anschließendes Auslösen
+              lag etwa in NRW im Jahr 2023 um den Faktor 3 höher. In den Statistiken
+              werden (anders als zum Schusswaffengebrauch) auch Alter, Geschlecht
+              und Alkohol- oder Drogenkonsum der betroffenen Person genannt,
+              außerdem Verletzungen und eine anschließend notwendige medizinische
+              Versorgung. Dass Menschen auch nach PsychKG eingewiesen werden,
+              verweist darauf, dass sie nicht zwingend wegen des Taser-Einsatzes
+              behandelt werden mussten. Siehe auch die{" "}
+              <a href="#dokumente">Dokumente weiter unten</a>.
+            </p>
+          </CollapsibleContent>
+        </div>
+      </Collapsible>
+      <div className="h-2.5" />
       <AnchorHeading style={{ marginTop: "2rem" }} order={2} id="chronik">
         Chronik der Tasertoten
       </AnchorHeading>
-      <Space />
+      <div className="h-2.5" />
       <div>
         {data.map((x: ProcessedDataItem) => (
           <Case item={x} key={x.key} isTaser />
@@ -316,9 +315,9 @@ const Taser: NextPage<TaserProps> = ({ data, stats }) => {
         Dokumente zur Taser-Statistik
       </AnchorHeading>
       <div style={{ textAlign: "center", marginTop: "2rem" }}>
-        <Grid>
+        <div className="grid grid-cols-12 gap-4">
           {links.map((x) => (
-            <Grid.Col span={4} key={x[1]}>
+            <div className="col-span-4" key={x[1]}>
               <a
                 target="_blank"
                 href={x[0]}
@@ -327,18 +326,16 @@ const Taser: NextPage<TaserProps> = ({ data, stats }) => {
               >
                 {x[1]}
               </a>
-            </Grid.Col>
+            </div>
           ))}
-        </Grid>
+        </div>
       </div>
-      <Space h="xl" />
-      <Space h="xl" />
+      <div className="h-6" />
+      <div className="h-6" />
 
-      <Center>
-        <Text
-          size="sm"
-          c="gray"
-          ta="center"
+      <div className="flex items-center justify-center">
+        <p
+          className="text-sm text-gray-500 text-center"
           style={{ maxWidth: "25rem" }}
         >
           Alle Daten auf dieser Webseite sind unter der{" "}
@@ -352,8 +349,8 @@ const Taser: NextPage<TaserProps> = ({ data, stats }) => {
           Lizenz veröffentlicht. Veröffentlichungen müssen als Quelle
           &quot;Bürgerrechte & Polizei/CILIP&quot; angeben und auf
           polizeischuesse.cilip.de verlinken.
-        </Text>
-      </Center>
+        </p>
+      </div>
     </Layout>
   );
 };

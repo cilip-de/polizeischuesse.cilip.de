@@ -1,10 +1,7 @@
-import "@mantine/core/styles.css";
-import { MantineProvider } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useState } from "react";
-import { theme } from "../theme";
 import "../styles/globals.css";
 
 export default function App(props: AppProps) {
@@ -25,7 +22,6 @@ export default function App(props: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MantineProvider theme={theme}>
       <Head>
         <title>Polizeiliche Todesschüsse</title>
         <link
@@ -57,7 +53,6 @@ export default function App(props: AppProps) {
       </Head>
 
       <Component {...pageProps} />
-    </MantineProvider>
     </QueryClientProvider>
   );
 }

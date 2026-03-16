@@ -1,4 +1,13 @@
-import { Center, Grid, Pagination, Skeleton, Text } from "@mantine/core";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis,
+} from "@/components/ui/pagination";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/router";
 import { useMemo, useState, useCallback } from "react";
 import { PAGE_SIZE, type ProcessedDataItem } from "../lib/data";
@@ -98,13 +107,78 @@ const CaseList = ({ maxCases }: CaseListProps) => {
   const isFiltered = selection.year || selection.state || selection.place ||
                      selection.weapon || selection.age || selection.tags.length > 0 || q;
 
+  function renderPagination(className: string) {
+    const currentPage = selection.p;
+    const goToPage = (page: number) =>
+      router.push(
+        constructUrlWithQ(q, { ...selection, p: page }),
+        undefined,
+        { scroll: false }
+      );
+
+    // Generate page numbers with ellipsis
+    const getPages = () => {
+      const pages: (number | "ellipsis")[] = [];
+      const delta = 1;
+      const left = Math.max(2, currentPage - delta);
+      const right = Math.min(totalPages - 1, currentPage + delta);
+
+      pages.push(1);
+      if (left > 2) pages.push("ellipsis");
+      for (let i = left; i <= right; i++) pages.push(i);
+      if (right < totalPages - 1) pages.push("ellipsis");
+      if (totalPages > 1) pages.push(totalPages);
+
+      return pages;
+    };
+
+    return (
+      <Pagination className={className}>
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              onClick={() => currentPage > 1 && goToPage(currentPage - 1)}
+              aria-label="Vorherige Seite"
+              className={currentPage <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            />
+          </PaginationItem>
+          {getPages().map((page, i) =>
+            page === "ellipsis" ? (
+              <PaginationItem key={`e${i}`}>
+                <PaginationEllipsis />
+              </PaginationItem>
+            ) : (
+              <PaginationItem key={page}>
+                <PaginationLink
+                  isActive={page === currentPage}
+                  onClick={() => goToPage(page)}
+                  aria-label={`Seite ${page}`}
+                  className="cursor-pointer"
+                >
+                  {page}
+                </PaginationLink>
+              </PaginationItem>
+            )
+          )}
+          <PaginationItem>
+            <PaginationNext
+              onClick={() => currentPage < totalPages && goToPage(currentPage + 1)}
+              aria-label="Nächste Seite"
+              className={currentPage >= totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    );
+  }
+
   return (
     <div style={{ paddingBottom: "2rem" }}>
-      <Grid>
-        <Grid.Col span={2} className="only-mobile"></Grid.Col>
-        <Grid.Col span={{ base: 12, xs: 8 }} className="only-mobile">
+      <div className="grid grid-cols-12 gap-4">
+        <div className="col-span-2 only-mobile"></div>
+        <div className="col-span-12 sm:col-span-8 only-mobile">
           {geoLoading ? (
-            <Skeleton height={200} />
+            <Skeleton className="h-[200px]" />
           ) : (
             <Map
               makersData={displayMarkers}
@@ -117,62 +191,62 @@ const CaseList = ({ maxCases }: CaseListProps) => {
               }
             />
           )}
-        </Grid.Col>
-        <Grid.Col span={2} className="only-mobile"></Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 8 }}>
+        </div>
+        <div className="col-span-2 only-mobile"></div>
+        <div className="col-span-12 md:col-span-8">
           <AnchorHeading order={2} id="chronik">
             Chronik
           </AnchorHeading>
           <div role="search" aria-label="Suche und Filter für polizeiliche Todesschüsse">
-            <Grid style={{ marginBottom: "1rem", marginTop: "0.5rem" }}>
+            <div className="grid grid-cols-12 gap-4" style={{ marginBottom: "1rem", marginTop: "0.5rem" }}>
               {[
                 ["year", "Jahr"],
                 ["state", "Bundesland"],
                 ["place", "Ort"],
               ].map(([key, label]) => (
-                <Grid.Col span={4} key={key}>
+                <div className="col-span-4" key={key}>
                   <SelectInput
                     skey={key}
                     label={label}
                     selection={selection}
                     data={options[key as keyof typeof options] || []}
                   />
-                </Grid.Col>
+                </div>
               ))}
-            </Grid>
-            <Grid style={{ marginBottom: "1rem" }}>
-              <Grid.Col span={8}>
+            </div>
+            <div className="grid grid-cols-12 gap-4" style={{ marginBottom: "1rem" }}>
+              <div className="col-span-8">
                 <SearchInput
                   q={q}
                   selection={selection}
                   setSearchedData={handleSearchData}
                   setSearchedQ={handleSearchQ}
                 />
-              </Grid.Col>
-              <Grid.Col span={4}>
+              </div>
+              <div className="col-span-4">
                 <SelectInput
                   skey={"weapon"}
                   label={"Bewaffnung"}
                   selection={selection}
                   data={options.weapon || []}
                 />
-              </Grid.Col>
-            </Grid>
-            <Grid style={{ marginBottom: "1rem" }}>
-              <Grid.Col span={{ base: 12, sm: 8 }}>
+              </div>
+            </div>
+            <div className="grid grid-cols-12 gap-4" style={{ marginBottom: "1rem" }}>
+              <div className="col-span-12 md:col-span-8">
                 <CategoryInput q={q} selection={selection} />
-              </Grid.Col>
-              <Grid.Col span={{ base: 12, sm: 4 }}>
+              </div>
+              <div className="col-span-12 md:col-span-4">
                 <SelectInput
                   skey={"age"}
                   label={"Alter"}
                   selection={selection}
                   data={options.age || []}
                 />
-              </Grid.Col>
-            </Grid>
+              </div>
+            </div>
             {statsLoading ? (
-              <Skeleton height={120} />
+              <Skeleton className="h-[120px]" />
             ) : statsData ? (
               <OverviewChartFromStats
                 yearCounts={statsData.yearCounts}
@@ -186,10 +260,10 @@ const CaseList = ({ maxCases }: CaseListProps) => {
               />
             ) : null}
           </div>
-        </Grid.Col>
-        <Grid.Col span={4} className="only-non-mobile">
+        </div>
+        <div className="col-span-4 only-non-mobile">
           {geoLoading ? (
-            <Skeleton height={300} />
+            <Skeleton className="h-[300px]" />
           ) : (
             <Map
               makersData={displayMarkers}
@@ -202,8 +276,8 @@ const CaseList = ({ maxCases }: CaseListProps) => {
               }
             />
           )}
-        </Grid.Col>
-      </Grid>
+        </div>
+      </div>
 
       <div style={{ minHeight: "100rem" }}>
         <div
@@ -212,37 +286,38 @@ const CaseList = ({ maxCases }: CaseListProps) => {
           aria-live="polite"
           aria-atomic="true"
         >
-          <Center style={{ marginBottom: "1rem", marginTop: "1rem" }}>
+          <div className="flex items-center justify-center" style={{ marginBottom: "1rem", marginTop: "1rem" }}>
             {casesLoading ? (
-              <Skeleton height={20} width={200} />
+              <Skeleton className="h-5 w-[200px]" />
             ) : (
               <>
                 {enoughChars && total > 1 && total !== maxCases && (
-                  <Text>
+                  <p>
                     zeige {total} von {maxCases} polizeilichen Todesschüsse
-                  </Text>
+                  </p>
                 )}
                 {enoughChars && total > 1 && total === maxCases && (
-                  <Text>{total} polizeiliche Todesschüsse</Text>
+                  <p>{total} polizeiliche Todesschüsse</p>
                 )}
                 {enoughChars && total === 1 && (
-                  <Text>ein polizeilicher Todesschuss</Text>
+                  <p>ein polizeilicher Todesschuss</p>
                 )}
                 {enoughChars && total === 0 && (
-                  <Text>
+                  <p>
                     kein polizeilicher Todesschuss entfällt auf die Auswahl
-                  </Text>
+                  </p>
                 )}
                 {!enoughChars && (
-                  <Text>Bitte mehr Zeichen für die Suche eingeben</Text>
+                  <p>Bitte mehr Zeichen für die Suche eingeben</p>
                 )}
               </>
             )}
-          </Center>
+          </div>
         </div>
-        <Grid className="only-non-mobile">
-          <Grid.Col span={8}>
-            <Center
+        <div className="grid grid-cols-12 gap-4 only-non-mobile">
+          <div className="col-span-8">
+            <div
+              className="flex items-center justify-center"
               style={{
                 marginLeft: ".5rem",
                 marginBottom: "2rem",
@@ -253,56 +328,56 @@ const CaseList = ({ maxCases }: CaseListProps) => {
               aria-atomic="true"
             >
               {casesLoading ? (
-                <Skeleton height={20} width={250} />
+                <Skeleton className="h-5 w-[250px]" />
               ) : (
                 <>
                   {enoughChars && total > 1 && total !== maxCases && (
-                    <Text c="gray">
+                    <p className="text-gray-500">
                       zeige {total} von {maxCases} polizeilichen Todesschüsse
-                    </Text>
+                    </p>
                   )}
                   {enoughChars && total > 1 && total === maxCases && (
-                    <Text c="gray">{total} polizeiliche Todesschüsse</Text>
+                    <p className="text-gray-500">{total} polizeiliche Todesschüsse</p>
                   )}
                   {enoughChars && total === 1 && (
-                    <Text c="gray">ein polizeilicher Todesschuss</Text>
+                    <p className="text-gray-500">ein polizeilicher Todesschuss</p>
                   )}
                   {enoughChars && total === 0 && (
-                    <Text c="gray">
+                    <p className="text-gray-500">
                       kein polizeilicher Todesschuss entfält auf die Auswahl
-                    </Text>
+                    </p>
                   )}
                   {!enoughChars && (
-                    <Text c="gray">
+                    <p className="text-gray-500">
                       Bitte mehr Zeichen für die Suche eingeben
-                    </Text>
+                    </p>
                   )}
                 </>
               )}
-            </Center>
-          </Grid.Col>
-          <Grid.Col span={4}>
+            </div>
+          </div>
+          <div className="col-span-4">
             <div style={{ marginBottom: "2rem", marginTop: "0rem" }}>
               {geoLoading ? (
-                <Skeleton height={20} width={150} style={{ margin: "0 auto" }} />
+                <Skeleton className="h-5 w-[150px] mx-auto" />
               ) : (
-                <Text ta="center" c="gray">
+                <p className="text-center text-gray-500">
                   {displayMarkers.length !== totalLocations &&
                     displayMarkers.length > 1 &&
                     `an ${displayMarkers.length} von ${totalLocations} Orten`}
                   {displayMarkers.length === totalLocations &&
                     `an ${totalLocations} Orten`}
                   {displayMarkers.length === 1 && `an einem Ort`}
-                </Text>
+                </p>
               )}
             </div>
-          </Grid.Col>
-        </Grid>
+          </div>
+        </div>
         {enoughChars && isFiltered && (
           <>
             {/* Desktop: button centered, toggle absolutely positioned right */}
             <div className="only-non-mobile" style={{ position: "relative", marginBottom: "2rem", width: "100%" }}>
-              <Center>
+              <div className="flex items-center justify-center">
                 <button
                   onClick={() => {
                     router.push("/", undefined, { scroll: false });
@@ -322,7 +397,7 @@ const CaseList = ({ maxCases }: CaseListProps) => {
                 >
                   Auswahl zurücksetzen
                 </button>
-              </Center>
+              </div>
               {q && q.length >= 3 && (
                 <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}>
                   <SortToggle
@@ -370,7 +445,7 @@ const CaseList = ({ maxCases }: CaseListProps) => {
         {casesLoading ? (
           // Loading skeleton
           Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} height={150} mb="md" />
+            <Skeleton key={i} className="h-[150px] mb-4" />
           ))
         ) : (
           <>
@@ -379,59 +454,10 @@ const CaseList = ({ maxCases }: CaseListProps) => {
         )}
 
         {enoughChars && total > PAGE_SIZE && !casesLoading && (
-          <Center>
-            <Pagination
-              className="only-non-mobile"
-              total={totalPages}
-              value={selection.p}
-              onChange={(newPage) =>
-                router.push(
-                  constructUrlWithQ(q, {
-                    ...selection,
-                    p: newPage,
-                  }),
-                  undefined,
-                  { scroll: false }
-                )
-              }
-              getControlProps={(control) => {
-                if (control === 'previous') return { 'aria-label': 'Vorherige Seite' };
-                if (control === 'next') return { 'aria-label': 'Nächste Seite' };
-                if (control === 'first') return { 'aria-label': 'Erste Seite' };
-                if (control === 'last') return { 'aria-label': 'Letzte Seite' };
-                return {};
-              }}
-              getItemProps={(page) => ({
-                'aria-label': `Seite ${page}`,
-              })}
-            />
-            <Pagination
-              className="only-mobile"
-              size={"sm"}
-              total={totalPages}
-              value={selection.p}
-              onChange={(newPage) =>
-                router.push(
-                  constructUrlWithQ(q, {
-                    ...selection,
-                    p: newPage,
-                  }),
-                  undefined,
-                  { scroll: false }
-                )
-              }
-              getControlProps={(control) => {
-                if (control === 'previous') return { 'aria-label': 'Vorherige Seite' };
-                if (control === 'next') return { 'aria-label': 'Nächste Seite' };
-                if (control === 'first') return { 'aria-label': 'Erste Seite' };
-                if (control === 'last') return { 'aria-label': 'Letzte Seite' };
-                return {};
-              }}
-              getItemProps={(page) => ({
-                'aria-label': `Seite ${page}`,
-              })}
-            />
-          </Center>
+          <div className="flex items-center justify-center">
+            {renderPagination("only-non-mobile")}
+            {renderPagination("only-mobile")}
+          </div>
         )}
       </div>
     </div>
