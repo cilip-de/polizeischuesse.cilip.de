@@ -305,7 +305,7 @@ const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseList
             )}
           </div>
         </div>
-        <div className="col-span-4 hidden md:block">
+        <div className="col-span-4 hidden md:block mb-8">
           {geoLoading ? (
             <Skeleton className="h-[300px]" />
           ) : (
