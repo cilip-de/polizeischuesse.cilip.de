@@ -68,6 +68,14 @@ const constructHighlights = (
   return text;
 };
 
+const getDomain = (url: string): string => {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+};
+
 const textToLinks = (text: string): React.ReactNode => {
   const links = text
     .trim()
@@ -79,19 +87,60 @@ const textToLinks = (text: string): React.ReactNode => {
   return (
     <>
       {links.map((x, i) => (
-        <a
-          target="_blank"
-          rel="noreferrer"
-          key={x}
-          style={{ color: "inherit", textDecoration: "inherit" }}
-          href={x}
-        >
-          [{i + 1}]
-        </a>
+        <React.Fragment key={x}>
+          {i > 0 && ", "}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={x}
+            style={{ color: "inherit" }}
+          >
+            {getDomain(x)}
+          </a>
+        </React.Fragment>
       ))}
     </>
   );
 };
+
+/**
+ * CSS-only expandable wrapper using checkbox + CSS :checked sibling selectors.
+ * No useState needed — works with React Compiler and SSR.
+ */
+function Expandable({ children, collapsedHeight = 240 }: { children: React.ReactNode; collapsedHeight?: number }) {
+  const id = React.useId();
+  return (
+    <div style={{ position: "relative" }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        [data-expand-id="${id}"]:checked ~ .expand-collapsed { display: none; }
+        [data-expand-id="${id}"]:not(:checked) ~ .expand-expanded { display: none; }
+      ` }} />
+      <input type="checkbox" id={id} data-expand-id={id} style={{ position: "absolute", opacity: 0, pointerEvents: "none" }} />
+
+      {/* Collapsed view */}
+      <div className="expand-collapsed">
+        <div style={{ maxHeight: collapsedHeight, overflow: "hidden", position: "relative" }}>
+          {children}
+          <div style={{
+            position: "absolute", bottom: 0, left: 0, right: 0, height: "4rem",
+            background: "linear-gradient(transparent, white)", pointerEvents: "none",
+          }} />
+        </div>
+        <label htmlFor={id} style={{ display: "block", textAlign: "center", color: "#228be6", fontSize: "0.875rem", margin: "0.25rem 0 0", cursor: "pointer" }}>
+          ▼ Mehr anzeigen
+        </label>
+      </div>
+
+      {/* Expanded view */}
+      <div className="expand-expanded">
+        {children}
+        <label htmlFor={id} style={{ display: "block", textAlign: "center", color: "#228be6", fontSize: "0.875rem", margin: "0.25rem 0 0", cursor: "pointer" }}>
+          ▲ Weniger anzeigen
+        </label>
+      </div>
+    </div>
+  );
+}
 
 interface CaseProps {
   item: Item;
@@ -120,53 +169,35 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
     </a>
   );
 
-  const cardContent = (
+  const cardInner = (
     <>
       <div className="flex flex-wrap items-center gap-1.5">
         {item.schusswechsel && (
-          <Badge className="border-transparent rounded-full" style={badgeStyle("pink")}>
-            Schusswechsel
-          </Badge>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("pink")}>Schusswechsel</Badge>
         )}
         {item.sek && (
-          <Badge className="border-transparent rounded-full" style={badgeStyle("grape")}>
-            SEK-Beteiligung
-          </Badge>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("grape")}>SEK-Beteiligung</Badge>
         )}
         {item.vgbeamte && (
-          <Badge className="border-transparent rounded-full" style={badgeStyle("violet")}>
-            Verletzte/getötete Beamte
-          </Badge>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("violet")}>Verletzte/getötete Beamte</Badge>
         )}
         {item.vbaktion && (
-          <Badge className="border-transparent rounded-full" style={badgeStyle("indigo")}>
-            Vorbereitete Polizeiaktion
-          </Badge>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("indigo")}>Vorbereitete Polizeiaktion</Badge>
         )}
         {item.psych && (
-          <Badge className="border-transparent rounded-full" style={badgeStyle("blue")}>
-            Mutm. psych. Ausnahmesituation
-          </Badge>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("blue")}>Mutm. psych. Ausnahmesituation</Badge>
         )}
         {item.alkdrog && (
-          <Badge className="border-transparent rounded-full" style={badgeStyle("cyan")}>
-            Mutm. Alkohol- o. Drogenkonsum
-          </Badge>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("cyan")}>Mutm. Alkohol- o. Drogenkonsum</Badge>
         )}
         {item.famgew && (
-          <Badge className="border-transparent rounded-full" style={badgeStyle("teal")}>
-            Mutm. famil. oder häusl. Gewalt
-          </Badge>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("teal")}>Mutm. famil. oder häusl. Gewalt</Badge>
         )}
         {item.unschuss && (
-          <Badge className="border-transparent rounded-full" style={badgeStyle("green")}>
-            Unbeabsichtigte Schussabgabe
-          </Badge>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("green")}>Unbeabsichtigte Schussabgabe</Badge>
         )}
         {item.indoor && (
-          <Badge className="border-transparent rounded-full" style={badgeStyle("lime")}>
-            Innenraum
-          </Badge>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("lime")}>Innenraum</Badge>
         )}
       </div>
       <div className="h-3" />
@@ -186,13 +217,8 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
             {item.state !== item.place && `, ${item.state}`}
           </p>
           <p className="hidden text-sm text-gray-500 leading-normal">
-            {item.numShots.length > 0 &&
-              item.numShots !== "0" &&
-              item.numShots !== "1" &&
-              `Mit ${item.numShots} Schüssen`}
-            {item.numShots.length > 0 &&
-              item.numShots === "1" &&
-              `Mit einem Schuss`}
+            {item.numShots.length > 0 && item.numShots !== "0" && item.numShots !== "1" && `Mit ${item.numShots} Schüssen`}
+            {item.numShots.length > 0 && item.numShots === "1" && `Mit einem Schuss`}
           </p>
           <p className="text-sm text-gray-500 leading-normal">
             {item.weapon && `Bewaffnet mit ${item.weapon}`}
@@ -201,9 +227,7 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
           <p className="text-sm text-gray-500">
             Quellen: {textToLinks(item["Quellen"])}
           </p>
-          {detailLink && (
-            <div className="h-2" />
-          )}
+          {detailLink && <div className="h-2" />}
           {detailLink}
         </div>
         <div className="col-span-12 md:col-span-8">
@@ -215,62 +239,16 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
     </>
   );
 
-  if (!isLong) {
-    return (
-      <Card
-        className="shadow-sm border-gray-200 p-4 mb-8 relative"
-        data-testid="case-card"
-      >
-
-        {cardContent}
-      </Card>
-    );
-  }
-
-  // Long cards: use <details> for native expand/collapse (no JS needed)
   return (
     <Card
       className="shadow-sm border-gray-200 p-4 mb-8 relative"
       data-testid="case-card"
     >
-      <details>
-        <summary
-          style={{
-            listStyle: "none",
-            cursor: "pointer",
-          }}
-        >
-          <div style={{ maxHeight: 240, overflow: "hidden", position: "relative" }}>
-            {cardContent}
-            <div
-              style={{
-                position: "absolute",
-                bottom: 0,
-                left: 0,
-                right: 0,
-                height: "4rem",
-                background: "linear-gradient(transparent, white)",
-                pointerEvents: "none",
-              }}
-            />
-          </div>
-          <p style={{ textAlign: "center", color: "#228be6", fontSize: "0.875rem", margin: "0.25rem 0 0" }}>
-            ▼ Mehr anzeigen
-          </p>
-        </summary>
-        {cardContent}
-        <p style={{ textAlign: "center", color: "#228be6", fontSize: "0.875rem", margin: "0.25rem 0 0", cursor: "pointer" }}
-           onClick={(e) => {
-             const details = (e.target as HTMLElement).closest("details");
-             if (details) {
-               details.removeAttribute("open");
-               details.closest("[data-testid='case-card']")?.scrollIntoView({ behavior: "smooth", block: "start" });
-             }
-           }}
-        >
-          ▲ Weniger anzeigen
-        </p>
-      </details>
+      {isLong ? (
+        <Expandable>{cardInner}</Expandable>
+      ) : (
+        cardInner
+      )}
     </Card>
   );
 };
