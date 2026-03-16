@@ -68,8 +68,8 @@ const SearchInput = ({
   }, [q]);
 
   return (
-    <div>
-      <Label htmlFor="search">
+    <div className="flex flex-col gap-1.5">
+      <Label htmlFor="search" className="text-sm font-medium">
         {showHint ? (
           <>
             Suche{" "}
