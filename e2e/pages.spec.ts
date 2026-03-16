@@ -18,8 +18,8 @@ test.describe("Page Navigation", () => {
       await helpers.waitForPageReady(page);
 
       const link = inNav
-        ? page.locator(`nav a[href="${url}"]`).locator('visible=true').first()
-        : page.locator(`a:has-text("${text}")`).locator('visible=true').first();
+        ? page.locator(`a[href="${url}"]:visible`).first()
+        : page.locator(`a:has-text("${text}"):visible`).first();
       await link.click({ timeout: 30000 });
       await expect(page).toHaveURL(`http://localhost:3000${url}`, { timeout: 10000 });
       await expect(page).toHaveTitle(title);
@@ -126,7 +126,7 @@ test.describe("Page Navigation", () => {
       await page.goto("http://localhost:3000/");
       await helpers.waitForPageReady(page);
 
-      const link = page.locator(`nav a[href="${expectedPath}"]`).locator('visible=true').first();
+      const link = page.locator(`a[href="${expectedPath}"]:visible`).first();
       await link.click({ timeout: 30000 });
       await expect(page).toHaveURL(new RegExp(expectedPath), { timeout: 15000 });
     }
