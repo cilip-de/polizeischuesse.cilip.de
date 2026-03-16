@@ -101,7 +101,7 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
 
   return (
     <Card
-      className="shadow-sm border-gray-200 p-4 mb-8 relative"
+      className="shadow-sm border-gray-200 p-4 mb-8 relative overflow-hidden max-h-72"
       data-testid="case-card"
     >
       <div className="flex flex-wrap items-center gap-1.5">
@@ -186,11 +186,11 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
           <div></div>
         </div>
         <div className="col-span-12 md:col-span-8">
-          <p className="leading-normal mb-2">
+          <p className="leading-normal mb-2 line-clamp-6">
             {highlights["Szenarium"]}
           </p>
           {!hideLink && (
-            <div style={{ position: "absolute", bottom: 0, right: 10 }}>
+            <div className="absolute bottom-0 right-2.5">
               <p className="text-right text-gray-400">
                 <a
                   href={`/fall/${item["Fall"]}`}
