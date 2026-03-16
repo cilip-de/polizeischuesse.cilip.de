@@ -231,7 +231,7 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
           {detailLink}
         </div>
         <div className="col-span-12 md:col-span-8">
-          <p className="leading-normal mb-2">
+          <p className="text-sm leading-normal mb-2">
             {highlights["Szenarium"]}
           </p>
         </div>
