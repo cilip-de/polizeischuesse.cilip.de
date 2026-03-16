@@ -63,15 +63,15 @@ function getDayOfYear(date: Date): number {
 }
 
 const badgeColors: Record<string, string> = {
-  pink: "bg-pink-50 text-pink-700 border-pink-200",
-  grape: "bg-purple-50 text-purple-700 border-purple-200",
-  violet: "bg-violet-50 text-violet-700 border-violet-200",
-  indigo: "bg-indigo-50 text-indigo-700 border-indigo-200",
-  blue: "bg-blue-50 text-blue-700 border-blue-200",
-  cyan: "bg-cyan-50 text-cyan-700 border-cyan-200",
-  teal: "bg-teal-50 text-teal-700 border-teal-200",
-  green: "bg-green-50 text-green-700 border-green-200",
-  lime: "bg-lime-50 text-lime-700 border-lime-200",
+  pink: "bg-pink-100 text-pink-800 border-transparent",
+  grape: "bg-purple-100 text-purple-800 border-transparent",
+  violet: "bg-violet-100 text-violet-800 border-transparent",
+  indigo: "bg-indigo-100 text-indigo-800 border-transparent",
+  blue: "bg-blue-100 text-blue-800 border-transparent",
+  cyan: "bg-cyan-100 text-cyan-800 border-transparent",
+  teal: "bg-teal-100 text-teal-800 border-transparent",
+  green: "bg-green-100 text-green-800 border-transparent",
+  lime: "bg-lime-100 text-lime-800 border-transparent",
 };
 
 // Tag configuration matching Case.tsx

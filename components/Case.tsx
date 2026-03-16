@@ -5,16 +5,16 @@ import type { ProcessedDataItem } from "../lib/data";
 import { SEARCH_KEYES } from "../lib/data";
 import { isNumber } from "../lib/util";
 
-const badgeColors: Record<string, string> = {
-  pink: "bg-pink-50 text-pink-700 border-pink-200",
-  grape: "bg-purple-50 text-purple-700 border-purple-200",
-  violet: "bg-violet-50 text-violet-700 border-violet-200",
-  indigo: "bg-indigo-50 text-indigo-700 border-indigo-200",
-  blue: "bg-blue-50 text-blue-700 border-blue-200",
-  cyan: "bg-cyan-50 text-cyan-700 border-cyan-200",
-  teal: "bg-teal-50 text-teal-700 border-teal-200",
-  green: "bg-green-50 text-green-700 border-green-200",
-  lime: "bg-lime-50 text-lime-700 border-lime-200",
+const badgeStyles: Record<string, React.CSSProperties> = {
+  pink: { backgroundColor: "#fff0f6", color: "#a61e4d" },
+  grape: { backgroundColor: "#f8f0fc", color: "#862e9c" },
+  violet: { backgroundColor: "#f3f0ff", color: "#5f3dc4" },
+  indigo: { backgroundColor: "#edf2ff", color: "#364fc7" },
+  blue: { backgroundColor: "#e7f5ff", color: "#1864ab" },
+  cyan: { backgroundColor: "#e3fafc", color: "#0b7285" },
+  teal: { backgroundColor: "#e6fcf5", color: "#087f5b" },
+  green: { backgroundColor: "#ebfbee", color: "#2b8a3e" },
+  lime: { backgroundColor: "#f4fce3", color: "#5c940d" },
 };
 
 // https://dev.to/noclat/using-fuse-js-with-react-to-build-an-advanced-search-with-highlighting-4b93
@@ -101,52 +101,52 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
 
   return (
     <Card
-      className="shadow-sm p-3 mb-8 relative"
+      className="shadow-sm border-gray-200 p-4 mb-8 relative"
       data-testid="case-card"
     >
-      <div className="flex flex-wrap items-center gap-1" style={{ paddingLeft: "-1rem" }}>
+      <div className="flex flex-wrap items-center gap-1.5">
         {item.schusswechsel && (
-          <Badge variant="outline" className={`text-xs ${badgeColors.pink}`}>
+          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.pink }}>
             Schusswechsel
           </Badge>
         )}
         {item.sek && (
-          <Badge variant="outline" className={`text-xs ${badgeColors.grape}`}>
+          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.grape }}>
             SEK-Beteiligung
           </Badge>
         )}
         {item.vgbeamte && (
-          <Badge variant="outline" className={`text-xs ${badgeColors.violet}`}>
+          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.violet }}>
             Verletzte/getötete Beamte
           </Badge>
         )}
         {item.vbaktion && (
-          <Badge variant="outline" className={`text-xs ${badgeColors.indigo}`}>
+          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.indigo }}>
             Vorbereitete Polizeiaktion
           </Badge>
         )}
         {item.psych && (
-          <Badge variant="outline" className={`text-xs ${badgeColors.blue}`}>
+          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.blue }}>
             Mutm. psych. Ausnahmesituation
           </Badge>
         )}
         {item.alkdrog && (
-          <Badge variant="outline" className={`text-xs ${badgeColors.cyan}`}>
+          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.cyan }}>
             Mutm. Alkohol- o. Drogenkonsum
           </Badge>
         )}
         {item.famgew && (
-          <Badge variant="outline" className={`text-xs ${badgeColors.teal}`}>
+          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.teal }}>
             Mutm. famil. oder häusl. Gewalt
           </Badge>
         )}
         {item.unschuss && (
-          <Badge variant="outline" className={`text-xs ${badgeColors.green}`}>
+          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.green }}>
             Unbeabsichtigte Schussabgabe
           </Badge>
         )}
         {item.indoor && (
-          <Badge variant="outline" className={`text-xs ${badgeColors.lime}`}>
+          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.lime }}>
             Innenraum
           </Badge>
         )}
