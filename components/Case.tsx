@@ -104,7 +104,7 @@ const textToLinks = (text: string): React.ReactNode => {
 };
 
 const SOFT_LIMIT = 240;
-const HARD_LIMIT = 400;
+const HARD_LIMIT = 300;
 
 /**
  * Expandable wrapper that measures actual content height.
