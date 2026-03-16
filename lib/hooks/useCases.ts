@@ -30,7 +30,8 @@ export function useCases(filters: CasesFilters = {}, options?: { initialData?: C
   return useQuery({
     queryKey: ["cases", filters],
     queryFn: () => fetchCases(filters),
-    initialData: options?.initialData,
+    // Only use initialData for the very first render (placeholderData doesn't block refetch)
+    ...(options?.initialData ? { placeholderData: options.initialData } : {}),
   });
 }
 

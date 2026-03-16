@@ -27,7 +27,7 @@ export function useStats(filters: StatsFilters = {}, options?: { initialData?: S
   return useQuery({
     queryKey: ["stats", filters],
     queryFn: () => fetchStats(filters),
-    initialData: options?.initialData,
+    ...(options?.initialData ? { placeholderData: options.initialData } : {}),
   });
 }
 

@@ -58,6 +58,38 @@ test.describe('Search and Filtering', () => {
       // Verify URL no longer contains the search param
       expect(page.url()).not.toContain('q=Berlin');
     });
+
+    test('should update results when changing search query', async ({ page }) => {
+      // Start with a search for "Kopf"
+      await page.goto('/?q=Kopf&sort=relevance');
+      await helpers.waitForPageReady(page);
+
+      // Should have results for "Kopf"
+      const cards = page.locator('[data-testid="case-card"]');
+      await expect(cards.first()).toBeVisible({ timeout: 10000 });
+
+      // Get the status text showing result count (e.g. "zeige 49 von 531")
+      const statusText = page.locator('[role="status"]').first();
+      const initialStatus = await statusText.textContent();
+
+      // Now change search to "Wohnung"
+      const searchInput = page.getByRole('textbox', { name: 'Suche' });
+      await searchInput.clear();
+      await searchInput.fill('Wohnung');
+
+      // Wait for URL to update with new query
+      await page.waitForURL(/q=Wohnung/, { timeout: 10000 });
+
+      // Wait for results to update — status text should change
+      await expect(statusText).not.toHaveText(initialStatus || '', { timeout: 10000 });
+
+      // Should still have results
+      await expect(cards.first()).toBeVisible({ timeout: 10000 });
+
+      // Status text should now show different count
+      const newStatus = await statusText.textContent();
+      expect(newStatus).not.toEqual(initialStatus);
+    });
   });
 
   test.describe('Filter by Year', () => {
