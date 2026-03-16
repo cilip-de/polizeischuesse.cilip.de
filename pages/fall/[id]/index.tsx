@@ -74,17 +74,17 @@ const CaseDetail: NextPage<CaseDetailProps> = (props) => {
         <meta name="twitter:card" content="summary" />
       </Head>
       <div className="mx-auto w-full max-w-[1140px] px-4">
-        <div style={{ marginTop: "5rem" }}>
+        <div className="mt-20">
           <p className="text-center">
             <Link href={isTaser ? "/taser" : "/"}>
               Zurück zur Chronik mit allen Fällen
             </Link>
           </p>
-          <div style={{ marginTop: "2rem" }}>
+          <div className="mt-8">
             <Case item={props.case} hideLink isTaser={props.taser} />
           </div>
           <div className="flex items-center justify-center" data-testid="case-detail">
-            <code className="rounded bg-gray-100 px-2 py-1 text-sm font-mono only-non-mobile">{pageUrl}</code>
+            <code className="rounded bg-gray-100 px-2 py-1 text-sm font-mono hidden md:block">{pageUrl}</code>
             <div className="w-6" />
             <div className="flex items-center gap-2">
               {shareSupported ? (
@@ -105,7 +105,7 @@ const CaseDetail: NextPage<CaseDetailProps> = (props) => {
           </div>
           <div className="h-6" />
         </div>
-        <p className="text-center" style={{ marginBottom: "5rem" }}>
+        <p className="text-center mb-20">
           <Link href={isTaser ? "/taser" : "/"}>
             Zurück zur Chronik mit allen Fällen
           </Link>

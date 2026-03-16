@@ -204,7 +204,7 @@ const VerticalBarChart = ({
   return (
     <div
       ref={containerRef}
-      className={mobile ? "only-mobile" : "only-non-mobile"}
+      className={mobile ? "md:hidden" : "hidden md:block"}
       style={{
         height: mobile ? 300 : 200,
         position: "relative",
@@ -433,7 +433,7 @@ const HorizontalBarChart = ({
   return (
     <div
       ref={containerRef}
-      className={mobile ? "only-mobile" : "only-non-mobile"}
+      className={mobile ? "md:hidden" : "hidden md:block"}
       style={{ height: 20 * data.length + (margin.top || 0) + (margin.bottom || 0), position: "relative" }}
       role="img"
       aria-label="Horizontales Balkendiagramm der Datenverteilung"

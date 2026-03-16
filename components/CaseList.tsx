@@ -173,10 +173,10 @@ const CaseList = ({ maxCases }: CaseListProps) => {
   }
 
   return (
-    <div style={{ paddingBottom: "2rem" }}>
+    <div className="pb-8">
       <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-2 only-mobile"></div>
-        <div className="col-span-12 sm:col-span-8 only-mobile">
+        <div className="col-span-2 md:hidden"></div>
+        <div className="col-span-12 sm:col-span-8 md:hidden">
           {geoLoading ? (
             <Skeleton className="h-[200px]" />
           ) : (
@@ -192,13 +192,13 @@ const CaseList = ({ maxCases }: CaseListProps) => {
             />
           )}
         </div>
-        <div className="col-span-2 only-mobile"></div>
+        <div className="col-span-2 md:hidden"></div>
         <div className="col-span-12 md:col-span-8">
           <AnchorHeading order={2} id="chronik">
             Chronik
           </AnchorHeading>
           <div role="search" aria-label="Suche und Filter für polizeiliche Todesschüsse">
-            <div className="grid grid-cols-12 gap-4" style={{ marginBottom: "1rem", marginTop: "0.5rem" }}>
+            <div className="grid grid-cols-12 gap-4 mb-4 mt-2">
               {[
                 ["year", "Jahr"],
                 ["state", "Bundesland"],
@@ -214,7 +214,7 @@ const CaseList = ({ maxCases }: CaseListProps) => {
                 </div>
               ))}
             </div>
-            <div className="grid grid-cols-12 gap-4" style={{ marginBottom: "1rem" }}>
+            <div className="grid grid-cols-12 gap-4 mb-4">
               <div className="col-span-8">
                 <SearchInput
                   q={q}
@@ -232,7 +232,7 @@ const CaseList = ({ maxCases }: CaseListProps) => {
                 />
               </div>
             </div>
-            <div className="grid grid-cols-12 gap-4" style={{ marginBottom: "1rem" }}>
+            <div className="grid grid-cols-12 gap-4 mb-4">
               <div className="col-span-12 md:col-span-8">
                 <CategoryInput q={q} selection={selection} />
               </div>
@@ -261,7 +261,7 @@ const CaseList = ({ maxCases }: CaseListProps) => {
             ) : null}
           </div>
         </div>
-        <div className="col-span-4 only-non-mobile">
+        <div className="col-span-4 hidden md:block">
           {geoLoading ? (
             <Skeleton className="h-[300px]" />
           ) : (
@@ -279,14 +279,14 @@ const CaseList = ({ maxCases }: CaseListProps) => {
         </div>
       </div>
 
-      <div style={{ minHeight: "100rem" }}>
+      <div className="min-h-[100rem]">
         <div
-          className="only-mobile"
+          className="md:hidden"
           role="status"
           aria-live="polite"
           aria-atomic="true"
         >
-          <div className="flex items-center justify-center" style={{ marginBottom: "1rem", marginTop: "1rem" }}>
+          <div className="flex items-center justify-center my-4">
             {casesLoading ? (
               <Skeleton className="h-5 w-[200px]" />
             ) : (
@@ -314,7 +314,7 @@ const CaseList = ({ maxCases }: CaseListProps) => {
             )}
           </div>
         </div>
-        <div className="grid grid-cols-12 gap-4 only-non-mobile">
+        <div className="grid grid-cols-12 gap-4 hidden md:block">
           <div className="col-span-8">
             <div
               className="flex items-center justify-center"
@@ -357,7 +357,7 @@ const CaseList = ({ maxCases }: CaseListProps) => {
             </div>
           </div>
           <div className="col-span-4">
-            <div style={{ marginBottom: "2rem", marginTop: "0rem" }}>
+            <div className="mb-8">
               {geoLoading ? (
                 <Skeleton className="h-5 w-[150px] mx-auto" />
               ) : (
@@ -376,30 +376,21 @@ const CaseList = ({ maxCases }: CaseListProps) => {
         {enoughChars && isFiltered && (
           <>
             {/* Desktop: button centered, toggle absolutely positioned right */}
-            <div className="only-non-mobile" style={{ position: "relative", marginBottom: "2rem", width: "100%" }}>
+            <div className="hidden md:block relative mb-8 w-full">
               <div className="flex items-center justify-center">
                 <button
                   onClick={() => {
                     router.push("/", undefined, { scroll: false });
                     setSearchQ(null);
                   }}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    padding: "0.25rem 0.5rem",
-                    cursor: "pointer",
-                    textDecoration: "underline",
-                    color: "#868e96",
-                    fontSize: "0.875rem",
-                    font: "inherit",
-                  }}
+                  className="bg-transparent border-none px-2 py-1 cursor-pointer underline text-gray-500 text-sm font-inherit"
                   aria-label="Auswahl zurücksetzen und alle Fälle anzeigen"
                 >
                   Auswahl zurücksetzen
                 </button>
               </div>
               {q && q.length >= 3 && (
-                <div style={{ position: "absolute", right: 0, top: "50%", transform: "translateY(-50%)" }}>
+                <div className="absolute right-0 top-1/2 -translate-y-1/2">
                   <SortToggle
                     q={q}
                     sort={selection.sort || "relevance"}
@@ -409,23 +400,14 @@ const CaseList = ({ maxCases }: CaseListProps) => {
               )}
             </div>
             {/* Mobile: button left, toggle right */}
-            <div className="only-mobile">
-              <div style={{ display: "flex", justifyContent: q && q.length >= 3 ? "space-between" : "center", alignItems: "center", marginBottom: "2rem" }}>
+            <div className="md:hidden">
+              <div className={`flex ${q && q.length >= 3 ? "justify-between" : "justify-center"} items-center mb-8`}>
                 <button
                   onClick={() => {
                     router.push("/", undefined, { scroll: false });
                     setSearchQ(null);
                   }}
-                  style={{
-                    background: "none",
-                    border: "none",
-                    padding: "0.25rem 0.5rem",
-                    cursor: "pointer",
-                    textDecoration: "underline",
-                    color: "#868e96",
-                    fontSize: "0.875rem",
-                    font: "inherit",
-                  }}
+                  className="bg-transparent border-none px-2 py-1 cursor-pointer underline text-gray-500 text-sm font-inherit"
                   aria-label="Auswahl zurücksetzen und alle Fälle anzeigen"
                 >
                   Auswahl zurücksetzen
@@ -455,8 +437,8 @@ const CaseList = ({ maxCases }: CaseListProps) => {
 
         {enoughChars && total > PAGE_SIZE && !casesLoading && (
           <div className="flex items-center justify-center">
-            {renderPagination("only-non-mobile")}
-            {renderPagination("only-mobile")}
+            {renderPagination("hidden md:block")}
+            {renderPagination("md:hidden")}
           </div>
         )}
       </div>

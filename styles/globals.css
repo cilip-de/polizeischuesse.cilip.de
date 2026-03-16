@@ -1,40 +1,35 @@
 @import "tailwindcss";
 
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+@layer base {
+  html,
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  }
 
-a {
-  color: #228be6;
-  text-decoration: underline;
-}
+  a {
+    color: #228be6;
+    text-decoration: underline;
+  }
 
-a:hover {
-  color: #1c7ed6;
-  text-decoration: underline;
-}
+  a:hover {
+    color: #1c7ed6;
+  }
 
-a:focus {
-  outline: 2px solid #228be6;
-  outline-offset: 2px;
-}
+  /* For links that should inherit color (like in cards or special contexts) */
+  a[style*="color: inherit"],
+  a[style*="inherit"] {
+    color: inherit;
+  }
 
-/* For links that should inherit color (like in cards or special contexts) */
-a[style*="color: inherit"],
-a[style*="inherit"] {
-  color: inherit;
-}
+  button a {
+    text-decoration: none;
+  }
 
-button a {
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
+  *:focus-visible {
+    outline: 2px solid #228be6;
+    outline-offset: 2px;
+  }
 }
 
 /* Skip link for accessibility */
@@ -65,30 +60,3 @@ button a {
   padding: 10px 20px;
   border-radius: 4px;
 }
-
-/* Enhanced focus indicators */
-*:focus-visible {
-  outline: 2px solid #228be6;
-  outline-offset: 2px;
-}
-
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid #228be6;
-  outline-offset: 2px;
-}
-
-
-
-@media screen and (max-width: 768px) {
-  .only-non-mobile {
-    display: none;
-  }
-}
-
-@media screen and (min-width: 769px) {
-  .only-mobile {
-    display: none;
-  }
-}
-

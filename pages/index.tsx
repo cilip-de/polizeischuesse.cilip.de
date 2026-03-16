@@ -48,7 +48,7 @@ const Home = ({
       </Head>
 
       <main id="main-content">
-        <div className="flex items-center justify-center gap-2 only-non-mobile">
+        <div className="flex items-center justify-center gap-2 hidden md:block">
           <a href="https://www.grimme-online-award.de/2025/nominierte/nominierte-detail/d/chronik-polizeilicher-todesschuesse-1976-2025">
             <Image
               src={goa2025}
@@ -65,7 +65,7 @@ const Home = ({
             />
           </a>
         </div>
-        <div className="flex items-center justify-center gap-2 only-mobile">
+        <div className="flex items-center justify-center gap-2 md:hidden">
           <a href="https://www.grimme-online-award.de/2025/nominierte/nominierte-detail/d/chronik-polizeilicher-todesschuesse-1976-2025">
             <Image
               src={goa2025}
@@ -83,7 +83,7 @@ const Home = ({
           <div className="h-6" />
           <nav
             aria-label="Hauptnavigation"
-            className="only-mobile"
+            className="md:hidden"
             style={{ marginBottom: "2rem" }}
           >
             <div className="flex items-center justify-center gap-2">
@@ -141,7 +141,7 @@ const Home = ({
           </div>
 
           <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 md:col-span-4 order-2 only-non-mobile">
+            <div className="col-span-12 md:col-span-4 order-2 hidden md:block">
               <div className="h-6" />
               <div className="flex items-center justify-end gap-2">
                 <div>
@@ -191,7 +191,7 @@ const Home = ({
                 werden auch Polizeikugeln auf Personen und daraus resultierende
                 Todesfälle gezählt.
               </p>
-              <div className="only-mobile">
+              <div className="md:hidden">
                 <div className="h-5" />
                 <div className="flex items-center justify-center gap-2">
                   <a href="https://cilip.de">

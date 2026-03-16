@@ -244,10 +244,10 @@ const Taser: NextPage<TaserProps> = ({ data, stats }) => {
       <AnchorHeading style={{ marginTop: "1rem" }} order={2} id="statistik">
         Taser-Statistik
       </AnchorHeading>
-      <div className="only-non-mobile" style={{ height: "40vh", width: "90%", margin: "0 auto" }}>
+      <div className="hidden md:block" style={{ height: "40vh", width: "90%", margin: "0 auto" }}>
         <MyResponsiveLine data={stats} />
       </div>
-      <div className="only-mobile" style={{ width: "100%" }}>
+      <div className="md:hidden" style={{ width: "100%" }}>
         <div style={{ height: "40vh", width: "100%", margin: "0 auto" }}>
           <MyResponsiveLine data={stats} mobile />
         </div>

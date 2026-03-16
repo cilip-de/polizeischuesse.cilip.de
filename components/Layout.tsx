@@ -63,11 +63,7 @@ export default function Layout({
       </a>
 
       <div className="mx-auto w-full max-w-[1140px] px-4">
-        <a
-          style={{ display: "none" }}
-          rel="me"
-          href="https://social.tchncs.de/@cilip"
-        >
+        <a className="hidden" rel="me" href="https://social.tchncs.de/@cilip">
           Mastodon
         </a>
         <div className="h-2.5" />
@@ -75,15 +71,7 @@ export default function Layout({
           onClick={() => {
             router.push("/");
           }}
-          style={{
-            background: "none",
-            border: "none",
-            padding: 0,
-            textDecoration: "underline",
-            cursor: "pointer",
-            font: "inherit",
-            color: "inherit",
-          }}
+          className="bg-transparent border-none p-0 underline cursor-pointer font-inherit text-inherit"
           aria-label="Zurück zur Startseite"
         >
           {"« zurück"}

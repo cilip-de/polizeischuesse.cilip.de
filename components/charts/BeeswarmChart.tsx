@@ -182,7 +182,7 @@ const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data, mobile = false }) =
   };
 
   return (
-    <div ref={containerRef} className={mobile ? "only-mobile" : "only-non-mobile"} style={{ paddingTop: mobile ? "0.5rem" : "0.75rem", paddingBottom: mobile ? "1.5rem" : "2rem" }}>
+    <div ref={containerRef} className={mobile ? "md:hidden" : "hidden md:block"} style={{ paddingTop: mobile ? "0.5rem" : "0.75rem", paddingBottom: mobile ? "1.5rem" : "2rem" }}>
       {/* Month header */}
       <div
         style={{
