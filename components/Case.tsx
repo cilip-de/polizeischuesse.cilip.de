@@ -17,6 +17,14 @@ const badgeStyles: Record<string, React.CSSProperties> = {
   lime: { backgroundColor: "#f4fce3", color: "#5c940d" },
 };
 
+const badgeStyle = (color: string): React.CSSProperties => ({
+  fontSize: "0.65rem",
+  fontWeight: 600,
+  textTransform: "uppercase",
+  letterSpacing: "0.05em",
+  ...badgeStyles[color],
+});
+
 // https://dev.to/noclat/using-fuse-js-with-react-to-build-an-advanced-search-with-highlighting-4b93
 const highlight = (
   value: string,
@@ -92,61 +100,83 @@ interface CaseProps {
 }
 
 const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
-  // Create highlighted versions without mutating the prop
-  // React Compiler will auto-memoize this
   const highlights: Record<string, React.ReactNode> = {};
   for (const term of SEARCH_KEYES) {
     highlights[term] = constructHighlights(item, term);
   }
 
-  return (
-    <Card
-      className="shadow-sm border-gray-200 p-4 mb-8 relative overflow-hidden max-h-72"
-      data-testid="case-card"
+  const scenarioText = (item["Szenarium"] as string) || "";
+  const isLong = scenarioText.length > 200;
+
+  const linkIcon = !hideLink && (
+    <a
+      href={`/fall/${item["Fall"]}`}
+      target="_blank"
+      rel="noreferrer"
+      aria-label={`Detailseite für Fall ${item["Name"]} öffnen`}
+      style={{ position: "absolute", top: 12, right: 12, color: "#adb5bd" }}
     >
-      <div className="flex flex-wrap items-center gap-1.5">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        fill="currentColor"
+        viewBox="0 0 16 16"
+        aria-hidden="true"
+        role="img"
+      >
+        <title>Link zur Detailseite</title>
+        <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
+        <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
+      </svg>
+    </a>
+  );
+
+  const cardContent = (
+    <>
+      <div style={{ paddingRight: "1.5rem" }} className="flex flex-wrap items-center gap-1.5">
         {item.schusswechsel && (
-          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.pink }}>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("pink")}>
             Schusswechsel
           </Badge>
         )}
         {item.sek && (
-          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.grape }}>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("grape")}>
             SEK-Beteiligung
           </Badge>
         )}
         {item.vgbeamte && (
-          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.violet }}>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("violet")}>
             Verletzte/getötete Beamte
           </Badge>
         )}
         {item.vbaktion && (
-          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.indigo }}>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("indigo")}>
             Vorbereitete Polizeiaktion
           </Badge>
         )}
         {item.psych && (
-          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.blue }}>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("blue")}>
             Mutm. psych. Ausnahmesituation
           </Badge>
         )}
         {item.alkdrog && (
-          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.cyan }}>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("cyan")}>
             Mutm. Alkohol- o. Drogenkonsum
           </Badge>
         )}
         {item.famgew && (
-          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.teal }}>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("teal")}>
             Mutm. famil. oder häusl. Gewalt
           </Badge>
         )}
         {item.unschuss && (
-          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.green }}>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("green")}>
             Unbeabsichtigte Schussabgabe
           </Badge>
         )}
         {item.indoor && (
-          <Badge className="border-transparent rounded-full" style={{ fontSize: "0.65rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", ...badgeStyles.lime }}>
+          <Badge className="border-transparent rounded-full" style={badgeStyle("lime")}>
             Innenraum
           </Badge>
         )}
@@ -183,40 +213,70 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
           <p className="text-sm text-gray-500">
             Quellen: {textToLinks(item["Quellen"])}
           </p>
-          <div></div>
         </div>
         <div className="col-span-12 md:col-span-8">
-          <p className="leading-normal mb-2 line-clamp-6">
+          <p className="leading-normal mb-2">
             {highlights["Szenarium"]}
           </p>
-          {!hideLink && (
-            <div className="absolute bottom-0 right-2.5">
-              <p className="text-right text-gray-400">
-                <a
-                  href={`/fall/${item["Fall"]}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`Detailseite für Fall ${item["Name"]} öffnen`}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    fill="currentColor"
-                    viewBox="0 0 16 16"
-                    aria-hidden="true"
-                    role="img"
-                  >
-                    <title>Link zur Detailseite</title>
-                    <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z" />
-                    <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z" />
-                  </svg>
-                </a>
-              </p>
-            </div>
-          )}
         </div>
       </div>
+    </>
+  );
+
+  if (!isLong) {
+    return (
+      <Card
+        className="shadow-sm border-gray-200 p-4 mb-8 relative"
+        data-testid="case-card"
+      >
+        {linkIcon}
+        {cardContent}
+      </Card>
+    );
+  }
+
+  // Long cards: use <details> for native expand/collapse (no JS needed)
+  return (
+    <Card
+      className="shadow-sm border-gray-200 p-4 mb-8 relative"
+      data-testid="case-card"
+    >
+      {linkIcon}
+      <details>
+        <summary
+          style={{
+            listStyle: "none",
+            cursor: "pointer",
+          }}
+        >
+          <div style={{ maxHeight: 240, overflow: "hidden", position: "relative" }}>
+            {cardContent}
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                height: "4rem",
+                background: "linear-gradient(transparent, white)",
+                pointerEvents: "none",
+              }}
+            />
+          </div>
+          <p style={{ textAlign: "center", color: "#228be6", fontSize: "0.875rem", margin: "0.25rem 0 0" }}>
+            ▼ Mehr anzeigen
+          </p>
+        </summary>
+        {cardContent}
+        <p style={{ textAlign: "center", color: "#228be6", fontSize: "0.875rem", margin: "0.25rem 0 0", cursor: "pointer" }}
+           onClick={(e) => {
+             const details = (e.target as HTMLElement).closest("details");
+             if (details) details.removeAttribute("open");
+           }}
+        >
+          ▲ Weniger anzeigen
+        </p>
+      </details>
     </Card>
   );
 };
