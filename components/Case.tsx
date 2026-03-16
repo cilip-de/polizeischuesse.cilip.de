@@ -262,7 +262,10 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
         <p style={{ textAlign: "center", color: "#228be6", fontSize: "0.875rem", margin: "0.25rem 0 0", cursor: "pointer" }}
            onClick={(e) => {
              const details = (e.target as HTMLElement).closest("details");
-             if (details) details.removeAttribute("open");
+             if (details) {
+               details.removeAttribute("open");
+               details.closest("[data-testid='case-card']")?.scrollIntoView({ behavior: "smooth", block: "start" });
+             }
            }}
         >
           ▲ Weniger anzeigen
