@@ -12,6 +12,9 @@ import { useRouter } from "next/router";
 import { useMemo, useState, useCallback } from "react";
 import { PAGE_SIZE, type ProcessedDataItem } from "../lib/data";
 import { constructUrl, constructUrlWithQ, type Selection } from "../lib/util";
+import type { CasesResponse } from "../lib/api/cases";
+import type { StatsResponse } from "../lib/api/stats";
+import type { GeoResponse } from "../lib/api/geo";
 import { useCases, type CasesFilters } from "../lib/hooks/useCases";
 import { useGeoData } from "../lib/hooks/useGeoData";
 import { useStats } from "../lib/hooks/useStats";
@@ -26,9 +29,12 @@ import SortToggle from "./SortToggle";
 
 interface CaseListProps {
   maxCases: number;
+  initialCases?: CasesResponse;
+  initialStats?: StatsResponse;
+  initialGeo?: GeoResponse;
 }
 
-function parseSelectionFromQuery(query: Record<string, string | string[] | undefined>): Required<Selection> {
+export function parseSelectionFromQuery(query: Record<string, string | string[] | undefined>): Required<Selection> {
   return {
     q: (query.q as string) || "",
     p: parseInt(query.p as string) || 1,
@@ -42,7 +48,7 @@ function parseSelectionFromQuery(query: Record<string, string | string[] | undef
   };
 }
 
-function selectionToFilters(selection: Required<Selection>, searchQ: string | null): CasesFilters {
+export function selectionToFilters(selection: Required<Selection>, searchQ: string | null): CasesFilters {
   const q = searchQ ?? selection.q;
   return {
     page: selection.p,
@@ -58,7 +64,7 @@ function selectionToFilters(selection: Required<Selection>, searchQ: string | nu
   };
 }
 
-const CaseList = ({ maxCases }: CaseListProps) => {
+const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseListProps) => {
   const router = useRouter();
 
   // Parse selection from URL query params
@@ -77,9 +83,9 @@ const CaseList = ({ maxCases }: CaseListProps) => {
   }, [filters]);
 
   // Fetch cases, geo data, and stats
-  const { data: casesData, isLoading: casesLoading } = useCases(filters);
-  const { data: geoData, isLoading: geoLoading } = useGeoData(statsFilters);
-  const { data: statsData, isLoading: statsLoading } = useStats(statsFilters);
+  const { data: casesData, isLoading: casesLoading } = useCases(filters, { initialData: initialCases });
+  const { data: geoData, isLoading: geoLoading } = useGeoData(statsFilters, { initialData: initialGeo });
+  const { data: statsData, isLoading: statsLoading } = useStats(statsFilters, { initialData: initialStats });
 
   const q = searchQ ?? selection.q;
   const enoughChars = !q || q.length > 2;

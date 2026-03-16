@@ -1,27 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-
-export interface GeoFilters {
-  q?: string;
-  year?: string;
-  state?: string;
-  place?: string;
-  weapon?: string;
-  age?: string;
-  tags?: string[];
-}
-
-export interface MarkerData {
-  city: string;
-  state: string;
-  longitude: number;
-  latitude: number;
-  count: number;
-}
-
-export interface GeoResponse {
-  markers: MarkerData[];
-  totalLocations: number;
-}
+import type { GeoFilters, GeoResponse } from "../api/geo";
 
 async function fetchGeoData(filters: GeoFilters): Promise<GeoResponse> {
   const params = new URLSearchParams();
@@ -45,9 +23,12 @@ async function fetchGeoData(filters: GeoFilters): Promise<GeoResponse> {
   return response.json();
 }
 
-export function useGeoData(filters: GeoFilters = {}) {
+export function useGeoData(filters: GeoFilters = {}, options?: { initialData?: GeoResponse }) {
   return useQuery({
     queryKey: ["geo", filters],
     queryFn: () => fetchGeoData(filters),
+    initialData: options?.initialData,
   });
 }
+
+export type { GeoFilters, GeoResponse, MarkerData } from "../api/geo";

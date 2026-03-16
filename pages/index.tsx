@@ -1,10 +1,17 @@
 import { Button } from "@/components/ui/button";
-import { GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import CaseList from "../components/CaseList";
+import { parseSelectionFromQuery, selectionToFilters } from "../components/CaseList";
 import { setupData } from "../lib/data";
+import { getCases } from "../lib/api/cases";
+import type { CasesResponse } from "../lib/api/cases";
+import { getStats } from "../lib/api/stats";
+import type { StatsResponse } from "../lib/api/stats";
+import { getGeo } from "../lib/api/geo";
+import type { GeoResponse } from "../lib/api/geo";
 
 import cover from "../public/cover_12.jpg";
 import cilipLogo from "../public/images/cilip_new.svg";
@@ -14,12 +21,18 @@ interface HomeProps {
   maxCases: number;
   afterReuni: number;
   beforeReuni: number;
+  initialCases: CasesResponse;
+  initialStats: StatsResponse;
+  initialGeo: GeoResponse;
 }
 
 const Home = ({
   maxCases,
   afterReuni,
   beforeReuni,
+  initialCases,
+  initialStats,
+  initialGeo,
 }: HomeProps) => {
   return (
     <div>
@@ -233,6 +246,9 @@ const Home = ({
           <div className="h-6" />
           <CaseList
             maxCases={maxCases}
+            initialCases={initialCases}
+            initialStats={initialStats}
+            initialGeo={initialGeo}
           />
         </div>
         <div className="h-6" />
@@ -299,17 +315,35 @@ const Home = ({
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async ({ query, res }) => {
+  // Cache for 60s, serve stale for 1h
+  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=3600');
+
   const { data, beforeReuni, afterReuni } = await setupData();
+
+  // Parse URL query params into filters
+  const selection = parseSelectionFromQuery(query);
+  const filters = selectionToFilters(selection, null);
+
+  // Build stats/geo filters (same as cases but without pagination)
+  const { page, limit, ...statsGeoFilters } = filters;
+
+  // Fetch all data in parallel
+  const [initialCases, initialStats, initialGeo] = await Promise.all([
+    getCases(filters),
+    getStats(statsGeoFilters),
+    getGeo(statsGeoFilters),
+  ]);
 
   return {
     props: {
       maxCases: data.length,
       beforeReuni,
       afterReuni,
+      initialCases,
+      initialStats,
+      initialGeo,
     },
-    // Revalidate every hour
-    revalidate: 3600,
   };
 };
 

@@ -1,26 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-
-export interface StatsFilters {
-  q?: string;
-  year?: string;
-  state?: string;
-  place?: string;
-  weapon?: string;
-  age?: string;
-  tags?: string[];
-}
-
-export interface YearCount {
-  year: number;
-  total: number;
-  hits: number;
-}
-
-export interface StatsResponse {
-  yearCounts: YearCount[];
-  totalCases: number;
-  totalHits: number;
-}
+import type { StatsFilters, StatsResponse } from "../api/stats";
 
 async function fetchStats(filters: StatsFilters): Promise<StatsResponse> {
   const params = new URLSearchParams();
@@ -44,9 +23,12 @@ async function fetchStats(filters: StatsFilters): Promise<StatsResponse> {
   return response.json();
 }
 
-export function useStats(filters: StatsFilters = {}) {
+export function useStats(filters: StatsFilters = {}, options?: { initialData?: StatsResponse }) {
   return useQuery({
     queryKey: ["stats", filters],
     queryFn: () => fetchStats(filters),
+    initialData: options?.initialData,
   });
 }
+
+export type { StatsFilters, StatsResponse, YearCount } from "../api/stats";

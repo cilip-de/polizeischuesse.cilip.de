@@ -1,26 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import type { ProcessedDataItem, SetupOptions } from "../data";
-
-export interface CasesFilters {
-  page?: number;
-  limit?: number;
-  q?: string;
-  year?: string;
-  state?: string;
-  place?: string;
-  weapon?: string;
-  age?: string;
-  tags?: string[];
-  sort?: "relevance" | "date";
-}
-
-export interface CasesResponse {
-  cases: ProcessedDataItem[];
-  total: number;
-  page: number;
-  totalPages: number;
-  filters: SetupOptions;
-}
+import type { CasesFilters, CasesResponse } from "../api/cases";
 
 async function fetchCases(filters: CasesFilters): Promise<CasesResponse> {
   const params = new URLSearchParams();
@@ -47,9 +26,12 @@ async function fetchCases(filters: CasesFilters): Promise<CasesResponse> {
   return response.json();
 }
 
-export function useCases(filters: CasesFilters = {}) {
+export function useCases(filters: CasesFilters = {}, options?: { initialData?: CasesResponse }) {
   return useQuery({
     queryKey: ["cases", filters],
     queryFn: () => fetchCases(filters),
+    initialData: options?.initialData,
   });
 }
+
+export type { CasesFilters, CasesResponse };
