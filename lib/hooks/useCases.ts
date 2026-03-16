@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import type { CasesFilters, CasesResponse } from "../api/cases";
 
 async function fetchCases(filters: CasesFilters): Promise<CasesResponse> {
@@ -30,8 +30,8 @@ export function useCases(filters: CasesFilters = {}, options?: { initialData?: C
   return useQuery({
     queryKey: ["cases", filters],
     queryFn: () => fetchCases(filters),
-    // Only use initialData for the very first render (placeholderData doesn't block refetch)
-    ...(options?.initialData ? { placeholderData: options.initialData } : {}),
+    placeholderData: keepPreviousData,
+    ...(options?.initialData ? { initialData: options.initialData } : {}),
   });
 }
 

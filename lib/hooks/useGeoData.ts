@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import type { GeoFilters, GeoResponse } from "../api/geo";
 
 async function fetchGeoData(filters: GeoFilters): Promise<GeoResponse> {
@@ -27,7 +27,8 @@ export function useGeoData(filters: GeoFilters = {}, options?: { initialData?: G
   return useQuery({
     queryKey: ["geo", filters],
     queryFn: () => fetchGeoData(filters),
-    ...(options?.initialData ? { placeholderData: options.initialData } : {}),
+    placeholderData: keepPreviousData,
+    ...(options?.initialData ? { initialData: options.initialData } : {}),
   });
 }
 
