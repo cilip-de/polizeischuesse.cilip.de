@@ -93,7 +93,7 @@ const textToLinks = (text: string): React.ReactNode => {
             target="_blank"
             rel="noreferrer"
             href={x}
-            style={{ color: "inherit" }}
+            className="text-inherit"
           >
             {getDomain(x)}
           </a>
