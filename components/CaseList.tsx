@@ -266,6 +266,44 @@ const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseList
               />
             ) : null}
           </div>
+          {/* Desktop status text — inside left column to avoid whitespace gap */}
+          <div className="hidden md:flex items-center justify-center gap-2 text-sm text-gray-500 mt-2 mb-2"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            {casesLoading ? (
+              <Skeleton className="h-4 w-[250px]" />
+            ) : (
+              <>
+                {enoughChars && total > 1 && total !== maxCases && (
+                  <span>zeige {total} von {maxCases} polizeilichen Todesschüssen</span>
+                )}
+                {enoughChars && total > 1 && total === maxCases && (
+                  <span>{total} polizeiliche Todesschüsse</span>
+                )}
+                {enoughChars && total === 1 && (
+                  <span>ein polizeilicher Todesschuss</span>
+                )}
+                {enoughChars && total === 0 && (
+                  <span>kein polizeilicher Todesschuss entfällt auf die Auswahl</span>
+                )}
+                {!enoughChars && (
+                  <span>Bitte mehr Zeichen für die Suche eingeben</span>
+                )}
+              </>
+            )}
+            {!geoLoading && !casesLoading && (
+              <span>
+                {displayMarkers.length !== totalLocations &&
+                  displayMarkers.length > 1 &&
+                  `· an ${displayMarkers.length} von ${totalLocations} Orten`}
+                {displayMarkers.length === totalLocations &&
+                  `· an ${totalLocations} Orten`}
+                {displayMarkers.length === 1 && `· an einem Ort`}
+              </span>
+            )}
+          </div>
         </div>
         <div className="col-span-4 hidden md:block">
           {geoLoading ? (
@@ -319,43 +357,6 @@ const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseList
               </>
             )}
           </div>
-        </div>
-        <div className="hidden md:flex items-center justify-center gap-2 text-sm text-gray-500 mb-4"
-          role="status"
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          {casesLoading ? (
-            <Skeleton className="h-4 w-[250px]" />
-          ) : (
-            <>
-              {enoughChars && total > 1 && total !== maxCases && (
-                <span>zeige {total} von {maxCases} polizeilichen Todesschüssen</span>
-              )}
-              {enoughChars && total > 1 && total === maxCases && (
-                <span>{total} polizeiliche Todesschüsse</span>
-              )}
-              {enoughChars && total === 1 && (
-                <span>ein polizeilicher Todesschuss</span>
-              )}
-              {enoughChars && total === 0 && (
-                <span>kein polizeilicher Todesschuss entfällt auf die Auswahl</span>
-              )}
-              {!enoughChars && (
-                <span>Bitte mehr Zeichen für die Suche eingeben</span>
-              )}
-            </>
-          )}
-          {!geoLoading && !casesLoading && (
-            <span>
-              {displayMarkers.length !== totalLocations &&
-                displayMarkers.length > 1 &&
-                `· an ${displayMarkers.length} von ${totalLocations} Orten`}
-              {displayMarkers.length === totalLocations &&
-                `· an ${totalLocations} Orten`}
-              {displayMarkers.length === 1 && `· an einem Ort`}
-            </span>
-          )}
         </div>
         {enoughChars && isFiltered && (
           <>
