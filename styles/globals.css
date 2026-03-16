@@ -32,6 +32,15 @@
   }
 }
 
+/* Dropdown item hover/selected state */
+[cmdk-item][data-selected="true"] {
+  background-color: #f1f3f5;
+}
+
+[cmdk-item]:hover {
+  background-color: #f1f3f5;
+}
+
 /* Skip link for accessibility */
 .skip-link {
   position: absolute;
