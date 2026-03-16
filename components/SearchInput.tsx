@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import _ from "lodash";
 import router from "next/router";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { constructUrlWithQ } from "../lib/util";
 
 interface SearchInputProps {
@@ -18,40 +18,43 @@ const SearchInput = ({
   setSearchedData,
   setSearchedQ,
 }: SearchInputProps) => {
-  const doStuff = useCallback(async (newQ: string) => {
-    if (selection.p > 1) {
-      router.replace(
-        constructUrlWithQ(newQ, {
-          ...selection,
-          p: 1,
-          q: newQ,
-        })
-      ),
-        undefined,
-        { scroll: false };
-      return;
+  // Local input value — responds immediately to typing
+  const [inputValue, setInputValue] = useState(q);
+  const isUserTyping = useRef(false);
+
+  // Sync from URL when URL changes externally (not from typing)
+  useEffect(() => {
+    if (!isUserTyping.current) {
+      setInputValue(q);
     }
+  }, [q]);
+
+  const doStuff = useCallback(async (newQ: string) => {
+    isUserTyping.current = false;
 
     router.replace(
       constructUrlWithQ(newQ, {
         ...selection,
+        p: 1,
         q: newQ,
       }),
       undefined,
-      { shallow: true }
+      { scroll: false, shallow: true }
     );
+
     if (newQ === "") {
       setSearchedData(null);
-    } else {
-      if (newQ.length > 2)
-        setSearchedData(await (await fetch("/api/suche?q=" + newQ)).json());
+    } else if (newQ.length > 2) {
+      setSearchedData(await (await fetch("/api/suche?q=" + newQ)).json());
     }
   }, [selection, setSearchedData]);
 
   const fetchSearch = useMemo(() => _.debounce(doStuff, 500), [doStuff]);
 
-  const searchFunc = async (event: { currentTarget: { value: any } }) => {
+  const searchFunc = (event: { currentTarget: { value: any } }) => {
     const newQ = event.currentTarget.value;
+    isUserTyping.current = true;
+    setInputValue(newQ);
     setSearchedQ(newQ);
     fetchSearch(newQ);
   };
@@ -59,13 +62,13 @@ const SearchInput = ({
   const [showHint, setShowHint] = useState(false);
 
   useEffect(() => {
-    if (q.length > 0 && q.length < 3) {
+    if (inputValue.length > 0 && inputValue.length < 3) {
       const timer = setTimeout(() => setShowHint(true), 2000);
       return () => clearTimeout(timer);
     } else {
       setShowHint(false); // eslint-disable-line react-hooks/set-state-in-effect
     }
-  }, [q]);
+  }, [inputValue]);
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -83,7 +86,7 @@ const SearchInput = ({
       </Label>
       <Input
         id="search"
-        value={q}
+        value={inputValue}
         placeholder="z. B. Wohnung, Flucht, Rücken, Kopf"
         onChange={searchFunc}
       />
