@@ -31,10 +31,21 @@ export async function getCases(filters: CasesFilters = {}): Promise<CasesRespons
   const { q, year, state, place, weapon, age, tags = [], sort } = filters;
 
   let resultList: ProcessedDataItem[];
+  // Map from item key to match data for search highlighting
+  const matchMap = new Map<string, { key: string; value: string; indices: number[][] }[]>();
 
   if (q && q.length > 2) {
     const searchResults = fuse.search("'" + q);
-    resultList = searchResults.map(({ item }) => item);
+    resultList = searchResults.map(({ item, matches }) => {
+      if (matches) {
+        matchMap.set(String(item.key), matches.map(m => ({
+          key: m.key || "",
+          value: m.value || "",
+          indices: m.indices ? Array.from(m.indices).map(pair => Array.from(pair)) : [],
+        })));
+      }
+      return item;
+    });
   } else {
     resultList = [...data];
   }
@@ -63,7 +74,11 @@ export async function getCases(filters: CasesFilters = {}): Promise<CasesRespons
   const total = resultList.length;
   const totalPages = Math.ceil(total / limit);
   const startIndex = (page - 1) * limit;
-  const paginatedCases = resultList.slice(startIndex, startIndex + limit);
+  const paginatedCases = resultList.slice(startIndex, startIndex + limit).map(item => {
+    const matches = matchMap.get(String(item.key));
+    if (matches) { (item as any).matches = matches; }
+    return item;
+  });
   const filterOptions = setupOptions(resultList);
 
   return {
