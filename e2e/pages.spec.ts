@@ -14,7 +14,7 @@ test.describe("Page Navigation", () => {
     ];
 
     for (const { text, url, title, inNav } of navPages) {
-      await page.goto("http://localhost:3000/");
+      await page.goto("http://localhost:3000/", { timeout: 30000 });
       await helpers.waitForPageReady(page);
 
       const link = inNav
@@ -123,7 +123,7 @@ test.describe("Page Navigation", () => {
     ];
 
     for (const { text, expectedPath } of navButtons) {
-      await page.goto("http://localhost:3000/");
+      await page.goto("http://localhost:3000/", { timeout: 30000 });
       await helpers.waitForPageReady(page);
 
       const link = page.locator(`a[href="${expectedPath}"]:visible`).first();
