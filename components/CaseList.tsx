@@ -320,64 +320,42 @@ const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseList
             )}
           </div>
         </div>
-        <div className="grid grid-cols-12 gap-4 hidden md:block">
-          <div className="col-span-8">
-            <div
-              className="flex items-center justify-center"
-              style={{
-                marginLeft: ".5rem",
-                marginBottom: "2rem",
-                marginTop: "0rem",
-              }}
-              role="status"
-              aria-live="polite"
-              aria-atomic="true"
-            >
-              {casesLoading ? (
-                <Skeleton className="h-5 w-[250px]" />
-              ) : (
-                <>
-                  {enoughChars && total > 1 && total !== maxCases && (
-                    <p className="text-gray-500">
-                      zeige {total} von {maxCases} polizeilichen Todesschüsse
-                    </p>
-                  )}
-                  {enoughChars && total > 1 && total === maxCases && (
-                    <p className="text-gray-500">{total} polizeiliche Todesschüsse</p>
-                  )}
-                  {enoughChars && total === 1 && (
-                    <p className="text-gray-500">ein polizeilicher Todesschuss</p>
-                  )}
-                  {enoughChars && total === 0 && (
-                    <p className="text-gray-500">
-                      kein polizeilicher Todesschuss entfält auf die Auswahl
-                    </p>
-                  )}
-                  {!enoughChars && (
-                    <p className="text-gray-500">
-                      Bitte mehr Zeichen für die Suche eingeben
-                    </p>
-                  )}
-                </>
+        <div className="hidden md:flex items-center justify-center gap-2 text-sm text-gray-500 mb-4"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {casesLoading ? (
+            <Skeleton className="h-4 w-[250px]" />
+          ) : (
+            <>
+              {enoughChars && total > 1 && total !== maxCases && (
+                <span>zeige {total} von {maxCases} polizeilichen Todesschüssen</span>
               )}
-            </div>
-          </div>
-          <div className="col-span-4">
-            <div className="mb-8">
-              {geoLoading ? (
-                <Skeleton className="h-5 w-[150px] mx-auto" />
-              ) : (
-                <p className="text-center text-gray-500">
-                  {displayMarkers.length !== totalLocations &&
-                    displayMarkers.length > 1 &&
-                    `an ${displayMarkers.length} von ${totalLocations} Orten`}
-                  {displayMarkers.length === totalLocations &&
-                    `an ${totalLocations} Orten`}
-                  {displayMarkers.length === 1 && `an einem Ort`}
-                </p>
+              {enoughChars && total > 1 && total === maxCases && (
+                <span>{total} polizeiliche Todesschüsse</span>
               )}
-            </div>
-          </div>
+              {enoughChars && total === 1 && (
+                <span>ein polizeilicher Todesschuss</span>
+              )}
+              {enoughChars && total === 0 && (
+                <span>kein polizeilicher Todesschuss entfällt auf die Auswahl</span>
+              )}
+              {!enoughChars && (
+                <span>Bitte mehr Zeichen für die Suche eingeben</span>
+              )}
+            </>
+          )}
+          {!geoLoading && !casesLoading && (
+            <span>
+              {displayMarkers.length !== totalLocations &&
+                displayMarkers.length > 1 &&
+                `· an ${displayMarkers.length} von ${totalLocations} Orten`}
+              {displayMarkers.length === totalLocations &&
+                `· an ${totalLocations} Orten`}
+              {displayMarkers.length === 1 && `· an einem Ort`}
+            </span>
+          )}
         </div>
         {enoughChars && isFiltered && (
           <>
