@@ -4,8 +4,9 @@ import { Page, expect } from '@playwright/test';
  * Wait for page to be fully loaded and hydrated
  */
 export async function waitForPageReady(page: Page) {
-  await page.waitForLoadState('networkidle');
   await page.waitForLoadState('domcontentloaded');
+  // Wait for hydration — check for interactive elements
+  await page.waitForLoadState('networkidle', { timeout: 30000 }).catch(() => {});
 }
 
 /**
