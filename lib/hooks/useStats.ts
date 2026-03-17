@@ -27,8 +27,8 @@ export function useStats(filters: StatsFilters = {}, options?: { initialData?: S
   return useQuery({
     queryKey: ["stats", filters],
     queryFn: () => fetchStats(filters),
-    placeholderData: keepPreviousData,
-    ...(options?.initialData ? { initialData: options.initialData } : {}),
+    placeholderData: options?.initialData ?? keepPreviousData,
+    staleTime: 0,
   });
 }
 
