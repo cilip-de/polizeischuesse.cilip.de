@@ -31,6 +31,7 @@ const SearchInput = ({
 
   const doStuff = useCallback(async (newQ: string) => {
     isUserTyping.current = false;
+    setSearchedQ(newQ);
 
     router.replace(
       constructUrlWithQ(newQ, {
@@ -47,7 +48,7 @@ const SearchInput = ({
     } else if (newQ.length > 2) {
       setSearchedData(await (await fetch("/api/suche?q=" + newQ)).json());
     }
-  }, [selection, setSearchedData]);
+  }, [selection, setSearchedData, setSearchedQ]);
 
   const fetchSearch = useMemo(() => _.debounce(doStuff, 500), [doStuff]);
 
@@ -55,7 +56,6 @@ const SearchInput = ({
     const newQ = event.currentTarget.value;
     isUserTyping.current = true;
     setInputValue(newQ);
-    setSearchedQ(newQ);
     fetchSearch(newQ);
   };
 
