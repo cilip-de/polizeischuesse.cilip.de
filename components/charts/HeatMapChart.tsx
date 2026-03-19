@@ -4,10 +4,10 @@ import { countBy, groupBy, orderBy, round } from "../../lib/util";
 import { useMobileTooltip, MobileTooltipOverlay } from "./MobileTooltipOverlay";
 import { ProcessedDataItem } from "../../lib/data";
 import { ChartTooltip } from "./ChartTooltip";
+import { useIsMobile } from "../../lib/hooks/useIsMobile";
 
 interface HeatMapChartProps {
   data: ProcessedDataItem[];
-  mobile?: boolean;
 }
 
 interface HeatMapCellData {
@@ -20,7 +20,8 @@ interface HeatMapSerieData {
   data: HeatMapCellData[];
 }
 
-const HeatMapChart = ({ data, mobile = false }: HeatMapChartProps) => {
+const HeatMapChart = ({ data }: HeatMapChartProps) => {
+  const mobile = useIsMobile();
   const { active: activeCell, setActive: setActiveCell, containerProps } = useMobileTooltip<{ serieId: string; x: string }>(mobile);
   const boolAtr = [
     "Schusswechsel",
@@ -102,7 +103,6 @@ const HeatMapChart = ({ data, mobile = false }: HeatMapChartProps) => {
     <div
       ref={containerProps.ref}
       style={{ height: mobile ? "600px" : "800px", position: "relative" }}
-      className={mobile ? "md:hidden" : "hidden md:block"}
       role="img"
       aria-label="Heatmap-Diagramm zeigt prozentuale Verteilung von Merkmalen polizeilicher Todesschüsse nach Bundesland"
       onClick={mobile ? containerProps.onClick : undefined}

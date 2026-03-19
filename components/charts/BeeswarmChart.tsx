@@ -6,10 +6,10 @@ import type { SimulationNodeDatum } from "d3-force";
 import { useMemo, useState, useRef, useEffect } from "react";
 import type { ProcessedDataItem } from "../../lib/data";
 import Link from "next/link";
+import { useIsMobile } from "../../lib/hooks/useIsMobile";
 
 interface BeeswarmChartProps {
   data: ProcessedDataItem[];
-  mobile?: boolean;
 }
 
 // Data item with Date field for beeswarm chart (separate from ProcessedDataItem's index signature)
@@ -88,7 +88,8 @@ const TAG_CONFIG: { [key: string]: { label: string; color: string } } = {
   indoor: { label: "Innenraum", color: "lime" },
 };
 
-const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data, mobile = false }) => {
+const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data }) => {
+  const mobile = useIsMobile();
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [tooltip, setTooltip] = useState<TooltipState>({
@@ -183,7 +184,7 @@ const BeeswarmChart: React.FC<BeeswarmChartProps> = ({ data, mobile = false }) =
   };
 
   return (
-    <div ref={containerRef} className={mobile ? "md:hidden" : "hidden md:block"} style={{ paddingTop: mobile ? "0.5rem" : "0.75rem", paddingBottom: mobile ? "1.5rem" : "2rem" }}>
+    <div ref={containerRef} style={{ paddingTop: mobile ? "0.5rem" : "0.75rem", paddingBottom: mobile ? "1.5rem" : "2rem" }}>
       {/* Month header */}
       <div
         style={{

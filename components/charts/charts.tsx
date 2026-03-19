@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import { orderBy, round } from "../../lib/util";
 import React, { useState } from "react";
 import { useMobileTooltip, MobileTooltipOverlay } from "./MobileTooltipOverlay";
+import { useIsMobile } from "../../lib/hooks/useIsMobile";
 import { countItems, ProcessedDataItem } from "../../lib/data";
 import { addMissingYears, combineArray } from "../../lib/util";
 import { makeDowData } from "../../pages/visualisierungen";
@@ -96,7 +97,6 @@ const commonProps = {
 interface VerticalBarChartProps {
   data: ChartDataItem[];
   numTicks?: number;
-  mobile?: boolean;
   tooltip?: React.FC<BarTooltipProps<ChartDataItem>>;
   gridYValues?: number[];
   axisLeft?: {
@@ -116,10 +116,10 @@ interface VerticalBarChartProps {
 const VerticalBarChart = ({
   data,
   numTicks = 3,
-  mobile = false,
   tooltip: customTooltip,
   ...rest
 }: VerticalBarChartProps) => {
+  const mobile = useIsMobile();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
   const { active: activeBar, setActive: setActiveBar, containerProps } = useMobileTooltip<{ indexValue: string; id: string; value: number; data: ChartDataItem }>(mobile);
 
@@ -189,7 +189,6 @@ const VerticalBarChart = ({
   return (
     <div
       ref={containerProps.ref}
-      className={mobile ? "md:hidden" : "hidden md:block"}
       style={{ height: mobile ? 300 : 200, position: "relative" }}
       role="img"
       aria-label="Balkendiagramm der Datenverteilung"
@@ -272,7 +271,6 @@ const VerticalBarChart = ({
 interface HorizontalBarChartProps {
   data: ChartDataItem[];
   formatPerc?: boolean;
-  mobile?: boolean;
   tooltip?: React.FC<BarTooltipProps<ChartDataItem>>;
   maxValue?: number;
   margin?: {
@@ -286,11 +284,11 @@ interface HorizontalBarChartProps {
 const HorizontalBarChart = ({
   data,
   formatPerc = false,
-  mobile = false,
   maxValue,
   margin: customMargin,
   ...rest
 }: HorizontalBarChartProps) => {
+  const mobile = useIsMobile();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
   const { active: activeBar, setActive: setActiveBar, containerProps: hContainerProps } = useMobileTooltip<{ indexValue: string; id: string; value: number }>(mobile);
 
@@ -378,7 +376,6 @@ const HorizontalBarChart = ({
   return (
     <div
       ref={hContainerProps.ref}
-      className={mobile ? "md:hidden" : "hidden md:block"}
       style={{ height: 20 * data.length + (margin.top || 0) + (margin.bottom || 0), position: "relative" }}
       role="img"
       aria-label="Horizontales Balkendiagramm der Datenverteilung"

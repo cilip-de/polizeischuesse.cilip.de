@@ -38,17 +38,6 @@ const ShortsPerYear = ({ wData }: { wData: ChartDataItem[] }) => {
           pluralUnit: "Schüsse",
         })}
       />
-      <VerticalBarChart
-        data={orderBy(wData, "value")}
-        labelSkipWidth={20}
-        labelSkipHeight={20}
-        numTicks={5}
-        mobile
-        tooltip={barChartTooltip({
-          singularUnit: "Schuss",
-          pluralUnit: "Schüsse",
-        })}
-      />
       <div className="h-5" />
       <div className="h-5" />
     </div>
@@ -106,14 +95,6 @@ const SimpleChart = ({
           bottom: 100,
           left: 50,
         }}
-        tooltip={barChartTooltip()}
-      />
-      <VerticalBarChart
-        data={orderBy(data, "value")}
-        labelSkipWidth={20}
-        labelSkipHeight={20}
-        numTicks={5}
-        mobile
         tooltip={barChartTooltip()}
       />
       <div className="h-5" />

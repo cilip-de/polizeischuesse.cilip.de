@@ -7,6 +7,7 @@ import { GetStaticProps } from "next";
 import Image from "next/image";
 import path from "path";
 import { useState, useEffect, useRef } from "react";
+import { useIsMobile } from "../lib/hooks/useIsMobile";
 import AnchorHeading from "../components/AnchorHeading";
 import Case from "../components/Case";
 import Layout from "../components/Layout";
@@ -59,7 +60,8 @@ const links = [
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const MyResponsiveLine = ({ data, mobile = false }: { data: LineSeries[]; mobile?: boolean }) => {
+const MyResponsiveLine = ({ data }: { data: LineSeries[] }) => {
+  const mobile = useIsMobile();
   const [activePoint, setActivePoint] = useState<{ seriesId: string | number; x: string | number | Date | null; y: string | number | Date | null } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -244,30 +246,8 @@ const Taser: NextPage<TaserProps> = ({ data, stats }) => {
       <AnchorHeading style={{ marginTop: "1rem" }} order={2} id="statistik">
         Taser-Statistik
       </AnchorHeading>
-      <div className="hidden md:block" style={{ height: "40vh", width: "90%", margin: "0 auto" }}>
+      <div style={{ height: "40vh", width: "100%", margin: "0 auto" }}>
         <MyResponsiveLine data={stats} />
-      </div>
-      <div className="md:hidden" style={{ width: "100%" }}>
-        <div style={{ height: "40vh", width: "100%", margin: "0 auto" }}>
-          <MyResponsiveLine data={stats} mobile />
-        </div>
-        <div style={{ marginTop: "1rem", padding: "0 1rem" }}>
-          {stats.map((serie: LineSeries, index: number) => (
-            <div key={serie.id} style={{ display: "flex", alignItems: "center", marginBottom: "0.5rem" }}>
-              <div
-                style={{
-                  width: "12px",
-                  height: "12px",
-                  borderRadius: "50%",
-                  backgroundColor: ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"][index % 9],
-                  marginRight: "0.5rem",
-                  flexShrink: 0,
-                }}
-              />
-              <p className="text-sm">{serie.id}</p>
-            </div>
-          ))}
-        </div>
       </div>
       <Collapsible open={opened} onOpenChange={setOpened}>
         <div style={{ marginTop: "1rem", textAlign: "right" }}>

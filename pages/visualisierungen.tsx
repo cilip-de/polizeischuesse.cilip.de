@@ -30,7 +30,7 @@ import Layout from "../components/Layout";
 import { countItems, setupData } from "../lib/data";
 import { addMissingYears, combineArray, isNumber } from "../lib/util";
 import { barChartTooltip, simpleBarChartTooltip, percentageTooltip, ChartTooltip } from "../components/charts/ChartTooltip";
-
+import { useIsMobile } from "../lib/hooks/useIsMobile";
 import dayjs from "dayjs";
 import visCover from "../public/vis_cover.png";
 
@@ -145,12 +145,6 @@ const CasesPerYear = ({ data }: { data: ProcessedDataItem[] }) => {
         numTicks={5}
         tooltip={barChartTooltip()}
       />
-      <VerticalBarChart
-        data={orderBy(procData, "value") as ChartDataItem[]}
-        numTicks={5}
-        mobile
-        tooltip={barChartTooltip()}
-      />
       <div className="h-5" />
     </div>
   );
@@ -186,12 +180,6 @@ const CasesPerYearWeapon = ({ data }: { data: ProcessedDataItem[] }) => {
         numTicks={5}
         tooltip={barChartTooltip()}
       />
-      <VerticalBarChart
-        data={orderBy(procData, "value") as ChartDataItem[]}
-        numTicks={5}
-        mobile
-        tooltip={barChartTooltip()}
-      />
       <div className="h-5" />
     </div>
   );
@@ -223,12 +211,6 @@ const CasesPerYearPsych = ({ data }: { data: ProcessedDataItem[] }) => {
         numTicks={5}
         tooltip={barChartTooltip()}
       />
-      <VerticalBarChart
-        data={orderBy(procData, "value") as ChartDataItem[]}
-        numTicks={5}
-        mobile
-        tooltip={barChartTooltip()}
-      />
       <div className="h-5" />
     </div>
   );
@@ -258,6 +240,7 @@ const MiddleContent = ({ children }: { children: React.ReactNode }) => (
 );
 
 const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, averages }) => {
+  const mobile = useIsMobile();
   const boolCounts: Record<string, number> = {};
   for (const d of data) {
     for (const attr of boolAtr) {
@@ -407,7 +390,6 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
         </AnchorHeading>
         <div className="h-3" />
         <BeeswarmChart data={data} />
-        <BeeswarmChart data={data} mobile />
       </div>
 
       <MiddleContent>
@@ -471,16 +453,6 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
                 pluralUnit: "",
               })}
             />
-            <HorizontalBarChart
-              data={perInhabWestSorted}
-              mobile
-              tooltip={simpleBarChartTooltip({
-                primaryLabelKey: "Bundesland",
-                secondaryLabelKey: "Anzahl je Mio. Einw.",
-                singularUnit: "",
-                pluralUnit: "",
-              })}
-            />
           </div>
           <div className="col-span-12 lg:col-span-6">
             <h4 className="text-lg font-semibold text-center">
@@ -488,16 +460,6 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
             </h4>
             <HorizontalBarChart
               data={inhabDataAfterSorted}
-              tooltip={simpleBarChartTooltip({
-                primaryLabelKey: "Bundesland",
-                secondaryLabelKey: "Anzahl je Mio. Einw.",
-                singularUnit: "",
-                pluralUnit: "",
-              })}
-            />
-            <HorizontalBarChart
-              data={inhabDataAfterSorted}
-              mobile
               tooltip={simpleBarChartTooltip({
                 primaryLabelKey: "Bundesland",
                 secondaryLabelKey: "Anzahl je Mio. Einw.",
@@ -527,26 +489,12 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
                 primaryLabelKey: "Stadt",
               })}
             />
-            <HorizontalBarChart
-              mobile
-              data={cityDataWest}
-              tooltip={simpleBarChartTooltip({
-                primaryLabelKey: "Stadt",
-              })}
-            />
           </div>
           <div className="col-span-12 lg:col-span-6">
             <h4 className="text-lg font-semibold text-center">
               Bundesrepublik 1990–{data[0].year}
             </h4>
             <HorizontalBarChart
-              data={cityDataAfter}
-              tooltip={simpleBarChartTooltip({
-                primaryLabelKey: "Stadt",
-              })}
-            />
-            <HorizontalBarChart
-              mobile
               data={cityDataAfter}
               tooltip={simpleBarChartTooltip({
                 primaryLabelKey: "Stadt",
@@ -562,15 +510,6 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Monat
         </AnchorHeading>
         <HorizontalBarChart
-          data={countItems(
-            orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
-          )}
-          tooltip={simpleBarChartTooltip({
-            primaryLabelKey: "Monat",
-          })}
-        />
-        <HorizontalBarChart
-          mobile
           data={countItems(
             orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
           )}
@@ -594,13 +533,6 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
             primaryLabelKey: "Wochentag",
           })}
         />
-        <HorizontalBarChart
-          data={dataSekNo2}
-          mobile
-          tooltip={barChartTooltip({
-            primaryLabelKey: "Wochentag",
-          })}
-        />
       </div>
       <div className="h-6" />
       <div className="h-6" />
@@ -615,13 +547,6 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
             primaryLabelKey: "Tag im Monat",
           })}
         />
-        <VerticalBarChart
-          data={countItems(data.map(({ dom }: ProcessedDataItem) => dom.toString()))}
-          mobile
-          tooltip={simpleBarChartTooltip({
-            primaryLabelKey: "Tag im Monat",
-          })}
-        />
       </div>
       <div className="h-6" />
       <div className="h-6" />
@@ -631,31 +556,32 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
           {data[0].year}
         </AnchorHeading>
         <VerticalBarChart
-          data={countItems(data.map(({ Alter }: ProcessedDataItem) => Alter).filter(isNumber))}
-          tooltip={({ value, data }: { value: number; data: ChartDataItem }) => (
-            <ChartTooltip
-              primaryLabel="Alter"
-              primaryValue={`${data.value} Jahre`}
-              secondaryLabel="Anzahl"
-              secondaryValue={value}
-              singularUnit="Opfer"
-              pluralUnit="Opfer"
-            />
-          )}
-        />
-        <VerticalBarChart
-          data={countItems(data.map(({ age }: ProcessedDataItem) => age.toString()).filter(isNumber))}
-          mobile
-          tooltip={({ value, data }: { value: number; data: ChartDataItem }) => (
-            <ChartTooltip
-              primaryLabel="Altersgruppe"
-              primaryValue={`${data.value}-${parseInt(data.value) + 4} Jahre`}
-              secondaryLabel="Anzahl"
-              secondaryValue={value}
-              singularUnit="Opfer"
-              pluralUnit="Opfer"
-            />
-          )}
+          data={mobile
+            ? countItems(data.map(({ age }: ProcessedDataItem) => age.toString()).filter(isNumber))
+            : countItems(data.map(({ Alter }: ProcessedDataItem) => Alter).filter(isNumber))
+          }
+          tooltip={mobile
+            ? ({ value, data }: { value: number; data: ChartDataItem }) => (
+              <ChartTooltip
+                primaryLabel="Altersgruppe"
+                primaryValue={`${data.value}-${parseInt(data.value) + 4} Jahre`}
+                secondaryLabel="Anzahl"
+                secondaryValue={value}
+                singularUnit="Opfer"
+                pluralUnit="Opfer"
+              />
+            )
+            : ({ value, data }: { value: number; data: ChartDataItem }) => (
+              <ChartTooltip
+                primaryLabel="Alter"
+                primaryValue={`${data.value} Jahre`}
+                secondaryLabel="Anzahl"
+                secondaryValue={value}
+                singularUnit="Opfer"
+                pluralUnit="Opfer"
+              />
+            )
+          }
         />
       </div>
       <div className="h-6" />
@@ -671,15 +597,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
           data={boolData}
           formatPerc
           maxValue={1}
-          margin={{ top: 10, right: 10, bottom: 30, left: 300 }}
-          tooltip={percentageTooltip()}
-        />
-        <HorizontalBarChart
-          mobile
-          data={boolData}
-          formatPerc
-          maxValue={1}
-          margin={{ top: 10, right: 10, bottom: 30, left: 190 }}
+          margin={{ top: 10, right: 10, bottom: 30, left: mobile ? 190 : 300 }}
           tooltip={percentageTooltip()}
         />
       </div>
@@ -692,7 +610,6 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
             –{data[0].year} auf Bundesländer (Angaben in Prozent)
           </AnchorHeading>
           <HeatMapChart data={data} />
-          <HeatMapChart data={data} mobile />
         </MiddleContent>
       </div>
       <div className="h-6" />
