@@ -1,4 +1,4 @@
-import orderBy from "lodash/orderBy";
+import { orderBy } from "../../lib/util";
 import AnchorHeading from "../AnchorHeading";
 import { VerticalBarChart, ChartDataItem } from "./charts";
 import { barChartTooltip, TooltipData } from "./ChartTooltip";

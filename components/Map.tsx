@@ -1,6 +1,5 @@
 import debounce from "lodash/debounce";
-import sortBy from "lodash/sortBy";
-import uniqBy from "lodash/uniqBy";
+import { uniqBy } from "../lib/util";
 import { useEffect, useState } from "react";
 import {
   ComposableMap,
@@ -34,18 +33,15 @@ interface ProcessedMarker {
 }
 
 const Map = ({ makersData, setInputPlace }: MapProps) => {
-  const markers: ProcessedMarker[] = sortBy(
-    uniqBy(
-      makersData.map((x: MarkerData): ProcessedMarker => ({
-        key: x.city + x.state,
-        name: x.city,
-        coordinates: [x["longitude"], x["latitude"]],
-        count: x.count,
-      })),
-      "key"
-    ),
-    "count"
-  );
+  const markers: ProcessedMarker[] = [...uniqBy(
+    makersData.map((x: MarkerData): ProcessedMarker => ({
+      key: x.city + x.state,
+      name: x.city,
+      coordinates: [x["longitude"], x["latitude"]],
+      count: x.count,
+    })),
+    "key"
+  )].sort((a, b) => a.count - b.count);
 
   const [showMarker, setShowMarker] = useState<string[]>([]);
   const debounceClear = debounce(() => setShowMarker([]), 10000);

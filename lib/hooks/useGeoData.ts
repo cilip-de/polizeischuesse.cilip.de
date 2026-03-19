@@ -28,7 +28,7 @@ export function useGeoData(filters: GeoFilters = {}, options?: { initialData?: G
     queryKey: ["geo", filters],
     queryFn: () => fetchGeoData(filters),
     placeholderData: (prev) => prev ?? options?.initialData,
-    staleTime: 0,
+    staleTime: 5 * 60 * 1000,
   });
 }
 

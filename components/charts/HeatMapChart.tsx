@@ -1,9 +1,6 @@
 import { colors } from "../../lib/colors";
 import { ResponsiveHeatMap } from "@nivo/heatmap";
-import countBy from "lodash/countBy";
-import groupBy from "lodash/groupBy";
-import orderBy from "lodash/orderBy";
-import round from "lodash/round";
+import { countBy, groupBy, orderBy, round } from "../../lib/util";
 import { useState, useEffect, useRef } from "react";
 import { ProcessedDataItem } from "../../lib/data";
 import { ChartTooltip } from "./ChartTooltip";

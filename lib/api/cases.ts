@@ -1,4 +1,4 @@
-import orderBy from "lodash/orderBy";
+import { orderBy } from "../util";
 import { setupData, PAGE_SIZE, setupOptions, SELECTABLE } from "../data";
 import type { ProcessedDataItem, SetupOptions } from "../data";
 

@@ -28,7 +28,7 @@ export function useStats(filters: StatsFilters = {}, options?: { initialData?: S
     queryKey: ["stats", filters],
     queryFn: () => fetchStats(filters),
     placeholderData: (prev) => prev ?? options?.initialData,
-    staleTime: 0,
+    staleTime: 5 * 60 * 1000,
   });
 }
 

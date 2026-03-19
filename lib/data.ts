@@ -4,9 +4,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/de";
 import localeData from "dayjs/plugin/localeData";
 import Fuse from "fuse.js";
-import map from "lodash/map";
-import orderBy from "lodash/orderBy";
-import partition from "lodash/partition";
+import { orderBy } from "./util";
 import { getGeo } from "./geo";
 import { isNumber } from "./util";
 
@@ -384,10 +382,8 @@ const setupData = async () => {
   const geoData = await getGeo(processedData);
 
   // Use data and not processedData to get the correct counts
-  const [beforeReuni, afterReuni] = map(
-    partition(data, "beforeReunification"),
-    "length"
-  );
+  const beforeReuni = data.filter((x) => x.beforeReunification).length;
+  const afterReuni = data.length - beforeReuni;
 
   const numMonthsSinceGermanReunification = dayjs().diff(
     dayjs("1990-10-3"),

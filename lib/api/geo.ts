@@ -1,4 +1,4 @@
-import countBy from "lodash/countBy";
+import { countBy } from "../util";
 import { setupData, SELECTABLE } from "../data";
 import type { ProcessedDataItem, GeoDataItem } from "../data";
 

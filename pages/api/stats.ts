@@ -20,5 +20,6 @@ export default async function handler(
     tags: req.query.tags ? (req.query.tags as string).split(",") : undefined,
   });
 
+  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
   return res.status(200).json(result);
 }

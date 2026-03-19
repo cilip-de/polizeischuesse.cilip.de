@@ -1,6 +1,6 @@
 import { csvParse } from "d3-dsv";
 import fs from "fs";
-import orderBy from "lodash/orderBy";
+import { orderBy } from "../lib/util";
 import type { NextPage } from "next";
 import { GetStaticProps } from "next";
 import Image from "next/image";

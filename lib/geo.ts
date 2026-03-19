@@ -1,5 +1,4 @@
-import uniq from "lodash/uniq";
-import uniqBy from "lodash/uniqBy";
+import { uniqBy } from "./util";
 
 interface LocationQuery {
   city: string;
@@ -98,15 +97,13 @@ const getGeo = async (data: LocationData[]): Promise<GeoResponseLocation[]> => {
     }
 
     // the API modified the city / state so keep the old ones
-    const result = uniq(
-      resp_json.locations.map((x) => ({
-        city: x.query.city,
-        state: x.query.state,
-        latitude: x.latitude,
-        longitude: x.longitude,
-        county: x.county,
-      }))
-    );
+    const result = resp_json.locations.map((x) => ({
+      city: x.query.city,
+      state: x.query.state,
+      latitude: x.latitude,
+      longitude: x.longitude,
+      county: x.county,
+    }));
 
     return uniqBy(result, (x) => x.city + x.state);
   } catch (error) {

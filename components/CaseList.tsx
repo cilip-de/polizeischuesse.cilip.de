@@ -8,6 +8,7 @@ import {
   PaginationEllipsis,
 } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useMemo, useState, useCallback } from "react";
 import { PAGE_SIZE } from "../lib/data";
@@ -21,11 +22,19 @@ import { useStats } from "../lib/hooks/useStats";
 import AnchorHeading from "./AnchorHeading";
 import Case from "./Case";
 import CategoryInput from "./CategoryInput";
-import { OverviewChartFromStats } from "./charts/OverviewChartFromStats";
-import Map from "./Map";
 import SearchInput from "./SearchInput";
 import SelectInput from "./SelectInput";
 import SortToggle from "./SortToggle";
+
+const OverviewChartFromStats = dynamic(
+  () => import("./charts/OverviewChartFromStats").then((mod) => mod.OverviewChartFromStats),
+  { ssr: false, loading: () => <Skeleton className="h-[120px]" /> }
+);
+
+const Map = dynamic(() => import("./Map"), {
+  ssr: false,
+  loading: () => <Skeleton className="h-[200px]" />,
+});
 
 interface CaseListProps {
   maxCases: number;

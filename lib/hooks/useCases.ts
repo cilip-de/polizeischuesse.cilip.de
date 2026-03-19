@@ -31,7 +31,7 @@ export function useCases(filters: CasesFilters = {}, options?: { initialData?: C
     queryKey: ["cases", filters],
     queryFn: () => fetchCases(filters),
     placeholderData: (prev) => prev ?? options?.initialData,
-    staleTime: 0,
+    staleTime: 5 * 60 * 1000,
   });
 }
 

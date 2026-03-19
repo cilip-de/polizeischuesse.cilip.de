@@ -1,5 +1,3 @@
-import range from "lodash/range";
-
 export type Selection = {
   year?: string;
   place?: string;
@@ -59,10 +57,9 @@ const addMissingYears = (
   maxYear: number | null = null
 ): ArrItem[] => {
   const years = arr.map(({ value }) => parseInt(value));
-  for (const i of range(
-    maxYear || data[data.length - 1].year,
-    minYear || data[0].year
-  )) {
+  const start = maxYear || data[data.length - 1].year;
+  const end = minYear || data[0].year;
+  for (let i = start; i > end; i--) {
     if (!years.includes(i)) arr.push({ value: `${i}`, count: 0 });
   }
   return arr;
@@ -130,12 +127,73 @@ const combineThree = (
   return arr1;
 };
 
+function orderBy<T>(
+  arr: T[],
+  iteratees: string | ((item: T) => any) | (string | ((item: T) => any))[],
+  orders?: string | string[]
+): T[] {
+  const keys = Array.isArray(iteratees) ? iteratees : [iteratees];
+  const dirs = Array.isArray(orders) ? orders : orders ? [orders] : [];
+  return [...arr].sort((a, b) => {
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const dir = (dirs[i] || "asc") === "desc" ? -1 : 1;
+      const va = typeof key === "function" ? key(a) : (a as any)[key];
+      const vb = typeof key === "function" ? key(b) : (b as any)[key];
+      if (va < vb) return -1 * dir;
+      if (va > vb) return 1 * dir;
+    }
+    return 0;
+  });
+}
+
+function round(num: number, precision: number = 0): number {
+  const factor = Math.pow(10, precision);
+  return Math.round(num * factor) / factor;
+}
+
+function countBy<T>(arr: T[], fn: ((item: T) => string | number) | string): Record<string, number> {
+  const getter = typeof fn === "string" ? (item: T) => (item as any)[fn] : fn;
+  const result: Record<string, number> = {};
+  for (const item of arr) {
+    const key = String(getter(item));
+    result[key] = (result[key] || 0) + 1;
+  }
+  return result;
+}
+
+function groupBy<T>(arr: T[], fn: ((item: T) => string) | string): Record<string, T[]> {
+  const getter = typeof fn === "string" ? (item: T) => String((item as any)[fn]) : fn;
+  const result: Record<string, T[]> = {};
+  for (const item of arr) {
+    const key = getter(item);
+    (result[key] = result[key] || []).push(item);
+  }
+  return result;
+}
+
+function uniqBy<T>(arr: T[], fn: ((item: T) => any) | string): T[] {
+  const getter = typeof fn === "string" ? (item: T) => (item as any)[fn] : fn;
+  const seen = new Set();
+  return arr.filter((item) => {
+    const key = getter(item);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 export {
   addMissingYears,
   combineArray,
   combineThree,
   constructUrl,
   constructUrlWithQ,
+  countBy,
+  groupBy,
   isNumber,
+  orderBy,
   paginate,
+  round,
+  uniqBy,
 };

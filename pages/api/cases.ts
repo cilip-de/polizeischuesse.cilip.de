@@ -23,5 +23,6 @@ export default async function handler(
     sort: req.query.sort as "relevance" | "date" | undefined,
   });
 
+  res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
   return res.status(200).json(result);
 }

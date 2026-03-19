@@ -1,5 +1,5 @@
 import { ResponsiveLine } from "@nivo/line";
-import orderBy from "lodash/orderBy";
+import { orderBy } from "../../lib/util";
 import { countItems, ProcessedDataItem } from "../../lib/data";
 import { addMissingYears } from "../../lib/util";
 
