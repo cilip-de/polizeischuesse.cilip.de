@@ -69,7 +69,6 @@ export const testData = {
 
   // API endpoints
   api: {
-    search: '/api/suche',
     contact: '/api/contact',
     feed: '/api/feed',
     og: '/api/og-case',

@@ -1,4 +1,5 @@
-import _ from "lodash";
+import countBy from "lodash/countBy";
+import uniq from "lodash/uniq";
 import { setupData, SELECTABLE } from "../data";
 import type { ProcessedDataItem } from "../data";
 
@@ -55,9 +56,9 @@ export async function getStats(filters: StatsFilters = {}): Promise<StatsRespons
     );
   }
 
-  const allYears = _.uniq(allData.map((x) => x.year)).sort();
-  const totalByYear = _.countBy(allData, (x) => x.year);
-  const hitsByYear = _.countBy(hits, (x) => x.year);
+  const allYears = uniq(allData.map((x) => x.year)).sort();
+  const totalByYear = countBy(allData, (x) => x.year);
+  const hitsByYear = countBy(hits, (x) => x.year);
 
   const yearCounts: YearCount[] = allYears.map((yr) => ({
     year: yr,

@@ -1,5 +1,5 @@
 import { ResponsiveLine } from "@nivo/line";
-import _ from "lodash";
+import orderBy from "lodash/orderBy";
 import { countItems, ProcessedDataItem } from "../../lib/data";
 import { addMissingYears } from "../../lib/util";
 
@@ -23,7 +23,7 @@ const WeaponChart = ({ data }: WeaponChartProps) => {
       )
     ).map((x) => ({ x: parseInt(x.value), y: x.count }));
 
-    return _.orderBy(step1, "x");
+    return orderBy(step1, "x");
   };
 
   const schussData = doData("Schusswaffe");

@@ -1,4 +1,4 @@
-import _ from "lodash";
+import countBy from "lodash/countBy";
 import { setupData, SELECTABLE } from "../data";
 import type { ProcessedDataItem, GeoDataItem } from "../data";
 
@@ -55,7 +55,7 @@ export async function getGeo(filters: GeoFilters = {}): Promise<GeoResponse> {
     );
   }
 
-  const locationCounts = _.countBy(resultList, (x) => x.place + x.state);
+  const locationCounts = countBy(resultList, (x) => x.place + x.state);
 
   const markers: MarkerData[] = geoData
     .filter(

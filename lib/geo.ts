@@ -1,4 +1,5 @@
-import _ from "lodash";
+import uniq from "lodash/uniq";
+import uniqBy from "lodash/uniqBy";
 
 interface LocationQuery {
   city: string;
@@ -53,7 +54,7 @@ const getGeo = async (data: LocationData[]): Promise<GeoResponseLocation[]> => {
 
   const body: GeoRequestBody = {
     provider: "here",
-    locations: _.uniqBy(
+    locations: uniqBy(
       locationsInput.filter((x) => x.query.city != "Unbekannt"),
       (x) => [x.query.city, x.query.state].join()
     ),
@@ -97,7 +98,7 @@ const getGeo = async (data: LocationData[]): Promise<GeoResponseLocation[]> => {
     }
 
     // the API modified the city / state so keep the old ones
-    const result = _.uniq(
+    const result = uniq(
       resp_json.locations.map((x) => ({
         city: x.query.city,
         state: x.query.state,
@@ -107,7 +108,7 @@ const getGeo = async (data: LocationData[]): Promise<GeoResponseLocation[]> => {
       }))
     );
 
-    return _.uniqBy(result, (x) => x.city + x.state);
+    return uniqBy(result, (x) => x.city + x.state);
   } catch (error) {
     console.error("Failed to fetch geo data:", error);
     // Return fallback data without coordinates

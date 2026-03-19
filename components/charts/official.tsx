@@ -1,4 +1,4 @@
-import _ from "lodash";
+import orderBy from "lodash/orderBy";
 import AnchorHeading from "../AnchorHeading";
 import { VerticalBarChart, ChartDataItem } from "./charts";
 import { barChartTooltip, TooltipData } from "./ChartTooltip";
@@ -20,7 +20,7 @@ const ShortsPerYear = ({ wData }: { wData: ChartDataItem[] }) => {
       <div className="h-5" />
 
       <VerticalBarChart
-        data={_.orderBy(wData, "value")}
+        data={orderBy(wData, "value")}
         numTicks={5}
         labelSkipWidth={20}
         axisLeft={{
@@ -39,7 +39,7 @@ const ShortsPerYear = ({ wData }: { wData: ChartDataItem[] }) => {
         })}
       />
       <VerticalBarChart
-        data={_.orderBy(wData, "value")}
+        data={orderBy(wData, "value")}
         labelSkipWidth={20}
         labelSkipHeight={20}
         numTicks={5}
@@ -92,7 +92,7 @@ const SimpleChart = ({
       <div className="h-5" />
 
       <VerticalBarChart
-        data={_.orderBy(data, "value")}
+        data={orderBy(data, "value")}
         numTicks={5}
         labelSkipWidth={20}
         labelSkipHeight={20}
@@ -109,7 +109,7 @@ const SimpleChart = ({
         tooltip={barChartTooltip()}
       />
       <VerticalBarChart
-        data={_.orderBy(data, "value")}
+        data={orderBy(data, "value")}
         labelSkipWidth={20}
         labelSkipHeight={20}
         numTicks={5}

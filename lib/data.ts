@@ -4,7 +4,9 @@ import dayjs from "dayjs";
 import "dayjs/locale/de";
 import localeData from "dayjs/plugin/localeData";
 import Fuse from "fuse.js";
-import _ from "lodash";
+import map from "lodash/map";
+import orderBy from "lodash/orderBy";
+import partition from "lodash/partition";
 import { getGeo } from "./geo";
 import { isNumber } from "./util";
 
@@ -93,7 +95,7 @@ const countItems = (arr: string[], sort = false) => {
   let countsEntries = Object.entries(counts);
 
   if (sort)
-    countsEntries = _.orderBy(
+    countsEntries = orderBy(
       countsEntries,
       [(x) => x[1], (x) => x[0]],
       ["desc", "asc"]
@@ -133,7 +135,7 @@ const setupOptions = (data: ProcessedDataItem[]): SetupOptions => {
     return { year: [], state: [], place: [], weapon: [], age: [] };
   }
 
-  const year = _.orderBy(
+  const year = orderBy(
     countItems(data.map((x) => x.year.toString())),
     "value",
     "desc"
@@ -289,7 +291,7 @@ interface ProcessedDataItem {
 }
 
 const preprocessData = (data: RawDataItem[]): ProcessedDataItem[] => {
-  data = _.orderBy(data, "Datum", "desc");
+  data = orderBy(data, "Datum", "desc");
 
   const dateReunification = dayjs("1990-10-3");
 
@@ -382,8 +384,8 @@ const setupData = async () => {
   const geoData = await getGeo(processedData);
 
   // Use data and not processedData to get the correct counts
-  const [beforeReuni, afterReuni] = _.map(
-    _.partition(data, "beforeReunification"),
+  const [beforeReuni, afterReuni] = map(
+    partition(data, "beforeReunification"),
     "length"
   );
 

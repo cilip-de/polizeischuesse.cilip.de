@@ -1,6 +1,9 @@
 import { colors } from "../../lib/colors";
 import { ResponsiveHeatMap } from "@nivo/heatmap";
-import _ from "lodash";
+import countBy from "lodash/countBy";
+import groupBy from "lodash/groupBy";
+import orderBy from "lodash/orderBy";
+import round from "lodash/round";
 import { useState, useEffect, useRef } from "react";
 import { ProcessedDataItem } from "../../lib/data";
 import { ChartTooltip } from "./ChartTooltip";
@@ -67,29 +70,29 @@ const HeatMapChart = ({ data, mobile = false }: HeatMapChartProps) => {
           .replace(
             "Hinweise auf psychische Ausnahmesituation",
             "Mutm. psych. Ausnahmesituation"
-          )]: _.round(
+          )]: round(
           (data.filter((d) => (d[x] as string).includes("Ja")).length / data.length) * 100,
           0
         ),
       }))
       .concat([
         {
-          unbewaffnet: _.round(
+          unbewaffnet: round(
             (data.filter((x) => x.weapon == "").length / data.length) * 100
           ),
         },
       ]);
 
-  const ans = _(data)
-    .groupBy("state")
-    .map((state, id) => ({
+  const grouped = groupBy(data, "state");
+  const ans = orderBy(
+    Object.entries(grouped).map(([id, stateItems]) => ({
       state: id.replace("Mecklenburg-Vorpommern", "Mecklenburg-Vorp."),
-      ...Object.assign({}, ...boolData(state)),
-    }))
-    .orderBy("state")
-    .value();
+      ...Object.assign({}, ...boolData(stateItems)),
+    })),
+    "state"
+  );
 
-  const perStateCounts = _(data).countBy("state").value();
+  const perStateCounts = countBy(data, "state");
 
   const keys = boolAtr
     .map((x) =>

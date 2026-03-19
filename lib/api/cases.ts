@@ -1,4 +1,4 @@
-import _ from "lodash";
+import orderBy from "lodash/orderBy";
 import { setupData, PAGE_SIZE, setupOptions, SELECTABLE } from "../data";
 import type { ProcessedDataItem, SetupOptions } from "../data";
 
@@ -68,7 +68,7 @@ export async function getCases(filters: CasesFilters = {}): Promise<CasesRespons
   }
 
   if (sort === "date") {
-    resultList = _.orderBy(resultList, (x) => x.Datum, "desc");
+    resultList = orderBy(resultList, (x) => x.Datum, "desc");
   }
 
   const total = resultList.length;

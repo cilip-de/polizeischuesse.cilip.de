@@ -1,4 +1,5 @@
-import _ from "lodash";
+import orderBy from "lodash/orderBy";
+import round from "lodash/round";
 import type { NextPage } from "next";
 import { GetStaticProps } from "next";
 import Image from "next/image";
@@ -125,12 +126,12 @@ const CasesPerYear = ({ data }: { data: ProcessedDataItem[] }) => {
         Polizeiliche Todesschüsse {data[data.length - 1].year}–{data[0].year}
       </AnchorHeading>
       <VerticalBarChart
-        data={_.orderBy(procData, "value") as ChartDataItem[]}
+        data={orderBy(procData, "value") as ChartDataItem[]}
         numTicks={5}
         tooltip={barChartTooltip()}
       />
       <VerticalBarChart
-        data={_.orderBy(procData, "value") as ChartDataItem[]}
+        data={orderBy(procData, "value") as ChartDataItem[]}
         numTicks={5}
         mobile
         tooltip={barChartTooltip()}
@@ -166,12 +167,12 @@ const CasesPerYearWeapon = ({ data }: { data: ProcessedDataItem[] }) => {
         Schusswaffe vs Stichwaffe
       </AnchorHeading>
       <VerticalBarChart
-        data={_.orderBy(procData, "value") as ChartDataItem[]}
+        data={orderBy(procData, "value") as ChartDataItem[]}
         numTicks={5}
         tooltip={barChartTooltip()}
       />
       <VerticalBarChart
-        data={_.orderBy(procData, "value") as ChartDataItem[]}
+        data={orderBy(procData, "value") as ChartDataItem[]}
         numTicks={5}
         mobile
         tooltip={barChartTooltip()}
@@ -203,12 +204,12 @@ const CasesPerYearPsych = ({ data }: { data: ProcessedDataItem[] }) => {
         psychische Ausnahmesituation
       </AnchorHeading>
       <VerticalBarChart
-        data={_.orderBy(procData, "value") as ChartDataItem[]}
+        data={orderBy(procData, "value") as ChartDataItem[]}
         numTicks={5}
         tooltip={barChartTooltip()}
       />
       <VerticalBarChart
-        data={_.orderBy(procData, "value") as ChartDataItem[]}
+        data={orderBy(procData, "value") as ChartDataItem[]}
         numTicks={5}
         mobile
         tooltip={barChartTooltip()}
@@ -220,7 +221,7 @@ const CasesPerYearPsych = ({ data }: { data: ProcessedDataItem[] }) => {
 
 const makeDowData = (data: ProcessedDataItem[]) => {
   const dataDow = countItems(
-    _.orderBy(data, "dow", "desc").map(({ dowPrint }: ProcessedDataItem) => dowPrint)
+    orderBy(data, "dow", "desc").map(({ dowPrint }: ProcessedDataItem) => dowPrint)
   );
   // make Sunday last day of week
   const lastItem = dataDow.pop();
@@ -288,10 +289,10 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
   );
 
   inhabDataWest.forEach((x: ChartDataItem) => {
-    x.count = _.round(x.count / landInhabWest[x.value], 1);
+    x.count = round(x.count / landInhabWest[x.value], 1);
   });
 
-  const perInhabWestSorted = _.orderBy(inhabDataWest, "count");
+  const perInhabWestSorted = orderBy(inhabDataWest, "count");
 
   const inhabDataAfter = countItems(
     data
@@ -303,17 +304,17 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
   );
 
   inhabDataAfter.forEach((x: ChartDataItem) => {
-    x.count = _.round(x.count / landInhab[x.value], 1);
+    x.count = round(x.count / landInhab[x.value], 1);
   });
 
-  const inhabDataAfterSorted = _.orderBy(inhabDataAfter, "count");
+  const inhabDataAfterSorted = orderBy(inhabDataAfter, "count");
 
   const cityWest = countItems(
     data.filter((x: ProcessedDataItem) => x.beforeReunification && !x.east).map((x: ProcessedDataItem) => x.place),
     true
   );
 
-  const cityDataWest = _.orderBy(cityWest, "count", "desc")
+  const cityDataWest = orderBy(cityWest, "count", "desc")
     .slice(0, 20)
     .reverse();
 
@@ -322,7 +323,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
     true
   );
 
-  const cityDataAfter = _.orderBy(cityAfter, "count", "desc")
+  const cityDataAfter = orderBy(cityAfter, "count", "desc")
     .slice(0, 20)
     .reverse();
 
@@ -377,9 +378,9 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
       <MiddleContent>
         <p>
           Seit 1990 erschoss die Polizei im Durchschnitt{" "}
-          {_.round(averages[0], 1)} Personen pro Monat. Im Jahr {dayjs().year()}{" "}
-          sind es bis jetzt {_.round(averages[2], 1)} Personen, im Jahr zuvor
-          waren es {_.round(averages[1], 1)}.
+          {round(averages[0], 1)} Personen pro Monat. Im Jahr {dayjs().year()}{" "}
+          sind es bis jetzt {round(averages[2], 1)} Personen, im Jahr zuvor
+          waren es {round(averages[1], 1)}.
         </p>
       </MiddleContent>
 
@@ -548,7 +549,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
         </AnchorHeading>
         <HorizontalBarChart
           data={countItems(
-            _.orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
+            orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
           )}
           tooltip={simpleBarChartTooltip({
             primaryLabelKey: "Monat",
@@ -557,7 +558,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
         <HorizontalBarChart
           mobile
           data={countItems(
-            _.orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
+            orderBy(data, "month", "desc").map(({ monthPrint }) => monthPrint)
           )}
           tooltip={simpleBarChartTooltip({
             primaryLabelKey: "Monat",

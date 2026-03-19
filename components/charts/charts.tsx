@@ -2,7 +2,8 @@ import { colors } from "../../lib/colors";
 import { BarDatum, BarTooltipProps, BarLegendProps, ResponsiveBar } from "@nivo/bar";
 import { ticks } from "d3-array";
 import dayjs from "dayjs";
-import _ from "lodash";
+import orderBy from "lodash/orderBy";
+import round from "lodash/round";
 import React, { useState, useEffect, useRef } from "react";
 import { countItems, ProcessedDataItem } from "../../lib/data";
 import { addMissingYears, combineArray } from "../../lib/util";
@@ -408,20 +409,20 @@ const HorizontalBarChart = ({
 
     // Always show first and last labels
     if (index === 0 || index === dataLength - 1) {
-      return formatPerc ? _.round(value * 100, 0) + " %" : value.toString();
+      return formatPerc ? round(value * 100, 0) + " %" : value.toString();
     }
 
     // For charts with many items, show every 2nd or 3rd label
     if (dataLength > 15) {
       const step = dataLength > 20 ? 3 : 2;
       if (index % step === 0) {
-        return formatPerc ? _.round(value * 100, 0) + " %" : value.toString();
+        return formatPerc ? round(value * 100, 0) + " %" : value.toString();
       }
       return "";
     }
 
     // For charts with fewer items, show all labels
-    return formatPerc ? _.round(value * 100, 0) + " %" : value.toString();
+    return formatPerc ? round(value * 100, 0) + " %" : value.toString();
   };
 
   const margin = customMargin || {
@@ -532,7 +533,7 @@ const OverviewChart = ({ data, hits, onClick }: OverviewChartProps) => {
     data.filter(({ key }) => !hitsId.has(key)).map(({ year }) => year.toString())
   );
 
-  const procData = _.orderBy(
+  const procData = orderBy(
     combineArray(
       addMissingYears(data, hitsData, data[data.length - 1].year, data[0].year),
       noHitsData,

@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import _ from "lodash";
+import debounce from "lodash/debounce";
 import router from "next/router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { constructUrlWithQ } from "../lib/util";
@@ -33,7 +33,7 @@ const SearchInput = ({
     }
   }, [q]);
 
-  const fetchSearch = useMemo(() => _.debounce((newQ: string) => {
+  const fetchSearch = useMemo(() => debounce((newQ: string) => {
     isUserTyping.current = false;
     setSearchedQRef.current(newQ);
 

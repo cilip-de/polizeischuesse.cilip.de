@@ -1,4 +1,4 @@
-import _ from "lodash";
+import range from "lodash/range";
 
 export type Selection = {
   year?: string;
@@ -24,7 +24,7 @@ const isNumber = (n: any): boolean => {
 const constructUrl = (params: Partial<Selection>) => {
   const paramsString = Object.entries(params)
     .filter((x) => !!x[1] && (!Array.isArray(x[1]) || x[1].length))
-    .map((x) => `${x[0]}=${x[1]}`);
+    .map((x) => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`);
 
   if (paramsString.length === 0) return "/";
 
@@ -59,7 +59,7 @@ const addMissingYears = (
   maxYear: number | null = null
 ): ArrItem[] => {
   const years = arr.map(({ value }) => parseInt(value));
-  for (const i of _.range(
+  for (const i of range(
     maxYear || data[data.length - 1].year,
     minYear || data[0].year
   )) {

@@ -1,6 +1,6 @@
 import { csvParse } from "d3-dsv";
 import fs from "fs";
-import _ from "lodash";
+import orderBy from "lodash/orderBy";
 import type { NextPage } from "next";
 import { GetStaticProps } from "next";
 import Image from "next/image";
@@ -78,7 +78,7 @@ const Statistiken: NextPage<StatistikenProps> = ({
       </AnchorHeading>
       <div className="h-6" />
       <div className="grid grid-cols-12 gap-4">
-        {_.orderBy(pdfs.documents, "title", "desc").map((x) => (
+        {orderBy(pdfs.documents, "title", "desc").map((x) => (
           <div className="col-span-4 lg:col-span-2 xl:col-span-1" key={x.title}>
             <a
               target="_blank"

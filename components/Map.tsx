@@ -1,4 +1,6 @@
-import _ from "lodash";
+import debounce from "lodash/debounce";
+import sortBy from "lodash/sortBy";
+import uniqBy from "lodash/uniqBy";
 import { useEffect, useState } from "react";
 import {
   ComposableMap,
@@ -32,8 +34,8 @@ interface ProcessedMarker {
 }
 
 const Map = ({ makersData, setInputPlace }: MapProps) => {
-  const markers: ProcessedMarker[] = _.sortBy(
-    _.uniqBy(
+  const markers: ProcessedMarker[] = sortBy(
+    uniqBy(
       makersData.map((x: MarkerData): ProcessedMarker => ({
         key: x.city + x.state,
         name: x.city,
@@ -46,7 +48,7 @@ const Map = ({ makersData, setInputPlace }: MapProps) => {
   );
 
   const [showMarker, setShowMarker] = useState<string[]>([]);
-  const debounceClear = _.debounce(() => setShowMarker([]), 10000);
+  const debounceClear = debounce(() => setShowMarker([]), 10000);
 
   // only render on client - this pattern is intentional for SSR hydration
   const [isClient, setIsClient] = useState(false);
