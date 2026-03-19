@@ -214,24 +214,30 @@ test.describe('Accessibility', () => {
   });
 
   test.describe('ARIA Attributes', () => {
-    test.skip('should have proper ARIA labels on interactive elements', async ({ page }) => {
+    test('should have proper ARIA labels on interactive elements', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      // Check buttons without text
-      const buttons = page.locator('button:not(:has-text(*)), [role="button"]:not(:has-text(*))');
+      // Check all visible buttons for accessible names
+      const buttons = page.locator('button:visible');
+      const count = await buttons.count();
 
-      if (await buttons.count() > 0) {
-        const firstButton = buttons.first();
-        const ariaLabel = await firstButton.getAttribute('aria-label');
-        const ariaLabelledBy = await firstButton.getAttribute('aria-labelledby');
-        const title = await firstButton.getAttribute('title');
+      for (let i = 0; i < count; i++) {
+        const button = buttons.nth(i);
+        const hasAccessibleName = await button.evaluate((el) => {
+          // Check for aria-label, aria-labelledby, title, or visible/sr-only text
+          return !!(
+            el.getAttribute('aria-label') ||
+            el.getAttribute('aria-labelledby') ||
+            el.getAttribute('title') ||
+            (el.textContent && el.textContent.trim().length > 0)
+          );
+        });
 
-        // Should have some label
-        expect(ariaLabel || ariaLabelledBy || title).toBeTruthy();
+        expect(hasAccessibleName).toBeTruthy();
       }
     });
 
-    test.skip('should have proper roles on custom components', async ({ page }) => {
+    test('should have proper roles on custom components', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
       // Check for custom interactive elements
@@ -273,7 +279,7 @@ test.describe('Accessibility', () => {
       }
     });
 
-    test.skip('should have aria-live regions for dynamic content', async ({ page }) => {
+    test('should have aria-live regions for dynamic content', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
       // Look for live regions
@@ -325,7 +331,7 @@ test.describe('Accessibility', () => {
       }
     });
 
-    test.skip('should not have images with alt="image" or generic text', async ({ page }) => {
+    test('should not have images with alt="image" or generic text', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
       const badAltImages = page.locator('img[alt="image"], img[alt="photo"], img[alt="picture"]');
@@ -359,7 +365,7 @@ test.describe('Accessibility', () => {
       }
     });
 
-    test.skip('should have proper field types for inputs', async ({ page }) => {
+    test('should have proper field types for inputs', async ({ page }) => {
       await helpers.navigateAndWait(page, '/kontakt');
 
       // Email field should have type="email"
@@ -408,39 +414,29 @@ test.describe('Accessibility', () => {
   });
 
   test.describe('Color and Contrast', () => {
-    test.skip('should not rely solely on color to convey information', async ({ page }) => {
+    test('should not rely solely on color to convey information', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      // Wait extra time for data to load
+      // Wait for data to load
       await page.waitForLoadState('networkidle', { timeout: 20000 });
-      await page.waitForTimeout(2000);
 
-      // Scroll down to where the charts are (below filters)
-      await page.evaluate(() => window.scrollTo(0, 1200));
-      await page.waitForTimeout(500);
+      // Check that SVG charts (e.g. overview chart) have text labels, not just colored bars
+      const chartSvgs = page.locator('svg:not([aria-hidden="true"])');
+      const chartCount = await chartSvgs.count();
 
-      // Charts should have patterns or labels, not just colors
-      // The chart might not appear if data isn't loaded, so check if it exists first
-      const chartContainer = page.locator('[role="img"][aria-label*="Übersichtsdiagramm"]');
-
-      if (await chartContainer.count() > 0) {
-        // Wait for SVG within the chart container
-        await page.waitForSelector('svg', { timeout: 15000 });
-
-        // Check that charts have text labels (year labels on x-axis)
-        const chartLabels = page.locator('svg text');
+      if (chartCount > 0) {
+        // At least one chart SVG should have text labels
+        const chartLabels = chartSvgs.first().locator('text');
         const labelCount = await chartLabels.count();
-
         expect(labelCount).toBeGreaterThan(0);
       } else {
-        // If chart doesn't render, that's also acceptable for this test
-        // as long as data is present in another form
+        // If no visible charts, data should be presented in text form
         const caseCards = page.locator('[data-testid="case-card"]');
         expect(await caseCards.count()).toBeGreaterThan(0);
       }
     });
 
-    test.skip('should have sufficient text size', async ({ page }) => {
+    test('should have sufficient text size', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
       const bodyFontSize = await page.evaluate(() => {
@@ -452,7 +448,7 @@ test.describe('Accessibility', () => {
       expect(bodyFontSize).toBeGreaterThanOrEqual(14);
     });
 
-    test.skip('should support high contrast mode indicators', async ({ page }) => {
+    test('should support high contrast mode indicators', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
       // Check for focus indicators (which help in high contrast)
@@ -478,7 +474,7 @@ test.describe('Accessibility', () => {
       expect(lang).toBe('de'); // German site
     });
 
-    test.skip('should use clear and simple language', async ({ page }) => {
+    test('should use clear and simple language', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
       const mainText = await page.locator('main').textContent();
@@ -487,7 +483,7 @@ test.describe('Accessibility', () => {
       expect(mainText!.length).toBeGreaterThan(100);
     });
 
-    test.skip('should not have excessive ALL CAPS text', async ({ page }) => {
+    test('should not have excessive ALL CAPS text', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
       // Find all p and span elements
@@ -512,7 +508,7 @@ test.describe('Accessibility', () => {
   });
 
   test.describe('Links and Navigation', () => {
-    test.skip('should have descriptive link text', async ({ page }) => {
+    test('should have descriptive link text', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
       const links = page.locator('a');
@@ -534,7 +530,7 @@ test.describe('Accessibility', () => {
       expect(hasGenericLinks).toBeFalsy();
     });
 
-    test.skip('should indicate external links', async ({ page }) => {
+    test('should indicate external links', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
       const externalLinks = page.locator('a[href^="http"]:not([href*="polizeischuesse.cilip.de"]):not([href*="localhost"])');
@@ -552,25 +548,21 @@ test.describe('Accessibility', () => {
       }
     });
 
-    test.skip('should have consistent navigation across pages', async ({ page }) => {
-      const navItems: string[] = [];
+    test('should have consistent navigation across pages', async ({ page }) => {
+      // Check that sub-pages have a back link to the homepage
+      const subPages = pages.filter(p => p.path !== '/');
 
-      for (const { path } of pages.slice(0, 3)) {
+      for (const { path } of subPages) {
         await helpers.navigateAndWait(page, path);
 
-        const nav = page.locator('nav a, header a');
-        const count = await nav.count();
-
-        navItems.push(`${count}`);
+        // Each sub-page should have a way to navigate back
+        const backLink = page.locator('a[href="/"]');
+        expect(await backLink.count()).toBeGreaterThan(0);
       }
-
-      // Navigation should be consistent
-      const allSame = navItems.every((count) => count === navItems[0]);
-      expect(allSame).toBeTruthy();
     });
   });
 
-  test.describe.skip('Dynamic Content', () => {
+  test.describe('Dynamic Content', () => {
     test('should announce filter changes to screen readers', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
@@ -604,27 +596,38 @@ test.describe('Accessibility', () => {
   });
 
   test.describe('Mobile Accessibility', () => {
-    test.skip('should have adequate touch target sizes on mobile', async ({ page }) => {
+    test('should have adequate touch target sizes on mobile', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 });
       await helpers.navigateAndWait(page, '/');
 
-      // Check button sizes - look for visible interactive elements
-      // Exclude skip links and hidden elements
-      const buttons = page.locator('button:visible, a[href]:visible').filter({
-        has: page.locator('text=/\\w+/')
+      // Check standalone interactive elements (not inline text links, which are
+      // exempt per WCAG 2.5.8 "Target Size" when constrained by line-height).
+      // Also exclude skip links which are intentionally off-screen.
+      const tooSmall = await page.evaluate(() => {
+        const elements = document.querySelectorAll('button:not(.skip-link), a[href]:not(.skip-link)');
+        const issues: { tag: string; text: string; width: number; height: number }[] = [];
+
+        for (const el of elements) {
+          const rect = el.getBoundingClientRect();
+          const style = window.getComputedStyle(el);
+          if (rect.width === 0 || rect.height === 0 || style.display === 'none' || style.visibility === 'hidden') continue;
+          const text = el.textContent?.trim() || '';
+          if (!text.match(/\w+/)) continue;
+
+          // Skip inline links within paragraphs (WCAG 2.5.8 exemption)
+          const parent = el.parentElement;
+          const isInline = parent && ['P', 'SPAN', 'LI', 'TD'].includes(parent.tagName) &&
+            parent.childNodes.length > 1;
+          if (isInline) continue;
+
+          if (rect.height < 24 || rect.width < 24) {
+            issues.push({ tag: el.tagName, text: text.substring(0, 60), width: Math.round(rect.width), height: Math.round(rect.height) });
+          }
+        }
+        return issues;
       });
 
-      if (await buttons.count() > 0) {
-        const firstButton = buttons.first();
-        const box = await firstButton.boundingBox();
-
-        if (box) {
-          // Touch targets should be at least 30x30px (relaxed from 44x44)
-          // Allow smaller targets for now as this is existing UI
-          expect(box.height).toBeGreaterThanOrEqual(24);
-          expect(box.width).toBeGreaterThanOrEqual(24);
-        }
-      }
+      expect(tooSmall).toEqual([]);
     });
 
     test('should allow zoom on mobile', async ({ page }) => {
@@ -638,7 +641,7 @@ test.describe('Accessibility', () => {
       expect(content).not.toContain('maximum-scale=1');
     });
 
-    test.skip('should be usable in portrait and landscape', async ({ page }) => {
+    test('should be usable in portrait and landscape', async ({ page }) => {
       // Test portrait
       await page.setViewportSize({ width: 375, height: 667 });
       await helpers.navigateAndWait(page, '/');
@@ -656,7 +659,7 @@ test.describe('Accessibility', () => {
     });
   });
 
-  test.describe.skip('Screen Reader Support', () => {
+  test.describe('Screen Reader Support', () => {
     test('should have descriptive page regions', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 

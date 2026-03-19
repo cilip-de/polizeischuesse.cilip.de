@@ -254,7 +254,7 @@ const Home = ({
         <div className="h-6" />
         <div className="flex items-center justify-center">
           <p className="text-lg">
-            <Link href="/kontakt">Kontakt, Impressum und Datenschutz</Link>
+            <Link href="/kontakt" className="inline-block py-1">Kontakt, Impressum und Datenschutz</Link>
           </p>
         </div>
         <div className="h-6" />

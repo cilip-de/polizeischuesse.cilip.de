@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 import { ReactNode } from "react";
 
@@ -25,7 +25,6 @@ export default function Layout({
   otherContent = null,
 }: LayoutProps) {
   const hostname = "https://polizeischuesse.cilip.de";
-  const router = useRouter();
 
   // Detect if this is an API-generated image or a static file
   const isApiImage = metaImg.startsWith("api/");
@@ -67,15 +66,13 @@ export default function Layout({
           Mastodon
         </a>
         <div className="h-2.5" />
-        <button
-          onClick={() => {
-            router.push("/");
-          }}
-          className="bg-transparent border-none p-0 underline cursor-pointer font-inherit text-inherit"
+        <Link
+          href="/"
+          className="underline text-inherit"
           aria-label="Zurück zur Startseite"
         >
           {"« zurück"}
-        </button>
+        </Link>
         <div className="h-2.5" />
 
         <div className="grid grid-cols-12 gap-4">

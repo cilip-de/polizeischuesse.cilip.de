@@ -154,7 +154,7 @@ function Expandable({ children }: { children: React.ReactNode }) {
           onClick={() => setState(s => s === "collapsed" ? "expanded" : "collapsed")}
           style={{
             display: "block", width: "100%", textAlign: "center",
-            color: "#228be6", fontSize: "0.875rem", margin: "0.25rem 0 0",
+            color: "#228be6", fontSize: "0.875rem", padding: "0.25rem 0",
             cursor: "pointer", background: "none", border: "none", fontFamily: "inherit",
           }}
         >
@@ -183,7 +183,7 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
       target="_blank"
       rel="noreferrer"
       aria-label={`Detailseite für Fall ${item["Name"]} öffnen`}
-      style={{ fontSize: "0.8rem", color: "#228be6" }}
+      style={{ fontSize: "0.8rem", color: "#228be6", display: "inline-block", padding: "0.25rem 0" }}
     >
       → Detailseite
     </a>
