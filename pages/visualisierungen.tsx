@@ -4,12 +4,28 @@ import { GetStaticProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import AnchorHeading from "../components/AnchorHeading";
-import {
-  HorizontalBarChart,
-  VerticalBarChart,
-} from "../components/charts/charts";
-import HeatMapChart from "../components/charts/HeatMapChart";
-import BeeswarmChart from "../components/charts/BeeswarmChart";
+import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const HorizontalBarChart = dynamic(
+  () => import("../components/charts/charts").then((mod) => mod.HorizontalBarChart),
+  { ssr: false, loading: () => <Skeleton className="h-[200px]" /> }
+);
+
+const VerticalBarChart = dynamic(
+  () => import("../components/charts/charts").then((mod) => mod.VerticalBarChart),
+  { ssr: false, loading: () => <Skeleton className="h-[200px]" /> }
+);
+
+const HeatMapChart = dynamic(
+  () => import("../components/charts/HeatMapChart"),
+  { ssr: false, loading: () => <Skeleton className="h-[800px]" /> }
+);
+
+const BeeswarmChart = dynamic(
+  () => import("../components/charts/BeeswarmChart"),
+  { ssr: false, loading: () => <Skeleton className="h-[300px]" /> }
+);
 import Layout from "../components/Layout";
 import { countItems, setupData } from "../lib/data";
 import { addMissingYears, combineArray, isNumber } from "../lib/util";
@@ -242,38 +258,32 @@ const MiddleContent = ({ children }: { children: React.ReactNode }) => (
 );
 
 const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, averages }) => {
+  const boolCounts: Record<string, number> = {};
+  for (const d of data) {
+    for (const attr of boolAtr) {
+      const val = d[attr];
+      if (typeof val === 'string' && val.includes("Ja")) {
+        boolCounts[attr] = (boolCounts[attr] || 0) + 1;
+      }
+    }
+  }
   const boolData = boolAtr.map((x) => ({
-    count: data.filter((d: ProcessedDataItem) => {
-      const val = d[x];
-      return typeof val === 'string' && val.includes("Ja");
-    }).length / data.length,
+    count: (boolCounts[x] || 0) / data.length,
     value: x
-      .replace(
-        "Hinweise auf familiäre oder häusliche Gewalt",
-        "Mutm. famil. oder häusl. Gewalt"
-      )
-      .replace(
-        "Hinweise auf Alkohol- und/ oder Drogenkonsum",
-        "Mutm. Alkohol- o. Drogenkonsum"
-      )
-      .replace(
-        "Hinweise auf psychische Ausnahmesituation",
-        "Mutm. psych. Ausnahmesituation"
-      ),
+      .replace("Hinweise auf familiäre oder häusliche Gewalt", "Mutm. famil. oder häusl. Gewalt")
+      .replace("Hinweise auf Alkohol- und/ oder Drogenkonsum", "Mutm. Alkohol- o. Drogenkonsum")
+      .replace("Hinweise auf psychische Ausnahmesituation", "Mutm. psych. Ausnahmesituation"),
   }));
 
-  const noWeaponSekYes = data.filter((x: ProcessedDataItem) => {
+  const sekYes: ProcessedDataItem[] = [];
+  const sekNo: ProcessedDataItem[] = [];
+  for (const x of data) {
     const val = x[boolAtr[1]];
-    return typeof val === 'string' && val.includes("Ja");
-  });
+    (typeof val === 'string' && val.includes("Ja") ? sekYes : sekNo).push(x);
+  }
 
-  const noWeaponSekNo = data.filter((x: ProcessedDataItem) => {
-    const val = x[boolAtr[1]];
-    return typeof val !== 'string' || !val.includes("Ja");
-  });
-
-  const dataSekYes = makeDowData(noWeaponSekYes);
-  const dataSekNo = makeDowData(noWeaponSekNo);
+  const dataSekYes = makeDowData(sekYes);
+  const dataSekNo = makeDowData(sekNo);
 
   const dataSekNo2 = combineArray(
     dataSekNo,
@@ -282,8 +292,15 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
     "mit SEK-Beteiligung"
   ) as ChartDataItem[];
 
+  const westPre: ProcessedDataItem[] = [];
+  const allPost: ProcessedDataItem[] = [];
+  for (const x of data) {
+    if (x.beforeReunification && !x.east) westPre.push(x);
+    if (!x.beforeReunification) allPost.push(x);
+  }
+
   const inhabDataWest = countItems(
-    data.filter((x: ProcessedDataItem) => x.beforeReunification && !x.east).map((x: ProcessedDataItem) => x.state),
+    westPre.map((x: ProcessedDataItem) => x.state),
     true
   );
 
@@ -294,11 +311,9 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
   const perInhabWestSorted = orderBy(inhabDataWest, "count");
 
   const inhabDataAfter = countItems(
-    data
-      .filter((x: ProcessedDataItem) => !x.beforeReunification)
-      .map((x: ProcessedDataItem) =>
-        x.state.replace("Mecklenburg-Vorpommern", "Mecklenburg-Vorp.")
-      ),
+    allPost.map((x: ProcessedDataItem) =>
+      x.state.replace("Mecklenburg-Vorpommern", "Mecklenburg-Vorp.")
+    ),
     true
   );
 
@@ -309,7 +324,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
   const inhabDataAfterSorted = orderBy(inhabDataAfter, "count");
 
   const cityWest = countItems(
-    data.filter((x: ProcessedDataItem) => x.beforeReunification && !x.east).map((x: ProcessedDataItem) => x.place),
+    westPre.map((x: ProcessedDataItem) => x.place),
     true
   );
 
@@ -318,7 +333,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
     .reverse();
 
   const cityAfter = countItems(
-    data.filter((x: ProcessedDataItem) => !x.beforeReunification).map((x: ProcessedDataItem) => x.place),
+    allPost.map((x: ProcessedDataItem) => x.place),
     true
   );
 

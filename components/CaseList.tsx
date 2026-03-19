@@ -14,11 +14,10 @@ import { useMemo, useState, useCallback } from "react";
 import { PAGE_SIZE } from "../lib/data";
 import { constructUrl, constructUrlWithQ, type Selection } from "../lib/util";
 import type { CasesResponse } from "../lib/api/cases";
+import type { CasesFilters } from "../lib/api/cases";
 import type { StatsResponse } from "../lib/api/stats";
 import type { GeoResponse } from "../lib/api/geo";
-import { useCases, type CasesFilters } from "../lib/hooks/useCases";
-import { useGeoData } from "../lib/hooks/useGeoData";
-import { useStats } from "../lib/hooks/useStats";
+import { useSearch } from "../lib/hooks/useSearch";
 import AnchorHeading from "./AnchorHeading";
 import Case from "./Case";
 import CategoryInput from "./CategoryInput";
@@ -85,16 +84,14 @@ const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseList
   // Build filters for API calls
   const filters = useMemo(() => selectionToFilters(selection, searchQ), [selection, searchQ]);
 
-  // Stats filters (same as cases but without pagination)
-  const statsFilters = useMemo(() => {
-    const { page, limit, ...rest } = filters;
-    return rest;
-  }, [filters]);
+  // Fetch cases, stats, and geo in a single request
+  const { casesData, statsData, geoData, isLoading } = useSearch(filters, {
+    initialData: { cases: initialCases, stats: initialStats, geo: initialGeo },
+  });
 
-  // Fetch cases, geo data, and stats
-  const { data: casesData, isLoading: casesLoading } = useCases(filters, { initialData: initialCases });
-  const { data: geoData, isLoading: geoLoading } = useGeoData(statsFilters, { initialData: initialGeo });
-  const { data: statsData, isLoading: statsLoading } = useStats(statsFilters, { initialData: initialStats });
+  const casesLoading = isLoading;
+  const geoLoading = isLoading;
+  const statsLoading = isLoading;
 
   const q = searchQ ?? selection.q;
   const enoughChars = !q || q.length > 2;

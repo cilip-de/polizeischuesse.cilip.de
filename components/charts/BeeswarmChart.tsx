@@ -1,7 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { colors } from "../../lib/colors";
-import * as d3Scale from "d3-scale";
-import * as d3Force from "d3-force";
+import { scaleLinear } from "d3-scale";
+import { forceSimulation, forceX, forceY, forceCollide } from "d3-force";
+import type { SimulationNodeDatum } from "d3-force";
 import { useMemo, useState, useRef, useEffect } from "react";
 import type { ProcessedDataItem } from "../../lib/data";
 import Link from "next/link";
@@ -36,7 +37,7 @@ interface BeeswarmDataItem {
   men: boolean;
 }
 
-interface BeeswarmNode extends d3Force.SimulationNodeDatum, BeeswarmDataItem {}
+interface BeeswarmNode extends SimulationNodeDatum, BeeswarmDataItem {}
 
 interface TooltipState {
   show: boolean;
@@ -384,8 +385,7 @@ const BeeswarmRow: React.FC<BeeswarmRowProps> = ({
 }) => {
   const xScale = useMemo(
     () =>
-      d3Scale
-        .scaleLinear()
+      scaleLinear()
         .domain([1, 365])
         .range([margin.left, width - margin.right]),
     [margin.left, margin.right, width]
@@ -420,11 +420,10 @@ const BeeswarmRow: React.FC<BeeswarmRowProps> = ({
       y: centerY,
     }));
 
-    const simulation = d3Force
-      .forceSimulation(nodeData)
-      .force("x", d3Force.forceX((d: any) => xScale(d.dayOfYear)).strength(1))
-      .force("y", d3Force.forceY(centerY).strength(0.3))
-      .force("collide", d3Force.forceCollide(radius + 0.5))
+    const simulation = forceSimulation(nodeData)
+      .force("x", forceX((d: any) => xScale(d.dayOfYear)).strength(1))
+      .force("y", forceY(centerY).strength(0.3))
+      .force("collide", forceCollide(radius + 0.5))
       .stop();
 
     for (let i = 0; i < 100; i++) simulation.tick();

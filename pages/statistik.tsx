@@ -6,7 +6,18 @@ import { GetStaticProps } from "next";
 import Image from "next/image";
 import path from "path";
 import AnchorHeading from "../components/AnchorHeading";
-import { ShortsPerYear, SimpleChart } from "../components/charts/official";
+import dynamic from "next/dynamic";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const ShortsPerYear = dynamic(
+  () => import("../components/charts/official").then((mod) => mod.ShortsPerYear),
+  { ssr: false, loading: () => <Skeleton className="h-[200px]" /> }
+);
+
+const SimpleChart = dynamic(
+  () => import("../components/charts/official").then((mod) => mod.SimpleChart),
+  { ssr: false, loading: () => <Skeleton className="h-[200px]" /> }
+);
 import Layout from "../components/Layout";
 import { combineThree } from "../lib/util";
 import staCov from "../public/statistik_cover.jpg";

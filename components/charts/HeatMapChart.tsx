@@ -52,33 +52,28 @@ const HeatMapChart = ({ data, mobile = false }: HeatMapChartProps) => {
     "Schussort Außen",
   ];
 
-  const boolData = (data: ProcessedDataItem[]) =>
-    boolAtr
-      .map((x) => ({
-        [x
-          .replace(
-            "Hinweise auf familiäre oder häusliche Gewalt",
-            "Mutm. famil. oder häusl. Gewalt"
-          )
-          .replace(
-            "Hinweise auf Alkohol- und/ oder Drogenkonsum",
-            "Mutm. Alkohol- o. Drogenkonsum"
-          )
-          .replace(
-            "Hinweise auf psychische Ausnahmesituation",
-            "Mutm. psych. Ausnahmesituation"
-          )]: round(
-          (data.filter((d) => (d[x] as string).includes("Ja")).length / data.length) * 100,
-          0
-        ),
-      }))
-      .concat([
-        {
-          unbewaffnet: round(
-            (data.filter((x) => x.weapon == "").length / data.length) * 100
-          ),
-        },
-      ]);
+  const boolData = (data: ProcessedDataItem[]) => {
+    const counts: Record<string, number> = {};
+    let emptyWeapon = 0;
+    for (const d of data) {
+      for (const attr of boolAtr) {
+        if ((d[attr] as string).includes("Ja")) {
+          counts[attr] = (counts[attr] || 0) + 1;
+        }
+      }
+      if (d.weapon === "") emptyWeapon++;
+    }
+    const len = data.length;
+    return boolAtr.map((x) => ({
+      [x
+        .replace("Hinweise auf familiäre oder häusliche Gewalt", "Mutm. famil. oder häusl. Gewalt")
+        .replace("Hinweise auf Alkohol- und/ oder Drogenkonsum", "Mutm. Alkohol- o. Drogenkonsum")
+        .replace("Hinweise auf psychische Ausnahmesituation", "Mutm. psych. Ausnahmesituation")
+      ]: round(((counts[x] || 0) / len) * 100, 0),
+    })).concat([{
+      unbewaffnet: round((emptyWeapon / len) * 100),
+    }]);
+  };
 
   const grouped = groupBy(data, "state");
   const ans = orderBy(
