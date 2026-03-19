@@ -8,14 +8,12 @@ import { constructUrlWithQ } from "../lib/util";
 interface SearchInputProps {
   q: string;
   selection: { p: number; [key: string]: any };
-  setSearchedData: (data: any) => void;
   setSearchedQ: (q: string) => void;
 }
 
 const SearchInput = ({
   q,
   selection,
-  setSearchedData,
   setSearchedQ,
 }: SearchInputProps) => {
   // Local input value — responds immediately to typing
@@ -24,10 +22,8 @@ const SearchInput = ({
 
   // Refs for latest values so the debounced function stays stable
   const selectionRef = useRef(selection);
-  const setSearchedDataRef = useRef(setSearchedData);
   const setSearchedQRef = useRef(setSearchedQ);
   useEffect(() => { selectionRef.current = selection; }, [selection]);
-  useEffect(() => { setSearchedDataRef.current = setSearchedData; }, [setSearchedData]);
   useEffect(() => { setSearchedQRef.current = setSearchedQ; }, [setSearchedQ]);
 
   // Sync from URL when URL changes externally (not from typing)
@@ -37,7 +33,7 @@ const SearchInput = ({
     }
   }, [q]);
 
-  const fetchSearch = useMemo(() => _.debounce(async (newQ: string) => {
+  const fetchSearch = useMemo(() => _.debounce((newQ: string) => {
     isUserTyping.current = false;
     setSearchedQRef.current(newQ);
 
@@ -50,13 +46,9 @@ const SearchInput = ({
       undefined,
       { scroll: false, shallow: true }
     );
-
-    if (newQ === "") {
-      setSearchedDataRef.current(null);
-    } else if (newQ.length > 2) {
-      setSearchedDataRef.current(await (await fetch("/api/suche?q=" + newQ)).json());
-    }
   }, 300), []);
+
+  useEffect(() => () => fetchSearch.cancel(), [fetchSearch]);
 
   const searchFunc = (event: { currentTarget: { value: any } }) => {
     const newQ = event.currentTarget.value;

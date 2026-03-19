@@ -10,7 +10,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/router";
 import { useMemo, useState, useCallback } from "react";
-import { PAGE_SIZE, type ProcessedDataItem } from "../lib/data";
+import { PAGE_SIZE } from "../lib/data";
 import { constructUrl, constructUrlWithQ, type Selection } from "../lib/util";
 import type { CasesResponse } from "../lib/api/cases";
 import type { StatsResponse } from "../lib/api/stats";
@@ -99,12 +99,6 @@ const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseList
   // Marker data from geo API
   const displayMarkers = geoData?.markers || [];
   const totalLocations = geoData?.totalLocations || 0;
-
-  // Handler for search input
-  const handleSearchData = useCallback((_data: ProcessedDataItem[] | null) => {
-    // With React Query, we don't need to store search results in state
-    // The useCases hook handles it. This is kept for compatibility.
-  }, []);
 
   const handleSearchQ = useCallback((newQ: string) => {
     setSearchQ(newQ === "" ? null : newQ);
@@ -225,7 +219,6 @@ const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseList
                 <SearchInput
                   q={q}
                   selection={selection}
-                  setSearchedData={handleSearchData}
                   setSearchedQ={handleSearchQ}
                 />
               </div>
