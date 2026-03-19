@@ -72,6 +72,57 @@ export function selectionToFilters(selection: Required<Selection>, searchQ: stri
   };
 }
 
+const StatusText = ({
+  isLoading,
+  enoughChars,
+  total,
+  maxCases,
+  displayMarkers,
+  totalLocations,
+  showLocations,
+}: {
+  isLoading: boolean;
+  enoughChars: boolean;
+  total: number;
+  maxCases: number;
+  displayMarkers: any[];
+  totalLocations: number;
+  showLocations: boolean;
+}) => {
+  if (isLoading) {
+    return <Skeleton className="h-4 w-[250px]" />;
+  }
+  return (
+    <>
+      {enoughChars && total > 1 && total !== maxCases && (
+        <span>zeige {total} von {maxCases} polizeilichen Todesschüssen</span>
+      )}
+      {enoughChars && total > 1 && total === maxCases && (
+        <span>{total} polizeiliche Todesschüsse</span>
+      )}
+      {enoughChars && total === 1 && (
+        <span>ein polizeilicher Todesschuss</span>
+      )}
+      {enoughChars && total === 0 && (
+        <span>kein polizeilicher Todesschuss entfällt auf die Auswahl</span>
+      )}
+      {!enoughChars && (
+        <span>Bitte mehr Zeichen für die Suche eingeben</span>
+      )}
+      {showLocations && (
+        <span>
+          {displayMarkers.length !== totalLocations &&
+            displayMarkers.length > 1 &&
+            `· an ${displayMarkers.length} von ${totalLocations} Orten`}
+          {displayMarkers.length === totalLocations &&
+            `· an ${totalLocations} Orten`}
+          {displayMarkers.length === 1 && `· an einem Ort`}
+        </span>
+      )}
+    </>
+  );
+};
+
 const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseListProps) => {
   const router = useRouter();
 
@@ -216,6 +267,7 @@ const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseList
                     label={label}
                     selection={selection}
                     data={options[key as keyof typeof options] || []}
+                    onChange={(x) => router.push(constructUrl({ ...selection, [key]: x, p: 1 }), undefined, { scroll: false })}
                   />
                 </div>
               ))}
@@ -234,12 +286,13 @@ const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseList
                   label={"Bewaffnung"}
                   selection={selection}
                   data={options.weapon || []}
+                  onChange={(x) => router.push(constructUrl({ ...selection, weapon: x ?? "", p: 1 }), undefined, { scroll: false })}
                 />
               </div>
             </div>
             <div className="grid grid-cols-12 gap-4 mb-4">
               <div className="col-span-12 md:col-span-8">
-                <CategoryInput q={q} selection={selection} />
+                <CategoryInput selection={selection} onChange={(tags) => router.replace(constructUrlWithQ(q, { ...selection, tags, p: 1 }), undefined, { scroll: false })} />
               </div>
               <div className="col-span-12 md:col-span-4">
                 <SelectInput
@@ -247,6 +300,7 @@ const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseList
                   label={"Alter"}
                   selection={selection}
                   data={options.age || []}
+                  onChange={(x) => router.push(constructUrl({ ...selection, age: x ?? "", p: 1 }), undefined, { scroll: false })}
                 />
               </div>
             </div>
@@ -267,41 +321,10 @@ const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseList
           </div>
           {/* Desktop status text — inside left column to avoid whitespace gap */}
           <div className="hidden md:flex items-center justify-center gap-2 text-sm text-gray-500 mt-2 mb-2"
-            role="status"
-            aria-live="polite"
-            aria-atomic="true"
+            role="status" aria-live="polite" aria-atomic="true"
           >
-            {casesLoading ? (
-              <Skeleton className="h-4 w-[250px]" />
-            ) : (
-              <>
-                {enoughChars && total > 1 && total !== maxCases && (
-                  <span>zeige {total} von {maxCases} polizeilichen Todesschüssen</span>
-                )}
-                {enoughChars && total > 1 && total === maxCases && (
-                  <span>{total} polizeiliche Todesschüsse</span>
-                )}
-                {enoughChars && total === 1 && (
-                  <span>ein polizeilicher Todesschuss</span>
-                )}
-                {enoughChars && total === 0 && (
-                  <span>kein polizeilicher Todesschuss entfällt auf die Auswahl</span>
-                )}
-                {!enoughChars && (
-                  <span>Bitte mehr Zeichen für die Suche eingeben</span>
-                )}
-              </>
-            )}
-            {!geoLoading && !casesLoading && (
-              <span>
-                {displayMarkers.length !== totalLocations &&
-                  displayMarkers.length > 1 &&
-                  `· an ${displayMarkers.length} von ${totalLocations} Orten`}
-                {displayMarkers.length === totalLocations &&
-                  `· an ${totalLocations} Orten`}
-                {displayMarkers.length === 1 && `· an einem Ort`}
-              </span>
-            )}
+            <StatusText isLoading={casesLoading} enoughChars={enoughChars} total={total} maxCases={maxCases}
+              displayMarkers={displayMarkers} totalLocations={totalLocations} showLocations={!geoLoading && !casesLoading} />
           </div>
         </div>
         <div className="col-span-4 hidden md:block mb-8">
@@ -323,38 +346,10 @@ const CaseList = ({ maxCases, initialCases, initialStats, initialGeo }: CaseList
       </div>
 
       <div className="min-h-[100rem]">
-        <div
-          className="md:hidden"
-          role="status"
-          aria-live="polite"
-          aria-atomic="true"
-        >
+        <div className="md:hidden" role="status" aria-live="polite" aria-atomic="true">
           <div className="flex items-center justify-center my-4">
-            {casesLoading ? (
-              <Skeleton className="h-5 w-[200px]" />
-            ) : (
-              <>
-                {enoughChars && total > 1 && total !== maxCases && (
-                  <p>
-                    zeige {total} von {maxCases} polizeilichen Todesschüsse
-                  </p>
-                )}
-                {enoughChars && total > 1 && total === maxCases && (
-                  <p>{total} polizeiliche Todesschüsse</p>
-                )}
-                {enoughChars && total === 1 && (
-                  <p>ein polizeilicher Todesschuss</p>
-                )}
-                {enoughChars && total === 0 && (
-                  <p>
-                    kein polizeilicher Todesschuss entfällt auf die Auswahl
-                  </p>
-                )}
-                {!enoughChars && (
-                  <p>Bitte mehr Zeichen für die Suche eingeben</p>
-                )}
-              </>
-            )}
+            <StatusText isLoading={casesLoading} enoughChars={enoughChars} total={total} maxCases={maxCases}
+              displayMarkers={displayMarkers} totalLocations={totalLocations} showLocations={false} />
           </div>
         </div>
         {enoughChars && isFiltered && (

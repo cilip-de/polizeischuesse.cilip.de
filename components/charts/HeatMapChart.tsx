@@ -1,7 +1,7 @@
 import { colors } from "../../lib/colors";
 import { ResponsiveHeatMap } from "@nivo/heatmap";
 import { countBy, groupBy, orderBy, round } from "../../lib/util";
-import { useState, useEffect, useRef } from "react";
+import { useMobileTooltip, MobileTooltipOverlay } from "./MobileTooltipOverlay";
 import { ProcessedDataItem } from "../../lib/data";
 import { ChartTooltip } from "./ChartTooltip";
 
@@ -21,23 +21,7 @@ interface HeatMapSerieData {
 }
 
 const HeatMapChart = ({ data, mobile = false }: HeatMapChartProps) => {
-  const [activeCell, setActiveCell] = useState<{ serieId: string; x: string } | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!mobile) return;
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setActiveCell(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [mobile]);
+  const { active: activeCell, setActive: setActiveCell, containerProps } = useMobileTooltip<{ serieId: string; x: string }>(mobile);
   const boolAtr = [
     "Schusswechsel",
     "Sondereinsatzbeamte",
@@ -116,46 +100,33 @@ const HeatMapChart = ({ data, mobile = false }: HeatMapChartProps) => {
 
   return (
     <div
-      ref={containerRef}
+      ref={containerProps.ref}
       style={{ height: mobile ? "600px" : "800px", position: "relative" }}
       className={mobile ? "md:hidden" : "hidden md:block"}
       role="img"
       aria-label="Heatmap-Diagramm zeigt prozentuale Verteilung von Merkmalen polizeilicher Todesschüsse nach Bundesland"
-      onClick={mobile ? () => setActiveCell(null) : undefined}
+      onClick={mobile ? containerProps.onClick : undefined}
     >
-      {mobile && activeCell && (
-        <div
-          style={{
-            position: "absolute",
-            bottom: "10px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            background: "white",
-            padding: "0.5rem 0.75rem",
-            borderRadius: "4px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
-            zIndex: 1000,
-            fontSize: "0.85rem",
-            maxWidth: "90%",
-            textAlign: "center",
-          }}
-        >
-          <div><strong>{activeCell.serieId}</strong></div>
-          <div>{activeCell.x}</div>
-          <div>
-            {(() => {
-              const cellData = ansFixed.find(serie => serie.id === activeCell.serieId)
-                ?.data.find(d => d.x === activeCell.x);
-              const count = perStateCounts[activeCell.serieId.replace("Mecklenburg-Vorp.", "Mecklenburg-Vorpommern")];
-              return cellData ? (
-                <>
-                  <strong>{cellData.y}%</strong> der {count} {count === 1 ? 'Fälle' : 'Fälle'}
-                </>
-              ) : '';
-            })()}
-          </div>
-        </div>
-      )}
+      <MobileTooltipOverlay mobile={mobile} visible={!!activeCell}>
+        {activeCell && (
+          <>
+            <div><strong>{activeCell.serieId}</strong></div>
+            <div>{activeCell.x}</div>
+            <div>
+              {(() => {
+                const cellData = ansFixed.find(serie => serie.id === activeCell.serieId)
+                  ?.data.find(d => d.x === activeCell.x);
+                const count = perStateCounts[activeCell.serieId.replace("Mecklenburg-Vorp.", "Mecklenburg-Vorpommern")];
+                return cellData ? (
+                  <>
+                    <strong>{cellData.y}%</strong> der {count} {count === 1 ? 'Fälle' : 'Fälle'}
+                  </>
+                ) : '';
+              })()}
+            </div>
+          </>
+        )}
+      </MobileTooltipOverlay>
       <ResponsiveHeatMap
         data={ansFixed}
         margin={{

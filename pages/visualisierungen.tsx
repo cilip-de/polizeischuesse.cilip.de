@@ -136,7 +136,7 @@ const CasesPerYear = ({ data }: { data: ProcessedDataItem[] }) => {
   ) as ChartDataItem[];
 
   return (
-    <div>
+    <div style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
       <AnchorHeading order={3} ta="center" id="todesschuesse-pro-jahr">
         Polizeiliche Todesschüsse {data[data.length - 1].year}–{data[0].year}
       </AnchorHeading>
@@ -176,7 +176,7 @@ const CasesPerYearWeapon = ({ data }: { data: ProcessedDataItem[] }) => {
   ) as ChartDataItem[];
 
   return (
-    <div>
+    <div style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
       <AnchorHeading order={3} ta="center" id="bewaffnung">
         Todesschüsse {data[data.length - 1].year}–{data[0].year}, Opfer mit
         Schusswaffe vs Stichwaffe
@@ -213,7 +213,7 @@ const CasesPerYearPsych = ({ data }: { data: ProcessedDataItem[] }) => {
   ) as ChartDataItem[];
 
   return (
-    <div>
+    <div style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
       <AnchorHeading order={3} ta="center" id="psychische-ausnahmesituation">
         Todesschüsse {data[data.length - 1].year}–{data[0].year}, Hinweise auf
         psychische Ausnahmesituation
@@ -401,7 +401,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
       <div className="h-6" />
       <div className="h-6" />
 
-      <div>
+      <div style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
         <AnchorHeading order={3} ta="center" id="zeitlicher-verlauf">
           Polizeiliche Todesschüsse im Jahresverlauf
         </AnchorHeading>
@@ -452,7 +452,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
       <div className="h-6" />
       <div className="h-6" />
       <div className="h-6" />
-      <div>
+      <div style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
         <AnchorHeading order={3} ta="center" id="pro-bundesland">
           Todesschüsse pro Bundesland, je eine Mio. Einwohner
         </AnchorHeading>
@@ -511,7 +511,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
       <div className="h-6" />
       <div className="h-6" />
       <div className="h-6" />
-      <div>
+      <div style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
         <AnchorHeading order={3} ta="center" id="pro-stadt">
           Todesschüsse pro Stadt
         </AnchorHeading>
@@ -557,7 +557,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
       </div>
       <div className="h-6" />
       <div className="h-6" />
-      <div>
+      <div style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
         <AnchorHeading order={3} ta="center" id="pro-monat">
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Monat
         </AnchorHeading>
@@ -581,7 +581,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
       </div>
       <div className="h-6" />
       <div className="h-6" />
-      <div>
+      <div style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
         <MiddleContent>
           <AnchorHeading order={3} ta="center" id="pro-wochentag">
             Todesschüsse {data[data.length - 1].year}–{data[0].year} pro
@@ -604,7 +604,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
       </div>
       <div className="h-6" />
       <div className="h-6" />
-      <div>
+      <div style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
         <AnchorHeading order={3} ta="center" id="pro-tag-im-monat">
           Todesschüsse {data[data.length - 1].year}–{data[0].year} pro Tag im
           Monat
@@ -625,7 +625,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
       </div>
       <div className="h-6" />
       <div className="h-6" />
-      <div>
+      <div style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
         <AnchorHeading order={3} ta="center" id="alter">
           Alter der Opfer von Todesschüssen {data[data.length - 1].year}–
           {data[0].year}
@@ -660,7 +660,7 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
       </div>
       <div className="h-6" />
       <div className="h-6" />
-      <div>
+      <div style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
         <MiddleContent>
           <AnchorHeading order={3} ta="center" id="weitere-umstaende">
             Weitere Umstände zu Todesschüssen {data[data.length - 1].year}–
@@ -685,14 +685,16 @@ const Visualisierungen: NextPage<VisualisierungenProps> = ({ data, options, aver
       </div>
       <div className="h-6" />
       <div className="h-6" />
-      <MiddleContent>
-        <AnchorHeading order={3} ta="center" id="umstaende-bundeslaender">
-          Verteilung der Umstände von Todesschüssen {data[data.length - 1].year}
-          –{data[0].year} auf Bundesländer (Angaben in Prozent)
-        </AnchorHeading>
-        <HeatMapChart data={data} />
-        <HeatMapChart data={data} mobile />
-      </MiddleContent>
+      <div style={{ contentVisibility: "auto", containIntrinsicSize: "auto 500px" }}>
+        <MiddleContent>
+          <AnchorHeading order={3} ta="center" id="umstaende-bundeslaender">
+            Verteilung der Umstände von Todesschüssen {data[data.length - 1].year}
+            –{data[0].year} auf Bundesländer (Angaben in Prozent)
+          </AnchorHeading>
+          <HeatMapChart data={data} />
+          <HeatMapChart data={data} mobile />
+        </MiddleContent>
+      </div>
       <div className="h-6" />
       <div className="h-6" />
       <div className="h-6" />

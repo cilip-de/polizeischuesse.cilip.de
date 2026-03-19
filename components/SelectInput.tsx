@@ -1,29 +1,19 @@
 import { SearchableSelect } from "@/components/ui/searchable-select";
-import router from "next/router";
-import { constructUrl } from "../lib/util";
 
 interface SelectInputProps {
   skey: string;
   label: string;
   selection: { [key: string]: any };
   data: { value: string; label: string }[];
+  onChange: (value: string | null) => void;
 }
 
-const SelectInput = ({ skey, label, selection, data }: SelectInputProps) => {
-  // Safety check: ensure data is an array
+const SelectInput = ({ skey, label, selection, data, onChange }: SelectInputProps) => {
   if (!data || !Array.isArray(data)) {
     return (
       <SearchableSelect
         value={selection[skey] || ""}
-        onChange={(x) =>
-          router.push(
-            constructUrl({ ...selection, [skey]: x, p: 1 }),
-            undefined,
-            {
-              scroll: false,
-            }
-          )
-        }
+        onChange={onChange}
         label={label}
         placeholder="auswählen"
         clearable
@@ -37,15 +27,7 @@ const SelectInput = ({ skey, label, selection, data }: SelectInputProps) => {
   return (
     <SearchableSelect
       value={selection[skey] || ""}
-      onChange={(x) =>
-        router.push(
-          constructUrl({ ...selection, [skey]: x, p: 1 }),
-          undefined,
-          {
-            scroll: false,
-          }
-        )
-      }
+      onChange={onChange}
       label={label}
       placeholder="auswählen"
       clearable

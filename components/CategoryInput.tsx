@@ -1,7 +1,5 @@
 import { MultiSelect } from "@/components/ui/multi-select";
-import router from "next/router";
 import { TAGS } from "../lib/data";
-import { constructUrlWithQ } from "../lib/util";
 
 interface Selection {
   tags: string[];
@@ -9,13 +7,12 @@ interface Selection {
 }
 
 const CategoryInput = ({
-  q,
   selection,
+  onChange,
 }: {
-  q: string;
   selection: Selection;
+  onChange: (tags: string[]) => void;
 }) => {
-  // Mantine v8 MultiSelect requires clean data with only value and label
   const mappedData = TAGS.map((x) => ({
     label: x[2],
     value: x[0],
@@ -42,13 +39,7 @@ const CategoryInput = ({
       placeholder="auswählen (mehrfach)"
       value={selection.tags}
       data={mappedData}
-      onChange={(x) =>
-        router.replace(
-          constructUrlWithQ(q, { ...selection, tags: x, p: 1 }),
-          undefined,
-          { scroll: false }
-        )
-      }
+      onChange={onChange}
     />
   );
 };
