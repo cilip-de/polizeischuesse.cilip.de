@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import _ from "lodash";
 import router from "next/router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { constructUrlWithQ } from "../lib/util";
 
 interface SearchInputProps {
@@ -22,6 +22,14 @@ const SearchInput = ({
   const [inputValue, setInputValue] = useState(q);
   const isUserTyping = useRef(false);
 
+  // Refs for latest values so the debounced function stays stable
+  const selectionRef = useRef(selection);
+  const setSearchedDataRef = useRef(setSearchedData);
+  const setSearchedQRef = useRef(setSearchedQ);
+  useEffect(() => { selectionRef.current = selection; }, [selection]);
+  useEffect(() => { setSearchedDataRef.current = setSearchedData; }, [setSearchedData]);
+  useEffect(() => { setSearchedQRef.current = setSearchedQ; }, [setSearchedQ]);
+
   // Sync from URL when URL changes externally (not from typing)
   useEffect(() => {
     if (!isUserTyping.current) {
@@ -29,13 +37,13 @@ const SearchInput = ({
     }
   }, [q]);
 
-  const doStuff = useCallback(async (newQ: string) => {
+  const fetchSearch = useMemo(() => _.debounce(async (newQ: string) => {
     isUserTyping.current = false;
-    setSearchedQ(newQ);
+    setSearchedQRef.current(newQ);
 
     router.replace(
       constructUrlWithQ(newQ, {
-        ...selection,
+        ...selectionRef.current,
         p: 1,
         q: newQ,
       }),
@@ -44,13 +52,11 @@ const SearchInput = ({
     );
 
     if (newQ === "") {
-      setSearchedData(null);
+      setSearchedDataRef.current(null);
     } else if (newQ.length > 2) {
-      setSearchedData(await (await fetch("/api/suche?q=" + newQ)).json());
+      setSearchedDataRef.current(await (await fetch("/api/suche?q=" + newQ)).json());
     }
-  }, [selection, setSearchedData, setSearchedQ]);
-
-  const fetchSearch = useMemo(() => _.debounce(doStuff, 500), [doStuff]);
+  }, 300), []);
 
   const searchFunc = (event: { currentTarget: { value: any } }) => {
     const newQ = event.currentTarget.value;
