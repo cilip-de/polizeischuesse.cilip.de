@@ -1,4 +1,4 @@
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import type { StatsFilters, StatsResponse } from "../api/stats";
 
 async function fetchStats(filters: StatsFilters): Promise<StatsResponse> {
@@ -27,7 +27,7 @@ export function useStats(filters: StatsFilters = {}, options?: { initialData?: S
   return useQuery({
     queryKey: ["stats", filters],
     queryFn: () => fetchStats(filters),
-    placeholderData: options?.initialData ?? keepPreviousData,
+    placeholderData: (prev) => prev ?? options?.initialData,
     staleTime: 0,
   });
 }
