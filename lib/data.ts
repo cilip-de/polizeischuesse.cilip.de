@@ -82,7 +82,7 @@ const TAGS: TagTuple[] = [
   ["minderjaehrig", "Minderjährig", "Minderjährig", "Volljährig"],
 ];
 
-const SEARCH_KEYES = ["Name", "Szenarium"];
+const SEARCH_KEYES = ["Name", "Szenarium", "place", "state", "weapon"];
 
 const countItems = (arr: string[], sort = false) => {
   const counts: { [key: string]: number } = {};

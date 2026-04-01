@@ -233,15 +233,15 @@ const Case = ({ item, hideLink = false, isTaser = false }: CaseProps) => {
             {isTaser ? "Getasert" : "Erschossen"} am {item.datePrint}
           </p>
           <p className="text-sm text-gray-500 leading-normal">
-            In {item.place}
-            {item.state !== item.place && `, ${item.state}`}
+            In {highlights["place"] || item.place}
+            {item.state !== item.place && <>, {highlights["state"] || item.state}</>}
           </p>
           <p className="hidden text-sm text-gray-500 leading-normal">
             {item.numShots.length > 0 && item.numShots !== "0" && item.numShots !== "1" && `Mit ${item.numShots} Schüssen`}
             {item.numShots.length > 0 && item.numShots === "1" && `Mit einem Schuss`}
           </p>
           <p className="text-sm text-gray-500 leading-normal">
-            {item.weapon && `Bewaffnet mit ${item.weapon}`}
+            {item.weapon && <>Bewaffnet mit {highlights["weapon"] || item.weapon}</>}
           </p>
           <div className="h-2.5" />
           <p className="text-sm text-gray-500">
