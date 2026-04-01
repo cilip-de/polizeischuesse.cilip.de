@@ -76,7 +76,10 @@ export async function getCases(filters: CasesFilters = {}): Promise<CasesRespons
   const startIndex = (page - 1) * limit;
   const paginatedCases = resultList.slice(startIndex, startIndex + limit).map(item => {
     const matches = matchMap.get(String(item.key));
-    return matches ? { ...item, matches } : item;
+    if (!matches) return item;
+    const clone = { ...item };
+    (clone as any).matches = matches;
+    return clone;
   });
   const filterOptions = setupOptions(resultList);
 

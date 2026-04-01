@@ -2,9 +2,9 @@ import { colors } from "../../lib/colors";
 import { ResponsiveBar } from "@nivo/bar";
 import dayjs from "dayjs";
 import { useState } from "react";
-import { ticks } from "d3-array";
 import type { YearCount } from "../../lib/hooks/useStats";
 import { ChartTooltip } from "./ChartTooltip";
+import { useIsMobile } from "../../lib/hooks/useIsMobile";
 
 type ChartDataItem = {
   value: string;
@@ -17,27 +17,26 @@ interface OverviewChartFromStatsProps {
   onClick: (year: number) => void;
 }
 
-const selectNiceTicks = (
+const selectEvenTicks = (
   data: ChartDataItem[],
   numTicks: number,
   startOffset = 0,
   endOffset = 0
-): string[] => {
-  const lastIndex = data.length - 1 - endOffset;
-  return [
-    ...Array.from(
-      new Set(
-        ticks(startOffset, lastIndex, numTicks)
-          .concat([startOffset, lastIndex])
-          .filter((x) => x >= 0 && x < data.length && x <= lastIndex)
-          .map((x) => data[x].value)
-      )
-    ),
-  ];
+): Set<string> => {
+  const first = startOffset;
+  const last = data.length - 1 - endOffset;
+  if (numTicks <= 1 || last <= first) return new Set([data[first].value, data[last].value]);
+  const indices = [first];
+  for (let i = 1; i < numTicks; i++) {
+    indices.push(Math.round(first + (i * (last - first)) / numTicks));
+  }
+  indices.push(last);
+  return new Set(indices.map((i) => data[i].value));
 };
 
 export const OverviewChartFromStats = ({ yearCounts, onClick }: OverviewChartFromStatsProps) => {
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
+  const isMobile = useIsMobile();
 
   if (!yearCounts || yearCounts.length === 0) {
     return null;
@@ -53,6 +52,8 @@ export const OverviewChartFromStats = ({ yearCounts, onClick }: OverviewChartFro
       count2: yc.total - yc.hits,
     }))
     .sort((a, b) => parseInt(a.value) - parseInt(b.value));
+
+  const visibleTicks = selectEvenTicks(chartData, isMobile ? 2 : 4, 1, 1);
 
   const tooltipOverview = ({
     value,
@@ -111,7 +112,21 @@ export const OverviewChartFromStats = ({ yearCounts, onClick }: OverviewChartFro
           return colorMap[x.id as string] || "#BFBFC1";
         }}
         axisBottom={{
-          tickValues: selectNiceTicks(chartData, 5, 1, 1),
+          renderTick: (tick) => {
+            if (!visibleTicks.has(tick.value as string)) return <g />;
+            return (
+              <g transform={`translate(${tick.x},${tick.y})`}>
+                <line y2={6} stroke="#ccc" />
+                <text
+                  y={16}
+                  textAnchor="middle"
+                  style={{ fontSize: 11, fill: "#333" }}
+                >
+                  {tick.value}
+                </text>
+              </g>
+            );
+          },
         }}
         data={chartData}
         indexBy="value"

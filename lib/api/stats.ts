@@ -55,7 +55,7 @@ export async function getStats(filters: StatsFilters = {}): Promise<StatsRespons
     );
   }
 
-  const allYears = [...new Set(allData.map((x) => x.year))].sort();
+  const allYears = Array.from(new Set(allData.map((x) => x.year))).sort();
   const totalByYear = countBy(allData, (x) => x.year);
   const hitsByYear = countBy(hits, (x) => x.year);
 
