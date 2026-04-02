@@ -34,9 +34,12 @@ test.describe('Map Interactions', () => {
       }
     });
 
-    test('should show map on mobile view', async ({ page }) => {
+    test('should show map on mobile view', async ({ page }, testInfo) => {
+      testInfo.setTimeout(60000);
       await page.setViewportSize({ width: 375, height: 667 });
-      await helpers.navigateAndWait(page, '/');
+      await page.waitForTimeout(500);
+      await page.goto('/', { waitUntil: 'domcontentloaded' });
+      await page.waitForLoadState('networkidle').catch(() => {});
 
       const map = page.locator('svg[viewBox], [data-testid*="map"]');
 

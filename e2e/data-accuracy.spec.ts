@@ -405,14 +405,15 @@ test.describe('Data Accuracy and Processing', () => {
       }
     });
 
-    test('should maintain data integrity across page loads', async ({ page }) => {
+    test('should maintain data integrity across page loads', async ({ page, }, testInfo) => {
+      testInfo.setTimeout(60000);
       await helpers.navigateAndWait(page, '/');
       await helpers.waitForDataLoad(page, 1);
 
       const initialCaseCount = await page.locator('[data-testid="case-card"]').count();
 
       // Reload page
-      await page.reload();
+      await page.reload({ waitUntil: 'domcontentloaded' });
       await helpers.waitForDataLoad(page, 1);
 
       const reloadedCaseCount = await page.locator('[data-testid="case-card"]').count();

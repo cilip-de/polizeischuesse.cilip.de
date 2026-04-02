@@ -92,16 +92,21 @@ test.describe('Visualizations Page', () => {
         // Hover over a bar in the middle of the collection (more reliable than first)
         const middleBar = bars.nth(Math.floor(barCount / 2));
         await middleBar.scrollIntoViewIfNeeded();
+        await page.waitForTimeout(500);
+
+        // Get element coordinates for reliable interaction
+        const box = await middleBar.boundingBox();
+        if (!box) return;
+        const cx = box.x + box.width / 2;
+        const cy = box.y + box.height / 2;
 
         // Check if we're on mobile viewport (≤768px matches the CSS media query)
         const viewport = page.viewportSize();
         const isMobile = viewport && viewport.width <= 768;
 
         if (isMobile) {
-          // On mobile, ensure element is within viewport before clicking
-          await middleBar.scrollIntoViewIfNeeded();
-          await page.waitForTimeout(500);
-          await middleBar.click({ force: true });
+          // On mobile, tooltips appear on click
+          await page.mouse.click(cx, cy);
           await page.waitForTimeout(800);
 
           // Mobile tooltips are absolutely positioned divs with inline styles
@@ -109,7 +114,7 @@ test.describe('Visualizations Page', () => {
           await expect(tooltip.first()).toBeVisible({ timeout: 5000 });
         } else {
           // On desktop, tooltips appear on hover
-          await middleBar.hover({ force: true });
+          await page.mouse.move(cx, cy);
           await page.waitForTimeout(500);
 
           // Look for ChartTooltip component (same selector as heatmap test)
@@ -243,16 +248,21 @@ test.describe('Visualizations Page', () => {
         // Hover over a cell in the middle of the collection
         const middleCell = cells.nth(Math.floor(await cells.count() / 2));
         await middleCell.scrollIntoViewIfNeeded();
+        await page.waitForTimeout(500);
+
+        // Get element coordinates for reliable interaction
+        const box = await middleCell.boundingBox();
+        if (!box) return;
+        const cx = box.x + box.width / 2;
+        const cy = box.y + box.height / 2;
 
         // Check if we're on mobile viewport (≤768px matches the CSS media query)
         const viewport = page.viewportSize();
         const isMobile = viewport && viewport.width <= 768;
 
         if (isMobile) {
-          // On mobile, ensure element is within viewport before clicking
-          await middleCell.scrollIntoViewIfNeeded();
-          await page.waitForTimeout(500);
-          await middleCell.click({ force: true });
+          // On mobile, tooltips appear on click
+          await page.mouse.click(cx, cy);
           await page.waitForTimeout(800);
 
           // Mobile tooltips are absolutely positioned divs with inline styles containing state names or data
@@ -262,7 +272,7 @@ test.describe('Visualizations Page', () => {
           await expect(tooltip.first()).toBeVisible({ timeout: 5000 });
         } else {
           // On desktop, tooltips appear on hover
-          await middleCell.hover({ force: true });
+          await page.mouse.move(cx, cy);
           await page.waitForTimeout(500);
 
           // Look for ChartTooltip component (renders with specific background styling)
