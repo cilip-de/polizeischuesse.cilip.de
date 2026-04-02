@@ -117,9 +117,9 @@ test.describe('Visualizations Page', () => {
           await page.mouse.move(cx, cy);
           await page.waitForTimeout(500);
 
-          // Look for ChartTooltip component (same selector as heatmap test)
-          const tooltip = page.locator('div:has(> [style*="background: white"][style*="padding: 0.3rem 0.5rem"])');
-          await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
+          // Look for ChartTooltip component by content (style selectors are unreliable across browsers)
+          const tooltip = page.locator('div').filter({ has: page.locator('strong') }).filter({ hasText: /Fall|Fälle/ });
+          await expect(tooltip.first()).toBeVisible({ timeout: 5000 });
 
           // Verify tooltip has two lines - check for strong tags (one per line)
           const strongTags = tooltip.first().locator('strong');
@@ -275,9 +275,9 @@ test.describe('Visualizations Page', () => {
           await page.mouse.move(cx, cy);
           await page.waitForTimeout(500);
 
-          // Look for ChartTooltip component (renders with specific background styling)
-          const tooltip = page.locator('div:has(> [style*="background: white"][style*="padding: 0.3rem 0.5rem"])');
-          await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
+          // Look for ChartTooltip component by content (style selectors are unreliable across browsers)
+          const tooltip = page.locator('div').filter({ has: page.locator('strong') }).filter({ hasText: /%/ });
+          await expect(tooltip.first()).toBeVisible({ timeout: 5000 });
 
           // Verify tooltip has two lines - check for strong tags (one per line)
           const strongTags = tooltip.first().locator('strong');
