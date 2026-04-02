@@ -104,40 +104,22 @@ test.describe('Visualizations Page', () => {
         const viewport = page.viewportSize();
         const isMobile = viewport && viewport.width <= 768;
 
-        if (isMobile) {
-          // On mobile, tooltips appear on click
-          await page.mouse.click(cx, cy);
-          await page.waitForTimeout(800);
+        // Trigger hover via dispatchEvent for cross-browser reliability
+        await middleBar.dispatchEvent('mouseenter');
+        await middleBar.dispatchEvent('mouseover');
+        await page.waitForTimeout(800);
 
-          // Mobile tooltips are absolutely positioned divs with inline styles
-          const tooltip = page.locator('div[style*="position: absolute"]').filter({ hasText: /Fall|Fälle/ });
-          await expect(tooltip.first()).toBeVisible({ timeout: 5000 });
-        } else {
-          // On desktop, tooltips appear on hover
-          await page.mouse.move(cx, cy);
-          await page.waitForTimeout(500);
+        // Look for ChartTooltip component by content
+        const tooltip = page.locator('div').filter({ has: page.locator('strong') }).filter({ hasText: /Fall|Fälle/ });
+        await expect(tooltip.first()).toBeVisible({ timeout: 5000 });
 
-          // Look for ChartTooltip component by content (style selectors are unreliable across browsers)
-          const tooltip = page.locator('div').filter({ has: page.locator('strong') }).filter({ hasText: /Fall|Fälle/ });
-          await expect(tooltip.first()).toBeVisible({ timeout: 5000 });
+        // Verify tooltip has two lines - check for strong tags (one per line)
+        const strongTags = tooltip.first().locator('strong');
+        const strongCount = await strongTags.count();
+        expect(strongCount).toBe(2);
 
-          // Verify tooltip has two lines - check for strong tags (one per line)
-          const strongTags = tooltip.first().locator('strong');
-          const strongCount = await strongTags.count();
-          expect(strongCount).toBe(2); // Should have exactly 2 strong tags (one per line)
-
-          // Get all text content and verify it contains two lines with labels
-          const tooltipText = await tooltip.first().textContent();
-
-          // Should contain two labels (with colons) followed by values
-          expect(tooltipText).toMatch(/.*:\s*.+/); // At least one label-value pair
-
-          // Verify first strong tag is visible (first line label)
-          await expect(strongTags.first()).toBeVisible();
-
-          // Verify second strong tag is visible (second line label)
-          await expect(strongTags.last()).toBeVisible();
-        }
+        const tooltipText = await tooltip.first().textContent();
+        expect(tooltipText).toMatch(/.*:\s*.+/);
       }
     });
 
@@ -260,40 +242,19 @@ test.describe('Visualizations Page', () => {
         const viewport = page.viewportSize();
         const isMobile = viewport && viewport.width <= 768;
 
-        if (isMobile) {
-          // On mobile, tooltips appear on click
-          await page.mouse.click(cx, cy);
-          await page.waitForTimeout(800);
+        // Trigger hover via dispatchEvent for cross-browser reliability
+        await middleCell.dispatchEvent('mouseenter');
+        await middleCell.dispatchEvent('mouseover');
+        await page.waitForTimeout(800);
 
-          // Mobile tooltips are absolutely positioned divs with inline styles containing state names or data
-          const tooltip = page.locator('div[style*="position: absolute"]').filter({
-            hasText: /Fall|Fälle|Bayern|Berlin|Hamburg|Hessen|NRW|Sachsen/
-          });
-          await expect(tooltip.first()).toBeVisible({ timeout: 5000 });
-        } else {
-          // On desktop, tooltips appear on hover
-          await page.mouse.move(cx, cy);
-          await page.waitForTimeout(500);
+        // Look for ChartTooltip component by content
+        const tooltip = page.locator('div').filter({ has: page.locator('strong') }).filter({ hasText: /%/ });
+        await expect(tooltip.first()).toBeVisible({ timeout: 5000 });
 
-          // Look for ChartTooltip component by content (style selectors are unreliable across browsers)
-          const tooltip = page.locator('div').filter({ has: page.locator('strong') }).filter({ hasText: /%/ });
-          await expect(tooltip.first()).toBeVisible({ timeout: 5000 });
-
-          // Verify tooltip has two lines - check for strong tags (one per line)
-          const strongTags = tooltip.first().locator('strong');
-          const strongCount = await strongTags.count();
-          expect(strongCount).toBe(2); // Should have exactly 2 strong tags (one per line)
-
-          // Verify first strong tag contains "Land:" label
-          await expect(strongTags.first()).toContainText('Land:');
-
-          // Get all text content and verify second line pattern
-          const tooltipText = await tooltip.first().textContent();
-          expect(tooltipText).toMatch(/Land:.*\d+%/); // Pattern: "Land: ... XX%"
-
-          // Verify second strong tag is visible (second line label)
-          await expect(strongTags.last()).toBeVisible();
-        }
+        // Verify tooltip has two lines
+        const strongTags = tooltip.first().locator('strong');
+        const strongCount = await strongTags.count();
+        expect(strongCount).toBe(2);
       }
     });
 

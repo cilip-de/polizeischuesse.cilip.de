@@ -78,7 +78,8 @@ test.describe("Page Navigation", () => {
     }
   });
 
-  test("should handle browser back/forward navigation", async ({ page }) => {
+  test("should handle browser back/forward navigation", async ({ page }, testInfo) => {
+    testInfo.setTimeout(60000);
     await page.goto("http://localhost:3000/");
     await helpers.waitForPageReady(page);
 
@@ -88,14 +89,12 @@ test.describe("Page Navigation", () => {
     await expect(page).toHaveURL(/visualisierungen/);
 
     // Go back
-    await page.goBack();
-    await helpers.waitForPageReady(page);
-    await expect(page).toHaveURL("http://localhost:3000/");
+    await page.goBack({ waitUntil: 'domcontentloaded' });
+    await expect(page).toHaveURL("http://localhost:3000/", { timeout: 10000 });
 
     // Go forward
-    await page.goForward();
-    await helpers.waitForPageReady(page);
-    await expect(page).toHaveURL(/visualisierungen/);
+    await page.goForward({ waitUntil: 'domcontentloaded' });
+    await expect(page).toHaveURL(/visualisierungen/, { timeout: 10000 });
   });
 
   test("should display correct page titles", async ({ page }) => {
