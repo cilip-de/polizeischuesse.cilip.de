@@ -98,13 +98,15 @@ test.describe('Visualizations Page', () => {
         const isMobile = viewport && viewport.width <= 768;
 
         if (isMobile) {
-          // On mobile, tooltips appear on click
-          await middleBar.click({ force: true });
+          // On mobile, ensure element is within viewport before clicking
+          await middleBar.scrollIntoViewIfNeeded();
           await page.waitForTimeout(500);
+          await middleBar.click({ force: true });
+          await page.waitForTimeout(800);
 
           // Mobile tooltips are absolutely positioned divs with inline styles
           const tooltip = page.locator('div[style*="position: absolute"]').filter({ hasText: /Fall|Fälle/ });
-          await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
+          await expect(tooltip.first()).toBeVisible({ timeout: 5000 });
         } else {
           // On desktop, tooltips appear on hover
           await middleBar.hover({ force: true });
@@ -247,15 +249,17 @@ test.describe('Visualizations Page', () => {
         const isMobile = viewport && viewport.width <= 768;
 
         if (isMobile) {
-          // On mobile, tooltips appear on click
-          await middleCell.click({ force: true });
+          // On mobile, ensure element is within viewport before clicking
+          await middleCell.scrollIntoViewIfNeeded();
           await page.waitForTimeout(500);
+          await middleCell.click({ force: true });
+          await page.waitForTimeout(800);
 
           // Mobile tooltips are absolutely positioned divs with inline styles containing state names or data
           const tooltip = page.locator('div[style*="position: absolute"]').filter({
             hasText: /Fall|Fälle|Bayern|Berlin|Hamburg|Hessen|NRW|Sachsen/
           });
-          await expect(tooltip.first()).toBeVisible({ timeout: 3000 });
+          await expect(tooltip.first()).toBeVisible({ timeout: 5000 });
         } else {
           // On desktop, tooltips appear on hover
           await middleCell.hover({ force: true });

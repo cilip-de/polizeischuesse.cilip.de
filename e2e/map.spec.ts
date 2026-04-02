@@ -36,8 +36,7 @@ test.describe('Map Interactions', () => {
 
     test('should show map on mobile view', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 });
-      await page.reload();
-      await helpers.waitForPageReady(page);
+      await helpers.navigateAndWait(page, '/');
 
       const map = page.locator('svg[viewBox], [data-testid*="map"]');
 

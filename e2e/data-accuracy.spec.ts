@@ -409,13 +409,13 @@ test.describe('Data Accuracy and Processing', () => {
       await helpers.navigateAndWait(page, '/');
       await helpers.waitForDataLoad(page, 1);
 
-      const initialCaseCount = await page.locator('[data-testid*="case"], .case, article, tbody tr').count();
+      const initialCaseCount = await page.locator('[data-testid="case-card"]').count();
 
       // Reload page
       await page.reload();
       await helpers.waitForDataLoad(page, 1);
 
-      const reloadedCaseCount = await page.locator('[data-testid*="case"], .case, article, tbody tr').count();
+      const reloadedCaseCount = await page.locator('[data-testid="case-card"]').count();
 
       // Count should be consistent
       expect(reloadedCaseCount).toBe(initialCaseCount);
