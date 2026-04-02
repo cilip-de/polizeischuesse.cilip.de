@@ -22,7 +22,7 @@ const isNumber = (n: any): boolean => {
 const constructUrl = (params: Partial<Selection>) => {
   const paramsString = Object.entries(params)
     .filter((x) => !!x[1] && (!Array.isArray(x[1]) || x[1].length))
-    .map((x) => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1])}`);
+    .map((x) => `${encodeURIComponent(x[0])}=${encodeURIComponent(String(x[1]))}`);
 
   if (paramsString.length === 0) return "/";
 
