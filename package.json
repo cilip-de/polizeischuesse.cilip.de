@@ -46,8 +46,8 @@
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.58.2",
-    "@tailwindcss/postcss": "^4.2.1",
+    "@playwright/test": "^1.59.1",
+    "@tailwindcss/postcss": "^4.2.2",
     "@types/d3-array": "^3.2.2",
     "@types/d3-fetch": "^3.0.7",
     "@types/d3-force": "^3.0.10",
@@ -57,7 +57,7 @@
     "@types/react-simple-maps": "^3.0.6",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9.39.4",
-    "eslint-config-next": "^16.1.6",
+    "eslint-config-next": "^16.2.2",
     "eslint-plugin-react-compiler": "^19.1.0-rc.2",
     "postcss": "^8.5.8",
     "prettier": "^3.6.2",
