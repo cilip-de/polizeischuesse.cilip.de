@@ -1,0 +1,14 @@
+name: Manual Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy
+        run: |
+          output=$(curl --fail --show-error --max-time 600 -X POST "${{ secrets.DEPLOY_URL }}")
+          echo "$output"
+          echo "$output" | tail -1 | grep -q "Deploy successful"
