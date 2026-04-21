@@ -1,13 +1,46 @@
-name: Manual Deploy
+name: Deploy
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: ["Update data from remote location"]
+    types: [completed]
+    branches: [main]
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
+      - name: Check out repo
+        if: ${{ github.event_name == 'workflow_run' }}
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+
+      - name: Skip if no new data commit
+        if: ${{ github.event_name == 'workflow_run' }}
+        id: check
+        env:
+          RUN_STARTED_AT: ${{ github.event.workflow_run.run_started_at }}
+        run: |
+          subject=$(git log -1 --format=%s)
+          head_ts=$(git log -1 --format=%ct)
+          run_ts=$(date -u -d "$RUN_STARTED_AT" +%s)
+          echo "HEAD: $subject ($head_ts)"
+          echo "Triggering run started: $RUN_STARTED_AT ($run_ts)"
+          if [[ "$subject" != Flat:* ]] || [ "$head_ts" -lt "$run_ts" ]; then
+            echo "No new Flat commit from this run; skipping deploy."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Deploy
+        if: ${{ steps.check.outputs.skip != 'true' }}
         run: |
           output=$(curl --fail --show-error --max-time 600 -X POST "${{ secrets.DEPLOY_URL }}")
           echo "$output"

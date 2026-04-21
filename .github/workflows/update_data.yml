@@ -12,10 +12,6 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v2
 
-      - name: Record SHA before fetch
-        id: before
-        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
       - name: Fetch shootings data
         uses: githubocto/flat@v3
         with:
@@ -43,14 +39,3 @@ jobs:
           http_url: ${{ secrets.OFFICIAL_TASER_REMOTE }}
           downloaded_filename: public/official_taser_statistics.csv
           mask: true
-
-      - name: Deploy if data changed
-        run: |
-          git fetch origin main
-          if [ "$(git rev-parse origin/main)" = "${{ steps.before.outputs.sha }}" ]; then
-            echo "No new commit from flat; skipping deploy."
-            exit 0
-          fi
-          output=$(curl --fail --show-error --max-time 600 -X POST "${{ secrets.DEPLOY_URL }}")
-          echo "$output"
-          echo "$output" | tail -1 | grep -q "Deploy successful"
