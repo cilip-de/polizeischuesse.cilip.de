@@ -38,16 +38,31 @@ const selectNiceTicks = (
   endOffset = 0
 ): string[] => {
   const lastIndex = data.length - 1 - endOffset;
-  return [
-    ...Array.from(
-      new Set(
-        ticks(startOffset, lastIndex, numTicks)
-          .concat([startOffset, lastIndex])
-          .filter((x) => x >= 0 && x < data.length && x <= lastIndex)
-          .map((x) => data[x].value)
-      )
-    ),
-  ];
+  if (lastIndex <= startOffset) {
+    return data[startOffset] ? [data[startOffset].value] : [];
+  }
+
+  // We always want to show the first and last labels (they define the range,
+  // e.g. "1984–2025"). The d3 "nice" ticks can land right next to those forced
+  // endpoints, which makes adjacent labels overlap (e.g. 2024 sitting on top of
+  // 2025). Drop any nice tick that is too close to either endpoint.
+  const step = (lastIndex - startOffset) / numTicks;
+  const minGap = Math.max(1, Math.ceil(step / 2));
+
+  const niceIndices = ticks(startOffset, lastIndex, numTicks).filter(
+    (x) =>
+      x > startOffset &&
+      x < lastIndex &&
+      x < data.length &&
+      x - startOffset >= minGap &&
+      lastIndex - x >= minGap
+  );
+
+  const indices = Array.from(
+    new Set([startOffset, ...niceIndices, lastIndex])
+  ).sort((a, b) => a - b);
+
+  return indices.map((x) => data[x].value);
 };
 
 const tooltip: React.FC<BarTooltipProps<ChartDataItem>> = ({ value, data, id }) => {
