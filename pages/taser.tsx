@@ -257,36 +257,55 @@ const Taser: NextPage<TaserProps> = ({ data, stats }) => {
             </button>
           </CollapsibleTrigger>
           <CollapsibleContent>
-            <p className="text-sm text-gray-500 text-left" style={{ marginTop: "0.5rem" }}>
-              Seit 2020 führt das Polizeitechnische Institut der Deutschen
-              Hochschule der Polizei (DhPol) nach einem Beschluss der IMK
-              Informationen zu Taser-Einsätzen aus Ländern und Bund zusammen (siehe
-              auch die <a href="#dokumente">Dokumente weiter unten</a>). Diese
-              konnten wir durch eine IFG-Anfrage befreien – vorläufig: Für die Jahre
-              ab 2024 wurden die Daten als Verschlusssache eingestuft, nachdem ein
-              oder mehrere Bundesländer Angaben zu Spezialeinheiten als
-              „vertraulich“ behandeln wollten. Deshalb haben wir die Angaben für die
-              Folgejahre nun mit weiteren IFG- sowie Presseanfragen des „nd“ und
-              Recherchen von netzpolitik.org zusammengetragen. Unsere Gesamtzahlen
-              stammen aus Einzelangaben zu: <b>Spezialeinheiten</b> (alle
-              Bundesländer, Bundespolizei und Zoll), <b>Streifendienst</b> (Stand
-              Juni 2026: Bayern, Brandenburg, Bremen, Hessen, Nordrhein-Westfalen,
-              Rheinland-Pfalz, Saarland, Schleswig-Holstein, Bundespolizei),{" "}
-              <b>Pilotprojekte</b> (Stand Juni 2026: Berlin, Baden-Württemberg,
-              Hamburg, Sachsen-Anhalt, Schleswig-Holstein). In den Statistiken der
-              DhPol werden (anders als zum Schusswaffengebrauch) auch Alter,
-              Geschlecht und Alkohol- oder Drogenkonsum der betroffenen Person
-              genannt, außerdem Verletzungen und eine anschließend notwendige
-              medizinische Versorgung. Dass Menschen laut den DhPol-Angaben nach
-              Taser-Einsätzen auch gemäß PsychKG eingewiesen werden, verweist
-              darauf, dass die Waffen oft gegen diese Personengruppe gerichtet
-              werden. Die zunehmend flächendeckende Einführung begründen die
-              Innenministerien und Polizeigewerkschaften mit Tasern als Alternative
-              zu Schusswaffen sowie als Schutz für Menschen, die mit Hieb- oder
-              Stichwaffen hantieren. Diese Argumente widerlegen unsere Recherchen:
-              Beide Einsatzformen nehmen zu – Taser sind also eine zusätzliche,
-              mitunter tödliche Waffe, und kein Ersatz.
-            </p>
+            <div className="text-sm text-gray-500 text-left" style={{ marginTop: "0.5rem" }}>
+              <p>
+                Seit 2020 führt das Polizeitechnische Institut der Deutschen
+                Hochschule der Polizei (DhPol) nach einem Beschluss der IMK
+                Informationen zu Taser-Einsätzen aus Ländern und Bund zusammen
+                (siehe auch die <a href="#dokumente">Dokumente weiter unten</a>).
+                Diese konnten wir durch eine IFG-Anfrage befreien – vorläufig: Für
+                die Jahre ab 2024 wurden die Daten als Verschlusssache eingestuft,
+                nachdem ein oder mehrere Bundesländer Angaben zu Spezialeinheiten
+                als „vertraulich“ behandeln wollten. Deshalb haben wir die Angaben
+                für die Folgejahre nun mit weiteren IFG- sowie Presseanfragen des
+                „nd“ und Recherchen von netzpolitik.org zusammengetragen.
+              </p>
+              <p className="mt-3">
+                Unsere Gesamtzahlen stammen aus Einzelangaben zu:
+              </p>
+              <ul className="mt-1 list-disc list-outside pl-5 space-y-1">
+                <li>
+                  <b>Spezialeinheiten</b> (alle Bundesländer, Bundespolizei und
+                  Zoll)
+                </li>
+                <li>
+                  <b>Streifendienst</b> (Stand Juni 2026: Bayern, Brandenburg,
+                  Bremen, Hessen, Nordrhein-Westfalen, Rheinland-Pfalz, Saarland,
+                  Schleswig-Holstein, Bundespolizei)
+                </li>
+                <li>
+                  <b>Pilotprojekte</b> (Stand Juni 2026: Berlin, Baden-Württemberg,
+                  Hamburg, Sachsen-Anhalt, Schleswig-Holstein)
+                </li>
+              </ul>
+              <p className="mt-3">
+                In den Statistiken der DhPol werden (anders als zum
+                Schusswaffengebrauch) auch Alter, Geschlecht und Alkohol- oder
+                Drogenkonsum der betroffenen Person genannt, außerdem Verletzungen
+                und eine anschließend notwendige medizinische Versorgung. Dass
+                Menschen laut den DhPol-Angaben nach Taser-Einsätzen auch gemäß
+                PsychKG eingewiesen werden, verweist darauf, dass die Waffen oft
+                gegen diese Personengruppe gerichtet werden.
+              </p>
+              <p className="mt-3">
+                Die zunehmend flächendeckende Einführung begründen die
+                Innenministerien und Polizeigewerkschaften mit Tasern als
+                Alternative zu Schusswaffen sowie als Schutz für Menschen, die mit
+                Hieb- oder Stichwaffen hantieren. Diese Argumente widerlegen unsere
+                Recherchen: Beide Einsatzformen nehmen zu – Taser sind also eine
+                zusätzliche, mitunter tödliche Waffe, und kein Ersatz.
+              </p>
+            </div>
           </CollapsibleContent>
         </div>
       </Collapsible>
