@@ -259,24 +259,33 @@ const Taser: NextPage<TaserProps> = ({ data, stats }) => {
           <CollapsibleContent>
             <p className="text-sm text-gray-500 text-left" style={{ marginTop: "0.5rem" }}>
               Seit 2020 führt das Polizeitechnische Institut der Deutschen
-              Hochschule der Polizei nach einem Beschluss der IMK Informationen zu
-              Taser-Einsätzen aus Ländern und Bund zusammen. Diese konnten wir durch
-              eine IFG-Anfrage befreien. Unsere Gesamtzahlen stammen aus
-              Einzelangaben zu: <b>Spezialeinheiten</b> (alle Bundesländer,
-              Bundespolizei und Zoll), <b>Streifendienst</b> (Stand Mai 2025:
-              Bayern, Brandenburg, Bremen, Nordrhein-Westfalen, Rheinland-Pfalz,
-              Saarland, Schleswig-Holstein), <b>Pilotprojekte</b> (Stand Mai 2025:
-              Berlin, Hamburg, Hessen, Schleswig-Holstein, Bundespolizei).
-              Dokumentiert wird darin aber <b>nur das Ziehen der Waffe</b> - die
-              Zahl von Androhungen des Tasereinsatzes ohne anschließendes Auslösen
-              lag etwa in NRW im Jahr 2023 um den Faktor 3 höher. In den Statistiken
-              werden (anders als zum Schusswaffengebrauch) auch Alter, Geschlecht
-              und Alkohol- oder Drogenkonsum der betroffenen Person genannt,
-              außerdem Verletzungen und eine anschließend notwendige medizinische
-              Versorgung. Dass Menschen auch nach PsychKG eingewiesen werden,
-              verweist darauf, dass sie nicht zwingend wegen des Taser-Einsatzes
-              behandelt werden mussten. Siehe auch die{" "}
-              <a href="#dokumente">Dokumente weiter unten</a>.
+              Hochschule der Polizei (DhPol) nach einem Beschluss der IMK
+              Informationen zu Taser-Einsätzen aus Ländern und Bund zusammen (siehe
+              auch die <a href="#dokumente">Dokumente weiter unten</a>). Diese
+              konnten wir durch eine IFG-Anfrage befreien – vorläufig: Für die Jahre
+              ab 2024 wurden die Daten als Verschlusssache eingestuft, nachdem ein
+              oder mehrere Bundesländer Angaben zu Spezialeinheiten als
+              „vertraulich“ behandeln wollten. Deshalb haben wir die Angaben für die
+              Folgejahre nun mit weiteren IFG- sowie Presseanfragen des „nd“ und
+              Recherchen von netzpolitik.org zusammengetragen. Unsere Gesamtzahlen
+              stammen aus Einzelangaben zu: <b>Spezialeinheiten</b> (alle
+              Bundesländer, Bundespolizei und Zoll), <b>Streifendienst</b> (Stand
+              Juni 2026: Bayern, Brandenburg, Bremen, Hessen, Nordrhein-Westfalen,
+              Rheinland-Pfalz, Saarland, Schleswig-Holstein, Bundespolizei),{" "}
+              <b>Pilotprojekte</b> (Stand Juni 2026: Berlin, Baden-Württemberg,
+              Hamburg, Sachsen-Anhalt, Schleswig-Holstein). In den Statistiken der
+              DhPol werden (anders als zum Schusswaffengebrauch) auch Alter,
+              Geschlecht und Alkohol- oder Drogenkonsum der betroffenen Person
+              genannt, außerdem Verletzungen und eine anschließend notwendige
+              medizinische Versorgung. Dass Menschen laut den DhPol-Angaben nach
+              Taser-Einsätzen auch gemäß PsychKG eingewiesen werden, verweist
+              darauf, dass die Waffen oft gegen diese Personengruppe gerichtet
+              werden. Die zunehmend flächendeckende Einführung begründen die
+              Innenministerien und Polizeigewerkschaften mit Tasern als Alternative
+              zu Schusswaffen sowie als Schutz für Menschen, die mit Hieb- oder
+              Stichwaffen hantieren. Diese Argumente widerlegen unsere Recherchen:
+              Beide Einsatzformen nehmen zu – Taser sind also eine zusätzliche,
+              mitunter tödliche Waffe, und kein Ersatz.
             </p>
           </CollapsibleContent>
         </div>
