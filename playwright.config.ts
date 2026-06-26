@@ -77,5 +77,9 @@ export default defineConfig({
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
+    // Keep E2E hermetic: blank GEO_HOST makes getGeo() skip the external
+    // geocoder (Next does not override env keys already set here), matching
+    // CI behaviour and avoiding flakes from an unreachable geo host.
+    env: { GEO_HOST: '' },
   },
 });

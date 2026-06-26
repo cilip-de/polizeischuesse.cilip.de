@@ -80,6 +80,9 @@ const getGeo = async (data: LocationData[]): Promise<GeoResponseLocation[]> => {
           "Basic " + atob(process.env.GEO_USER + ":" + process.env.GEO_PW),
       },
       body: JSON.stringify(body),
+      // Bound the call so an unreachable/slow geocoder can't stall SSR (the
+      // catch below falls back to null coordinates).
+      signal: AbortSignal.timeout(3000),
     });
 
     if (!resp.ok) {
