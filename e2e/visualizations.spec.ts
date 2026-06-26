@@ -80,7 +80,10 @@ test.describe('Visualizations Page', () => {
       expect(barCount).toBeGreaterThan(0);
     });
 
-    test('should show tooltips on bar hover', async ({ page }) => {
+    test('should show tooltips on bar hover', async ({ page, isMobile }) => {
+      // Hover tooltips are a desktop-only affordance: touch devices have no
+      // hover, and recharts only renders them on real mouse movement.
+      test.skip(!!isMobile, 'hover tooltips are desktop-only');
       await helpers.waitForCharts(page, 1);
       await page.waitForTimeout(1000); // Wait for chart to fully render
 
@@ -93,16 +96,6 @@ test.describe('Visualizations Page', () => {
         const middleBar = bars.nth(Math.floor(barCount / 2));
         await middleBar.scrollIntoViewIfNeeded();
         await page.waitForTimeout(500);
-
-        // Get element coordinates for reliable interaction
-        const box = await middleBar.boundingBox();
-        if (!box) return;
-        const cx = box.x + box.width / 2;
-        const cy = box.y + box.height / 2;
-
-        // Check if we're on mobile viewport (≤768px matches the CSS media query)
-        const viewport = page.viewportSize();
-        const isMobile = viewport && viewport.width <= 768;
 
         // Trigger hover via dispatchEvent for cross-browser reliability
         await middleBar.dispatchEvent('mouseenter');
@@ -216,7 +209,10 @@ test.describe('Visualizations Page', () => {
       expect(foundState).toBeTruthy();
     });
 
-    test('should show tooltip on heatmap cell hover', async ({ page }) => {
+    test('should show tooltip on heatmap cell hover', async ({ page, isMobile }) => {
+      // Hover tooltips are a desktop-only affordance: touch devices have no
+      // hover, and recharts only renders them on real mouse movement.
+      test.skip(!!isMobile, 'hover tooltips are desktop-only');
       // Scroll to the heatmap section specifically
       await page.locator('#umstaende-bundeslaender').scrollIntoViewIfNeeded();
       await helpers.waitForCharts(page, 2);
@@ -231,16 +227,6 @@ test.describe('Visualizations Page', () => {
         const middleCell = cells.nth(Math.floor(await cells.count() / 2));
         await middleCell.scrollIntoViewIfNeeded();
         await page.waitForTimeout(500);
-
-        // Get element coordinates for reliable interaction
-        const box = await middleCell.boundingBox();
-        if (!box) return;
-        const cx = box.x + box.width / 2;
-        const cy = box.y + box.height / 2;
-
-        // Check if we're on mobile viewport (≤768px matches the CSS media query)
-        const viewport = page.viewportSize();
-        const isMobile = viewport && viewport.width <= 768;
 
         // Trigger hover via dispatchEvent for cross-browser reliability
         await middleCell.dispatchEvent('mouseenter');
