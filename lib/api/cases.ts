@@ -1,5 +1,5 @@
 import { orderBy } from "../util";
-import { setupData, PAGE_SIZE, setupOptions, SELECTABLE } from "../data";
+import { setupData, PAGE_SIZE, setupOptions } from "../data";
 import type { ProcessedDataItem, SetupOptions } from "../data";
 
 export interface CasesFilters {
@@ -50,22 +50,27 @@ export async function getCases(filters: CasesFilters = {}): Promise<CasesRespons
     resultList = [...data];
   }
 
-  const selection: Record<string, string | undefined> = { year, state, place, age };
-  for (const [k, v] of Object.entries(selection)) {
-    if (!v || !SELECTABLE.includes(k)) continue;
-    resultList = resultList.filter((x) => String(x[k]) === v);
-  }
+  // Tags are not dropdown facets but still constrain everything, including which
+  // values remain available in the facet dropdowns.
+  const baseList = resultList.filter((x) =>
+    tags.every((tag) =>
+      !tag ? true : tag.startsWith("no__") ? !x[tag.replace("no__", "")] : x[tag]
+    )
+  );
 
-  if (weapon) {
-    resultList = resultList.filter((x) => x.weapon.includes(weapon));
-  }
+  // One predicate per dropdown facet. Each passes when the item matches that
+  // facet's currently selected value (or when nothing is selected for it).
+  const facetFilters: Record<string, (x: ProcessedDataItem) => boolean> = {
+    year: (x) => !year || String(x.year) === year,
+    state: (x) => !state || String(x.state) === state,
+    place: (x) => !place || String(x.place) === place,
+    weapon: (x) => !weapon || x.weapon.includes(weapon),
+    age: (x) => !age || String(x.age) === age,
+  };
+  const facetKeys = Object.keys(facetFilters);
 
-  for (const tag of tags) {
-    if (!tag) continue;
-    resultList = resultList.filter((x) =>
-      tag.startsWith("no__") ? !x[tag.replace("no__", "")] : x[tag]
-    );
-  }
+  // The result list must satisfy every facet.
+  resultList = baseList.filter((x) => facetKeys.every((k) => facetFilters[k](x)));
 
   if (sort === "date") {
     resultList = orderBy(resultList, (x) => x.Datum, "desc");
@@ -81,7 +86,24 @@ export async function getCases(filters: CasesFilters = {}): Promise<CasesRespons
     (clone as any).matches = matches;
     return clone;
   });
-  const filterOptions = setupOptions(resultList);
+
+  // Faceted options: every dropdown lists the values still reachable when *its
+  // own* selection is ignored but all other active filters apply. Without this,
+  // selecting e.g. a year collapses the year dropdown to that single year, so the
+  // selection can neither be changed nor cleared from the list.
+  const filterOptions: SetupOptions = {
+    year: [],
+    state: [],
+    place: [],
+    weapon: [],
+    age: [],
+  };
+  for (const key of facetKeys) {
+    const subset = baseList.filter((x) =>
+      facetKeys.every((k) => k === key || facetFilters[k](x))
+    );
+    if (subset.length) filterOptions[key] = setupOptions(subset)[key];
+  }
 
   return {
     cases: paginatedCases,

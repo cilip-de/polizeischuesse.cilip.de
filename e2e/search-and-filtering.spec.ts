@@ -96,37 +96,82 @@ test.describe('Search and Filtering', () => {
     test('should filter cases by year', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      // Find year filter select
-      const yearFilter = page.locator('select[name="year"], select:has-text("Jahr"), label:has-text("Jahr") + select').first();
+      // SearchableSelect combobox labelled "Jahr"
+      await helpers.selectFilterOption(page, 'Jahr', '2023');
 
-      if (await yearFilter.count() > 0) {
-        // Select a specific year
-        await yearFilter.selectOption({ index: 1 }); // Select first non-empty option
-        await page.waitForTimeout(500);
+      // URL should contain year parameter
+      expect(await helpers.urlHasParam(page, 'year', '2023')).toBeTruthy();
 
-        // URL should contain year parameter
-        const hasYearParam = await helpers.urlHasParam(page, 'year');
-        expect(hasYearParam).toBeTruthy();
-
-        // Cases should be filtered
-        await helpers.waitForDataLoad(page, 1);
-      }
+      // Cases should be filtered
+      await helpers.waitForDataLoad(page, 1);
     });
 
     test('should update URL when year is selected', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      const yearFilter = page.locator('select[name="year"], select:has-text("Jahr"), label:has-text("Jahr") + select').first();
+      const initialUrl = page.url();
+      await helpers.selectFilterOption(page, 'Jahr', '2023');
 
-      if (await yearFilter.count() > 0) {
-        const initialUrl = page.url();
+      expect(page.url()).not.toBe(initialUrl);
+      expect(await helpers.urlHasParam(page, 'year')).toBeTruthy();
+    });
+  });
 
-        await yearFilter.selectOption({ index: 1 });
-        await page.waitForTimeout(500);
+  // Regression coverage for the bug Norbert reported: once a value was chosen the
+  // dropdown collapsed to that single value (so it could not be changed) and the
+  // clear (X) control did nothing (SVG inside the trigger Button had
+  // pointer-events: none). See lib/api/cases.ts (faceted options) and
+  // components/ui/searchable-select.tsx (clear control).
+  test.describe('Filter dropdown stays usable after a selection', () => {
+    test('year dropdown still offers other years once a year is selected', async ({ page }) => {
+      await helpers.navigateAndWait(page, '/?year=2023');
 
-        const newUrl = page.url();
-        expect(newUrl).not.toBe(initialUrl);
-      }
+      // Reopen the Jahr dropdown — it must NOT have collapsed to just "2023".
+      await helpers.openFilterDropdown(page, 'Jahr');
+      const options = await helpers.getDropdownOptions(page);
+      expect(options.length).toBeGreaterThan(1);
+      expect(options.some((o) => o.startsWith('2022'))).toBeTruthy();
+
+      // And the selection must be changeable directly from the list.
+      await page.locator('[cmdk-item]:has-text("2022")').first().click();
+      await page.waitForURL(/year=2022/, { timeout: 5000 });
+      expect(await helpers.urlHasParam(page, 'year', '2022')).toBeTruthy();
+    });
+
+    test('clear (X) removes a year selection without opening the dropdown', async ({ page }) => {
+      await helpers.navigateAndWait(page, '/?year=2023');
+
+      await helpers.clearFilter(page, 'Jahr');
+
+      await page.waitForFunction(() => !new URL(location.href).searchParams.get('year'), null, {
+        timeout: 5000,
+      });
+      expect(await helpers.urlHasParam(page, 'year')).toBeFalsy();
+      // Clearing must not pop the dropdown open.
+      await expect(page.locator('[cmdk-item]')).toHaveCount(0);
+    });
+
+    test('selecting one facet keeps it switchable and narrows the others', async ({ page }) => {
+      await helpers.navigateAndWait(page, '/?state=Bayern');
+
+      // The Bundesland field itself must still list other states (switchable).
+      await helpers.openFilterDropdown(page, 'Bundesland');
+      const states = await helpers.getDropdownOptions(page);
+      expect(states.length).toBeGreaterThan(1);
+      await page.keyboard.press('Escape');
+
+      // The Jahr facet is constrained by state=Bayern but still offers a choice.
+      await helpers.openFilterDropdown(page, 'Jahr');
+      const years = await helpers.getDropdownOptions(page);
+      expect(years.length).toBeGreaterThan(1);
+      await page.keyboard.press('Escape');
+
+      // Clear works on a non-year field too.
+      await helpers.clearFilter(page, 'Bundesland');
+      await page.waitForFunction(() => !new URL(location.href).searchParams.get('state'), null, {
+        timeout: 5000,
+      });
+      expect(await helpers.urlHasParam(page, 'state')).toBeFalsy();
     });
   });
 
@@ -134,17 +179,9 @@ test.describe('Search and Filtering', () => {
     test('should filter cases by state (Bundesland)', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      const stateFilter = page.locator('select[name="state"], select:has-text("Bundesland"), label:has-text("Bundesland") + select').first();
+      await helpers.selectFilterOption(page, 'Bundesland', 'Berlin');
 
-      if (await stateFilter.count() > 0) {
-        // Select a state
-        await stateFilter.selectOption({ index: 1 });
-        await page.waitForTimeout(500);
-
-        // URL should contain state parameter
-        const hasStateParam = await helpers.urlHasParam(page, 'state');
-        expect(hasStateParam).toBeTruthy();
-      }
+      expect(await helpers.urlHasParam(page, 'state', 'Berlin')).toBeTruthy();
     });
 
     test('should show filtered results for specific state', async ({ page }) => {
@@ -154,12 +191,9 @@ test.describe('Search and Filtering', () => {
       // Should show at least one case from Berlin
       await helpers.waitForDataLoad(page, 1);
 
-      // Check that Berlin is selected in filter
-      const stateFilter = page.locator('select[name="state"]').first();
-      if (await stateFilter.count() > 0) {
-        const selectedValue = await stateFilter.inputValue();
-        expect(selectedValue).toBe('Berlin');
-      }
+      // The Bundesland combobox trigger should reflect the active selection.
+      const stateTrigger = page.getByRole('combobox', { name: 'Bundesland' });
+      await expect(stateTrigger).toContainText('Berlin');
     });
   });
 
@@ -167,15 +201,10 @@ test.describe('Search and Filtering', () => {
     test('should filter cases by place (Ort)', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      const placeFilter = page.locator('select[name="place"], select:has-text("Ort"), label:has-text("Ort") + select').first();
+      // Pick whatever the first available Ort option is.
+      await helpers.selectFirstFilterOption(page, 'Ort');
 
-      if (await placeFilter.count() > 0) {
-        await placeFilter.selectOption({ index: 1 });
-        await page.waitForTimeout(500);
-
-        const hasPlaceParam = await helpers.urlHasParam(page, 'place');
-        expect(hasPlaceParam).toBeTruthy();
-      }
+      expect(await helpers.urlHasParam(page, 'place')).toBeTruthy();
     });
   });
 
@@ -183,23 +212,9 @@ test.describe('Search and Filtering', () => {
     test('should filter cases by weapon type', async ({ page }) => {
       await helpers.navigateAndWait(page, '/');
 
-      // Look for weapon filter
-      const weaponFilter = page.locator('select[name="weapon"], button:has-text("Waffe"), label:has-text("Waffe")').first();
+      await helpers.selectFirstFilterOption(page, 'Bewaffnung');
 
-      if (await weaponFilter.count() > 0) {
-        // Interact with weapon filter (might be select or button group)
-        if (await weaponFilter.evaluate(el => el.tagName.toLowerCase()) === 'select') {
-          await weaponFilter.selectOption({ index: 1 });
-        } else {
-          await weaponFilter.click();
-        }
-
-        await page.waitForTimeout(500);
-
-        // Check for weapon parameter in URL
-        const hasWeaponParam = await helpers.urlHasParam(page, 'weapon');
-        expect(hasWeaponParam).toBeTruthy();
-      }
+      expect(await helpers.urlHasParam(page, 'weapon')).toBeTruthy();
     });
   });
 
@@ -335,16 +350,16 @@ test.describe('Search and Filtering', () => {
       await page.goto('/?year=2020&state=Berlin');
       await helpers.waitForPageReady(page);
 
-      // Clear year filter
-      const yearFilter = page.locator('select[name="year"]').first();
-      if (await yearFilter.count() > 0) {
-        await yearFilter.selectOption('');
-        await page.waitForTimeout(500);
+      // Clear only the year filter via its X control.
+      await helpers.clearFilter(page, 'Jahr');
+      await page.waitForFunction(() => !new URL(location.href).searchParams.get('year'), null, {
+        timeout: 5000,
+      });
 
-        // Year should be removed from URL but state should remain
-        const urlParams = await helpers.getUrlParams(page);
-        expect(urlParams.year).toBeUndefined();
-      }
+      // Year should be removed from URL but state should remain
+      const urlParams = await helpers.getUrlParams(page);
+      expect(urlParams.year).toBeUndefined();
+      expect(urlParams.state).toBe('Berlin');
     });
 
     test('should reset all filters when navigating to home', async ({ page }) => {
@@ -391,15 +406,11 @@ test.describe('Search and Filtering', () => {
       await helpers.waitForPageReady(page);
 
       // Change a filter
-      const yearFilter = page.locator('select[name="year"]').first();
-      if (await yearFilter.count() > 0) {
-        await yearFilter.selectOption({ index: 1 });
-        await page.waitForTimeout(500);
+      await helpers.selectFilterOption(page, 'Jahr', '2023');
 
-        // Should go back to page 1 (or p parameter removed)
-        const urlParams = await helpers.getUrlParams(page);
-        expect(urlParams.p === '1' || urlParams.p === undefined).toBeTruthy();
-      }
+      // Should go back to page 1 (or p parameter removed)
+      const urlParams = await helpers.getUrlParams(page);
+      expect(urlParams.p === '1' || urlParams.p === undefined).toBeTruthy();
     });
   });
 

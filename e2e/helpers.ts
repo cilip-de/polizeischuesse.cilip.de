@@ -1,4 +1,4 @@
-import { Page, expect } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 /**
  * Wait for page to be fully loaded and hydrated
@@ -70,6 +70,71 @@ export async function fillAndWait(page: Page, selector: string, value: string) {
 export async function selectAndWait(page: Page, selector: string, value: string) {
   await page.selectOption(selector, value);
   await page.waitForTimeout(300); // Wait for filter updates
+}
+
+/**
+ * Open a SearchableSelect filter dropdown by its label (the combobox aria-label,
+ * e.g. "Jahr", "Bundesland", "Ort", "Bewaffnung", "Alter") and wait for the
+ * option list to render.
+ */
+export async function openFilterDropdown(page: Page, label: string) {
+  await page.getByRole('combobox', { name: label }).click();
+  // Wait for the Radix popover to open, the cmdk list to render, and the open
+  // animation to settle — otherwise a click can land on stale coordinates and
+  // dismiss the popover without selecting anything.
+  await page
+    .locator('[data-slot="popover-content"][data-state="open"]')
+    .waitFor({ state: 'visible', timeout: 5000 });
+  await page.locator('[cmdk-item]').first().waitFor({ state: 'visible', timeout: 5000 });
+  await page.waitForTimeout(300);
+}
+
+/**
+ * Read the visible option labels of a currently open SearchableSelect dropdown.
+ */
+export async function getDropdownOptions(page: Page): Promise<string[]> {
+  return page.locator('[cmdk-item]').allInnerTexts();
+}
+
+/**
+ * Open a SearchableSelect filter and pick the first option whose text contains
+ * `optionText`, then wait for the popover to close and the results to reload.
+ */
+export async function selectFilterOption(page: Page, label: string, optionText: string) {
+  await openFilterDropdown(page, label);
+  await selectOpenOption(page, page.locator(`[cmdk-item]:has-text("${optionText}")`).first());
+}
+
+/**
+ * Open a SearchableSelect filter and pick the first available option, then wait
+ * for the popover to close and the results to reload. Use when the concrete
+ * value does not matter, only that a selection is applied.
+ */
+export async function selectFirstFilterOption(page: Page, label: string) {
+  await openFilterDropdown(page, label);
+  await selectOpenOption(page, page.locator('[cmdk-item]').first());
+}
+
+/**
+ * Click an option in an already-open dropdown and wait for the filter to apply.
+ * Selecting pushes a new URL via the router asynchronously (after the popover
+ * closes), so we wait for the URL to change rather than for network idle — which
+ * is already satisfied from page load and would resolve before the navigation.
+ */
+async function selectOpenOption(page: Page, option: Locator) {
+  const urlBefore = page.url();
+  await option.click();
+  await page.waitForFunction((prev) => window.location.href !== prev, urlBefore, { timeout: 5000 });
+  await page.waitForLoadState('networkidle');
+}
+
+/**
+ * Click the clear (X) control of a SearchableSelect filter by its label. The
+ * control is a span with role="button" and aria-label "<label>: Auswahl
+ * zurücksetzen", rendered only while the filter has a value.
+ */
+export async function clearFilter(page: Page, label: string) {
+  await page.getByRole('button', { name: `${label}: Auswahl zurücksetzen` }).click();
 }
 
 /**

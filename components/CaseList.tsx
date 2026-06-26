@@ -104,7 +104,7 @@ const StatusText = ({
         <span>ein polizeilicher Todesschuss</span>
       )}
       {enoughChars && total === 0 && (
-        <span>kein polizeilicher Todesschuss entfällt auf die Auswahl</span>
+        <span>Keine Treffer für die aktuelle Auswahl</span>
       )}
       {!enoughChars && (
         <span>Bitte mehr Zeichen für die Suche eingeben</span>

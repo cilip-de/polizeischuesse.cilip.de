@@ -54,17 +54,24 @@ export function SearchableSelect({
             className="w-full justify-between font-normal"
           >
             <span className="truncate">
-              {selectedItem ? selectedItem.label : placeholder}
+              {selectedItem ? selectedItem.label : value || placeholder}
             </span>
             <div className="flex items-center gap-1 ml-2 shrink-0">
               {clearable && value && (
-                <X
-                  className="h-3 w-3 opacity-50 hover:opacity-100"
+                // Wrapper span needed because the Button applies
+                // `[&_svg]:pointer-events-none` to all descendant SVGs, which
+                // would otherwise swallow clicks on the clear icon.
+                <span
+                  role="button"
+                  aria-label={`${label}: Auswahl zurücksetzen`}
+                  className="pointer-events-auto flex items-center cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     onChange(null);
                   }}
-                />
+                >
+                  <X className="h-3 w-3 opacity-50 hover:opacity-100" />
+                </span>
               )}
               <ChevronsUpDown className="h-4 w-4 opacity-50" />
             </div>
