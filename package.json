@@ -63,7 +63,7 @@
     "postcss": "^8.5.8",
     "prettier": "^3.8.5",
     "tailwindcss": "^4.2.1",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "overrides": {
     "d3-color": "^3.1.0"
