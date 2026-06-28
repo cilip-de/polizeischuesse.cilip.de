@@ -173,6 +173,40 @@ test.describe('Search and Filtering', () => {
       });
       expect(await helpers.urlHasParam(page, 'state')).toBeFalsy();
     });
+
+    test('category badge (X) clears a single selected category', async ({ page }) => {
+      await page.goto('/?tags=unbewaffnet');
+      await helpers.waitForPageReady(page);
+
+      // The category is shown as a badge with its own remove icon. The bug: the
+      // X (an SVG inside the trigger Button) had pointer-events:none, so the
+      // click was swallowed and only toggled the dropdown.
+      await page.getByRole('button', { name: 'Unbewaffnet entfernen' }).click();
+
+      await page.waitForFunction(() => !location.search.includes('unbewaffnet'), null, {
+        timeout: 5000,
+      });
+      expect(page.url()).not.toContain('unbewaffnet');
+      // Removing must not pop the category dropdown open.
+      await expect(page.locator('[cmdk-item]')).toHaveCount(0);
+    });
+
+    test('category clear-all (X) clears multiple selected categories', async ({ page }) => {
+      await page.goto('/?tags=unbewaffnet,minderjaehrig');
+      await helpers.waitForPageReady(page);
+
+      await helpers.clearFilter(page, 'Kategorie');
+
+      await page.waitForFunction(
+        () =>
+          !location.search.includes('unbewaffnet') &&
+          !location.search.includes('minderjaehrig'),
+        null,
+        { timeout: 5000 }
+      );
+      expect(page.url()).not.toContain('unbewaffnet');
+      expect(page.url()).not.toContain('minderjaehrig');
+    });
   });
 
   test.describe('Filter by State', () => {

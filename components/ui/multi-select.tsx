@@ -76,10 +76,17 @@ export function MultiSelect({
                     className="text-xs"
                   >
                     {item.label}
-                    <X
-                      className="ml-1 h-3 w-3 cursor-pointer"
+                    {/* Wrapper span needed because the Button applies
+                        `[&_svg]:pointer-events-none` to all descendant SVGs,
+                        which would otherwise swallow clicks on this icon. */}
+                    <span
+                      role="button"
+                      aria-label={`${item.label} entfernen`}
+                      className="pointer-events-auto ml-1 flex items-center cursor-pointer"
                       onClick={(e) => handleRemove(item.value, e)}
-                    />
+                    >
+                      <X className="h-3 w-3" />
+                    </span>
                   </Badge>
                 ))
               ) : (
@@ -87,14 +94,20 @@ export function MultiSelect({
               )}
             </div>
             <div className="flex items-center gap-1 ml-2 shrink-0">
-              {clearable && value.length > 0 && (
-                <X
-                  className="h-3 w-3 opacity-50 hover:opacity-100"
+              {/* Clear-all only with 2+ selected; a single tag is removed via
+                  its own badge icon, so we avoid showing two redundant crosses. */}
+              {clearable && value.length > 1 && (
+                <span
+                  role="button"
+                  aria-label={`${label}: Auswahl zurücksetzen`}
+                  className="pointer-events-auto flex items-center cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation();
                     onChange([]);
                   }}
-                />
+                >
+                  <X className="h-3 w-3 opacity-50 hover:opacity-100" />
+                </span>
               )}
               <ChevronsUpDown className="h-4 w-4 opacity-50" />
             </div>
