@@ -4,10 +4,7 @@ interface MobileTooltipState<T> {
   active: T | null;
   setActive: (item: T | null) => void;
   containerRef: React.RefObject<HTMLDivElement | null>;
-  containerProps: {
-    ref: React.RefObject<HTMLDivElement | null>;
-    onClick: () => void;
-  };
+  dismiss: () => void;
 }
 
 export function useMobileTooltip<T>(mobile: boolean): MobileTooltipState<T> {
@@ -29,10 +26,7 @@ export function useMobileTooltip<T>(mobile: boolean): MobileTooltipState<T> {
     active,
     setActive,
     containerRef,
-    containerProps: {
-      ref: containerRef,
-      onClick: () => setActive(null),
-    },
+    dismiss: () => setActive(null),
   };
 }
 

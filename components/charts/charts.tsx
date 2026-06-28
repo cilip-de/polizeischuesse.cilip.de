@@ -136,7 +136,7 @@ const VerticalBarChart = ({
 }: VerticalBarChartProps) => {
   const mobile = useIsMobile();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
-  const { active: activeBar, setActive: setActiveBar, containerProps } = useMobileTooltip<{ indexValue: string; id: string; value: number; data: ChartDataItem }>(mobile);
+  const { active: activeBar, setActive: setActiveBar, containerRef, dismiss } = useMobileTooltip<{ indexValue: string; id: string; value: number; data: ChartDataItem }>(mobile);
 
   let legend = undefined;
   const firstDataWithTooltip = data as unknown as ChartDataItemWithTooltip[];
@@ -203,11 +203,11 @@ const VerticalBarChart = ({
 
   return (
     <div
-      ref={containerProps.ref}
+      ref={containerRef}
       style={{ height: mobile ? 300 : 200, position: "relative" }}
       role="img"
       aria-label="Balkendiagramm der Datenverteilung"
-      onClick={mobile ? containerProps.onClick : undefined}
+      onClick={mobile ? dismiss : undefined}
     >
       <MobileTooltipOverlay mobile={mobile} visible={!!activeBar}>
         {activeBar && (customTooltip ? (
@@ -305,7 +305,7 @@ const HorizontalBarChart = ({
 }: HorizontalBarChartProps) => {
   const mobile = useIsMobile();
   const [hoveredBar, setHoveredBar] = useState<{ indexValue: string; id: string } | null>(null);
-  const { active: activeBar, setActive: setActiveBar, containerProps: hContainerProps } = useMobileTooltip<{ indexValue: string; id: string; value: number }>(mobile);
+  const { active: activeBar, setActive: setActiveBar, containerRef: hContainerRef, dismiss: hDismiss } = useMobileTooltip<{ indexValue: string; id: string; value: number }>(mobile);
 
   let legend = undefined;
   const dataWithTooltip = data as unknown as ChartDataItemWithTooltip[];
@@ -390,11 +390,11 @@ const HorizontalBarChart = ({
   };
   return (
     <div
-      ref={hContainerProps.ref}
+      ref={hContainerRef}
       style={{ height: 20 * data.length + (margin.top || 0) + (margin.bottom || 0), position: "relative" }}
       role="img"
       aria-label="Horizontales Balkendiagramm der Datenverteilung"
-      onClick={mobile ? hContainerProps.onClick : undefined}
+      onClick={mobile ? hDismiss : undefined}
     >
       <MobileTooltipOverlay mobile={mobile} visible={!!activeBar}>
         {activeBar && (

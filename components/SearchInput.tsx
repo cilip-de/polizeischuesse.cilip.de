@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import debounce from "lodash/debounce";
 import router from "next/router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useMemo, useState } from "react";
 import { constructUrlWithQ } from "../lib/util";
 
 interface SearchInputProps {
@@ -18,55 +18,62 @@ const SearchInput = ({
 }: SearchInputProps) => {
   // Local input value — responds immediately to typing
   const [inputValue, setInputValue] = useState(q);
-  const isUserTyping = useRef(false);
+  // Latest query fed to the debounce; also lets us tell our own committed URL
+  // changes apart from external ones (back button, links).
+  const [debouncedQ, setDebouncedQ] = useState<string | null>(null);
 
-  // Refs for latest values so the debounced function stays stable
-  const selectionRef = useRef(selection);
-  const setSearchedQRef = useRef(setSearchedQ);
-  useEffect(() => { selectionRef.current = selection; }, [selection]);
-  useEffect(() => { setSearchedQRef.current = setSearchedQ; }, [setSearchedQ]);
+  // Sync the input when the URL's q changes externally, but not when the change
+  // is our own committed search. Adjusting state during render (guarded by a
+  // changed value) is React's recommended alternative to a syncing Effect.
+  const [prevQ, setPrevQ] = useState(q);
+  if (q !== prevQ) {
+    setPrevQ(q);
+    if (q !== debouncedQ) setInputValue(q);
+  }
 
-  // Sync from URL when URL changes externally (not from typing)
-  useEffect(() => {
-    if (!isUserTyping.current) {
-      setInputValue(q);
-    }
-  }, [q]);
-
-  const fetchSearch = useMemo(() => debounce((newQ: string) => {
-    isUserTyping.current = false;
-    setSearchedQRef.current(newQ);
-
+  // Commit the search. As an Effect Event it always sees the latest selection /
+  // setSearchedQ without them being reactive dependencies — so the debounce
+  // below needs no value refs to stay stable.
+  const commitSearch = useEffectEvent((newQ: string) => {
+    setSearchedQ(newQ);
     router.replace(
       constructUrlWithQ(newQ, {
-        ...selectionRef.current,
+        ...selection,
         p: 1,
         q: newQ,
       }),
       undefined,
       { scroll: false, shallow: true }
     );
-  }, 300), []);
+  });
 
+  // The debounce only defers a state update (no refs), so it stays stable.
+  // Effect Events may only be called from an Effect, so commit once q settles.
+  const fetchSearch = useMemo(() => debounce(setDebouncedQ, 300), []);
   useEffect(() => () => fetchSearch.cancel(), [fetchSearch]);
+
+  useEffect(() => {
+    if (debouncedQ !== null) commitSearch(debouncedQ);
+  }, [debouncedQ]);
 
   const searchFunc = (event: { currentTarget: { value: any } }) => {
     const newQ = event.currentTarget.value;
-    isUserTyping.current = true;
     setInputValue(newQ);
     fetchSearch(newQ);
   };
 
-  const [showHint, setShowHint] = useState(false);
-
+  // Show a "min. 3 characters" hint once the input has lingered at 1–2 chars.
+  const inHintRange = inputValue.length > 0 && inputValue.length < 3;
+  const [hintReady, setHintReady] = useState(false);
   useEffect(() => {
-    if (inputValue.length > 0 && inputValue.length < 3) {
-      const timer = setTimeout(() => setShowHint(true), 2000);
-      return () => clearTimeout(timer);
-    } else {
-      setShowHint(false); // eslint-disable-line react-hooks/set-state-in-effect
-    }
-  }, [inputValue]);
+    if (!inHintRange) return;
+    const timer = setTimeout(() => setHintReady(true), 2000);
+    return () => {
+      clearTimeout(timer);
+      setHintReady(false);
+    };
+  }, [inHintRange]);
+  const showHint = inHintRange && hintReady;
 
   return (
     <div className="flex flex-col gap-1.5">

@@ -22,7 +22,7 @@ interface HeatMapSerieData {
 
 const HeatMapChart = ({ data }: HeatMapChartProps) => {
   const mobile = useIsMobile();
-  const { active: activeCell, setActive: setActiveCell, containerProps } = useMobileTooltip<{ serieId: string; x: string }>(mobile);
+  const { active: activeCell, setActive: setActiveCell, containerRef, dismiss } = useMobileTooltip<{ serieId: string; x: string }>(mobile);
   const boolAtr = [
     "Schusswechsel",
     "Sondereinsatzbeamte",
@@ -101,11 +101,11 @@ const HeatMapChart = ({ data }: HeatMapChartProps) => {
 
   return (
     <div
-      ref={containerProps.ref}
+      ref={containerRef}
       style={{ height: mobile ? "600px" : "800px", position: "relative" }}
       role="img"
       aria-label="Heatmap-Diagramm zeigt prozentuale Verteilung von Merkmalen polizeilicher Todesschüsse nach Bundesland"
-      onClick={mobile ? containerProps.onClick : undefined}
+      onClick={mobile ? dismiss : undefined}
     >
       <MobileTooltipOverlay mobile={mobile} visible={!!activeCell}>
         {activeCell && (
