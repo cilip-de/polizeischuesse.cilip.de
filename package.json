@@ -61,7 +61,7 @@
     "eslint-config-next": "^16.2.9",
     "eslint-plugin-react-compiler": "^19.1.0-rc.2",
     "postcss": "^8.5.8",
-    "prettier": "^3.8.5",
+    "prettier": "^3.9.1",
     "tailwindcss": "^4.2.1",
     "typescript": "^6.0.3"
   },
