@@ -52,6 +52,29 @@ jobs:
           path: next-build.tar
           retention-days: 1
 
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: npm-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      - run: npm ci
+
+      - run: npm run lint
+
   test:
     needs: build
     runs-on: ubuntu-latest
@@ -138,7 +161,7 @@ jobs:
           retention-days: 7
 
   deploy:
-    needs: test
+    needs: [test, lint]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
