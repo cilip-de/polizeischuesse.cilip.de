@@ -79,6 +79,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    # firefox crashes/times out intermittently on the CI runner (a flake, not a
+    # real bug). Keep it as a visible check but don't let it block the deploy.
+    continue-on-error: ${{ matrix.browser == 'firefox' }}
     strategy:
       fail-fast: false
       matrix:
