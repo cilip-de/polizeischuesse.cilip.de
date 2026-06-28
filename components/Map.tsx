@@ -1,6 +1,7 @@
 import debounce from "lodash/debounce";
 import { uniqBy } from "../lib/util";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useIsClient } from "@/lib/hooks/useIsClient";
 import {
   ComposableMap,
   Geographies,
@@ -46,11 +47,9 @@ const Map = ({ makersData, setInputPlace }: MapProps) => {
   const [showMarker, setShowMarker] = useState<string[]>([]);
   const debounceClear = debounce(() => setShowMarker([]), 10000);
 
-  // only render on client - this pattern is intentional for SSR hydration
-  const [isClient, setIsClient] = useState(false);
-  useEffect(() => {
-    setIsClient(true); // eslint-disable-line react-hooks/set-state-in-effect
-  }, []);
+  // Only render on the client — the map relies on browser-only APIs. useIsClient
+  // is false during SSR and the hydration render, then true after mount.
+  const isClient = useIsClient();
   if (!isClient) return null;
 
   return (

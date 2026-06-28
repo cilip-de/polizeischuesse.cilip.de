@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useIsClient } from "@/lib/hooks/useIsClient";
 import Case from "../../../components/Case";
 import { setupData, setupTaserData } from "../../../lib/data";
 import type { ProcessedDataItem } from "../../../lib/data";
@@ -18,12 +18,10 @@ interface CaseDetailProps {
 
 const CaseDetail: NextPage<CaseDetailProps> = (props) => {
   const clipboard = useClipboard({ timeout: 99999999999999 });
-  const [shareSupported, setShareSupported] = useState(false);
-
-  useEffect(() => {
-    // Check if Web Share API is supported - intentional for SSR hydration
-    setShareSupported(typeof navigator !== "undefined" && !!navigator.share); // eslint-disable-line react-hooks/set-state-in-effect
-  }, []);
+  // Web Share API is client-only; useIsClient keeps SSR and the hydration render
+  // in sync (false), then this re-evaluates on the client.
+  const shareSupported =
+    useIsClient() && typeof navigator !== "undefined" && !!navigator.share;
 
   const isTaser = props.taser;
   const pageUrl = `https://polizeischuesse.cilip.de/fall/${props.id}`;
