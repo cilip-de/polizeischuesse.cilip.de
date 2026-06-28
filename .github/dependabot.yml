@@ -5,6 +5,12 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      # ESLint 10 is blocked: eslint-plugin-react (via eslint-config-next) only
+      # peers up to eslint 9.7 and crashes on v10 (removed context.getFilename()).
+      # Remove this once the Next.js lint chain supports ESLint 10.
+      - dependency-name: "eslint"
+        versions: [">=10"]
     groups:
       production-dependencies:
         dependency-type: "production"
