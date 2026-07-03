@@ -4,7 +4,7 @@ import { VerticalBarChart, ChartDataItem } from "./charts";
 import { barChartTooltip, TooltipData } from "./ChartTooltip";
 
 const ShortsPerYear = ({ wData }: { wData: ChartDataItem[] }) => {
-  const sums = wData.map((x: ChartDataItem) => x.count + (typeof x.count2 === 'number' ? x.count2 : 0) + (typeof x.count3 === 'number' ? x.count3 : 0));
+  const sums = wData.map((x: ChartDataItem) => x.count + (typeof x.count2 === 'number' ? x.count2 : 0) + (typeof x.count3 === 'number' ? x.count3 : 0) + (typeof x.count4 === 'number' ? x.count4 : 0));
 
   const maxValues = Math.max(...sums);
 
@@ -29,7 +29,7 @@ const ShortsPerYear = ({ wData }: { wData: ChartDataItem[] }) => {
         gridYValues={tickValues}
         margin={{
           top: 10,
-          right: 150,
+          right: 220,
           bottom: 100,
           left: 50,
         }}

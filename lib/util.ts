@@ -70,10 +70,12 @@ interface ArrayItem {
   count: number;
   count2?: number;
   count3?: number;
+  count4?: number;
   tooltipLabel?: {
     count: string;
     count2: string;
     count3?: string;
+    count4?: string;
   };
 }
 
@@ -90,6 +92,25 @@ const combineArray = (
       count: count1Label,
       count2: count2Label,
     };
+  }
+  return arr1;
+};
+
+const combineFour = (
+  arr1: ArrayItem[],
+  arr2: ArrayItem[],
+  arr3: ArrayItem[],
+  arr4: ArrayItem[],
+  count1Label: string,
+  count2Label: string,
+  count3Label: string,
+  count4Label: string
+): ArrayItem[] => {
+  combineThree(arr1, arr2, arr3, count1Label, count2Label, count3Label);
+  for (const x of arr1) {
+    const sameValue = arr4.filter(({ value }) => value === x.value);
+    if (sameValue.length) x.count4 = sameValue[0].count;
+    if (x.tooltipLabel) x.tooltipLabel.count4 = count4Label;
   }
   return arr1;
 };
@@ -186,6 +207,7 @@ function uniqBy<T>(arr: T[], fn: ((item: T) => any) | string): T[] {
 export {
   addMissingYears,
   combineArray,
+  combineFour,
   combineThree,
   constructUrl,
   constructUrlWithQ,

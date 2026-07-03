@@ -104,7 +104,7 @@ const tooltipOverview: React.FC<BarTooltipProps<ChartDataItem>> = ({
 
 const commonProps = {
   indexBy: "value",
-  keys: ["count", "count2", "count3"],
+  keys: ["count", "count2", "count3", "count4"],
   padding: 0.2,
   tooltip,
 };
@@ -160,6 +160,11 @@ const VerticalBarChart = ({
             id: "count3",
             label: firstDataWithTooltip[0].tooltipLabel.count3,
             color: colors.indigo[3],
+          },
+          {
+            id: "count4",
+            label: firstDataWithTooltip[0].tooltipLabel.count4,
+            color: colors.indigo[5],
           },
         ].filter((x) => x.label),
         anchor: "bottom-right" as const,
@@ -252,6 +257,7 @@ const VerticalBarChart = ({
             count: isHovered ? colors.indigo[4] : colors.indigo[2],
             count2: isHovered ? colors.indigo[3] : colors.indigo[1],
             count3: isHovered ? colors.indigo[5] : colors.indigo[3],
+            count4: isHovered ? colors.indigo[6] : colors.indigo[5],
           };
           return colorMap[bar.id as keyof typeof colorMap] || colors.indigo[2];
         }}
@@ -424,6 +430,7 @@ const HorizontalBarChart = ({
             count: isHovered ? colors.indigo[4] : colors.indigo[2],
             count2: isHovered ? colors.indigo[3] : colors.indigo[1],
             count3: isHovered ? colors.indigo[5] : colors.indigo[3],
+            count4: isHovered ? colors.indigo[6] : colors.indigo[5],
           };
           return colorMap[bar.id as keyof typeof colorMap] || colors.indigo[2];
         }}
@@ -569,6 +576,7 @@ const DowChart = ({ data }: DowChartProps) => {
             count: isHovered ? colors.indigo[4] : colors.indigo[2],
             count2: isHovered ? colors.indigo[3] : colors.indigo[1],
             count3: isHovered ? colors.indigo[5] : colors.indigo[3],
+            count4: isHovered ? colors.indigo[6] : colors.indigo[5],
           };
           return colorMap[bar.id as keyof typeof colorMap] || colors.indigo[2];
         }}

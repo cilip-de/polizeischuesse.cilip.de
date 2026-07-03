@@ -19,7 +19,7 @@ const SimpleChart = dynamic(
   { ssr: false, loading: () => <Skeleton className="h-[200px]" /> }
 );
 import Layout from "../components/Layout";
-import { combineThree } from "../lib/util";
+import { combineFour, combineThree } from "../lib/util";
 import staCov from "../public/statistik_cover.jpg";
 
 interface StatistikenProps {
@@ -65,10 +65,13 @@ const Statistiken: NextPage<StatistikenProps> = ({
         Sie wird im Frühjahr oder spätestens im Sommer des Folgejahres
         abgeschlossen und enthält Zahlen zu sämtlichen, durch Polizist*innen der
         Länder und des Bundes abgegebenen Schüssen. Dieser Schusswaffengebrauch
-        gegen Personen und ihnen zugeordnete Sachen wird in sechs Kategorien
+        gegen Personen und ihnen zugeordnete Sachen wird in sieben Kategorien
         dargestellt. Gezählt werden davon Verletzte und Tote sowie Suizide von
         Polizist*innen. Dokumentiert ist außerdem das Töten von Tieren. Eine
-        weitere Kategorie ist der unzulässige Schusswaffengebrauch.
+        weitere Kategorie ist der unzulässige Schusswaffengebrauch. Nach einem
+        Beschluss des Arbeitskreises Innere Sicherheit (AK II) der IMK vom 26.
+        Mai 2025 wird der Schusswaffengebrauch gegen Personen in Fahrzeugen
+        seitdem als eigenständige Kategorie erfasst.
         <br />
         <br />
         Erst ab 1984 wird diese jährliche Übersicht auch herausgegeben,
@@ -114,6 +117,7 @@ const Statistiken: NextPage<StatistikenProps> = ({
         und in den folgenden Visualisierungen aufbereitet. Die Diagramme zeigen
         die zeitliche Entwicklung verschiedener Kategorien des polizeilichen
         Schusswaffengebrauchs: Warnschüsse, Schüsse gegen Personen und Sachen,
+        Schüsse gegen Personen in Fahrzeugen (seit 2025 eigenständig erfasst),
         Verletzte, Schusswaffengebrauch gegen Tiere sowie Selbsttötungen durch
         Schusswaffengebrauch und unbeabsichtigte Schussauslösungen von
         Polizistinnen und Polizisten.
@@ -174,6 +178,20 @@ export const getStaticProps: GetStaticProps = async () => {
     label: `${x["Schusswaffengebrauch gegen Personen"]}, ${x["Jahr"]}}`,
   }));
 
+  // Seit 2025 als eigenständige Kategorie erfasst (IMK-AK-II-Beschluss vom
+  // 26.5.2025); ältere Jahrgänge haben keine Werte in dieser Spalte.
+  const wData4 = stats
+    .filter(
+      (x) =>
+        x["Schusswaffengebrauch gegen Personen in Fahrzeugen"] != null &&
+        x["Schusswaffengebrauch gegen Personen in Fahrzeugen"] !== "",
+    )
+    .map((x) => ({
+      count: Number(x["Schusswaffengebrauch gegen Personen in Fahrzeugen"]),
+      value: x["Jahr"],
+      label: `${x["Schusswaffengebrauch gegen Personen in Fahrzeugen"]}, ${x["Jahr"]}}`,
+    }));
+
   const s1 = stats.map((x) => ({
     count: Number(x["Verletzte"]),
     value: x["Jahr"],
@@ -202,14 +220,26 @@ export const getStaticProps: GetStaticProps = async () => {
       label: `${x["unbeabsichtigte Schussauslösung"]}, ${x["Jahr"]}}`,
     }));
 
-  const procData = combineThree(
-    wData2,
-    wData3,
-    wData1,
-    "Gegen Sachen",
-    "Gegen Personen",
-    "Warnschüsse",
-  );
+  const procData =
+    wData4.length > 0
+      ? combineFour(
+          wData2,
+          wData3,
+          wData1,
+          wData4,
+          "Gegen Sachen",
+          "Gegen Personen",
+          "Warnschüsse",
+          "Gegen Personen in Fahrzeugen",
+        )
+      : combineThree(
+          wData2,
+          wData3,
+          wData1,
+          "Gegen Sachen",
+          "Gegen Personen",
+          "Warnschüsse",
+        );
 
   return {
     props: {
