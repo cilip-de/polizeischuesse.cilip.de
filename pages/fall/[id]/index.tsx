@@ -113,18 +113,35 @@ const CaseDetail: NextPage<CaseDetailProps> = (props) => {
   );
 };
 
+// Case ids follow "<prefix>-<year>-<number>" and are meant to stay unpadded
+// (e.g. "cilip-2026-7"), but data entry sometimes zero-pads the number
+// (e.g. "cilip-2026-07"). Normalize both the requested id and stored ids the
+// same way so either form resolves, and always canonicalize to the unpadded
+// form.
+const normalizeCaseId = (id: string) =>
+  id.replace(/^(.+-\d{4}-)0+(\d+)$/, "$1$2");
+
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const results = await setupData();
   const taserData = await setupTaserData();
-  const casex = results.data
-    .concat(taserData)
-    .filter((x) => x["Fall"] == query.id)[0];
+  const allCases = results.data.concat(taserData);
 
-  // 404
+  const rawId = query.id as string | undefined;
+  if (!rawId) return { notFound: true };
+
+  const canonicalId = normalizeCaseId(rawId);
+  const casex = allCases.find((x) => normalizeCaseId(x["Fall"]) === canonicalId);
+
   if (casex == null) return { notFound: true };
 
+  if (rawId !== canonicalId) {
+    return {
+      redirect: { destination: `/fall/${canonicalId}`, permanent: true },
+    };
+  }
+
   return {
-    props: { case: casex, taser: query.id?.includes("taser"), id: query.id },
+    props: { case: casex, taser: canonicalId.includes("taser"), id: canonicalId },
   };
 };
 
