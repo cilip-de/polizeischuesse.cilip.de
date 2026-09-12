@@ -1,3 +1,6 @@
+# Deploys on manual dispatch, or after "Update data from remote location" when HEAD is a
+# "Flat:" data commit. A plain code push does NOT deploy: it goes live with the next data
+# update or via `gh workflow run Deploy --ref main`.
 name: Deploy
 
 on:
