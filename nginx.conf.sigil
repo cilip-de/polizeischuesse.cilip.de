@@ -66,6 +66,8 @@ server {
 # START CILIP
 # Not under /tmp: the cleanup timer prunes it, and the directory is provisioned
 # setgid www-data so Dokku's pre-deploy `nginx -t` cannot chown nginx out of it.
+# Changing this path needs a new keys_zone name too: nginx refuses to move a zone
+# on reload, keeps the old workers, and the deploy ends in 502.
 proxy_cache_path /var/cache/nginx/polizeischuesse levels=1:2 keys_zone=cilipcache:10m max_size=1g inactive=20m use_temp_path=off;
 # END CILIP
 
