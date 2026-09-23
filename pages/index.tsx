@@ -316,7 +316,8 @@ const Home = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query, res }) => {
-  // Cache for 60s, serve stale for 1h
+  // SSR, not ISR: shared filter URLs must arrive as filtered HTML, without a flash
+  // of the unfiltered list. Shared caches keep it 60s and serve stale for 1h.
   res.setHeader('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=3600');
 
   const { data, beforeReuni, afterReuni } = await setupData();
