@@ -45,21 +45,21 @@
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.61.1",
+    "@playwright/test": "^1.64.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@types/d3-array": "^3.2.2",
     "@types/d3-fetch": "^3.0.7",
     "@types/d3-force": "^3.0.10",
     "@types/d3-scale": "^4.0.9",
-    "@types/lodash": "^4.17.24",
-    "@types/node": "^22.20.0",
+    "@types/lodash": "^4.17.27",
+    "@types/node": "^22.20.5",
     "@types/react": "^19.3.0",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^9.39.5",
     "eslint-config-next": "^16.4.3",
     "eslint-plugin-react-compiler": "^19.1.0-rc.2",
-    "postcss": "^8.5.8",
-    "prettier": "^3.9.6",
+    "postcss": "^8.5.32",
+    "prettier": "^3.9.10",
     "tailwindcss": "^4.2.1",
     "typescript": "^6.0.3"
   }
