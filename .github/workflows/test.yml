@@ -172,6 +172,10 @@ jobs:
   deploy:
     needs: [test, lint]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    # Shared with deploy.yml: Dokku aborts a deploy while another one holds the app lock.
+    concurrency:
+      group: deploy
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     steps:
       - name: Deploy
