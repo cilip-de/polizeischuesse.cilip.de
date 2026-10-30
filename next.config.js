@@ -5,15 +5,13 @@
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
-const { withSentryConfig } = require("@sentry/nextjs");
+const { withSentryConfig } = require("@sentry/nextjs/config");
 
 const moduleExports = {
   poweredByHeader: false,
   reactStrictMode: true,
   // Enable React Compiler for automatic memoization
   reactCompiler: true,
-  // Transpile react-simple-maps to ensure prop-types is bundled correctly
-  transpilePackages: ["react-simple-maps"],
   headers() {
     return [
       {
@@ -74,11 +72,9 @@ const sentryWebpackPluginOptions = {
 
   org: "johannes-filter",
   project: "polizeischuesse",
-  token: process.env.SENTRY_TOKEN,
+  authToken: process.env.SENTRY_TOKEN,
 
-  // Hides source maps from generated client bundles
-  hideSourceMaps: true,
-  sourceMaps: { disable: true },
+  sourcemaps: { disable: true },
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   bundleSizeOptimizations: {
