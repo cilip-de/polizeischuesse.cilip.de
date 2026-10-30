@@ -11,6 +11,13 @@ updates:
       # Remove this once the Next.js lint chain supports ESLint 10.
       - dependency-name: "eslint"
         versions: [">=10"]
+      # TypeScript 7 is blocked: typescript-eslint (via eslint-config-next) peers
+      # typescript <6.1 and crashes on v7. Remove once it supports TypeScript 7.
+      - dependency-name: "typescript"
+        versions: [">=7"]
+      # Types follow the Node major in package.json "engines".
+      - dependency-name: "@types/node"
+        versions: [">=23"]
     groups:
       production-dependencies:
         dependency-type: "production"
